@@ -42,10 +42,11 @@ namespace WinFormsAppTest
         string shape;
 
         //progess표시 변수
-        int progress=0;
+        int progress = 0;
 
         Coords bufferedPolycords = new Coords();
 
+        private Point relativeFormPos = new Point();
 
         public PlotForm()
         {
@@ -1300,6 +1301,23 @@ namespace WinFormsAppTest
             mindbh = Jobj.mindbh;
             maxdbh = Jobj.maxdbh;
 
+        }
+
+        private void PlotForm_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                relativeFormPos = e.Location;
+            }
+        }
+
+        private void PlotForm_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                this.Location = new Point(this.Location.X + (e.X - relativeFormPos.X),
+                    this.Location.Y + (e.Y - relativeFormPos.Y));
+            }
         }
     }
 }

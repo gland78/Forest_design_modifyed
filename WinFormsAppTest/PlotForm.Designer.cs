@@ -246,7 +246,7 @@
             tcPlot.Controls.Add(tpPlotCircle);
             tcPlot.Controls.Add(tpPlotRec);
             tcPlot.Controls.Add(tpPlotPoly);
-            tcPlot.ItemSize = new Size(0, 1);
+            tcPlot.ItemSize = new Size(0, 5);
             tcPlot.Location = new Point(13, 129);
             tcPlot.Multiline = true;
             tcPlot.Name = "tcPlot";
@@ -264,11 +264,13 @@
             tpPlotCircle.Controls.Add(lbPlotCircleX);
             tpPlotCircle.Controls.Add(tbPlotCircleX);
             tpPlotCircle.Controls.Add(lbPlotCircleY);
-            tpPlotCircle.Location = new Point(4, 5);
+            tpPlotCircle.Location = new Point(4, 9);
             tpPlotCircle.Name = "tpPlotCircle";
             tpPlotCircle.Padding = new Padding(3);
-            tpPlotCircle.Size = new Size(487, 189);
+            tpPlotCircle.Size = new Size(487, 185);
             tpPlotCircle.TabIndex = 0;
+            tpPlotCircle.MouseDown += PlotForm_MouseDown;
+            tpPlotCircle.MouseMove += PlotForm_MouseMove;
             // 
             // lbPlotCircle
             // 
@@ -422,6 +424,8 @@
             FormBorderStyle = FormBorderStyle.None;
             Name = "PlotForm";
             Text = "Form2";
+            MouseDown += PlotForm_MouseDown;
+            MouseMove += PlotForm_MouseMove;
             tcPlot.ResumeLayout(false);
             tpPlotCircle.ResumeLayout(false);
             tpPlotCircle.PerformLayout();
