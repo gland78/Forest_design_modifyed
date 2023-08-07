@@ -226,6 +226,7 @@
             btnPlotOK.TabIndex = 7;
             btnPlotOK.Text = "OK";
             btnPlotOK.UseVisualStyleBackColor = false;
+            btnPlotOK.Click += btnPlotOK_Click;
             // 
             // btnPlotCancle
             // 
@@ -387,6 +388,7 @@
             c_btnPlotData.Text = "File Search";
             c_btnPlotData.TextColor = Color.White;
             c_btnPlotData.UseVisualStyleBackColor = false;
+            c_btnPlotData.Click += c_btnPlotData_Click;
             // 
             // tbPlotData
             // 
@@ -394,6 +396,7 @@
             tbPlotData.Name = "tbPlotData";
             tbPlotData.Size = new Size(285, 23);
             tbPlotData.TabIndex = 9;
+            tbPlotData.TextChanged += tbPlotData_TextChanged;
             // 
             // lbPlotData
             // 
