@@ -7,14 +7,20 @@ namespace WinFormsAppTest
     {
         private PlotForm? pFrm;
 
-        //슬라이딩 메뉴의 최대, 최소 폭 크기
+        //슬라이딩 메뉴의 최대, 최소 폭 크기 및 그 차이
         const int MAX_SLIDING_WIDTH = 384;
         const int MIN_SLIDING_WIDTH = 65;
         const int SLIDING_GAP = MAX_SLIDING_WIDTH - MIN_SLIDING_WIDTH;
-        //최초 슬라이딩 메뉴 크기
-        int posSliding = MIN_SLIDING_WIDTH;
+
+        //슬라이딩 메뉴에 확장, 축소에 따른 메뉴 버튼 크기
+        const int MIN_ICON_WIDTH = 42;
+        const int MAX_ICON_WIDTH = 370;
 
         bool menuOpen = false;
+
+        private Point relativeMformPos = new Point();
+
+        private bool isMformDrag = false;
 
         public MainForm()
         {
@@ -24,9 +30,99 @@ namespace WinFormsAppTest
             customPanels_Load();
 
             pnSideMenu.Width = MIN_SLIDING_WIDTH;
-            tcMainHome.Left -= SLIDING_GAP;
-            tcMainHome.Width += SLIDING_GAP;
+            tcMainHome.Left -= SLIDING_GAP / 2;
+
+            btnSettings.Width = MIN_ICON_WIDTH;
             btnSettings.Text = "";
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            Point screenSize = ((Point)Screen.PrimaryScreen.Bounds.Size);
+
+            this.Location = new Point((screenSize.X - this.Width) / 2, (screenSize.Y - this.Height) / 2);
+
+            mainForm_AddEvent();
+        }
+
+        private void mainForm_AddEvent()
+        {
+            //홈버튼 이벤트
+            btnHome.Click += btnHome_Click;
+            //설정버튼 이벤트
+            btnSettings.Click += btnSettings_Click;
+            //사이드 메뉴 접기/열기 버튼 이벤트
+            btnSlideMenu.Click += btnSlideMenu_Click;
+            //창 닫기 버튼 이벤트
+            btnClose.Click += btnClose_Click;
+            //프로그램 실행 버튼 이벤트
+            btnStart.Click += btnStart_Click;
+            
+            //이 아래로 전부 설정창의 CustomPanel 객체들 이벤트
+            pnSettingSub1.MouseDown += pnSettingAll_MouseDown;
+            pnSettingSub1.MouseEnter += pnSettingAll_MouseEnter;
+            pnSettingSub1.MouseLeave += pnSettingAll_MouseLeave;
+            pnSettingSub1.MouseUp += pnSettingAll_MouseUp;
+
+            pnSettingOut1.MouseDown += pnSettingAll_MouseDown;
+            pnSettingOut1.MouseEnter += pnSettingAll_MouseEnter;
+            pnSettingOut1.MouseLeave += pnSettingAll_MouseLeave;
+            pnSettingOut1.MouseUp += pnSettingAll_MouseUp;
+
+            pnSettingOut2.MouseDown += pnSettingAll_MouseDown;
+            pnSettingOut2.MouseEnter += pnSettingAll_MouseEnter;
+            pnSettingOut2.MouseLeave += pnSettingAll_MouseLeave;
+            pnSettingOut2.MouseUp += pnSettingAll_MouseUp;
+
+            pnSettingOut3.MouseDown += pnSettingAll_MouseDown;
+            pnSettingOut3.MouseEnter += pnSettingAll_MouseEnter;
+            pnSettingOut3.MouseLeave += pnSettingAll_MouseLeave;
+            pnSettingOut3.MouseUp += pnSettingAll_MouseUp;
+
+            pnSettingTrunk1.MouseDown += pnSettingAll_MouseDown;
+            pnSettingTrunk1.MouseEnter += pnSettingAll_MouseEnter;
+            pnSettingTrunk1.MouseLeave += pnSettingAll_MouseLeave;
+            pnSettingTrunk1.MouseUp += pnSettingAll_MouseUp;
+
+            pnSettingTrunk2.MouseDown += pnSettingAll_MouseDown;
+            pnSettingTrunk2.MouseEnter += pnSettingAll_MouseEnter;
+            pnSettingTrunk2.MouseLeave += pnSettingAll_MouseLeave;
+            pnSettingTrunk2.MouseUp += pnSettingAll_MouseUp;
+
+            pnSettingCrown1.MouseDown += pnSettingAll_MouseDown;
+            pnSettingCrown1.MouseEnter += pnSettingAll_MouseEnter;
+            pnSettingCrown1.MouseLeave += pnSettingAll_MouseLeave;
+            pnSettingCrown1.MouseUp += pnSettingAll_MouseUp;
+
+            pnSettingCrown2.MouseDown += pnSettingAll_MouseDown;
+            pnSettingCrown2.MouseEnter += pnSettingAll_MouseEnter;
+            pnSettingCrown2.MouseLeave += pnSettingAll_MouseLeave;
+            pnSettingCrown2.MouseUp += pnSettingAll_MouseUp;
+
+            pnSettingTree1.MouseDown += pnSettingAll_MouseDown;
+            pnSettingTree1.MouseEnter += pnSettingAll_MouseEnter;
+            pnSettingTree1.MouseLeave += pnSettingAll_MouseLeave;
+            pnSettingTree1.MouseUp += pnSettingAll_MouseUp;
+
+            pnSettingTree2.MouseDown += pnSettingAll_MouseDown;
+            pnSettingTree2.MouseEnter += pnSettingAll_MouseEnter;
+            pnSettingTree2.MouseLeave += pnSettingAll_MouseLeave;
+            pnSettingTree2.MouseUp += pnSettingAll_MouseUp;
+
+            pnSettingTree3.MouseDown += pnSettingAll_MouseDown;
+            pnSettingTree3.MouseEnter += pnSettingAll_MouseEnter;
+            pnSettingTree3.MouseLeave += pnSettingAll_MouseLeave;
+            pnSettingTree3.MouseUp += pnSettingAll_MouseUp;
+
+            pnSettingTree4.MouseDown += pnSettingAll_MouseDown;
+            pnSettingTree4.MouseEnter += pnSettingAll_MouseEnter;
+            pnSettingTree4.MouseLeave += pnSettingAll_MouseLeave;
+            pnSettingTree4.MouseUp += pnSettingAll_MouseUp;
+
+            pnSettingMeasure1.MouseDown += pnSettingAll_MouseDown;
+            pnSettingMeasure1.MouseEnter += pnSettingAll_MouseEnter;
+            pnSettingMeasure1.MouseLeave += pnSettingAll_MouseLeave;
+            pnSettingMeasure1.MouseUp += pnSettingAll_MouseUp;
         }
 
         private void customPanels_Load()
@@ -97,7 +193,7 @@ namespace WinFormsAppTest
             pnSettingMeasure1.fillColor = Color.Gray;
         }
 
-        private void btnStart_Click_1(object sender, EventArgs e)
+        private void btnStart_Click(object sender, EventArgs e)
         {
             pFrm = new PlotForm();
             pFrm.ShowDialog();
@@ -134,18 +230,18 @@ namespace WinFormsAppTest
             if (pnSideMenu.Width <= MAX_SLIDING_WIDTH && menuOpen == true)
             {
                 pnSideMenu.Width = MAX_SLIDING_WIDTH;
-                tcMainHome.Left += SLIDING_GAP;
-                tcMainHome.Width -= SLIDING_GAP;
+                tcMainHome.Left += SLIDING_GAP / 2;
 
+                btnSettings.Width = MAX_ICON_WIDTH;
                 btnSettings.Text = "            Settings";
             }
 
             else if (pnSideMenu.Width >= MIN_SLIDING_WIDTH && menuOpen == false)
             {
                 pnSideMenu.Width = MIN_SLIDING_WIDTH;
-                tcMainHome.Left -= SLIDING_GAP;
-                tcMainHome.Width += SLIDING_GAP;
+                tcMainHome.Left -= SLIDING_GAP / 2;
 
+                btnSettings.Width = MIN_ICON_WIDTH;
                 btnSettings.Text = "";
             }
         }
@@ -153,6 +249,73 @@ namespace WinFormsAppTest
         private void btnSettings_Click(object sender, EventArgs e)
         {
             tcMainHome.SelectedIndex = 1;
+        }
+
+        private void pnSettingAll_MouseEnter(object sender, EventArgs e)
+        {
+            if (sender is CustomPanel)
+            {
+                CustomPanel cPanel = (CustomPanel)sender;
+
+                cPanel.fillColor = Color.DarkGray;
+                cPanel.Invalidate();
+            }
+        }
+
+        private void pnSettingAll_MouseLeave(object sender, EventArgs e)
+        {
+            if (sender is CustomPanel)
+            {
+                CustomPanel cPanel = (CustomPanel)sender;
+
+                cPanel.fillColor = Color.Gray;
+                cPanel.Invalidate();
+            }
+        }
+
+        private void pnSettingAll_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (sender is CustomPanel)
+            {
+                CustomPanel cPanel = (CustomPanel)sender;
+
+                cPanel.fillColor = Color.Silver;
+                cPanel.Invalidate();
+            }
+        }
+
+        private void pnSettingAll_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (sender is CustomPanel)
+            {
+                CustomPanel cPanel = (CustomPanel)sender;
+
+                cPanel.fillColor = Color.DarkGray;
+                cPanel.Invalidate();
+            }
+        }
+
+        private void MainForm_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left && e.Location.Y <= 30)
+            {
+                relativeMformPos = e.Location;
+                isMformDrag = true;
+            }
+        }
+
+        private void MainForm_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left && isMformDrag)
+            {
+                this.Location = new Point(this.Location.X + (e.X - relativeMformPos.X),
+                    this.Location.Y + (e.Y - relativeMformPos.Y));
+            }
+        }
+
+        private void MainForm_MouseUp(object sender, MouseEventArgs e)
+        {
+            isMformDrag = false;
         }
     }
 }

@@ -294,10 +294,10 @@
             tpPlotRec.Controls.Add(lbPlotRecText1);
             tpPlotRec.Controls.Add(lbPlotRecY);
             tpPlotRec.Controls.Add(tbPlotRecYmin);
-            tpPlotRec.Location = new Point(4, 5);
+            tpPlotRec.Location = new Point(4, 9);
             tpPlotRec.Name = "tpPlotRec";
             tpPlotRec.Padding = new Padding(3);
-            tpPlotRec.Size = new Size(487, 189);
+            tpPlotRec.Size = new Size(487, 185);
             tpPlotRec.TabIndex = 1;
             // 
             // lbPlotRec
@@ -317,10 +317,10 @@
             tpPlotPoly.Controls.Add(tbPlotPolySet);
             tpPlotPoly.Controls.Add(c_btnPlotPolySet);
             tpPlotPoly.Controls.Add(lbPlotPolySet);
-            tpPlotPoly.Location = new Point(4, 5);
+            tpPlotPoly.Location = new Point(4, 9);
             tpPlotPoly.Name = "tpPlotPoly";
             tpPlotPoly.Padding = new Padding(3);
-            tpPlotPoly.Size = new Size(487, 189);
+            tpPlotPoly.Size = new Size(487, 185);
             tpPlotPoly.TabIndex = 2;
             // 
             // lbPlotPoly
@@ -361,6 +361,7 @@
             cbPlotShape.Name = "cbPlotShape";
             cbPlotShape.Size = new Size(109, 23);
             cbPlotShape.TabIndex = 11;
+            cbPlotShape.SelectedIndexChanged += cbPlotShape_SelectedIndexChanged;
             // 
             // c_pnPlotData
             // 
@@ -424,6 +425,7 @@
             FormBorderStyle = FormBorderStyle.None;
             Name = "PlotForm";
             Text = "Form2";
+            Load += PlotForm_Load;
             MouseDown += PlotForm_MouseDown;
             MouseMove += PlotForm_MouseMove;
             tcPlot.ResumeLayout(false);
@@ -458,9 +460,6 @@
         private TextBox tbPlotPolySet;
         private Label lbPlotPolySet;
         private CustomBtn c_btnPlotPolySet;
-        private Button button2;
-        private Button button3;
-        private Button button4;
         private Button btnPlotOK;
         private Button btnPlotCancle;
         private CustomTabControl tcPlot;

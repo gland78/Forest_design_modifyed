@@ -19,6 +19,7 @@ namespace WinFormsAppTest
 
         public CustomPanel()
         {
+            DoubleBuffered = true;
         }
 
         protected override void OnPaint(PaintEventArgs e)

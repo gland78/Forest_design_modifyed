@@ -46,7 +46,7 @@ namespace WinFormsAppTest
 
         Coords bufferedPolycords = new Coords();
 
-        private Point relativeFormPos = new Point();
+        private Point relativePformPos = new Point();
 
         public PlotForm()
         {
@@ -57,6 +57,13 @@ namespace WinFormsAppTest
             c_pnPlotData.isFill = true;
             c_pnPlotData.isBorder = false;
             c_pnPlotData.borderColor = Color.Honeydew;
+        }
+
+        private void PlotForm_Load(object sender, EventArgs e)
+        {
+            Point screenSize = ((Point)Screen.PrimaryScreen.Bounds.Size);
+
+            this.Location = new Point((screenSize.X - this.Width) / 2, (screenSize.Y - this.Height) / 2);
         }
 
         private void btnPlotCancle_Click(object sender, EventArgs e)
@@ -1307,7 +1314,7 @@ namespace WinFormsAppTest
         {
             if (e.Button == MouseButtons.Left)
             {
-                relativeFormPos = e.Location;
+                relativePformPos = e.Location;
             }
         }
 
@@ -1315,9 +1322,14 @@ namespace WinFormsAppTest
         {
             if (e.Button == MouseButtons.Left)
             {
-                this.Location = new Point(this.Location.X + (e.X - relativeFormPos.X),
-                    this.Location.Y + (e.Y - relativeFormPos.Y));
+                this.Location = new Point(this.Location.X + (e.X - relativePformPos.X),
+                    this.Location.Y + (e.Y - relativePformPos.Y));
             }
+        }
+
+        private void cbPlotShape_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            tcPlot.SelectedIndex = cbPlotShape.SelectedIndex;
         }
     }
 }
