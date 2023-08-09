@@ -21,12 +21,12 @@ namespace WinFormsAppTest
         public PlotForm(MainForm paramForm)
         {
             InitializeComponent();
-            c_pnPlotSelection.isFill = true;
-            c_pnPlotSelection.isBorder = false;
-            c_pnPlotSelection.borderColor = Color.Honeydew;
-            c_pnPlotData.isFill = true;
-            c_pnPlotData.isBorder = false;
-            c_pnPlotData.borderColor = Color.Honeydew;
+            pnPlotSelection.isFill = true;
+            pnPlotSelection.isBorder = false;
+            pnPlotSelection.borderColor = Color.Honeydew;
+            pnPlotData.isFill = true;
+            pnPlotData.isBorder = false;
+            pnPlotData.borderColor = Color.Honeydew;
 
             cbPlotShape.SelectedIndex = 0;
             this.paramForm = paramForm;

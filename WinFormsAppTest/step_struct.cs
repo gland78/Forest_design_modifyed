@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,6 +20,7 @@ namespace WinFormsAppTest
         public point left;
     }
 
+    [Serializable]
     public struct GUI
     {
         /// <summary>
@@ -53,14 +55,20 @@ namespace WinFormsAppTest
         /// </summary>
         public string pointList { get; set; }
     }
+
+    [Serializable]
     public struct Crop
     {
         public double buffer { get; set; }
     }
+
+    [Serializable]
     public struct Subsampling
     {
         public double cellSize { get; set; }
     }
+
+    [Serializable]
     public struct Outlier
     {
         /// <summary>
@@ -78,6 +86,7 @@ namespace WinFormsAppTest
 
     }
 
+    [Serializable]
     public struct GroundSeg
     {
         public string scalar { get; set; }
@@ -86,22 +95,28 @@ namespace WinFormsAppTest
         public string windowSize { get; set; }
         public string threshold { get; set; }
     }
+
+    [Serializable]
     public struct TSlice
     {
         public double minHeight { get; set; }
         public double maxHeight { get; set; }
     }
 
+    [Serializable]
     public struct CSlice
     {
         public double minHeight { get; set; }
         public double maxHeight { get; set; }
     }
 
+    [Serializable]
     public struct CrownSeg
     {
         public int CrownNN { get; set; }
     }
+
+    [Serializable]
     public struct Measure
     {
         public int MeasureNN { get; set; }
@@ -110,6 +125,7 @@ namespace WinFormsAppTest
         public int iterations { get; set; }
     }
 
+    [Serializable]
     public struct SegmentStem
     {
         public double smoothness { get; set; }

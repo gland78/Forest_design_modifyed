@@ -32,8 +32,8 @@ namespace WinFormsAppTest
 
         bool isMformDrag = false;
 
-        string configPath = System.IO.Directory.GetParent(System.Environment.CurrentDirectory).Parent + @"\bin\";
-        string[] reqDi = { "", "preSetConfig", "recentConfig" };
+        string configPath = Directory.GetParent(System.Environment.CurrentDirectory) + @"\bin\";
+        string[] reqDi = { "", "recentConfig", "preSetConfig" };
 
         public MainForm()
         {
@@ -54,6 +54,17 @@ namespace WinFormsAppTest
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            DirectoryInfo configDi;
+            foreach (string diName in reqDi)
+            {
+                configDi = new DirectoryInfo(configPath + diName);
+                if (configDi.Exists == false)
+                {
+                    configDi.Create();
+                    touchConfig(configFileType.Preset);
+                }
+            }
+
             //ReadConfig();
             Initialize_Params();
             FillTextboxes();
@@ -64,21 +75,16 @@ namespace WinFormsAppTest
             this.Location = new Point((screenSize.X - this.Width) / 2, (screenSize.Y - this.Height) / 2);
 
             mainForm_AddEvent();
-
-            DirectoryInfo configDi;
-            foreach (string fileName in reqDi)
-            {
-                configDi = new DirectoryInfo(configPath + fileName);
-                MessageBox.Show(configDi.FullName);
-                if (configDi.Exists == false)
-                {
-                    configDi.Create();
-                }
-            }
         }
 
         private void touchConfig(configFileType confType)
         {
+            string[] files;
+            if (confType != configFileType.Default)
+            {
+                files = Directory.GetFiles(configPath + reqDi[(int)confType] + @"\", $"{"config*"}");
+                File.Copy(configPath + "config.json", configPath + reqDi[(int)confType] + @"\config" + files.Length.ToString() + ".json");
+            }
         }
 
         //메인 폼 로드 전 이벤트 전처리(Designer.cs에 넣으면 찾기가 힘듬)
