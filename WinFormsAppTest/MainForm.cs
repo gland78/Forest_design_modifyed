@@ -1,5 +1,7 @@
 using System.Threading.Tasks;
 using Timer = System.Windows.Forms.Timer;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace WinFormsAppTest
 {
@@ -38,6 +40,11 @@ namespace WinFormsAppTest
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            //ReadConfig();
+            Initialize_Params();
+            FillTextboxes();
+            RegistTextBoxHandler();
+
             Point screenSize = ((Point)Screen.PrimaryScreen.Bounds.Size);
 
             this.Location = new Point((screenSize.X - this.Width) / 2, (screenSize.Y - this.Height) / 2);
@@ -57,7 +64,7 @@ namespace WinFormsAppTest
             btnClose.Click += btnClose_Click;
             //프로그램 실행 버튼 이벤트
             btnStart.Click += btnStart_Click;
-            
+
             //이 아래로 전부 설정창의 CustomPanel 객체들 이벤트
             pnSettingSub1.MouseDown += pnSettingAll_MouseDown;
             pnSettingSub1.MouseEnter += pnSettingAll_MouseEnter;
@@ -195,7 +202,7 @@ namespace WinFormsAppTest
 
         private void btnStart_Click(object sender, EventArgs e)
         {
-            pFrm = new PlotForm();
+            pFrm = new PlotForm(this);
             pFrm.ShowDialog();
         }
 
@@ -316,6 +323,130 @@ namespace WinFormsAppTest
         private void MainForm_MouseUp(object sender, MouseEventArgs e)
         {
             isMformDrag = false;
+        }
+
+
+
+
+        /// <summary>
+        /// config 저장하기 버튼 구현 필요
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnSettingSave_Click(object sender, EventArgs e)
+        {
+            /*
+            //반지름, 사각형 좌표 무결성 검사
+            bool integrity = CheckIntegrity();
+            if (!integrity)
+            {
+                MessageBox.Show("좌표설정 혹은 반지름 설정에 문제가 있습니다. 수정해주세요.");
+                return;
+            }*/
+            //변수들 초기화
+            UpdateParams();
+
+            //제이슨 파일에 쓰기
+            string filePath = "..\\bin\\config.json"; ;
+            try
+            {
+                // Read the existing JSON file
+                string jsonString = File.ReadAllText(filePath);
+                JArray jsonArray = JArray.Parse(jsonString);
+
+                // Update the values in the JSON objects based on the TextBox inputs
+                foreach (JObject jsonObject in jsonArray)
+                {
+                    /*if (jsonObject.ContainsKey("GUI"))
+                    {
+                        JObject guiObject = jsonObject["GUI"] as JObject;
+                        if (guiObject != null && guiObject.ContainsKey("circle"))
+                        {
+                            JObject circleObject = guiObject["circle"] as JObject;
+                            if (circleObject != null)
+                            {
+                                circleObject["cx"] = plot_xcenter;
+                                circleObject["cy"] = plot_ycenter;
+                                circleObject["radius"] = plot_radius;
+                            }
+
+                        }
+                        JObject rectangleObject = guiObject["rectangle"] as JObject;
+                        if (rectangleObject != null)
+                        {
+                            rectangleObject["xmin"] = plot_Xmin;
+                            rectangleObject["ymin"] = plot_Ymin;
+                            rectangleObject["xmax"] = plot_Xmax;
+                            rectangleObject["ymax"] = plot_Ymax;
+                        }
+                        JObject result_path = guiObject["result_path"] as JObject;
+                        if (result_path != null)
+                        {
+                            result_path["result_path"] = plot_resPath;
+                        }
+                    }*/
+
+                    if (jsonObject.ContainsKey("Crop"))
+                    {
+                        jsonObject["Crop"]["buffer"] = crop.buffer;
+                    }
+
+                    if (jsonObject.ContainsKey("Sub"))
+                    {
+                        jsonObject["Sub"]["Sub_cell"] = subsampling.cellSize;
+                    }
+                    if (jsonObject.ContainsKey("Outlier"))
+                    {
+                        jsonObject["Outlier"]["method"] = outlier.method;
+                        jsonObject["Outlier"]["mean_k"] = outlier.mean_k;
+                        jsonObject["Outlier"]["multiplier"] = outlier.Multiplier;
+                    }
+                    if (jsonObject.ContainsKey("Ground"))
+                    {
+                        jsonObject["Ground"]["Ground_cell"] = groundseg.cellSize;
+                        jsonObject["Ground"]["window"] = groundseg.windowSize;
+                        jsonObject["Ground"]["slope"] = groundseg.slope;
+                        jsonObject["Ground"]["scalar"] = groundseg.scalar;
+                        jsonObject["Ground"]["threshold"] = groundseg.threshold;
+                    }
+
+                    if (jsonObject.ContainsKey("TSlice"))
+                    {
+                        jsonObject["TSlice"]["T_minheight"] = tSlice.minHeight;
+                        jsonObject["TSlice"]["T_maxheight"] = tSlice.maxHeight;
+                    }
+                    if (jsonObject.ContainsKey("CSlice"))
+                    {
+                        jsonObject["CSlice"]["C_minheight"] = cSlice.minHeight;
+                        jsonObject["CSlice"]["C_maxheight"] = cSlice.maxHeight;
+                    }
+                    if (jsonObject.ContainsKey("Crownseg"))
+                    {
+                        jsonObject["Crownseg"]["Crown_nnearest"] = crownSeg.CrownNN;
+                    }
+                    if (jsonObject.ContainsKey("Measure"))
+                    {
+                        jsonObject["Measure"]["Measure_nnearest"] = measure.MeasureNN;
+                        jsonObject["Measure"]["minRad"] = measure.minRad;
+                        jsonObject["Measure"]["maxRad"] = measure.maxRad;
+                        jsonObject["Measure"]["iterations"] = measure.iterations;
+                    }
+                    if (jsonObject.ContainsKey("SegmentStem"))
+                    {
+                        jsonObject["SegmentStem"]["smoothness"] = segmentStem.smoothness;
+                        jsonObject["SegmentStem"]["mindbh"] = segmentStem.minDBH;
+                        jsonObject["SegmentStem"]["maxdbh"] = segmentStem.maxDBH;
+                    }
+                }
+
+                // Save the modified JSON back to the file
+                File.WriteAllText(filePath, jsonArray.ToString());
+                MessageBox.Show("변수가 성공적으로 수정되었습니다.");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error while updating JSON file: " + ex.Message);
+            }
         }
     }
 }
