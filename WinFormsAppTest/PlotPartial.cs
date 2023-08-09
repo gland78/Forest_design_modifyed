@@ -99,6 +99,8 @@ namespace WinFormsAppTest
                     //MessageBox.Show("batFileCreated");
                     using (StreamWriter sw = new StreamWriter(new FileStream(batFilePath, FileMode.OpenOrCreate), Encoding.Default))
                     {
+                        sw.WriteLine("chcp 65001");
+                        sw.WriteLine("cls");
                         sw.WriteLine("@ECHO OFF");
                         sw.WriteLine("echo Buffer 표준지 분류 중...");
                         sw.WriteLine("pdal pipeline " + one + originLasName + ".json");
@@ -545,6 +547,8 @@ namespace WinFormsAppTest
                 }
                 using (StreamWriter sw = new StreamWriter(new FileStream(batFilePath, FileMode.OpenOrCreate), Encoding.Default))
                 {
+                    sw.WriteLine("chcp 65001");
+                    sw.WriteLine("cls");
                     sw.WriteLine("@ECHO OFF");
                     sw.WriteLine("echo 파일 크기 축소 중...");
                     sw.WriteLine("pdal pipeline " + two + originLasName + ".json");
@@ -567,6 +571,8 @@ namespace WinFormsAppTest
                 }
                 using (StreamWriter sw = new StreamWriter(new FileStream(batFilePath, FileMode.OpenOrCreate), Encoding.Default))
                 {
+                    sw.WriteLine("chcp 65001");
+                    sw.WriteLine("cls");
                     sw.WriteLine("@ECHO OFF");
                     sw.WriteLine("echo 이상점 제거 중...");
                     sw.WriteLine("pdal pipeline " + three + originLasName + ".json");
@@ -591,6 +597,8 @@ namespace WinFormsAppTest
                 using (StreamWriter sw = new StreamWriter(new FileStream(batFilePath, FileMode.OpenOrCreate), Encoding.Default))
 
                 {
+                    sw.WriteLine("chcp 65001");
+                    sw.WriteLine("cls");
                     sw.WriteLine("@ECHO OFF");
                     sw.WriteLine("echo 지면 추출 및 평탄화 중...");
                     sw.WriteLine("pdal pipeline " + four + originLasName + ".json");
@@ -614,6 +622,8 @@ namespace WinFormsAppTest
                 }
                 using (StreamWriter sw = new StreamWriter(new FileStream(batFilePath, FileMode.OpenOrCreate), Encoding.Default))
                 {
+                    sw.WriteLine("chcp 65001");
+                    sw.WriteLine("cls");
                     sw.WriteLine("@ECHO OFF");
                     sw.WriteLine("echo las에서 pcd로 확장자 변환 중...");
                     sw.WriteLine("pdal pipeline " + fourone + originLasName + ".json");
@@ -640,6 +650,8 @@ namespace WinFormsAppTest
                 }
                 using (StreamWriter sw = new StreamWriter(new FileStream(batFilePath, FileMode.OpenOrCreate), Encoding.Default))
                 {
+                    sw.WriteLine("chcp 65001");
+                    sw.WriteLine("cls");
                     sw.WriteLine("@ECHO OFF");
                     sw.WriteLine("echo 원본 표준지 분류 중...");
                     sw.WriteLine("pdal pipeline " + fourtwo + originLasName + ".json");
@@ -740,6 +752,8 @@ namespace WinFormsAppTest
                 }
                 using (StreamWriter sw = new StreamWriter(new FileStream(batFilePath, FileMode.OpenOrCreate), Encoding.Default))
                 {
+                    sw.WriteLine("chcp 65001");
+                    sw.WriteLine("cls");
                     sw.WriteLine("@ECHO OFF");
                     sw.WriteLine("echo 수간 영역 잘라내는 중...");
                     sw.WriteLine("pdal pipeline " + five + originLasName + ".json");
@@ -763,6 +777,8 @@ namespace WinFormsAppTest
                 }
                 using (StreamWriter sw = new StreamWriter(new FileStream(batFilePath, FileMode.OpenOrCreate), Encoding.Default))
                 {
+                    sw.WriteLine("chcp 65001");
+                    sw.WriteLine("cls");
                     sw.WriteLine("@ECHO OFF");
                     sw.WriteLine("echo 수관 영역 잘라내는 중...");
                     sw.WriteLine("pdal pipeline " + six + originLasName + ".json");
@@ -786,6 +802,8 @@ namespace WinFormsAppTest
                 }
                 using (StreamWriter sw = new StreamWriter(new FileStream(batFilePath, FileMode.OpenOrCreate), Encoding.Default))
                 {
+                    sw.WriteLine("chcp 65001");
+                    sw.WriteLine("cls");
                     sw.WriteLine("@ECHO OFF");
                     sw.WriteLine("echo 수간 추출 및 하층식생 제거 중...");
                     //최종에서는 명령인수 삭제
@@ -830,6 +848,8 @@ namespace WinFormsAppTest
                 {
                     string tree_name = "_TREE_";
                     string destination = @"..\tree";
+                    sw.WriteLine("chcp 65001");
+                    sw.WriteLine("cls");
                     sw.WriteLine("@ECHO OFF");
                     sw.WriteLine("echo 개별목 추출 중...");
 
@@ -864,6 +884,8 @@ namespace WinFormsAppTest
                 String FolderName2 = "..\\tree";
                 using (StreamWriter sw = new StreamWriter(new FileStream(batFilePath, FileMode.OpenOrCreate), Encoding.Default))
                 {
+                    sw.WriteLine("chcp 65001");
+                    sw.WriteLine("cls");
                     sw.WriteLine("@ECHO OFF");
                     sw.WriteLine("echo 산림 속성 정보 계산중...  ");
                     sw.WriteLine("measure " + FolderName + " " + FolderName2);
@@ -886,6 +908,8 @@ namespace WinFormsAppTest
                 String FolderName2 = "..\\tree";
                 using (StreamWriter sw = new StreamWriter(new FileStream(batFilePath, FileMode.OpenOrCreate), Encoding.Default))
                 {
+                    sw.WriteLine("chcp 65001");
+                    sw.WriteLine("cls");
                     sw.WriteLine("@ECHO OFF");
                     sw.WriteLine("echo pcd파일 las파일로 변환중");
                     sw.WriteLine("PCD2LAS " + FolderName);
