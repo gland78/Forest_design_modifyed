@@ -1,3 +1,4 @@
+using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
 using Timer = System.Windows.Forms.Timer;
 
@@ -5,6 +6,13 @@ namespace WinFormsAppTest
 {
     public partial class MainForm : Form
     {
+        public enum configFileType
+        {
+            Default,
+            Recent,
+            Preset
+        }
+
         private PlotForm? pFrm;
 
         //슬라이딩 메뉴의 최대, 최소 폭 크기 및 그 차이
@@ -18,9 +26,12 @@ namespace WinFormsAppTest
 
         bool menuOpen = false;
 
-        private Point relativeMformPos = new Point();
+        Point relativeMformPos = new Point();
 
-        private bool isMformDrag = false;
+        bool isMformDrag = false;
+
+        string configPath = System.IO.Directory.GetParent(System.Environment.CurrentDirectory).Parent + @"\bin\";
+        string[] reqDi = { "", "preSetConfig", "recentConfig" };
 
         public MainForm()
         {
@@ -29,11 +40,14 @@ namespace WinFormsAppTest
 
             customPanels_Load();
 
+            pnMain.isBorder = false;
+
             pnSideMenu.Width = MIN_SLIDING_WIDTH;
             tcMainHome.Left -= SLIDING_GAP / 2;
 
             btnSettings.Width = MIN_ICON_WIDTH;
             btnSettings.Text = "";
+
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -43,8 +57,24 @@ namespace WinFormsAppTest
             this.Location = new Point((screenSize.X - this.Width) / 2, (screenSize.Y - this.Height) / 2);
 
             mainForm_AddEvent();
+
+            DirectoryInfo configDi;
+            foreach (string fileName in reqDi)
+            {
+                configDi = new DirectoryInfo(configPath + fileName);
+                MessageBox.Show(configDi.FullName);
+                if (configDi.Exists == false)
+                {
+                    configDi.Create();
+                }
+            }
         }
 
+        private void touchConfig(configFileType confType)
+        {
+        }
+
+        //메인 폼 로드 전 이벤트 전처리(Designer.cs에 넣으면 찾기가 힘듬)
         private void mainForm_AddEvent()
         {
             //홈버튼 이벤트
@@ -57,7 +87,7 @@ namespace WinFormsAppTest
             btnClose.Click += btnClose_Click;
             //프로그램 실행 버튼 이벤트
             btnStart.Click += btnStart_Click;
-            
+
             //이 아래로 전부 설정창의 CustomPanel 객체들 이벤트
             pnSettingSub1.MouseDown += pnSettingAll_MouseDown;
             pnSettingSub1.MouseEnter += pnSettingAll_MouseEnter;
@@ -125,6 +155,7 @@ namespace WinFormsAppTest
             pnSettingMeasure1.MouseUp += pnSettingAll_MouseUp;
         }
 
+        //CustomPanel 색 및 테두리 지정(Designer.cs에서 지정하면 컴파일 시 없어짐)
         private void customPanels_Load()
         {
             pnSettingSub1.BackColor = Color.Transparent;
@@ -199,21 +230,6 @@ namespace WinFormsAppTest
             pFrm.ShowDialog();
         }
 
-        private void btnExtractMenu_Click(object sender, EventArgs e)
-        {
-            tcMainHome.SelectedIndex = 1;
-        }
-
-        private void btnTidyMenu_Click(object sender, EventArgs e)
-        {
-            tcMainHome.SelectedIndex = 2;
-        }
-
-        private void btnCalcMenu_Click(object sender, EventArgs e)
-        {
-            tcMainHome.SelectedIndex = 3;
-        }
-
         private void btnHome_Click(object sender, EventArgs e)
         {
             tcMainHome.SelectedIndex = 0;
@@ -224,6 +240,7 @@ namespace WinFormsAppTest
             this.Close();
         }
 
+        //사이드 메뉴 여닫기
         private void btnSlideMenu_Click(object sender, EventArgs e)
         {
             menuOpen = !menuOpen;
@@ -251,6 +268,7 @@ namespace WinFormsAppTest
             tcMainHome.SelectedIndex = 1;
         }
 
+        //이 아래 4개 메서드 설정창 파라메터 판넬 마우스 이벤트
         private void pnSettingAll_MouseEnter(object sender, EventArgs e)
         {
             if (sender is CustomPanel)
@@ -295,6 +313,7 @@ namespace WinFormsAppTest
             }
         }
 
+        //아래 메서드 3개 커스텀 제목표시줄로 인한 창 이동 이벤트 임의 생성
         private void MainForm_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left && e.Location.Y <= 30)

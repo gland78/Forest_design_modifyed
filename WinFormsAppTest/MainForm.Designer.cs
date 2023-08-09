@@ -49,7 +49,7 @@
             pnReviewMain = new Panel();
             pnReview = new Panel();
             lbReview = new Label();
-            pnMain = new Panel();
+            pnMain = new CustomPanel();
             lbSubTitle = new Label();
             btnStart = new Button();
             lbTitle = new Label();
@@ -130,6 +130,9 @@
             pnSideMenu.Name = "pnSideMenu";
             pnSideMenu.Size = new Size(384, 800);
             pnSideMenu.TabIndex = 0;
+            pnSideMenu.MouseDown += MainForm_MouseDown;
+            pnSideMenu.MouseMove += MainForm_MouseMove;
+            pnSideMenu.MouseUp += MainForm_MouseUp;
             // 
             // btnHome
             // 
@@ -308,11 +311,13 @@
             tcMainHome.Controls.Add(tpMainHome);
             tcMainHome.Controls.Add(tpSettings);
             tcMainHome.ItemSize = new Size(0, 5);
-            tcMainHome.Location = new Point(379, 30);
+            tcMainHome.Location = new Point(379, 27);
+            tcMainHome.Margin = new Padding(0);
             tcMainHome.Multiline = true;
             tcMainHome.Name = "tcMainHome";
+            tcMainHome.Padding = new Point(0, 0);
             tcMainHome.SelectedIndex = 0;
-            tcMainHome.Size = new Size(905, 774);
+            tcMainHome.Size = new Size(905, 777);
             tcMainHome.TabIndex = 4;
             // 
             // tpMainHome
@@ -322,7 +327,7 @@
             tpMainHome.Location = new Point(4, 9);
             tpMainHome.Name = "tpMainHome";
             tpMainHome.Padding = new Padding(3);
-            tpMainHome.Size = new Size(897, 761);
+            tpMainHome.Size = new Size(897, 764);
             tpMainHome.TabIndex = 0;
             tpMainHome.UseVisualStyleBackColor = true;
             // 
@@ -332,10 +337,10 @@
             pnReviewMain.Controls.Add(pnReview);
             pnReviewMain.Controls.Add(lbReview);
             pnReviewMain.Dock = DockStyle.Bottom;
-            pnReviewMain.Location = new Point(3, 441);
+            pnReviewMain.Location = new Point(3, 442);
             pnReviewMain.Margin = new Padding(3, 4, 3, 4);
             pnReviewMain.Name = "pnReviewMain";
-            pnReviewMain.Size = new Size(891, 317);
+            pnReviewMain.Size = new Size(891, 319);
             pnReviewMain.TabIndex = 9;
             // 
             // pnReview
@@ -360,6 +365,8 @@
             // 
             // pnMain
             // 
+            pnMain.BackgroundImage = (Image)resources.GetObject("pnMain.BackgroundImage");
+            pnMain.BackgroundImageLayout = ImageLayout.Stretch;
             pnMain.Controls.Add(lbSubTitle);
             pnMain.Controls.Add(btnStart);
             pnMain.Controls.Add(lbTitle);
@@ -367,7 +374,7 @@
             pnMain.Location = new Point(3, 3);
             pnMain.Margin = new Padding(3, 4, 3, 4);
             pnMain.Name = "pnMain";
-            pnMain.Size = new Size(891, 438);
+            pnMain.Size = new Size(891, 452);
             pnMain.TabIndex = 10;
             // 
             // lbSubTitle
@@ -384,7 +391,7 @@
             // 
             btnStart.Anchor = AnchorStyles.Right;
             btnStart.Font = new Font("굴림", 20.25F, FontStyle.Regular, GraphicsUnit.Point);
-            btnStart.Location = new Point(646, 222);
+            btnStart.Location = new Point(646, 229);
             btnStart.Margin = new Padding(3, 4, 3, 4);
             btnStart.Name = "btnStart";
             btnStart.Size = new Size(179, 61);
@@ -432,7 +439,7 @@
             tpSettings.Location = new Point(4, 9);
             tpSettings.Name = "tpSettings";
             tpSettings.Padding = new Padding(3);
-            tpSettings.Size = new Size(897, 761);
+            tpSettings.Size = new Size(897, 764);
             tpSettings.TabIndex = 1;
             // 
             // lbSettings
@@ -887,6 +894,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.White;
             ClientSize = new Size(1280, 800);
             Controls.Add(btnHide);
             Controls.Add(pnSideMenu);
@@ -953,7 +961,7 @@
         private Panel pnReviewMain;
         private Panel pnReview;
         private Label lbReview;
-        private Panel pnMain;
+        private CustomPanel pnMain;
         private Label lbSubTitle;
         private Button btnStart;
         private Label lbTitle;

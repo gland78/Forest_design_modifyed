@@ -54,10 +54,10 @@
             lbPlotRec = new Label();
             tpPlotPoly = new TabPage();
             lbPlotPoly = new Label();
-            c_pnPlotSelection = new CustomPanel();
+            pnPlotSelection = new CustomPanel();
             lbPlotSelection = new Label();
             cbPlotShape = new ComboBox();
-            c_pnPlotData = new CustomPanel();
+            pnPlotData = new CustomPanel();
             c_btnPlotData = new CustomBtn();
             tbPlotData = new TextBox();
             lbPlotData = new Label();
@@ -65,8 +65,8 @@
             tpPlotCircle.SuspendLayout();
             tpPlotRec.SuspendLayout();
             tpPlotPoly.SuspendLayout();
-            c_pnPlotSelection.SuspendLayout();
-            c_pnPlotData.SuspendLayout();
+            pnPlotSelection.SuspendLayout();
+            pnPlotData.SuspendLayout();
             SuspendLayout();
             // 
             // tbPlotCircleR
@@ -335,13 +335,13 @@
             // 
             // c_pnPlotSelection
             // 
-            c_pnPlotSelection.BackColor = Color.Transparent;
-            c_pnPlotSelection.Controls.Add(lbPlotSelection);
-            c_pnPlotSelection.Controls.Add(cbPlotShape);
-            c_pnPlotSelection.Location = new Point(13, 73);
-            c_pnPlotSelection.Name = "c_pnPlotSelection";
-            c_pnPlotSelection.Size = new Size(494, 60);
-            c_pnPlotSelection.TabIndex = 10;
+            pnPlotSelection.BackColor = Color.Transparent;
+            pnPlotSelection.Controls.Add(lbPlotSelection);
+            pnPlotSelection.Controls.Add(cbPlotShape);
+            pnPlotSelection.Location = new Point(13, 73);
+            pnPlotSelection.Name = "c_pnPlotSelection";
+            pnPlotSelection.Size = new Size(494, 60);
+            pnPlotSelection.TabIndex = 10;
             // 
             // lbPlotSelection
             // 
@@ -365,14 +365,14 @@
             // 
             // c_pnPlotData
             // 
-            c_pnPlotData.BackColor = Color.Transparent;
-            c_pnPlotData.Controls.Add(c_btnPlotData);
-            c_pnPlotData.Controls.Add(tbPlotData);
-            c_pnPlotData.Controls.Add(lbPlotData);
-            c_pnPlotData.Location = new Point(13, 16);
-            c_pnPlotData.Name = "c_pnPlotData";
-            c_pnPlotData.Size = new Size(494, 60);
-            c_pnPlotData.TabIndex = 11;
+            pnPlotData.BackColor = Color.Transparent;
+            pnPlotData.Controls.Add(c_btnPlotData);
+            pnPlotData.Controls.Add(tbPlotData);
+            pnPlotData.Controls.Add(lbPlotData);
+            pnPlotData.Location = new Point(13, 16);
+            pnPlotData.Name = "c_pnPlotData";
+            pnPlotData.Size = new Size(494, 60);
+            pnPlotData.TabIndex = 11;
             // 
             // c_btnPlotData
             // 
@@ -417,9 +417,9 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.YellowGreen;
             ClientSize = new Size(521, 370);
-            Controls.Add(c_pnPlotSelection);
+            Controls.Add(pnPlotSelection);
             Controls.Add(tcPlot);
-            Controls.Add(c_pnPlotData);
+            Controls.Add(pnPlotData);
             Controls.Add(btnPlotCancle);
             Controls.Add(btnPlotOK);
             FormBorderStyle = FormBorderStyle.None;
@@ -435,10 +435,10 @@
             tpPlotRec.PerformLayout();
             tpPlotPoly.ResumeLayout(false);
             tpPlotPoly.PerformLayout();
-            c_pnPlotSelection.ResumeLayout(false);
-            c_pnPlotSelection.PerformLayout();
-            c_pnPlotData.ResumeLayout(false);
-            c_pnPlotData.PerformLayout();
+            pnPlotSelection.ResumeLayout(false);
+            pnPlotSelection.PerformLayout();
+            pnPlotData.ResumeLayout(false);
+            pnPlotData.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -469,10 +469,10 @@
         private Label lbPlotCircle;
         private Label lbPlotRec;
         private Label lbPlotPoly;
-        private CustomPanel c_pnPlotSelection;
+        private CustomPanel pnPlotSelection;
         private Label lbPlotSelection;
         private ComboBox cbPlotShape;
-        private CustomPanel c_pnPlotData;
+        private CustomPanel pnPlotData;
         private CustomBtn c_btnPlotData;
         private TextBox tbPlotData;
         private Label lbPlotData;
