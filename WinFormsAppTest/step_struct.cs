@@ -59,14 +59,14 @@ namespace WinFormsAppTest
     }
     public struct Subsampling
     {
-        public string cellSize { get; set; }
+        public double cellSize { get; set; }
     }
     public struct Outlier
     {
         /// <summary>
         /// confing파일에서 mean_k입니다.
         /// </summary>
-        public string mean_k { get; set; }
+        public double mean_k { get; set; }
         /// <summary>
         /// config파일에서 method입니다.
         /// </summary>
@@ -74,7 +74,7 @@ namespace WinFormsAppTest
         /// <summary>
         /// confing 파일에서 multiplier입니다.
         /// </summary>
-        public string Multiplier { get; set; }
+        public double Multiplier { get; set; }
 
     }
 
@@ -96,5 +96,25 @@ namespace WinFormsAppTest
     {
         public double minHeight { get; set; }
         public double maxHeight { get; set; }
+    }
+
+    public struct CrownSeg
+    {
+        public int CrownNN { get; set; }
+    }
+    public struct Measure
+    {
+        public int MeasureNN { get; set; }
+        public double minRad { get; set; }
+        public double maxRad { get; set; }
+        public int iterations { get; set; }
+    }
+
+    public struct SegmentStem
+    {
+        public double smoothness { get; set; }
+        public double minDBH { get; set; }
+        public double maxDBH { get; set; }
+        public double HeightThreshold { get; set; }
     }
 }
