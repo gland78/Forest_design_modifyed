@@ -96,6 +96,7 @@
             pnSettingSub1 = new CustomPanel();
             tbSubCellSize = new TextBox();
             lbSubCellSize = new Label();
+            btnCreatePre = new CustomBtn();
             pnSideMenu.SuspendLayout();
             pnSettingOut1.SuspendLayout();
             tcMainHome.SuspendLayout();
@@ -410,6 +411,7 @@
             tpSettings.AutoScrollMargin = new Size(0, 20);
             tpSettings.AutoScrollMinSize = new Size(0, 5);
             tpSettings.BackColor = Color.DimGray;
+            tpSettings.Controls.Add(btnCreatePre);
             tpSettings.Controls.Add(lbSettings);
             tpSettings.Controls.Add(btnSettingSave);
             tpSettings.Controls.Add(pnSettingTree4);
@@ -886,6 +888,27 @@
             lbSubCellSize.TabIndex = 23;
             lbSubCellSize.Text = "Cell Size";
             // 
+            // btnCreatePre
+            // 
+            btnCreatePre.BackColor = Color.FromArgb(64, 64, 64);
+            btnCreatePre.BackgroundColor = Color.FromArgb(64, 64, 64);
+            btnCreatePre.BorderColor = Color.Transparent;
+            btnCreatePre.BorderRadius = 10;
+            btnCreatePre.BorderSize = 1;
+            btnCreatePre.FlatAppearance.BorderSize = 0;
+            btnCreatePre.FlatAppearance.MouseDownBackColor = Color.FromArgb(80, 80, 80);
+            btnCreatePre.FlatStyle = FlatStyle.Flat;
+            btnCreatePre.Font = new Font("맑은 고딕", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
+            btnCreatePre.ForeColor = Color.White;
+            btnCreatePre.Location = new Point(633, 27);
+            btnCreatePre.Name = "btnCreatePre";
+            btnCreatePre.Size = new Size(100, 36);
+            btnCreatePre.TabIndex = 88;
+            btnCreatePre.Text = "preset생성";
+            btnCreatePre.TextColor = Color.White;
+            btnCreatePre.UseVisualStyleBackColor = false;
+            btnCreatePre.Click += btnCreatePre_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1012,5 +1035,6 @@
         private TextBox tbTreeSegNN;
         private CustomBtn btnSettingSave;
         private Label lbSettings;
+        private CustomBtn btnCreatePre;
     }
 }

@@ -3,7 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
+using System.IO;
 using WK.Libraries.BetterFolderBrowserNS;
 
 namespace WinFormsAppTest
@@ -226,6 +228,140 @@ namespace WinFormsAppTest
             }
         }
 
+
+        private void MakeConfig()
+        {
+            List<object> data = new List<object>
+            {
+                new
+                {
+                    GUI = new
+                    {
+                        circle = new
+                        {
+                            cx = 0.0,
+                            cy = 0.0,
+                            radius = 11.3
+                        },
+                        rectangle = new
+                        {
+                            xmin = -5.0,
+                            ymin = -5.0,
+                            xmax = 5.0,
+                            ymax = 5.0
+                        },
+                        result_path = "..\\result"
+                    }
+                },
+                new
+                {
+                    Crop = new
+                    {
+                        buffer = 120.0
+                    }
+                },
+                new
+                {
+                    Sub = new
+                    {
+                        Sub_cell = 0.03
+                    }
+                },
+                new
+                {
+                    Outlier = new
+                    {
+                        method = "statistical",
+                        mean_k = 12,
+                        multiplier = 2.2
+                    }
+                },
+                new
+                {
+                    Ground = new
+                    {
+                        Ground_cell = 4.0,
+                        window = 16.0,
+                        slope = 0.3,
+                        scalar = 1.25,
+                        threshold = 0.15
+                    }
+                },
+                new
+                {
+                    TSlice = new
+                    {
+                        T_minheight = 0.0,
+                        T_maxheight = 4.8
+                    }
+                },
+                new
+                {
+                    CSlice = new
+                    {
+                        C_minheight = 4.8,
+                        C_maxheight = 100.0
+                    }
+                },
+                new
+                {
+                    Crownseg = new
+                    {
+                        Crown_nnearest = 16
+                    }
+                },
+                new
+                {
+                    Measure = new
+                    {
+                        Measure_nnearest = 16,
+                        minRad = 0.03,
+                        maxRad = 0.5,
+                        iterations = 10000,
+                        zmin_check = 0.2,
+                        zmax_check = 0.7
+                    }
+                },
+                new
+                {
+                    SegmentStem = new
+                    {
+                        smoothness = 16.0,
+                        mindbh = 0.06,
+                        maxdbh = 0.8,
+                        heightThreshold = 9.0
+                    }
+                }
+            };
+
+            using (var saveDialog = new SaveFileDialog())
+            {
+                saveDialog.Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*";
+                saveDialog.FilterIndex = 1;
+                saveDialog.RestoreDirectory = true;
+
+                if (saveDialog.ShowDialog() == DialogResult.OK)
+                {
+                    string filePath = saveDialog.FileName;
+
+                    string json = System.Text.Json.JsonSerializer.Serialize(data, new JsonSerializerOptions
+                    {
+                        WriteIndented = true
+                    });
+
+                    File.WriteAllText(filePath, json);
+
+                    Console.WriteLine($"JSON file saved at: {filePath}");
+                }
+                else
+                {
+                    Console.WriteLine("File save canceled.");
+                }
+            }
+
+            Console.WriteLine("preset.json 파일이 생성되었습니다.");
+        }
+
         /* private bool CheckIntegrity()
         {
             //원형 표준지에 필요한 값들이 비어있는경우
@@ -306,3 +442,4 @@ namespace WinFormsAppTest
         }*/
     }
 }
+

@@ -2,6 +2,9 @@ using System.Threading.Tasks;
 using Timer = System.Windows.Forms.Timer;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using WK.Libraries.BetterFolderBrowserNS;
+using WK.Libraries.BetterFolderBrowserNS.Helpers;
+using System.Text.Json;
 
 namespace WinFormsAppTest
 {
@@ -326,13 +329,6 @@ namespace WinFormsAppTest
         }
 
 
-
-
-        /// <summary>
-        /// config 저장하기 버튼 구현 필요
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void btnSettingSave_Click(object sender, EventArgs e)
         {
             /*
@@ -447,6 +443,11 @@ namespace WinFormsAppTest
             {
                 throw new Exception("Error while updating JSON file: " + ex.Message);
             }
+        }
+
+        private void btnCreatePre_Click(object sender, EventArgs e)
+        {
+            MakeConfig();
         }
     }
 }
