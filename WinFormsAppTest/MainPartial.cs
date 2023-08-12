@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -226,6 +227,223 @@ namespace WinFormsAppTest
                 MessageBox.Show("정수만 입력 가능합니다!");
                 e.Handled = true;
             }
+        }
+
+        private void setJsonData<T>(List<object> data, string prop, string subProp, T value)
+        {
+            var subObject = data.FirstOrDefault(ob =>
+            {
+                var subTitle = ob.GetType().GetProperty(prop);
+                return subTitle != null;
+            });
+
+            var param = subObject.GetType().GetProperty(subProp);
+            param.SetValue(subObject, value);
+        }
+
+        private void setAllparams(List<object> data)
+        {
+            setJsonData(data, "Sub", "Sub_cell", double.Parse(tbSubCellSize.Text));
+            setJsonData(data, "Outlier", "method", double.Parse(tbOutlierMethod.Text));
+            setJsonData(data, "Outlier", "mean_k", double.Parse(tbOutlierMeank.Text));
+            setJsonData(data, "Outlier", "multiplier", double.Parse(tbOutlierMul.Text));
+            setJsonData(data, "TSlice", "T_minheight", double.Parse(tbTrunkMinHeight.Text));
+            setJsonData(data, "TSlice", "T_maxheight", double.Parse(tbTrunkMaxHeight.Text));
+            setJsonData(data, "CSlice", "C_minheight", double.Parse(tbCrownMinHeight.Text));
+            setJsonData(data, "CSlice", "C_maxheight", double.Parse(tbCrownMaxHeight.Text));
+            setJsonData(data, "Crownseg", "Crown_nnearest", double.Parse(tbTreeSegNN.Text));
+            setJsonData(data, "SegmentStem", "smoothness", double.Parse(tbTreeSegSmooth.Text));
+            setJsonData(data, "SegmentStem", "heightThreshold", double.Parse(tbTreeSegHeightThres.Text));
+            setJsonData(data, "SegmentStem", "mindbh", double.Parse(tbTreeSegMinDBH.Text));
+            setJsonData(data, "Measure", "Measure_nnearest", double.Parse(tbMeasureNN.Text));
+        }
+
+        private void MakeConfig(configFileType confType)
+        {
+            string filePath = configPath + reqDi[(int)confType];
+
+            //해당 폴더 없을 시 만들기
+            if(!Directory.Exists(filePath))
+            {
+                Directory.CreateDirectory(filePath);
+            }
+
+            //해당 폴더 내 config파일 갯수 확인
+            string[] confCheck = Directory.GetFiles(Path.Combine(configPath, reqDi[(int)confType]), "config*");
+            
+            List<object> data = new List<object>
+            {
+                new
+                {
+                    GUI = new
+                    {
+                        circle = new
+                        {
+                            cx = 0.0,
+                            cy = 0.0,
+                            radius = 0.0
+                        },
+                        rectangle = new
+                        {
+                            xmin = 0.0,
+                            ymin = 0.0,
+                            xmax = 0.0,
+                            ymax = 0.0
+                        },
+                        result_path = "..\\result"
+                    }
+                },
+                new
+                {
+                    Crop = new
+                    {
+                        buffer = 120.0
+                    }
+                },
+                new
+                {
+                    Sub = new
+                    {
+                        Sub_cell = 0.03
+                    }
+                },
+                new
+                {
+                    Outlier = new
+                    {
+                        method = "statistical",
+                        mean_k = 12,
+                        multiplier = 2.2
+                    }
+                },
+                new
+                {
+                    Ground = new
+                    {
+                        Ground_cell = 4.0,
+                        window = 16.0,
+                        slope = 0.3,
+                        scalar = 1.25,
+                        threshold = 0.15
+                    }
+                },
+                new
+                {
+                    TSlice = new
+                    {
+                        T_minheight = 0.0,
+                        T_maxheight = 4.8
+                    }
+                },
+                new
+                {
+                    CSlice = new
+                    {
+                        C_minheight = 4.8,
+                        C_maxheight = 100.0
+                    }
+                },
+                new
+                {
+                    Crownseg = new
+                    {
+                        Crown_nnearest = 16
+                    }
+                },
+                new
+                {
+                    Measure = new
+                    {
+                        Measure_nnearest = 16,
+                        minRad = 0.03,
+                        maxRad = 0.5,
+                        iterations = 10000,
+                        zmin_check = 0.2,
+                        zmax_check = 0.7
+                    }
+                },
+                new
+                {
+                    SegmentStem = new
+                    {
+                        smoothness = 16.0,
+                        mindbh = 0.06,
+                        maxdbh = 0.8,
+                        heightThreshold = 9.0
+                    }
+                }
+            };
+
+            //config 파일 종류별 전처리(종류별로 필요한 데이터 추가)
+            switch (confType)
+            {
+                case configFileType.Default:
+                    filePath += @"\config.json";
+                    break;
+                case configFileType.Recent:
+                    setAllparams(data);
+                    var infoRecent = new
+                    {
+                        FIleInfo = new
+                        {
+                            fileType = confType,
+                            title = DateTime.Now
+                        }
+                    };
+                    data.Insert(0, infoRecent);
+                    filePath += @"\config" + confCheck.Length.ToString() + ".json";
+                    break;
+                case configFileType.Preset:
+                    setAllparams(data);
+                    var infoPreset = new
+                    {
+                        FIleInfo = new
+                        {
+                            fileType = confType,
+                            title = "tmp"
+                        }
+                    };
+                    data.Insert(0, infoPreset);
+                    filePath += @"\config" + confCheck.Length.ToString() + ".json";
+                    break;
+                default:
+                    throw new Exception("unknown error: configFileType.Exception");
+            }
+
+            string json = System.Text.Json.JsonSerializer.Serialize(data, new JsonSerializerOptions
+            {
+                WriteIndented = true
+            });
+
+            File.WriteAllText(filePath, json);
+
+            /*
+            using (var saveDialog = new SaveFileDialog())
+            {
+                saveDialog.Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*";
+                saveDialog.FilterIndex = 1;
+                saveDialog.RestoreDirectory = true;
+
+                if (saveDialog.ShowDialog() == DialogResult.OK)
+                {
+                    string filePath = saveDialog.FileName;
+
+                    string json = System.Text.Json.JsonSerializer.Serialize(data, new JsonSerializerOptions
+                    {
+                        WriteIndented = true
+                    });
+
+                    File.WriteAllText(filePath, json);
+
+                    Console.WriteLine($"JSON file saved at: {filePath}");
+                }
+                else
+                {
+                    Console.WriteLine("File save canceled.");
+                }
+            }
+
+            Console.WriteLine("preset.json 파일이 생성되었습니다.");*/
         }
 
 

@@ -54,6 +54,7 @@
             btnStart = new Button();
             lbTitle = new Label();
             tpSettings = new TabPage();
+            btnPresetSave = new CustomBtn();
             lbSettings = new Label();
             btnSettingSave = new CustomBtn();
             pnSettingTree4 = new CustomPanel();
@@ -157,7 +158,7 @@
             btnSettings.FlatAppearance.MouseDownBackColor = Color.MediumAquamarine;
             btnSettings.FlatAppearance.MouseOverBackColor = Color.MediumSeaGreen;
             btnSettings.FlatStyle = FlatStyle.Flat;
-            btnSettings.Font = new Font("나눔고딕 ExtraBold", 14.25F, FontStyle.Bold, GraphicsUnit.Point);
+            btnSettings.Font = new Font("Microsoft Sans Serif", 14.25F, FontStyle.Bold, GraphicsUnit.Point);
             btnSettings.Image = (Image)resources.GetObject("btnSettings.Image");
             btnSettings.ImageAlign = ContentAlignment.MiddleLeft;
             btnSettings.Location = new Point(12, 754);
@@ -297,11 +298,11 @@
             // lbOutlierRemove
             // 
             lbOutlierRemove.AutoSize = true;
-            lbOutlierRemove.Font = new Font("나눔고딕 ExtraBold", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
+            lbOutlierRemove.Font = new Font("Microsoft Sans Serif", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
             lbOutlierRemove.ForeColor = Color.White;
             lbOutlierRemove.Location = new Point(26, 233);
             lbOutlierRemove.Name = "lbOutlierRemove";
-            lbOutlierRemove.Size = new Size(154, 24);
+            lbOutlierRemove.Size = new Size(167, 25);
             lbOutlierRemove.TabIndex = 16;
             lbOutlierRemove.Text = "OutlierRemove";
             // 
@@ -398,10 +399,10 @@
             // lbTitle
             // 
             lbTitle.AutoSize = true;
-            lbTitle.Font = new Font("나눔고딕", 63.75F, FontStyle.Regular, GraphicsUnit.Point);
+            lbTitle.Font = new Font("Microsoft Sans Serif", 63.75F, FontStyle.Regular, GraphicsUnit.Point);
             lbTitle.Location = new Point(4, 15);
             lbTitle.Name = "lbTitle";
-            lbTitle.Size = new Size(343, 98);
+            lbTitle.Size = new Size(348, 96);
             lbTitle.TabIndex = 4;
             lbTitle.Text = "ForestLi\n";
             // 
@@ -411,7 +412,7 @@
             tpSettings.AutoScrollMargin = new Size(0, 20);
             tpSettings.AutoScrollMinSize = new Size(0, 5);
             tpSettings.BackColor = Color.DimGray;
-            tpSettings.Controls.Add(btnCreatePre);
+            tpSettings.Controls.Add(btnPresetSave);
             tpSettings.Controls.Add(lbSettings);
             tpSettings.Controls.Add(btnSettingSave);
             tpSettings.Controls.Add(pnSettingTree4);
@@ -436,8 +437,29 @@
             tpSettings.Location = new Point(4, 9);
             tpSettings.Name = "tpSettings";
             tpSettings.Padding = new Padding(3);
-            tpSettings.Size = new Size(897, 761);
+            tpSettings.Size = new Size(897, 764);
             tpSettings.TabIndex = 1;
+            // 
+            // btnPresetSave
+            // 
+            btnPresetSave.BackColor = Color.FromArgb(64, 64, 64);
+            btnPresetSave.BackgroundColor = Color.FromArgb(64, 64, 64);
+            btnPresetSave.BorderColor = Color.Transparent;
+            btnPresetSave.BorderRadius = 10;
+            btnPresetSave.BorderSize = 1;
+            btnPresetSave.FlatAppearance.BorderSize = 0;
+            btnPresetSave.FlatAppearance.MouseDownBackColor = Color.FromArgb(80, 80, 80);
+            btnPresetSave.FlatStyle = FlatStyle.Flat;
+            btnPresetSave.Font = new Font("맑은 고딕", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
+            btnPresetSave.ForeColor = Color.White;
+            btnPresetSave.Location = new Point(624, 27);
+            btnPresetSave.Name = "btnPresetSave";
+            btnPresetSave.Size = new Size(119, 36);
+            btnPresetSave.TabIndex = 88;
+            btnPresetSave.Text = "프리셋 저장";
+            btnPresetSave.TextColor = Color.White;
+            btnPresetSave.UseVisualStyleBackColor = false;
+            btnPresetSave.Click += btnPresetSave_Click;
             // 
             // lbSettings
             // 
@@ -888,32 +910,13 @@
             lbSubCellSize.TabIndex = 23;
             lbSubCellSize.Text = "Cell Size";
             // 
-            // btnCreatePre
-            // 
-            btnCreatePre.BackColor = Color.FromArgb(64, 64, 64);
-            btnCreatePre.BackgroundColor = Color.FromArgb(64, 64, 64);
-            btnCreatePre.BorderColor = Color.Transparent;
-            btnCreatePre.BorderRadius = 10;
-            btnCreatePre.BorderSize = 1;
-            btnCreatePre.FlatAppearance.BorderSize = 0;
-            btnCreatePre.FlatAppearance.MouseDownBackColor = Color.FromArgb(80, 80, 80);
-            btnCreatePre.FlatStyle = FlatStyle.Flat;
-            btnCreatePre.Font = new Font("맑은 고딕", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
-            btnCreatePre.ForeColor = Color.White;
-            btnCreatePre.Location = new Point(633, 27);
-            btnCreatePre.Name = "btnCreatePre";
-            btnCreatePre.Size = new Size(100, 36);
-            btnCreatePre.TabIndex = 88;
-            btnCreatePre.Text = "preset생성";
-            btnCreatePre.TextColor = Color.White;
-            btnCreatePre.UseVisualStyleBackColor = false;
-            btnCreatePre.Click += btnCreatePre_Click;
-            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.White;
             ClientSize = new Size(1280, 800);
+            Controls.Add(pnSideMenu);
             Controls.Add(btnHide);
             Controls.Add(pnSideMenu);
             Controls.Add(btnClose);
@@ -1035,6 +1038,6 @@
         private TextBox tbTreeSegNN;
         private CustomBtn btnSettingSave;
         private Label lbSettings;
-        private CustomBtn btnCreatePre;
+        private CustomBtn btnPresetSave;
     }
 }
