@@ -28,25 +28,27 @@
         /// </summary>
         private void InitializeComponent()
         {
-            listView1 = new ListView();
+            lvPresetConf = new ListView();
             numHeader = new ColumnHeader();
             titleHeader = new ColumnHeader();
             infoHeader = new ColumnHeader();
-            button1 = new Button();
-            button2 = new Button();
+            btnManageTitle = new Button();
+            btnManageDelete = new Button();
             SuspendLayout();
             // 
-            // listView1
+            // lvPresetConf
             // 
-            listView1.Columns.AddRange(new ColumnHeader[] { numHeader, titleHeader, infoHeader });
-            listView1.Font = new Font("맑은 고딕", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            listView1.GridLines = true;
-            listView1.Location = new Point(12, 12);
-            listView1.Name = "listView1";
-            listView1.Size = new Size(363, 305);
-            listView1.TabIndex = 0;
-            listView1.UseCompatibleStateImageBehavior = false;
-            listView1.View = View.Details;
+            lvPresetConf.Columns.AddRange(new ColumnHeader[] { numHeader, titleHeader, infoHeader });
+            lvPresetConf.Font = new Font("맑은 고딕", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lvPresetConf.FullRowSelect = true;
+            lvPresetConf.GridLines = true;
+            lvPresetConf.Location = new Point(12, 12);
+            lvPresetConf.MultiSelect = false;
+            lvPresetConf.Name = "lvPresetConf";
+            lvPresetConf.Size = new Size(363, 305);
+            lvPresetConf.TabIndex = 0;
+            lvPresetConf.UseCompatibleStateImageBehavior = false;
+            lvPresetConf.View = View.Details;
             // 
             // numHeader
             // 
@@ -64,32 +66,34 @@
             infoHeader.Text = "Parameter";
             infoHeader.Width = 180;
             // 
-            // button1
+            // btnManageTitle
             // 
-            button1.Location = new Point(391, 12);
-            button1.Name = "button1";
-            button1.Size = new Size(92, 32);
-            button1.TabIndex = 1;
-            button1.Text = "제목 수정";
-            button1.UseVisualStyleBackColor = true;
+            btnManageTitle.Location = new Point(391, 12);
+            btnManageTitle.Name = "btnManageTitle";
+            btnManageTitle.Size = new Size(92, 32);
+            btnManageTitle.TabIndex = 1;
+            btnManageTitle.Text = "제목 수정";
+            btnManageTitle.UseVisualStyleBackColor = true;
+            btnManageTitle.Click += btnManageTitle_Click;
             // 
-            // button2
+            // btnManageDelete
             // 
-            button2.Location = new Point(391, 55);
-            button2.Name = "button2";
-            button2.Size = new Size(92, 32);
-            button2.TabIndex = 2;
-            button2.Text = "삭제";
-            button2.UseVisualStyleBackColor = true;
+            btnManageDelete.Location = new Point(391, 55);
+            btnManageDelete.Name = "btnManageDelete";
+            btnManageDelete.Size = new Size(92, 32);
+            btnManageDelete.TabIndex = 2;
+            btnManageDelete.Text = "삭제";
+            btnManageDelete.UseVisualStyleBackColor = true;
+            btnManageDelete.Click += btnManageDelete_Click;
             // 
             // ManageForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(497, 329);
-            Controls.Add(button2);
-            Controls.Add(button1);
-            Controls.Add(listView1);
+            Controls.Add(btnManageDelete);
+            Controls.Add(btnManageTitle);
+            Controls.Add(lvPresetConf);
             Name = "ManageForm";
             Text = "ManageForm";
             Load += ManageForm_Load;
@@ -98,11 +102,11 @@
 
         #endregion
 
-        private ListView listView1;
+        private ListView lvPresetConf;
         private ColumnHeader numHeader;
         private ColumnHeader titleHeader;
         private ColumnHeader infoHeader;
-        private Button button1;
-        private Button button2;
+        private Button btnManageTitle;
+        private Button btnManageDelete;
     }
 }

@@ -1,11 +1,13 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Dynamic;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using WK.Libraries.BetterFolderBrowserNS;
+using System.Security;
 
 namespace WinFormsAppTest
 {
@@ -94,6 +96,11 @@ namespace WinFormsAppTest
             outlier.mean_k = int.Parse(tbOutlierMeank.Text);
             outlier.Multiplier = double.Parse(tbOutlierMul.Text);
 
+            groundseg.scalar = tbNorScalar.Text;
+            groundseg.cellSize = tbNorCellSize.Text;
+            groundseg.slope = tbNorSlope.Text;
+            groundseg.windowSize = tbNorWinSize.Text;
+            groundseg.threshold = tbNorThres.Text;
 
             //trunkSlice_textboxes
             tSlice.minHeight = double.Parse(tbTrunkMinHeight.Text);
@@ -124,6 +131,12 @@ namespace WinFormsAppTest
             tbOutlierMeank.Text = outlier.mean_k.ToString();
             tbOutlierMul.Text = outlier.Multiplier.ToString();
 
+            //normalize_textboxes
+            tbNorCellSize.Text = groundseg.cellSize;
+            tbNorScalar.Text = groundseg.scalar;
+            tbNorSlope.Text = groundseg.slope;
+            tbNorThres.Text = groundseg.threshold;
+            tbNorWinSize.Text = groundseg.windowSize;
 
             //trunkSlice_textboxes
             tbTrunkMinHeight.Text = tSlice.minHeight.ToString();
@@ -152,6 +165,9 @@ namespace WinFormsAppTest
             tbSubCellSize.KeyPress += TextBox_KeyPressOnlyNumbers;
             tbOutlierMeank.KeyPress += TextBox_KeyPressOnlyNumbers;
             tbOutlierMul.KeyPress += TextBox_KeyPressOnlyNumbers;
+            tbNorScalar.KeyPress += TextBox_KeyPressOnlyNumbers;
+            tbNorSlope.KeyPress += TextBox_KeyPressOnlyNumbers;
+            tbNorThres.KeyPress += TextBox_KeyPressOnlyNumbers;
             tbTrunkMinHeight.KeyPress += TextBox_KeyPressOnlyNumbers;
             tbTrunkMaxHeight.KeyPress += TextBox_KeyPressOnlyNumbers;
             tbCrownMinHeight.KeyPress += TextBox_KeyPressOnlyNumbers;
@@ -179,6 +195,8 @@ namespace WinFormsAppTest
 
 
             //정수만 입력하도록 하는 핸들러
+            tbNorCellSize.KeyPress += TextBox_KeyPress_OnlyInt;
+            tbNorWinSize.KeyPress += TextBox_KeyPress_OnlyInt;
             tbTreeSegNN.KeyPress += TextBox_KeyPress_OnlyInt;
             tbTreeSegNN.KeyPress += TextBox_KeyPress_OnlyInt;
             //CSP_nnearest_textbox.KeyPress += TextBox_KeyPress_OnlyInt;
@@ -196,6 +214,7 @@ namespace WinFormsAppTest
             }
         }
 
+        /*
         private void customBtn3_Click(object sender, EventArgs e)
         {
             var betterFolderBrowser = new BetterFolderBrowser();
@@ -214,6 +233,7 @@ namespace WinFormsAppTest
             }
             gui.resultPath = myfoldername;
         }
+        */
 
         private void TextBox_KeyPress_OnlyInt(object sender, KeyPressEventArgs e)
         {
@@ -225,34 +245,133 @@ namespace WinFormsAppTest
             }
         }
 
+        /*
         private void setJsonData<T>(List<object> data, string prop, string subProp, T value)
         {
-            var subObject = data.FirstOrDefault(ob =>
+            foreach (var obj in data)
             {
-                var subTitle = ob.GetType().GetProperty(prop);
-                return subTitle != null;
-            });
+                var expandoObj = obj as IDictionary<string, object>;
 
-            var param = subObject.GetType().GetProperty(prop);
-            var subParam = param.GetType().GetProperty(subProp);
-            param.SetValue(param, value, null);
+                if (expandoObj != null && expandoObj.ContainsKey(prop))
+                {
+                    var subObject = expandoObj[prop] as IDictionary<string, object>;
+
+                    if (subObject != null && subObject.ContainsKey(subProp))
+                    {
+                        subObject[subProp] = value;
+                        return;  // Exit after setting the value
+                    }
+                }
+            }
         }
+        */
 
-        private void setAllparams(List<object> data)
+        private void setAllparams(ref List<object> data)
         {
-            setJsonData(data, "Sub", "Sub_cell", double.Parse(tbSubCellSize.Text));
-            setJsonData(data, "Outlier", "method", double.Parse(tbOutlierMethod.Text));
-            setJsonData(data, "Outlier", "mean_k", double.Parse(tbOutlierMeank.Text));
-            setJsonData(data, "Outlier", "multiplier", double.Parse(tbOutlierMul.Text));
-            setJsonData(data, "TSlice", "T_minheight", double.Parse(tbTrunkMinHeight.Text));
-            setJsonData(data, "TSlice", "T_maxheight", double.Parse(tbTrunkMaxHeight.Text));
-            setJsonData(data, "CSlice", "C_minheight", double.Parse(tbCrownMinHeight.Text));
-            setJsonData(data, "CSlice", "C_maxheight", double.Parse(tbCrownMaxHeight.Text));
-            setJsonData(data, "Crownseg", "Crown_nnearest", double.Parse(tbTreeSegNN.Text));
-            setJsonData(data, "SegmentStem", "smoothness", double.Parse(tbTreeSegSmooth.Text));
-            setJsonData(data, "SegmentStem", "heightThreshold", double.Parse(tbTreeSegHeightThres.Text));
-            setJsonData(data, "SegmentStem", "mindbh", double.Parse(tbTreeSegMinDBH.Text));
-            setJsonData(data, "Measure", "Measure_nnearest", double.Parse(tbMeasureNN.Text));
+            Dictionary<string, double> plotData = plotSender();
+
+            data = new List<object>
+            {
+                new
+                {
+                    GUI = new
+                    {
+                        circle = new
+                        {
+                            cx = plotData["cx"],
+                            cy = plotData["cy"],
+                            radius = plotData["radius"]
+                        },
+                        rectangle = new
+                        {
+                            xmin = plotData["xmin"],
+                            ymin = plotData["ymin"],
+                            xmax = plotData["xmax"],
+                            ymax = plotData["ymax"]
+                        },
+                        result_path = "..\\result"
+                    }
+                },
+                new
+                {
+                    Crop = new
+                    {
+                        buffer = 120.0
+                    }
+                },
+                new
+                {
+                    Sub = new
+                    {
+                        Sub_cell = double.Parse(tbSubCellSize.Text)
+                    }
+                },
+                new
+                {
+                    Outlier = new
+                    {
+                        method = "statistical",
+                        mean_k = int.Parse(tbOutlierMeank.Text),
+                        multiplier = double.Parse(tbOutlierMul.Text)
+                    }
+                },
+                new
+                {
+                    Ground = new
+                    {
+                        Ground_cell = double.Parse(tbNorCellSize.Text),
+                        window = double.Parse(tbNorWinSize.Text),
+                        slope = double.Parse(tbNorSlope.Text),
+                        scalar = double.Parse(tbNorScalar.Text),
+                        threshold = double.Parse(tbNorThres.Text)
+                    }
+                },
+                new
+                {
+                    TSlice = new
+                    {
+                        T_minheight = double.Parse(tbTrunkMinHeight.Text),
+                        T_maxheight = double.Parse(tbTrunkMaxHeight.Text)
+                    }
+                },
+                new
+                {
+                    CSlice = new
+                    {
+                        C_minheight = double.Parse(tbCrownMinHeight.Text),
+                        C_maxheight = int.Parse(tbCrownMaxHeight.Text)
+                    }
+                },
+                new
+                {
+                    Crownseg = new
+                    {
+                        Crown_nnearest = int.Parse(tbTreeSegNN.Text)
+                    }
+                },
+                new
+                {
+                    Measure = new
+                    {
+                        Measure_nnearest = int.Parse(tbMeasureNN.Text),
+                        minRad = 0.03,
+                        maxRad = 0.5,
+                        iterations = 10000,
+                        zmin_check = 0.2,
+                        zmax_check = 0.7
+                    }
+                },
+                new
+                {
+                    SegmentStem = new
+                    {
+                        smoothness = int.Parse(tbTreeSegSmooth.Text),
+                        mindbh = double.Parse(tbTreeSegMinDBH.Text),
+                        maxdbh = 0.8,
+                        heightThreshold = int.Parse(tbTreeSegHeightThres.Text)
+                    }
+                }
+            };
         }
 
         private void MakeConfig(configFileType confType)
@@ -371,6 +490,8 @@ namespace WinFormsAppTest
                 }
             };
 
+            Dictionary<string, double> plotData = plotSender();
+
             //config 파일 종류별 전처리(종류별로 필요한 데이터 추가)
             switch (confType)
             {
@@ -378,30 +499,46 @@ namespace WinFormsAppTest
                     filePath += @"\config.json";
                     break;
                 case configFileType.Recent:
-                    setAllparams(data);
+                    setAllparams(ref data);
                     var infoRecent = new
                     {
                         FIleInfo = new
                         {
                             fileType = confType,
-                            title = DateTime.Now
+                            title = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                            selection = plotData["selection"]
                         }
                     };
                     data.Insert(0, infoRecent);
-                    filePath += @"\recentConfig" + confCheck.Length.ToString() + ".json";
+                    filePath += @"\recentConfig0.json";
+                    for (int i = confCheck.Length - 1; i >= 0; i--)
+                    {
+                        string oldPath = Path.Combine(Path.Combine(configPath, reqDi[(int)configFileType.Recent]) + @"\", $"recentConfig{i}.json");
+                        string newPath = Path.Combine(Path.Combine(configPath, reqDi[(int)configFileType.Recent]), $"recentConfig{i + 1}.json");
+
+                        if (i >= 4)
+                        {
+                            continue;
+                        }
+                        if (File.Exists(oldPath) && File.Exists(newPath))
+                        {
+                            File.Delete(newPath);
+                        }
+                        File.Move(oldPath, newPath);
+                    }
                     break;
                 case configFileType.Preset:
-                    setAllparams(data);
+                    setAllparams(ref data);
                     var infoPreset = new
                     {
                         FIleInfo = new
                         {
                             fileType = confType,
-                            title = "config" + confCheck.Length.ToString()
+                            title = "config" + confCheck.Length.ToString(),
                         }
                     };
                     data.Insert(0, infoPreset);
-                    filePath += @"\preConfig" + confCheck.Length.ToString() + ".json";
+                    filePath += @"\presetConfig" + confCheck.Length.ToString() + ".json";
                     break;
                 default:
                     throw new Exception("unknown error: configFileType.Exception");
@@ -411,7 +548,7 @@ namespace WinFormsAppTest
             {
                 WriteIndented = true
             });
-
+            
             File.WriteAllText(filePath, json);
         }
 

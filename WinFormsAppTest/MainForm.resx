@@ -58,6 +58,19 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="btnPresetManage.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
+        DAAACwwBP0AiyAAAAbdJREFUWEftlj0vBFEUhjei99WpNDoJkQii0UkUEoVoSYhCopQgPiJ+gH/A79Co
+        VTQ6oRDR+I6KgudlbnKczOze3TuExJM8md2Zs/c9M3PvzlT++Wu04gzOY492/CRL+IBvxh30qMlNPMVz
+        PMBOTGIdbbB8xmG0dOEF2rptTCIv/AXH0HOEts6Ht2fbaPLC5TJ6+tDW+HCNdfj5MY6icKnLrMttmcZw
+        XHOlGwNhLN22KEYwDFakP5sptMevUE3YE7nGaFbQDuidQMsi+hqdsf2+h1XRUlNR8AbtANZb7EUxjq+Y
+        VxdUvb9tX2hBv4Skn9nWO5xDf6ZejatJWpO8dTyLurzav5vtq6XqJnEBR7EZo/FNqAHRlG230IZ5dTwZ
+        20RowLKPPliWEh5QE1pqfuIM4CN+a3gRMeEdGFZHqcSE60l4glodpTYxiDHhxxiOldaEwp/QBkt/z/Wi
+        4muSmxjCmPCA9vvahpsoCtfbTjVKaUJvOnnhGxhDUhNF4Xqs1kNDTeg/+xL9D+sND+Q1cYZV6Uf79ruG
+        Kdgm7jHqNoQmVj++paMmFB71SA60Zduy8M+Uf34Dlco7y2gQIZXGVH8AAAAASUVORK5CYII=
+</value>
+  </data>
   <data name="btnHome.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAACUAAAAfCAYAAABgfwTIAAAABGdBTUEAALGPC/xhBQAAAh1JREFUWEfF
@@ -112,7 +125,7 @@
   <data name="pnMain.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAA4AAAAHgCAYAAAD0XwMkAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
-        DwAACw8BkvkDpQAA/7JJREFUeF7s/em2ZUluHAjz/f+3xKGomlgsskiK0kO0JGZmsch+gu/T2K3OiOIT
+        DAAACwwBP0AiyAAA/7JJREFUeF7s/em2ZUluHAjz/f+3xKGomlgsskiK0kO0JGZmsch+gu/T2K3OiOIT
         RDQmAwxw+D7nZlGr2WvVD1sADAY43Pc+w457I+IP/vjvPn/5w//06esf/kfDl38t9l//h89f//A//PaL
         2n/9H37b8R//STT/pDag3G+//ivFf5KawL/6j5+FU3i+QTUzBsc58FvOkHMInxZ+4l/9hzU3fUH0/U/i
         9zm6/SDsDLzflz8U6DmaFV4t/AY7ezv/uA4E64FYzlqswngBzv5/U57i8pnzOo7BGe9rrOuWDT/ycz/b

@@ -12,12 +12,18 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Xml.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using static WinFormsAppTest.MainForm;
 
 namespace WinFormsAppTest
 {
     public partial class PlotForm : Form
     {
         MainForm paramForm;
+
+        internal configHandler configTouch;
+
+        internal customEventHandler mainPaint;
+
         public PlotForm(MainForm paramForm)
         {
             InitializeComponent();
@@ -30,6 +36,24 @@ namespace WinFormsAppTest
 
             cbPlotShape.SelectedIndex = 0;
             this.paramForm = paramForm;
+            paramForm.plotSender += new plotDataHandler(plotPacker);
+        }
+
+        private Dictionary<string, double> plotPacker()
+        {
+            Dictionary<string, double> plots = new Dictionary<string, double>();
+            plots.Add("selection", cbPlotShape.SelectedIndex);
+
+            plots.Add("cx", double.Parse(tbPlotCircleX.Text));
+            plots.Add("cy", double.Parse(tbPlotCircleY.Text));
+            plots.Add("radius", double.Parse(tbPlotCircleR.Text));
+
+            plots.Add("xmin", double.Parse(tbPlotRecXmin.Text));
+            plots.Add("ymin", double.Parse(tbPlotRecYmin.Text));
+            plots.Add("xmax", double.Parse(tbPlotRecXmax.Text));
+            plots.Add("ymax", double.Parse(tbPlotRecYmax.Text));
+
+            return plots;
         }
 
         private void PlotForm_Load(object sender, EventArgs e)
@@ -137,6 +161,18 @@ namespace WinFormsAppTest
         /// 전체 과정 실행 버튼
         private void btnPlotOK_Click(object sender, EventArgs e)
         {
+            //최근 작업 config 생성
+            string fileDi = Path.Combine(configPath, reqDi[(int)configFileType.Recent]);
+
+            if (!Directory.Exists(fileDi))
+            {
+                Directory.CreateDirectory(fileDi);
+            }
+            string[] confCheck = Directory.GetFiles(Path.Combine(configPath, reqDi[(int)configFileType.Recent]), "RecentConfig*");
+            configTouch(configFileType.Recent);
+            mainPaint();
+
+
             //무결성 검사
             bool isEmptyVal_cir = tbPlotCircleX.Text == "" && tbPlotCircleY.Text == "" && tbPlotCircleR.Text == "";//원형 표준지에 필요한 값들이 비어있는경우
             bool isRadiusZero = (Double.Parse(tbPlotCircleR.Text) <= 0);//radius값이 0인지 확인

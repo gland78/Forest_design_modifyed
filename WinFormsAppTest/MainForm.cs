@@ -3,9 +3,19 @@ using System.Threading.Tasks;
 using Timer = System.Windows.Forms.Timer;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using WinFormsAppTest.Properties;
+using System.Dynamic;
+using System.Text.RegularExpressions;
+using static WinFormsAppTest.MainForm;
 
 namespace WinFormsAppTest
 {
+    internal delegate Dictionary<string, double> plotDataHandler();
+
+    internal delegate void customEventHandler();
+
+    internal delegate void configHandler(configFileType type);
+
     public partial class MainForm : Form
     {
         public enum configFileType
@@ -15,17 +25,31 @@ namespace WinFormsAppTest
             Preset
         }
 
+        internal plotDataHandler plotSender;
+
         private PlotForm? pFrm;
         private ManageForm? mFrm;
 
-        //슬라이딩 메뉴의 최대, 최소 폭 크기 및 그 차이
+        //사이드 메뉴의 최대, 최소 폭 크기 및 그 차이
         const int MAX_SLIDING_WIDTH = 384;
         const int MIN_SLIDING_WIDTH = 65;
         const int SLIDING_GAP = MAX_SLIDING_WIDTH - MIN_SLIDING_WIDTH;
 
-        //슬라이딩 메뉴에 확장, 축소에 따른 메뉴 버튼 크기
-        const int MIN_ICON_WIDTH = 42;
-        const int MAX_ICON_WIDTH = 370;
+        //사이드 메뉴에 확장, 축소에 따른 메뉴 버튼 크기
+        const int MIN_BTN_WIDTH = 42;
+        const int MAX_BTN_WIDTH = 370;
+
+        //사이드 메뉴에 생성될 첫 버튼의 위치 및 크기, 간격
+        Point PRESET_BTN_POS = new Point(12, 170);
+        const int PRESET_BTN_WIDTH = 370;
+        const int PRESET_BTN_HEIGHT = 45;
+        const int PRESET_BTN_GAP = 5;
+
+        //최근 작업 목록 첫 추가 위치 및 크기, 간격
+        Point RECENT_BTN_POS = new Point(50, 27);
+        const int RECENT_BTN_WIDTH = 205;
+        const int RECENT_BTN_HEIGHT = 165;
+        const int RECENT_BTN_GAP = 30;
 
         bool menuOpen = false;
 
@@ -48,9 +72,8 @@ namespace WinFormsAppTest
             pnSideMenu.Width = MIN_SLIDING_WIDTH;
             tcMainHome.Left -= SLIDING_GAP / 2;
 
-            btnSettings.Width = MIN_ICON_WIDTH;
+            btnSettings.Width = MIN_BTN_WIDTH;
             btnSettings.Text = "";
-
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -70,6 +93,18 @@ namespace WinFormsAppTest
             this.Location = new Point((screenSize.X - this.Width) / 2, (screenSize.Y - this.Height) / 2);
 
             mainForm_AddEvent();
+
+            preConfBtnLoad();
+            recentConfBtnLoad();
+
+            foreach (Control cont in pnSideMenu.Controls)
+            {
+                if (cont.Name.Contains("presetConfig"))
+                {
+                    cont.ForeColor = Color.SeaGreen;
+                    cont.Width = MIN_BTN_WIDTH;
+                }
+            }
         }
 
         //메인 폼 로드 전 이벤트 전처리(Designer.cs에 넣으면 찾기가 힘듬)
@@ -222,9 +257,281 @@ namespace WinFormsAppTest
             pnSettingMeasure1.fillColor = Color.Gray;
         }
 
+        //프리셋 콘피그 파일 갯수만큼 버튼 로드
+        private void preConfBtnLoad()
+        {
+            pnSideMenu.Controls.Clear();
+
+            pnSideMenu.Controls.Add(btnHome);
+            pnSideMenu.Controls.Add(btnHide);
+            pnSideMenu.Controls.Add(btnSettings);
+            pnSideMenu.Controls.Add(btnSlideMenu);
+            pnSideMenu.Controls.Add(btnPresetManage);
+
+            //프리셋 콘피그 저장 장소
+            string[] confCheck = Directory.GetFiles(Path.Combine(configPath, reqDi[(int)configFileType.Preset]), "PresetConfig*");
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
+            Array.Sort(confCheck);
+
+            Point relativeBtnPos = PRESET_BTN_POS;
+            int btnNum = 0;
+
+            pnSideMenu.SuspendLayout();
+            foreach (string conf in confCheck)
+            {
+                Button btnPreConfs = new Button();
+                btnPreConfs.MouseClick += btnPreConf_Click;
+
+                pnSideMenu.Controls.Add(btnPreConfs);
+                btnPreConfs.Location = relativeBtnPos;
+                btnPreConfs.Width = PRESET_BTN_WIDTH;
+                btnPreConfs.Height = PRESET_BTN_HEIGHT;
+                btnPreConfs.BackColor = Color.Transparent;
+                btnPreConfs.FlatAppearance.BorderSize = 0;
+                btnPreConfs.FlatAppearance.MouseDownBackColor = Color.MediumAquamarine;
+                btnPreConfs.FlatAppearance.MouseOverBackColor = Color.MediumSeaGreen;
+                btnPreConfs.FlatStyle = FlatStyle.Flat;
+                btnPreConfs.ImageAlign = ContentAlignment.MiddleLeft;
+                btnPreConfs.TextAlign = ContentAlignment.MiddleLeft;
+                btnPreConfs.Font = new Font("Microsoft Sans Serif", 18F, FontStyle.Bold, GraphicsUnit.Point);
+                btnPreConfs.Image = (Image)resources.GetObject("btnPreConf.Image");
+                using (StreamReader sr = new StreamReader(conf))
+                {
+                    string line;
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        if (line.Contains("title"))
+                        {
+                            btnPreConfs.Text = "            " + line.Substring(line.IndexOf(":") + 3, line.Length - line.IndexOf(":") - 4);
+                            break;
+                        }
+                    }
+                }
+                btnPreConfs.Name = "presetConfig" + btnNum++.ToString();
+                relativeBtnPos.Y = relativeBtnPos.Y + PRESET_BTN_HEIGHT + PRESET_BTN_GAP;
+                if (menuOpen == false)
+                {
+                    btnPreConfs.ForeColor = Color.SeaGreen;
+                    btnPreConfs.Width = MIN_BTN_WIDTH;
+                }
+            }
+            pnSideMenu.ResumeLayout(false);
+            pnSideMenu.PerformLayout();
+        }
+
+        //최근 작업 콘피그 파일 갯수만큼 버튼 로드
+        private void recentConfBtnLoad()
+        {
+            pnReview.Controls.Clear();
+
+            string[] confCheck = Directory.GetFiles(Path.Combine(configPath, reqDi[(int)configFileType.Recent]), "RecentConfig*");
+            Array.Sort(confCheck);
+
+            Point relativePos = RECENT_BTN_POS;
+            int btnNum = confCheck.Length - 1;
+            string btnText = "";
+
+            pnReview.SuspendLayout();
+
+            foreach (string conf in confCheck)
+            {
+                btnText = "";
+
+                CustomBtn btnRecentConfs = new CustomBtn();
+                btnRecentConfs.MouseClick += btnRecentConf_Click;
+
+                pnReview.Controls.Add(btnRecentConfs);
+                btnRecentConfs.Location = relativePos;
+                btnRecentConfs.Width = RECENT_BTN_WIDTH;
+                btnRecentConfs.Height = RECENT_BTN_HEIGHT;
+                btnRecentConfs.Margin = new Padding(4, 8, 4, 4);
+                btnRecentConfs.BackColor = Color.MintCream;
+                btnRecentConfs.BackgroundColor = Color.MintCream;
+                btnRecentConfs.BorderColor = Color.Transparent;
+                btnRecentConfs.BorderRadius = 20;
+                btnRecentConfs.BorderSize = 0;
+                btnRecentConfs.FlatAppearance.BorderSize = 0;
+                btnRecentConfs.FlatAppearance.MouseDownBackColor = Color.FromArgb(246, 255, 253);
+                btnRecentConfs.FlatAppearance.MouseOverBackColor = Color.FromArgb(240, 255, 250);
+                btnRecentConfs.FlatStyle = FlatStyle.Flat;
+                btnRecentConfs.TextAlign = ContentAlignment.MiddleLeft;
+                btnRecentConfs.Font = new Font("맑은 고딕", 12F, FontStyle.Regular, GraphicsUnit.Point);
+                btnRecentConfs.ForeColor = SystemColors.ControlText;
+                using (StreamReader sr = new StreamReader(conf))
+                {
+                    string line;
+                    string shapeStr = "";
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        if (line.Contains("title"))
+                        {
+                            btnText += "   " + line.Substring(line.IndexOf(":") + 3, line.Length - line.IndexOf(":") - 5) + "\n";
+                        }
+                        if (line.Contains("selection"))
+                        {
+                            int selection = int.Parse(Regex.Replace(line, @"[^0-9]", ""));
+
+                            switch (selection)
+                            {
+                                case 0:
+                                    shapeStr = "Circle";
+                                    break;
+                                case 1:
+                                    shapeStr = "Rectangle";
+                                    break;
+                                case 2:
+                                    shapeStr = "Polygon";
+                                    break;
+                            }
+                            btnText += "   " + shapeStr + "\n";
+                        }
+                        if (shapeStr == "Circle" && line.Contains("cx") || line.Contains("cy") || line.Contains("radius"))
+                        {
+                            btnText += "   " + Regex.Replace(line, @"[^0-9a-zA-Z:]", "") + "\n";
+                        }
+                        else if (shapeStr == "Rectangle" && line.Contains("xmin") || line.Contains("ymin") || line.Contains("xmax") || line.Contains("ymax"))
+                        {
+                            btnText += "   " + Regex.Replace(line, @"[^0-9a-zA-Z:]", "") + "\n";
+                        }
+                    }
+                }
+                btnRecentConfs.Text = btnText;
+                btnRecentConfs.Name = "recentConfig" + btnNum--.ToString();
+                relativePos.X = relativePos.X + RECENT_BTN_WIDTH + RECENT_BTN_GAP;
+            }
+            pnReview.ResumeLayout(false);
+            pnReview.PerformLayout();
+        }
+
+        private void btnRecentConf_Click(object sender, EventArgs e)
+        {
+            string[] confCheck = Directory.GetFiles(Path.Combine(configPath, reqDi[(int)configFileType.Preset]), "RecentConfig*");
+            if (MessageBox.Show("해당 설정을 적용하시겠습니까?\n저장되지 않은 설정값은 사라집니다.",
+                "최근 작업기록 적용", MessageBoxButtons.OKCancel) == DialogResult.Cancel)
+            {
+                return;
+            }
+
+            foreach (string conf in confCheck)
+            {
+                string fileName = conf.Substring(conf.IndexOf("recentConfig"), conf.Length - conf.IndexOf("recentConfig") - 5);
+                if (((Button)sender).Name == fileName)
+                {
+                    string json = File.ReadAllText(conf);
+                    var jsonArray = JsonConvert.DeserializeObject<dynamic>(json);
+
+                    //subsamplng_textboxes
+                    dynamic JObject = jsonArray[3].Sub;
+                    tbSubCellSize.Text = JObject.Sub_cell.ToString();
+
+                    //outlierRemoving_textboxes
+                    JObject = jsonArray[4].Outlier;
+                    tbOutlierMeank.Text = JObject.mean_k.ToString();
+                    tbOutlierMul.Text = JObject.multiplier.ToString();
+
+                    //normalize_textboxes
+                    JObject = jsonArray[5].Ground;
+                    tbNorCellSize.Text = JObject.Ground_cell.ToString();
+                    tbNorScalar.Text = JObject.scalar.ToString();
+                    tbNorSlope.Text = JObject.slope.ToString();
+                    tbNorThres.Text = JObject.threshold.ToString();
+                    tbNorWinSize.Text = JObject.window.ToString();
+
+                    //trunkSlice_textboxes
+                    JObject = jsonArray[6].TSlice;
+                    tbTrunkMinHeight.Text = JObject.T_minheight.ToString();
+                    tbTrunkMaxHeight.Text = JObject.T_maxheight.ToString();
+
+                    //CrownSlice_textboxes
+                    JObject = jsonArray[7].CSlice;
+                    tbCrownMinHeight.Text = JObject.C_minheight.ToString();
+                    tbCrownMaxHeight.Text = JObject.C_maxheight.ToString();
+
+                    ////treeSegment_textbox
+                    JObject = jsonArray[8].Crownseg;
+                    tbTreeSegNN.Text = JObject.Crown_nnearest.ToString();
+
+                    ////trunkSegment_textboxes
+                    JObject = jsonArray[10].SegmentStem;
+                    tbTreeSegSmooth.Text = JObject.smoothness.ToString();
+                    tbTreeSegMinDBH.Text = JObject.mindbh.ToString();
+                    tbTreeSegHeightThres.Text = JObject.heightThreshold.ToString();
+
+                    //measure_textbox
+                    JObject = jsonArray[9].Measure;
+                    tbMeasureNN.Text = JObject.Measure_nnearest.ToString();
+                }
+            }
+        }
+
+        private void btnPreConf_Click(object sender, EventArgs e)
+        {
+            string[] confCheck = Directory.GetFiles(Path.Combine(configPath, reqDi[(int)configFileType.Preset]), "PresetConfig*");
+            if (MessageBox.Show("선택한 프리셋을 적용하시겠습니까?\n저장되지 않은 설정값은 사라집니다.",
+                "프리셋 적용", MessageBoxButtons.OKCancel) == DialogResult.Cancel)
+            {
+                return;
+            }
+            foreach (string conf in confCheck)
+            {
+                string fileName = conf.Substring(conf.IndexOf("presetConfig"), conf.Length - conf.IndexOf("presetConfig") - 5);
+                if (((Button)sender).Name == fileName)
+                {
+                    string json = File.ReadAllText(conf);
+                    var jsonArray = JsonConvert.DeserializeObject<dynamic>(json);
+
+                    //subsamplng_textboxes
+                    dynamic JObject = jsonArray[3].Sub;
+                    tbSubCellSize.Text = JObject.Sub_cell.ToString();
+
+                    //outlierRemoving_textboxes
+                    JObject = jsonArray[4].Outlier;
+                    tbOutlierMeank.Text = JObject.mean_k.ToString();
+                    tbOutlierMul.Text = JObject.multiplier.ToString();
+
+                    //normalize_textboxes
+                    JObject = jsonArray[5].Ground;
+                    tbNorCellSize.Text = JObject.Ground_cell.ToString();
+                    tbNorScalar.Text = JObject.scalar.ToString();
+                    tbNorSlope.Text = JObject.slope.ToString();
+                    tbNorThres.Text = JObject.threshold.ToString();
+                    tbNorWinSize.Text = JObject.window.ToString();
+
+                    //trunkSlice_textboxes
+                    JObject = jsonArray[6].TSlice;
+                    tbTrunkMinHeight.Text = JObject.T_minheight.ToString();
+                    tbTrunkMaxHeight.Text = JObject.T_maxheight.ToString();
+
+                    //CrownSlice_textboxes
+                    JObject = jsonArray[7].CSlice;
+                    tbCrownMinHeight.Text = JObject.C_minheight.ToString();
+                    tbCrownMaxHeight.Text = JObject.C_maxheight.ToString();
+
+                    ////treeSegment_textbox
+                    JObject = jsonArray[8].Crownseg;
+                    tbTreeSegNN.Text = JObject.Crown_nnearest.ToString();
+
+                    ////trunkSegment_textboxes
+                    JObject = jsonArray[10].SegmentStem;
+                    tbTreeSegSmooth.Text = JObject.smoothness.ToString();
+                    tbTreeSegMinDBH.Text = JObject.mindbh.ToString();
+                    tbTreeSegHeightThres.Text = JObject.heightThreshold.ToString();
+
+                    //measure_textbox
+                    JObject = jsonArray[9].Measure;
+                    tbMeasureNN.Text = JObject.Measure_nnearest.ToString();
+                }
+            }
+        }
+
         private void btnStart_Click(object sender, EventArgs e)
         {
-            pFrm = new PlotForm(this);
+            if (pFrm == null)
+            {
+                pFrm = new PlotForm(this);
+                pFrm.configTouch += new configHandler(MakeConfig);
+                pFrm.mainPaint += new customEventHandler(recentConfBtnLoad);
+            }
             pFrm.ShowDialog();
         }
 
@@ -247,7 +554,15 @@ namespace WinFormsAppTest
                 pnSideMenu.Width = MAX_SLIDING_WIDTH;
                 tcMainHome.Left += SLIDING_GAP / 2;
 
-                btnSettings.Width = MAX_ICON_WIDTH;
+                foreach (Control cont in pnSideMenu.Controls)
+                {
+                    if (cont.Name.Contains("presetConfig"))
+                    {
+                        cont.ForeColor = SystemColors.ControlText;
+                        cont.Width = MAX_BTN_WIDTH;
+                    }
+                }
+                btnSettings.Width = MAX_BTN_WIDTH;
                 btnSettings.Text = "            Settings";
             }
 
@@ -256,7 +571,15 @@ namespace WinFormsAppTest
                 pnSideMenu.Width = MIN_SLIDING_WIDTH;
                 tcMainHome.Left -= SLIDING_GAP / 2;
 
-                btnSettings.Width = MIN_ICON_WIDTH;
+                foreach (Control cont in pnSideMenu.Controls)
+                {
+                    if (cont.Name.Contains("presetConfig"))
+                    {
+                        cont.ForeColor = Color.SeaGreen;
+                        cont.Width = MIN_BTN_WIDTH;
+                    }
+                }
+                btnSettings.Width = MIN_BTN_WIDTH;
                 btnSettings.Text = "";
             }
         }
@@ -462,7 +785,22 @@ namespace WinFormsAppTest
         private void btnPresetSave_Click(object sender, EventArgs e)
         {
             MakeConfig(configFileType.Preset);
-            mFrm = new ManageForm();
+            if (mFrm == null)
+            {
+                mFrm = new ManageForm();
+                mFrm.mainPaint += new customEventHandler(this.preConfBtnLoad);
+            }
+            preConfBtnLoad();
+            mFrm.ShowDialog();
+        }
+
+        private void btnPresetManage_Click(object sender, EventArgs e)
+        {
+            if (mFrm == null)
+            {
+                mFrm = new ManageForm();
+                mFrm.mainPaint += new customEventHandler(this.preConfBtnLoad);
+            }
             mFrm.ShowDialog();
         }
     }

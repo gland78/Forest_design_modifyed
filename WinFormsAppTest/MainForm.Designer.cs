@@ -31,6 +31,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             pnSideMenu = new Panel();
+            btnPresetManage = new Button();
             btnHome = new Button();
             btnSettings = new Button();
             btnSlideMenu = new Button();
@@ -54,6 +55,22 @@
             btnStart = new Button();
             lbTitle = new Label();
             tpSettings = new TabPage();
+            pnSettingNor5 = new CustomPanel();
+            tbNorThres = new TextBox();
+            lbNorThres = new Label();
+            pnSettingNor4 = new CustomPanel();
+            tbNorScalar = new TextBox();
+            lbNorScalar = new Label();
+            pnSettingNor3 = new CustomPanel();
+            tbNorSlope = new TextBox();
+            lbNorSlope = new Label();
+            pnSettingNor2 = new CustomPanel();
+            tbNorWinSize = new TextBox();
+            lbNorWinSize = new Label();
+            pnSettingNor1 = new CustomPanel();
+            tbNorCellSize = new TextBox();
+            lbNorCellSize = new Label();
+            lbNormalize = new Label();
             btnPresetSave = new CustomBtn();
             lbSettings = new Label();
             btnSettingSave = new CustomBtn();
@@ -104,6 +121,11 @@
             pnReviewMain.SuspendLayout();
             pnMain.SuspendLayout();
             tpSettings.SuspendLayout();
+            pnSettingNor5.SuspendLayout();
+            pnSettingNor4.SuspendLayout();
+            pnSettingNor3.SuspendLayout();
+            pnSettingNor2.SuspendLayout();
+            pnSettingNor1.SuspendLayout();
             pnSettingTree4.SuspendLayout();
             customPanel8.SuspendLayout();
             pnSettingTree3.SuspendLayout();
@@ -122,6 +144,8 @@
             // pnSideMenu
             // 
             pnSideMenu.BackColor = Color.SeaGreen;
+            pnSideMenu.BackgroundImageLayout = ImageLayout.Zoom;
+            pnSideMenu.Controls.Add(btnPresetManage);
             pnSideMenu.Controls.Add(btnHome);
             pnSideMenu.Controls.Add(btnSettings);
             pnSideMenu.Controls.Add(btnSlideMenu);
@@ -134,6 +158,25 @@
             pnSideMenu.MouseDown += MainForm_MouseDown;
             pnSideMenu.MouseMove += MainForm_MouseMove;
             pnSideMenu.MouseUp += MainForm_MouseUp;
+            // 
+            // btnPresetManage
+            // 
+            btnPresetManage.BackColor = Color.Transparent;
+            btnPresetManage.BackgroundImageLayout = ImageLayout.None;
+            btnPresetManage.CausesValidation = false;
+            btnPresetManage.FlatAppearance.BorderColor = Color.SeaGreen;
+            btnPresetManage.FlatAppearance.BorderSize = 0;
+            btnPresetManage.FlatAppearance.MouseDownBackColor = Color.MediumAquamarine;
+            btnPresetManage.FlatAppearance.MouseOverBackColor = Color.MediumSeaGreen;
+            btnPresetManage.FlatStyle = FlatStyle.Flat;
+            btnPresetManage.Image = (Image)resources.GetObject("btnPresetManage.Image");
+            btnPresetManage.Location = new Point(12, 94);
+            btnPresetManage.Margin = new Padding(3, 4, 3, 4);
+            btnPresetManage.Name = "btnPresetManage";
+            btnPresetManage.Size = new Size(38, 34);
+            btnPresetManage.TabIndex = 9;
+            btnPresetManage.UseVisualStyleBackColor = false;
+            btnPresetManage.Click += btnPresetManage_Click;
             // 
             // btnHome
             // 
@@ -161,6 +204,7 @@
             btnSettings.FlatAppearance.MouseOverBackColor = Color.MediumSeaGreen;
             btnSettings.FlatStyle = FlatStyle.Flat;
             btnSettings.Font = new Font("Microsoft Sans Serif", 14.25F, FontStyle.Bold, GraphicsUnit.Point);
+            btnSettings.ForeColor = SystemColors.ControlText;
             btnSettings.Image = (Image)resources.GetObject("btnSettings.Image");
             btnSettings.ImageAlign = ContentAlignment.MiddleLeft;
             btnSettings.Location = new Point(12, 754);
@@ -302,7 +346,7 @@
             lbOutlierRemove.AutoSize = true;
             lbOutlierRemove.Font = new Font("Microsoft Sans Serif", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
             lbOutlierRemove.ForeColor = Color.White;
-            lbOutlierRemove.Location = new Point(26, 233);
+            lbOutlierRemove.Location = new Point(24, 233);
             lbOutlierRemove.Name = "lbOutlierRemove";
             lbOutlierRemove.Size = new Size(167, 25);
             lbOutlierRemove.TabIndex = 16;
@@ -418,6 +462,12 @@
             tpSettings.AutoScrollMargin = new Size(0, 20);
             tpSettings.AutoScrollMinSize = new Size(0, 5);
             tpSettings.BackColor = Color.DimGray;
+            tpSettings.Controls.Add(pnSettingNor5);
+            tpSettings.Controls.Add(pnSettingNor4);
+            tpSettings.Controls.Add(pnSettingNor3);
+            tpSettings.Controls.Add(pnSettingNor2);
+            tpSettings.Controls.Add(pnSettingNor1);
+            tpSettings.Controls.Add(lbNormalize);
             tpSettings.Controls.Add(btnPresetSave);
             tpSettings.Controls.Add(lbSettings);
             tpSettings.Controls.Add(btnSettingSave);
@@ -445,6 +495,172 @@
             tpSettings.Padding = new Padding(3);
             tpSettings.Size = new Size(897, 764);
             tpSettings.TabIndex = 1;
+            // 
+            // pnSettingNor5
+            // 
+            pnSettingNor5.BackColor = Color.Gray;
+            pnSettingNor5.Controls.Add(tbNorThres);
+            pnSettingNor5.Controls.Add(lbNorThres);
+            pnSettingNor5.Location = new Point(24, 782);
+            pnSettingNor5.Margin = new Padding(3, 4, 3, 4);
+            pnSettingNor5.Name = "pnSettingNor5";
+            pnSettingNor5.Size = new Size(850, 58);
+            pnSettingNor5.TabIndex = 28;
+            // 
+            // tbNorThres
+            // 
+            tbNorThres.Font = new Font("맑은 고딕", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            tbNorThres.Location = new Point(725, 15);
+            tbNorThres.Margin = new Padding(3, 4, 3, 4);
+            tbNorThres.Name = "tbNorThres";
+            tbNorThres.Size = new Size(109, 29);
+            tbNorThres.TabIndex = 24;
+            // 
+            // lbNorThres
+            // 
+            lbNorThres.AutoSize = true;
+            lbNorThres.Font = new Font("맑은 고딕", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
+            lbNorThres.ForeColor = Color.White;
+            lbNorThres.Location = new Point(21, 21);
+            lbNorThres.Name = "lbNorThres";
+            lbNorThres.Size = new Size(70, 17);
+            lbNorThres.TabIndex = 23;
+            lbNorThres.Text = "Threshold";
+            // 
+            // pnSettingNor4
+            // 
+            pnSettingNor4.BackColor = Color.Gray;
+            pnSettingNor4.Controls.Add(tbNorScalar);
+            pnSettingNor4.Controls.Add(lbNorScalar);
+            pnSettingNor4.Location = new Point(24, 716);
+            pnSettingNor4.Margin = new Padding(3, 4, 3, 4);
+            pnSettingNor4.Name = "pnSettingNor4";
+            pnSettingNor4.Size = new Size(850, 58);
+            pnSettingNor4.TabIndex = 28;
+            // 
+            // tbNorScalar
+            // 
+            tbNorScalar.Font = new Font("맑은 고딕", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            tbNorScalar.Location = new Point(725, 15);
+            tbNorScalar.Margin = new Padding(3, 4, 3, 4);
+            tbNorScalar.Name = "tbNorScalar";
+            tbNorScalar.Size = new Size(109, 29);
+            tbNorScalar.TabIndex = 24;
+            // 
+            // lbNorScalar
+            // 
+            lbNorScalar.AutoSize = true;
+            lbNorScalar.Font = new Font("맑은 고딕", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
+            lbNorScalar.ForeColor = Color.White;
+            lbNorScalar.Location = new Point(21, 21);
+            lbNorScalar.Name = "lbNorScalar";
+            lbNorScalar.Size = new Size(44, 17);
+            lbNorScalar.TabIndex = 23;
+            lbNorScalar.Text = "Scalar";
+            // 
+            // pnSettingNor3
+            // 
+            pnSettingNor3.BackColor = Color.Gray;
+            pnSettingNor3.Controls.Add(tbNorSlope);
+            pnSettingNor3.Controls.Add(lbNorSlope);
+            pnSettingNor3.Location = new Point(24, 650);
+            pnSettingNor3.Margin = new Padding(3, 4, 3, 4);
+            pnSettingNor3.Name = "pnSettingNor3";
+            pnSettingNor3.Size = new Size(850, 58);
+            pnSettingNor3.TabIndex = 27;
+            // 
+            // tbNorSlope
+            // 
+            tbNorSlope.Font = new Font("맑은 고딕", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            tbNorSlope.Location = new Point(725, 15);
+            tbNorSlope.Margin = new Padding(3, 4, 3, 4);
+            tbNorSlope.Name = "tbNorSlope";
+            tbNorSlope.Size = new Size(109, 29);
+            tbNorSlope.TabIndex = 24;
+            // 
+            // lbNorSlope
+            // 
+            lbNorSlope.AutoSize = true;
+            lbNorSlope.Font = new Font("맑은 고딕", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
+            lbNorSlope.ForeColor = Color.White;
+            lbNorSlope.Location = new Point(21, 21);
+            lbNorSlope.Name = "lbNorSlope";
+            lbNorSlope.Size = new Size(42, 17);
+            lbNorSlope.TabIndex = 23;
+            lbNorSlope.Text = "Slope";
+            // 
+            // pnSettingNor2
+            // 
+            pnSettingNor2.BackColor = Color.Gray;
+            pnSettingNor2.Controls.Add(tbNorWinSize);
+            pnSettingNor2.Controls.Add(lbNorWinSize);
+            pnSettingNor2.Location = new Point(24, 584);
+            pnSettingNor2.Margin = new Padding(3, 4, 3, 4);
+            pnSettingNor2.Name = "pnSettingNor2";
+            pnSettingNor2.Size = new Size(850, 58);
+            pnSettingNor2.TabIndex = 27;
+            // 
+            // tbNorWinSize
+            // 
+            tbNorWinSize.Font = new Font("맑은 고딕", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            tbNorWinSize.Location = new Point(725, 15);
+            tbNorWinSize.Margin = new Padding(3, 4, 3, 4);
+            tbNorWinSize.Name = "tbNorWinSize";
+            tbNorWinSize.Size = new Size(109, 29);
+            tbNorWinSize.TabIndex = 24;
+            // 
+            // lbNorWinSize
+            // 
+            lbNorWinSize.AutoSize = true;
+            lbNorWinSize.Font = new Font("맑은 고딕", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
+            lbNorWinSize.ForeColor = Color.White;
+            lbNorWinSize.Location = new Point(21, 21);
+            lbNorWinSize.Name = "lbNorWinSize";
+            lbNorWinSize.Size = new Size(88, 17);
+            lbNorWinSize.TabIndex = 23;
+            lbNorWinSize.Text = "Window Size";
+            // 
+            // pnSettingNor1
+            // 
+            pnSettingNor1.BackColor = Color.Gray;
+            pnSettingNor1.Controls.Add(tbNorCellSize);
+            pnSettingNor1.Controls.Add(lbNorCellSize);
+            pnSettingNor1.Location = new Point(24, 518);
+            pnSettingNor1.Margin = new Padding(3, 4, 3, 4);
+            pnSettingNor1.Name = "pnSettingNor1";
+            pnSettingNor1.Size = new Size(850, 58);
+            pnSettingNor1.TabIndex = 26;
+            // 
+            // tbNorCellSize
+            // 
+            tbNorCellSize.Font = new Font("맑은 고딕", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            tbNorCellSize.Location = new Point(725, 15);
+            tbNorCellSize.Margin = new Padding(3, 4, 3, 4);
+            tbNorCellSize.Name = "tbNorCellSize";
+            tbNorCellSize.Size = new Size(109, 29);
+            tbNorCellSize.TabIndex = 24;
+            // 
+            // lbNorCellSize
+            // 
+            lbNorCellSize.AutoSize = true;
+            lbNorCellSize.Font = new Font("맑은 고딕", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
+            lbNorCellSize.ForeColor = Color.White;
+            lbNorCellSize.Location = new Point(21, 21);
+            lbNorCellSize.Name = "lbNorCellSize";
+            lbNorCellSize.Size = new Size(60, 17);
+            lbNorCellSize.TabIndex = 23;
+            lbNorCellSize.Text = "Cell Size";
+            // 
+            // lbNormalize
+            // 
+            lbNormalize.AutoSize = true;
+            lbNormalize.Font = new Font("Microsoft Sans Serif", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
+            lbNormalize.ForeColor = Color.White;
+            lbNormalize.Location = new Point(24, 485);
+            lbNormalize.Name = "lbNormalize";
+            lbNormalize.Size = new Size(117, 25);
+            lbNormalize.TabIndex = 89;
+            lbNormalize.Text = "Normalize";
             // 
             // btnPresetSave
             // 
@@ -505,7 +721,7 @@
             pnSettingTree4.Controls.Add(customPanel8);
             pnSettingTree4.Controls.Add(tbTreeSegMinDBH);
             pnSettingTree4.Controls.Add(lbTreeMinDBH);
-            pnSettingTree4.Location = new Point(24, 1085);
+            pnSettingTree4.Location = new Point(24, 1472);
             pnSettingTree4.Margin = new Padding(3, 4, 3, 4);
             pnSettingTree4.Name = "pnSettingTree4";
             pnSettingTree4.Size = new Size(850, 58);
@@ -565,7 +781,7 @@
             lbMeasureAttribute.AutoSize = true;
             lbMeasureAttribute.Font = new Font("Microsoft Sans Serif", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
             lbMeasureAttribute.ForeColor = Color.White;
-            lbMeasureAttribute.Location = new Point(26, 1173);
+            lbMeasureAttribute.Location = new Point(24, 1560);
             lbMeasureAttribute.Name = "lbMeasureAttribute";
             lbMeasureAttribute.Size = new Size(192, 25);
             lbMeasureAttribute.TabIndex = 63;
@@ -576,7 +792,7 @@
             pnSettingTree3.BackColor = Color.Gray;
             pnSettingTree3.Controls.Add(tbTreeSegHeightThres);
             pnSettingTree3.Controls.Add(lbTreeThres);
-            pnSettingTree3.Location = new Point(24, 1019);
+            pnSettingTree3.Location = new Point(24, 1406);
             pnSettingTree3.Margin = new Padding(3, 4, 3, 4);
             pnSettingTree3.Name = "pnSettingTree3";
             pnSettingTree3.Size = new Size(850, 58);
@@ -607,7 +823,7 @@
             pnSettingTree2.BackColor = Color.Gray;
             pnSettingTree2.Controls.Add(lbTreeSmooth);
             pnSettingTree2.Controls.Add(tbTreeSegSmooth);
-            pnSettingTree2.Location = new Point(24, 953);
+            pnSettingTree2.Location = new Point(24, 1340);
             pnSettingTree2.Margin = new Padding(3, 4, 3, 4);
             pnSettingTree2.Name = "pnSettingTree2";
             pnSettingTree2.Size = new Size(850, 58);
@@ -638,7 +854,7 @@
             pnSettingCrown2.BackColor = Color.Gray;
             pnSettingCrown2.Controls.Add(lbCrownMaxH);
             pnSettingCrown2.Controls.Add(tbCrownMaxHeight);
-            pnSettingCrown2.Location = new Point(24, 767);
+            pnSettingCrown2.Location = new Point(24, 1154);
             pnSettingCrown2.Margin = new Padding(3, 4, 3, 4);
             pnSettingCrown2.Name = "pnSettingCrown2";
             pnSettingCrown2.Size = new Size(850, 58);
@@ -669,7 +885,7 @@
             lbTreeSegment.AutoSize = true;
             lbTreeSegment.Font = new Font("Microsoft Sans Serif", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
             lbTreeSegment.ForeColor = Color.White;
-            lbTreeSegment.Location = new Point(26, 855);
+            lbTreeSegment.Location = new Point(24, 1242);
             lbTreeSegment.Name = "lbTreeSegment";
             lbTreeSegment.Size = new Size(152, 25);
             lbTreeSegment.TabIndex = 62;
@@ -680,7 +896,7 @@
             pnSettingTrunk2.BackColor = Color.Gray;
             pnSettingTrunk2.Controls.Add(lbTrunkMaxH);
             pnSettingTrunk2.Controls.Add(tbTrunkMaxHeight);
-            pnSettingTrunk2.Location = new Point(24, 581);
+            pnSettingTrunk2.Location = new Point(24, 968);
             pnSettingTrunk2.Margin = new Padding(3, 4, 3, 4);
             pnSettingTrunk2.Name = "pnSettingTrunk2";
             pnSettingTrunk2.Size = new Size(850, 58);
@@ -722,7 +938,7 @@
             lbCrownSlice.AutoSize = true;
             lbCrownSlice.Font = new Font("Microsoft Sans Serif", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
             lbCrownSlice.ForeColor = Color.White;
-            lbCrownSlice.Location = new Point(26, 669);
+            lbCrownSlice.Location = new Point(24, 1056);
             lbCrownSlice.Name = "lbCrownSlice";
             lbCrownSlice.Size = new Size(130, 25);
             lbCrownSlice.TabIndex = 47;
@@ -733,7 +949,7 @@
             lbTrunkSlice.AutoSize = true;
             lbTrunkSlice.Font = new Font("Microsoft Sans Serif", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
             lbTrunkSlice.ForeColor = Color.White;
-            lbTrunkSlice.Location = new Point(26, 483);
+            lbTrunkSlice.Location = new Point(24, 870);
             lbTrunkSlice.Name = "lbTrunkSlice";
             lbTrunkSlice.Size = new Size(124, 25);
             lbTrunkSlice.TabIndex = 46;
@@ -755,7 +971,7 @@
             pnSettingMeasure1.BackColor = Color.Gray;
             pnSettingMeasure1.Controls.Add(tbMeasureNN);
             pnSettingMeasure1.Controls.Add(lbMeasureNnear);
-            pnSettingMeasure1.Location = new Point(24, 1205);
+            pnSettingMeasure1.Location = new Point(24, 1592);
             pnSettingMeasure1.Margin = new Padding(3, 4, 3, 4);
             pnSettingMeasure1.Name = "pnSettingMeasure1";
             pnSettingMeasure1.Size = new Size(850, 58);
@@ -786,7 +1002,7 @@
             lbSubsampling.AutoSize = true;
             lbSubsampling.Font = new Font("Microsoft Sans Serif", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
             lbSubsampling.ForeColor = Color.White;
-            lbSubsampling.Location = new Point(26, 113);
+            lbSubsampling.Location = new Point(24, 113);
             lbSubsampling.Name = "lbSubsampling";
             lbSubsampling.Size = new Size(150, 25);
             lbSubsampling.TabIndex = 22;
@@ -797,7 +1013,7 @@
             pnSettingTree1.BackColor = Color.Gray;
             pnSettingTree1.Controls.Add(lbTreeNnear);
             pnSettingTree1.Controls.Add(tbTreeSegNN);
-            pnSettingTree1.Location = new Point(24, 887);
+            pnSettingTree1.Location = new Point(24, 1274);
             pnSettingTree1.Margin = new Padding(3, 4, 3, 4);
             pnSettingTree1.Name = "pnSettingTree1";
             pnSettingTree1.Size = new Size(850, 58);
@@ -828,7 +1044,7 @@
             pnSettingCrown1.BackColor = Color.Gray;
             pnSettingCrown1.Controls.Add(lbCrownMinH);
             pnSettingCrown1.Controls.Add(tbCrownMinHeight);
-            pnSettingCrown1.Location = new Point(24, 701);
+            pnSettingCrown1.Location = new Point(24, 1088);
             pnSettingCrown1.Margin = new Padding(3, 4, 3, 4);
             pnSettingCrown1.Name = "pnSettingCrown1";
             pnSettingCrown1.Size = new Size(850, 58);
@@ -859,7 +1075,7 @@
             pnSettingTrunk1.BackColor = Color.Gray;
             pnSettingTrunk1.Controls.Add(tbTrunkMinHeight);
             pnSettingTrunk1.Controls.Add(lbTrunkMinH);
-            pnSettingTrunk1.Location = new Point(24, 515);
+            pnSettingTrunk1.Location = new Point(24, 902);
             pnSettingTrunk1.Margin = new Padding(3, 4, 3, 4);
             pnSettingTrunk1.Name = "pnSettingTrunk1";
             pnSettingTrunk1.Size = new Size(850, 58);
@@ -946,6 +1162,16 @@
             pnMain.PerformLayout();
             tpSettings.ResumeLayout(false);
             tpSettings.PerformLayout();
+            pnSettingNor5.ResumeLayout(false);
+            pnSettingNor5.PerformLayout();
+            pnSettingNor4.ResumeLayout(false);
+            pnSettingNor4.PerformLayout();
+            pnSettingNor3.ResumeLayout(false);
+            pnSettingNor3.PerformLayout();
+            pnSettingNor2.ResumeLayout(false);
+            pnSettingNor2.PerformLayout();
+            pnSettingNor1.ResumeLayout(false);
+            pnSettingNor1.PerformLayout();
             pnSettingTree4.ResumeLayout(false);
             pnSettingTree4.PerformLayout();
             customPanel8.ResumeLayout(false);
@@ -1044,5 +1270,22 @@
         private CustomBtn btnSettingSave;
         private Label lbSettings;
         private CustomBtn btnPresetSave;
+        private CustomPanel pnSettingNor5;
+        private TextBox tbNorThres;
+        private Label lbNorThres;
+        private CustomPanel pnSettingNor4;
+        private TextBox tbNorScalar;
+        private Label lbNorScalar;
+        private CustomPanel pnSettingNor3;
+        private TextBox tbNorSlope;
+        private Label lbNorSlope;
+        private CustomPanel pnSettingNor2;
+        private TextBox tbNorWinSize;
+        private Label lbNorWinSize;
+        private CustomPanel pnSettingNor1;
+        private TextBox tbNorCellSize;
+        private Label lbNorCellSize;
+        private Label lbNormalize;
+        private Button btnPresetManage;
     }
 }
