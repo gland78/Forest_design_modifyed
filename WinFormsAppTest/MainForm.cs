@@ -16,6 +16,7 @@ namespace WinFormsAppTest
         }
 
         private PlotForm? pFrm;
+        private ManageForm? mFrm;
 
         //슬라이딩 메뉴의 최대, 최소 폭 크기 및 그 차이
         const int MAX_SLIDING_WIDTH = 384;
@@ -32,8 +33,8 @@ namespace WinFormsAppTest
 
         bool isMformDrag = false;
 
-        string configPath = Directory.GetParent(System.Environment.CurrentDirectory) + @"\bin\";
-        string[] reqDi = { "", "recentConfig", "preSetConfig" };
+        internal static string configPath = Directory.GetParent(System.Environment.CurrentDirectory) + @"\bin\";
+        internal static string[] reqDi = { "", "RecentConfig", "PresetConfig" };
 
         public MainForm()
         {
@@ -54,15 +55,9 @@ namespace WinFormsAppTest
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            DirectoryInfo configDi;
-            foreach (string diName in reqDi)
+            if (!File.Exists(configPath + "config.json"))
             {
-                configDi = new DirectoryInfo(configPath + diName);
-                if (configDi.Exists == false)
-                {
-                    configDi.Create();
-                    touchConfig(configFileType.Preset);
-                }
+                MakeConfig(configFileType.Default);
             }
 
             //ReadConfig();
@@ -75,16 +70,6 @@ namespace WinFormsAppTest
             this.Location = new Point((screenSize.X - this.Width) / 2, (screenSize.Y - this.Height) / 2);
 
             mainForm_AddEvent();
-        }
-
-        private void touchConfig(configFileType confType)
-        {
-            string[] files;
-            if (confType != configFileType.Default)
-            {
-                files = Directory.GetFiles(configPath + reqDi[(int)confType] + @"\", $"{"config*"}");
-                File.Copy(configPath + "config.json", configPath + reqDi[(int)confType] + @"\config" + files.Length.ToString() + ".json");
-            }
         }
 
         //메인 폼 로드 전 이벤트 전처리(Designer.cs에 넣으면 찾기가 힘듬)
@@ -472,6 +457,13 @@ namespace WinFormsAppTest
             {
                 throw new Exception("Error while updating JSON file: " + ex.Message);
             }
+        }
+
+        private void btnPresetSave_Click(object sender, EventArgs e)
+        {
+            MakeConfig(configFileType.Preset);
+            mFrm = new ManageForm();
+            mFrm.ShowDialog();
         }
     }
 }

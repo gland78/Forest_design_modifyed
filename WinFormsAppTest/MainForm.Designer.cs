@@ -54,6 +54,7 @@
             btnStart = new Button();
             lbTitle = new Label();
             tpSettings = new TabPage();
+            btnPresetSave = new CustomBtn();
             lbSettings = new Label();
             btnSettingSave = new CustomBtn();
             pnSettingTree4 = new CustomPanel();
@@ -159,7 +160,7 @@
             btnSettings.FlatAppearance.MouseDownBackColor = Color.MediumAquamarine;
             btnSettings.FlatAppearance.MouseOverBackColor = Color.MediumSeaGreen;
             btnSettings.FlatStyle = FlatStyle.Flat;
-            btnSettings.Font = new Font("나눔고딕 ExtraBold", 14.25F, FontStyle.Bold, GraphicsUnit.Point);
+            btnSettings.Font = new Font("Microsoft Sans Serif", 14.25F, FontStyle.Bold, GraphicsUnit.Point);
             btnSettings.Image = (Image)resources.GetObject("btnSettings.Image");
             btnSettings.ImageAlign = ContentAlignment.MiddleLeft;
             btnSettings.Location = new Point(12, 754);
@@ -299,11 +300,11 @@
             // lbOutlierRemove
             // 
             lbOutlierRemove.AutoSize = true;
-            lbOutlierRemove.Font = new Font("나눔고딕 ExtraBold", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
+            lbOutlierRemove.Font = new Font("Microsoft Sans Serif", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
             lbOutlierRemove.ForeColor = Color.White;
             lbOutlierRemove.Location = new Point(26, 233);
             lbOutlierRemove.Name = "lbOutlierRemove";
-            lbOutlierRemove.Size = new Size(154, 24);
+            lbOutlierRemove.Size = new Size(167, 25);
             lbOutlierRemove.TabIndex = 16;
             lbOutlierRemove.Text = "OutlierRemove";
             // 
@@ -404,10 +405,10 @@
             // lbTitle
             // 
             lbTitle.AutoSize = true;
-            lbTitle.Font = new Font("나눔고딕", 63.75F, FontStyle.Regular, GraphicsUnit.Point);
+            lbTitle.Font = new Font("Microsoft Sans Serif", 63.75F, FontStyle.Regular, GraphicsUnit.Point);
             lbTitle.Location = new Point(4, 15);
             lbTitle.Name = "lbTitle";
-            lbTitle.Size = new Size(343, 98);
+            lbTitle.Size = new Size(348, 96);
             lbTitle.TabIndex = 4;
             lbTitle.Text = "ForestLi\n";
             // 
@@ -417,6 +418,7 @@
             tpSettings.AutoScrollMargin = new Size(0, 20);
             tpSettings.AutoScrollMinSize = new Size(0, 5);
             tpSettings.BackColor = Color.DimGray;
+            tpSettings.Controls.Add(btnPresetSave);
             tpSettings.Controls.Add(lbSettings);
             tpSettings.Controls.Add(btnSettingSave);
             tpSettings.Controls.Add(pnSettingTree4);
@@ -443,6 +445,27 @@
             tpSettings.Padding = new Padding(3);
             tpSettings.Size = new Size(897, 764);
             tpSettings.TabIndex = 1;
+            // 
+            // btnPresetSave
+            // 
+            btnPresetSave.BackColor = Color.FromArgb(64, 64, 64);
+            btnPresetSave.BackgroundColor = Color.FromArgb(64, 64, 64);
+            btnPresetSave.BorderColor = Color.Transparent;
+            btnPresetSave.BorderRadius = 10;
+            btnPresetSave.BorderSize = 1;
+            btnPresetSave.FlatAppearance.BorderSize = 0;
+            btnPresetSave.FlatAppearance.MouseDownBackColor = Color.FromArgb(80, 80, 80);
+            btnPresetSave.FlatStyle = FlatStyle.Flat;
+            btnPresetSave.Font = new Font("맑은 고딕", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
+            btnPresetSave.ForeColor = Color.White;
+            btnPresetSave.Location = new Point(636, 27);
+            btnPresetSave.Name = "btnPresetSave";
+            btnPresetSave.Size = new Size(116, 36);
+            btnPresetSave.TabIndex = 88;
+            btnPresetSave.Text = "프리셋 저장";
+            btnPresetSave.TextColor = Color.White;
+            btnPresetSave.UseVisualStyleBackColor = false;
+            btnPresetSave.Click += btnPresetSave_Click;
             // 
             // lbSettings
             // 
@@ -540,11 +563,11 @@
             // lbMeasureAttribute
             // 
             lbMeasureAttribute.AutoSize = true;
-            lbMeasureAttribute.Font = new Font("나눔고딕 ExtraBold", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
+            lbMeasureAttribute.Font = new Font("Microsoft Sans Serif", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
             lbMeasureAttribute.ForeColor = Color.White;
             lbMeasureAttribute.Location = new Point(26, 1173);
             lbMeasureAttribute.Name = "lbMeasureAttribute";
-            lbMeasureAttribute.Size = new Size(182, 24);
+            lbMeasureAttribute.Size = new Size(192, 25);
             lbMeasureAttribute.TabIndex = 63;
             lbMeasureAttribute.Text = "MeasureAttribute";
             // 
@@ -644,11 +667,11 @@
             // lbTreeSegment
             // 
             lbTreeSegment.AutoSize = true;
-            lbTreeSegment.Font = new Font("나눔고딕 ExtraBold", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
+            lbTreeSegment.Font = new Font("Microsoft Sans Serif", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
             lbTreeSegment.ForeColor = Color.White;
             lbTreeSegment.Location = new Point(26, 855);
             lbTreeSegment.Name = "lbTreeSegment";
-            lbTreeSegment.Size = new Size(137, 24);
+            lbTreeSegment.Size = new Size(152, 25);
             lbTreeSegment.TabIndex = 62;
             lbTreeSegment.Text = "TreeSegment";
             // 
@@ -697,22 +720,22 @@
             // lbCrownSlice
             // 
             lbCrownSlice.AutoSize = true;
-            lbCrownSlice.Font = new Font("나눔고딕 ExtraBold", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
+            lbCrownSlice.Font = new Font("Microsoft Sans Serif", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
             lbCrownSlice.ForeColor = Color.White;
             lbCrownSlice.Location = new Point(26, 669);
             lbCrownSlice.Name = "lbCrownSlice";
-            lbCrownSlice.Size = new Size(118, 24);
+            lbCrownSlice.Size = new Size(130, 25);
             lbCrownSlice.TabIndex = 47;
             lbCrownSlice.Text = "CrownSlice";
             // 
             // lbTrunkSlice
             // 
             lbTrunkSlice.AutoSize = true;
-            lbTrunkSlice.Font = new Font("나눔고딕 ExtraBold", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
+            lbTrunkSlice.Font = new Font("Microsoft Sans Serif", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
             lbTrunkSlice.ForeColor = Color.White;
             lbTrunkSlice.Location = new Point(26, 483);
             lbTrunkSlice.Name = "lbTrunkSlice";
-            lbTrunkSlice.Size = new Size(108, 24);
+            lbTrunkSlice.Size = new Size(124, 25);
             lbTrunkSlice.TabIndex = 46;
             lbTrunkSlice.Text = "TrunkSlice";
             // 
@@ -761,11 +784,11 @@
             // lbSubsampling
             // 
             lbSubsampling.AutoSize = true;
-            lbSubsampling.Font = new Font("나눔고딕 ExtraBold", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
+            lbSubsampling.Font = new Font("Microsoft Sans Serif", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
             lbSubsampling.ForeColor = Color.White;
             lbSubsampling.Location = new Point(26, 113);
             lbSubsampling.Name = "lbSubsampling";
-            lbSubsampling.Size = new Size(137, 24);
+            lbSubsampling.Size = new Size(150, 25);
             lbSubsampling.TabIndex = 22;
             lbSubsampling.Text = "SubSampling";
             // 
@@ -1020,5 +1043,6 @@
         private TextBox tbTreeSegNN;
         private CustomBtn btnSettingSave;
         private Label lbSettings;
+        private CustomBtn btnPresetSave;
     }
 }
