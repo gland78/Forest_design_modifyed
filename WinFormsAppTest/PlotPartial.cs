@@ -517,22 +517,27 @@ namespace WinFormsAppTest
                 File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + six + originLasName + ".json", "[" + Readers.ToString() + ", " + sonSpec.ToString() + ", " + Writers.ToString() + "]");
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + six + originLasName + ".json 파일을 생성했습니다.");
             }
+            MakeSevnethJsonFile();
         }
 
-        private void MakeJsonFileagain2()
+        private void MakeSevnethJsonFile()
         {
             string seven = "level7_segmentTrunk_";
             {
                 JObject segmentStem = new JObject(
-                    new JProperty("smoothness", 16.0),
-                    new JProperty("mindbh", 0.06),
-                    new JProperty("maxdbh", 0.8),
-                    new JProperty("height_threshold", 9.0)
+                    new JProperty("smoothness", paramForm.segmentStem.smoothness),
+                    new JProperty("mindbh", paramForm.segmentStem.minDBH),
+                    new JProperty("maxdbh", paramForm.segmentStem.maxDBH),
+                    new JProperty("height_threshold", paramForm.segmentStem.HeightThreshold)
                     );
                 JObject root = new JObject(new JProperty("Segmentstem", segmentStem));
                 File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + seven + originLasName + ".json", root.ToString());
             }
-            string eight = "level8_segmentCrown_";
+            
+        }
+        private void MakeEighthJsonFile()
+        {
+            /*string eight = "level8_segmentCrown_";
             {
                 List<String> filenames_pcd = new List<String>();
 
@@ -548,13 +553,40 @@ namespace WinFormsAppTest
                 string jsonFilePaths = JsonConvert.SerializeObject(filenames_pcd);
 
                 JObject segmentCrown = new JObject(
+                    new JProperty("Crown_nnearest", paramForm.crownSeg.CrownNN),
                     new JProperty("Trunk_files", jsonFilePaths),
-                    new JProperty("pcdFiles", originLasName+"CSlice.pcd")
+                    new JProperty("pcdFiles", originLasName + "_CSlice.pcd")
                 );
                 JObject root = new JObject(new JProperty("segmentCrown", segmentCrown));
                 File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + eight + originLasName + ".json", root.ToString());
 
+            }*/
+
+            string eight = "level8_segmentCrown_";
+
+            List<String> filenames_pcd = new List<String>();
+
+            String FolderName = resultSavedDirectory + shape + @"\intermediate";
+            System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(FolderName);
+            foreach (System.IO.FileInfo File in di.GetFiles())
+            {
+                if (File.Extension.ToLower().CompareTo(".pcd") == 0 && File.Name.Contains(originLasName) == true && File.Name.Contains("_TRUNK") == true)
+                {
+                    filenames_pcd.Add(File.FullName);
+                }
             }
+
+            string trunkFilesString = string.Join(", ", filenames_pcd);
+
+            JObject segmentCrown = new JObject(
+                new JProperty("Crown_nnearest", paramForm.crownSeg.CrownNN),
+                new JProperty("Trunk_files", trunkFilesString),
+                new JProperty("pcdFiles", originLasName + "_CSlice.pcd")
+            );
+
+            JObject root = new JObject(new JProperty("segmentCrown", segmentCrown));
+            File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + eight + originLasName + ".json", root.ToString());
+
         }
         private void ProcessBatch(string num)
         {
@@ -846,6 +878,7 @@ namespace WinFormsAppTest
                     sw.WriteLine("cls");
                     sw.WriteLine("@ECHO OFF");
                     sw.WriteLine("echo 수간 추출 및 하층식생 제거 중...");
+                    //sw.WriteLine("csp_segmentstem " +seven+originLasName+".json");
                     //최종에서는 명령인수 삭제
                     sw.WriteLine("csp_segmentstem " + paramForm.segmentStem.smoothness + " " + paramForm.segmentStem.minDBH + " " + paramForm.segmentStem.maxDBH + " level1_cropped_" + originLasName + "_B.dat "
                      + originLasName + "_Tslice.pcd");
@@ -854,6 +887,7 @@ namespace WinFormsAppTest
                 ProcessBatch(seven);
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + originLasName + seven + ".bat 파일을 생성했습니다.");
             }
+            MakeEighthJsonFile();
         }
         private void RunFileEighth()
         {
