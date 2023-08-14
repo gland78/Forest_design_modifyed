@@ -686,11 +686,7 @@ namespace WinFormsAppTest
 
 
 
-        /// <summary>
-        /// config 저장하기 버튼 구현 필요
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        
         private void btnSettingSave_Click(object sender, EventArgs e)
         {
             /*
