@@ -572,11 +572,11 @@ namespace WinFormsAppTest
             {
                 if (File.Extension.ToLower().CompareTo(".pcd") == 0 && File.Name.Contains(originLasName) == true && File.Name.Contains("_TRUNK") == true)
                 {
-                    filenames_pcd.Add(File.FullName);
+                    filenames_pcd.Add(File.Name);
                 }
             }
 
-            string trunkFilesString = string.Join(", ", filenames_pcd);
+            string trunkFilesString = string.Join(" ", filenames_pcd);
 
             JObject segmentCrown = new JObject(
                 new JProperty("Crown_nnearest", paramForm.crownSeg.CrownNN),
