@@ -54,6 +54,7 @@ namespace WinFormsAppTest
         bool menuOpen = false;
 
         Point relativeMformPos = new Point();
+        Point relativeRpanelPos = new Point();
 
         bool isMformDrag = false;
 
@@ -353,7 +354,7 @@ namespace WinFormsAppTest
             Array.Sort(confCheck);
 
             Point relativePos = RECENT_BTN_POS;
-            int btnNum = confCheck.Length - 1;
+            int btnNum = 0;
             string btnText = "";
 
             pnReview.SuspendLayout();
@@ -421,7 +422,7 @@ namespace WinFormsAppTest
                     }
                 }
                 btnRecentConfs.Text = btnText;
-                btnRecentConfs.Name = "recentConfig" + btnNum--.ToString();
+                btnRecentConfs.Name = "recentConfig" + btnNum++.ToString();
                 relativePos.X = relativePos.X + RECENT_BTN_WIDTH + RECENT_BTN_GAP;
             }
             pnReview.ResumeLayout(false);
@@ -430,7 +431,7 @@ namespace WinFormsAppTest
 
         private void btnRecentConf_Click(object sender, EventArgs e)
         {
-            string[] confCheck = Directory.GetFiles(Path.Combine(configPath, reqDi[(int)configFileType.Preset]), "RecentConfig*");
+            string[] confCheck = Directory.GetFiles(Path.Combine(configPath, reqDi[(int)configFileType.Recent]), "recentConfig*");
             if (MessageBox.Show("해당 설정을 적용하시겠습니까?\n저장되지 않은 설정값은 사라집니다.",
                 "최근 작업기록 적용", MessageBoxButtons.OKCancel) == DialogResult.Cancel)
             {
@@ -686,7 +687,7 @@ namespace WinFormsAppTest
 
 
 
-        
+
         private void btnSettingSave_Click(object sender, EventArgs e)
         {
             /*
@@ -805,14 +806,22 @@ namespace WinFormsAppTest
 
         private void btnPresetSave_Click(object sender, EventArgs e)
         {
-            MakeConfig(configFileType.Preset);
             if (mFrm == null)
             {
                 mFrm = new ManageForm();
                 mFrm.mainPaint += new customEventHandler(this.preConfBtnLoad);
             }
-            preConfBtnLoad();
+
+            if (pFrm == null)
+            {
+                pFrm = new PlotForm(this);
+                pFrm.configTouch += new configHandler(MakeConfig);
+                pFrm.mainPaint += new customEventHandler(recentConfBtnLoad);
+            }
+            MakeConfig(configFileType.Preset);
+
             mFrm.ShowDialog();
+            preConfBtnLoad();
         }
 
         private void btnPresetManage_Click(object sender, EventArgs e)

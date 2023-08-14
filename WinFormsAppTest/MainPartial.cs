@@ -268,7 +268,24 @@ namespace WinFormsAppTest
 
         private void setAllparams(ref List<object> data)
         {
-            Dictionary<string, double> plotData = plotSender();
+            Dictionary<string, double> plotData = new Dictionary<string, double>();
+
+            if (Application.OpenForms["PlotForm"] != null)
+            {
+                plotData = plotSender();
+            }
+            
+            else
+            {
+                plotData.Add("cx", gui.centerX);
+                plotData.Add("cy", gui.centerY);
+                plotData.Add("radius", gui.radius);
+
+                plotData.Add("xmin", gui.xMin);
+                plotData.Add("ymin", gui.yMin);
+                plotData.Add("xmax", gui.xMax);
+                plotData.Add("ymax", gui.yMax);
+            }
 
             data = new List<object>
             {

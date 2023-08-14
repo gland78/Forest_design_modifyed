@@ -62,7 +62,6 @@ namespace WinFormsAppTest
             resultPath = paramForm.gui.resultPath;
             Point screenSize = ((Point)Screen.PrimaryScreen.Bounds.Size);
 
-
             this.Location = new Point((screenSize.X - this.Width) / 2, (screenSize.Y - this.Height) / 2);
         }
 

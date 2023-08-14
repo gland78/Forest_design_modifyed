@@ -375,7 +375,6 @@
             // 
             // pnReview
             // 
-            pnReview.AutoScroll = true;
             pnReview.Dock = DockStyle.Bottom;
             pnReview.Location = new Point(0, 64);
             pnReview.Margin = new Padding(3, 4, 3, 4);
