@@ -1,10 +1,12 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace WinFormsAppTest
 {
@@ -516,6 +518,44 @@ namespace WinFormsAppTest
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + six + originLasName + ".json 파일을 생성했습니다.");
             }
         }
+
+        private void MakeJsonFileagain2()
+        {
+            string seven = "level7_segmentTrunk_";
+            {
+                JObject segmentStem = new JObject(
+                    new JProperty("smoothness", 16.0),
+                    new JProperty("mindbh", 0.06),
+                    new JProperty("maxdbh", 0.8),
+                    new JProperty("height_threshold", 9.0)
+                    );
+                JObject root = new JObject(new JProperty("Segmentstem", segmentStem));
+                File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + seven + originLasName + ".json", root.ToString());
+            }
+            string eight = "level8_segmentCrown_";
+            {
+                List<String> filenames_pcd = new List<String>();
+
+                String FolderName = resultSavedDirectory + shape + @"\intermediate";
+                System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(FolderName);
+                foreach (System.IO.FileInfo File in di.GetFiles())
+                {
+                    if (File.Extension.ToLower().CompareTo(".pcd") == 0 && File.Name.Contains(originLasName) == true && File.Name.Contains("_TRUNK") == true)
+                    {
+                        filenames_pcd.Add(File.FullName);
+                    }
+                }
+                string jsonFilePaths = JsonConvert.SerializeObject(filenames_pcd);
+
+                JObject segmentCrown = new JObject(
+                    new JProperty("Trunk_files", jsonFilePaths),
+                    new JProperty("pcdFiles", originLasName+"CSlice.pcd")
+                );
+                JObject root = new JObject(new JProperty("segmentCrown", segmentCrown));
+                File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + eight + originLasName + ".json", root.ToString());
+
+            }
+        }
         private void ProcessBatch(string num)
         {
             //num(ex. "level1_~";
@@ -820,22 +860,6 @@ namespace WinFormsAppTest
             string eight = "level8_segmentCrown_";
             //8단계 개별목 추출 
             {
-                List<String> filenames_pcd = new List<String>();
-
-                string stemlist = "";
-
-                String FolderName = resultSavedDirectory + shape + @"\intermediate";
-                System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(FolderName);
-                foreach (System.IO.FileInfo File in di.GetFiles())
-                {
-                    if (File.Extension.ToLower().CompareTo(".pcd") == 0 && File.Name.Contains(originLasName) == true && File.Name.Contains("_TRUNK") == true)
-                    {
-                        String FileNameOnly = File.Name.Substring(0, File.Name.Length - 4);
-                        String FullFileName = File.FullName;
-
-                        stemlist += FullFileName + " ";
-                    }
-                }
                 string batFilePath = resultSavedDirectory + shape + @"\\intermediate\" + eight + originLasName + ".bat";
                 if (!File.Exists(batFilePath))
                 {
@@ -853,7 +877,7 @@ namespace WinFormsAppTest
                     sw.WriteLine("@ECHO OFF");
                     sw.WriteLine("echo 개별목 추출 중...");
 
-                    sw.WriteLine("csp_segmentcrown " + stemlist + " " + originLasName + "_CSlice.pcd");
+                    sw.WriteLine("csp_segmentcrown " + eight+originLasName+".json");
                     sw.WriteLine();
                     sw.WriteLine("set destination=\"{0}\"", destination);
                     sw.WriteLine();
