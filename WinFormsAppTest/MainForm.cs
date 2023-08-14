@@ -270,7 +270,6 @@ namespace WinFormsAppTest
             pnSideMenu.Controls.Clear();
 
             pnSideMenu.Controls.Add(btnHome);
-            pnSideMenu.Controls.Add(btnHide);
             pnSideMenu.Controls.Add(btnSettings);
             pnSideMenu.Controls.Add(btnSlideMenu);
             pnSideMenu.Controls.Add(btnPresetManage);
@@ -278,7 +277,7 @@ namespace WinFormsAppTest
             //프리셋 콘피그 저장 장소
             string[] confCheck = Directory.GetFiles(filePath, "presetConfig*");
 
-            if(confCheck.Length < 1 )
+            if (confCheck.Length < 1)
             {
                 return;
             }
@@ -346,7 +345,7 @@ namespace WinFormsAppTest
 
             string[] confCheck = Directory.GetFiles(filePath, "RecentConfig*");
 
-            if(confCheck.Length < 1)
+            if (confCheck.Length < 1)
             {
                 return;
             }
@@ -411,11 +410,11 @@ namespace WinFormsAppTest
                             }
                             btnText += "   " + shapeStr + "\n";
                         }
-                        if (shapeStr == "Circle" && line.Contains("cx") || line.Contains("cy") || line.Contains("radius"))
+                        if (shapeStr == "Circle" && (line.Contains("cx") || line.Contains("cy") || line.Contains("radius")))
                         {
                             btnText += "   " + Regex.Replace(line, @"[^0-9a-zA-Z:]", "") + "\n";
                         }
-                        else if (shapeStr == "Rectangle" && line.Contains("xmin") || line.Contains("ymin") || line.Contains("xmax") || line.Contains("ymax"))
+                        else if (shapeStr == "Rectangle" && (line.Contains("xmin") || line.Contains("ymin") || line.Contains("xmax") || line.Contains("ymax")))
                         {
                             btnText += "   " + Regex.Replace(line, @"[^0-9a-zA-Z:]", "") + "\n";
                         }
@@ -828,6 +827,11 @@ namespace WinFormsAppTest
                 mFrm.mainPaint += new customEventHandler(this.preConfBtnLoad);
             }
             mFrm.ShowDialog();
+        }
+
+        private void btnHide_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
         }
     }
 }

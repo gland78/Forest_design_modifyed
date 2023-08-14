@@ -35,7 +35,6 @@
             btnHome = new Button();
             btnSettings = new Button();
             btnSlideMenu = new Button();
-            btnHide = new Button();
             btnClose = new Button();
             pnSettingOut1 = new CustomPanel();
             tbOutlierMethod = new TextBox();
@@ -114,6 +113,7 @@
             pnSettingSub1 = new CustomPanel();
             tbSubCellSize = new TextBox();
             lbSubCellSize = new Label();
+            btnHide = new Button();
             pnSideMenu.SuspendLayout();
             pnSettingOut1.SuspendLayout();
             tcMainHome.SuspendLayout();
@@ -234,23 +234,6 @@
             btnSlideMenu.TabIndex = 1;
             btnSlideMenu.UseVisualStyleBackColor = false;
             // 
-            // btnHide
-            // 
-            btnHide.BackColor = Color.LightGray;
-            btnHide.BackgroundImageLayout = ImageLayout.Center;
-            btnHide.FlatAppearance.BorderColor = SystemColors.AppWorkspace;
-            btnHide.FlatAppearance.BorderSize = 0;
-            btnHide.FlatAppearance.MouseDownBackColor = Color.LightGray;
-            btnHide.FlatAppearance.MouseOverBackColor = Color.WhiteSmoke;
-            btnHide.FlatStyle = FlatStyle.Flat;
-            btnHide.Image = (Image)resources.GetObject("btnHide.Image");
-            btnHide.Location = new Point(1194, 0);
-            btnHide.Margin = new Padding(3, 4, 3, 4);
-            btnHide.Name = "btnHide";
-            btnHide.Size = new Size(43, 30);
-            btnHide.TabIndex = 3;
-            btnHide.UseVisualStyleBackColor = false;
-            // 
             // btnClose
             // 
             btnClose.BackColor = Color.LightGray;
@@ -358,13 +341,13 @@
             tcMainHome.Controls.Add(tpMainHome);
             tcMainHome.Controls.Add(tpSettings);
             tcMainHome.ItemSize = new Size(0, 5);
-            tcMainHome.Location = new Point(379, 27);
+            tcMainHome.Location = new Point(379, 30);
             tcMainHome.Margin = new Padding(0);
             tcMainHome.Multiline = true;
             tcMainHome.Name = "tcMainHome";
             tcMainHome.Padding = new Point(0, 0);
             tcMainHome.SelectedIndex = 0;
-            tcMainHome.Size = new Size(905, 777);
+            tcMainHome.Size = new Size(905, 770);
             tcMainHome.TabIndex = 4;
             // 
             // tpMainHome
@@ -372,9 +355,9 @@
             tpMainHome.Controls.Add(pnReviewMain);
             tpMainHome.Controls.Add(pnMain);
             tpMainHome.Location = new Point(4, 9);
+            tpMainHome.Margin = new Padding(0);
             tpMainHome.Name = "tpMainHome";
-            tpMainHome.Padding = new Padding(3);
-            tpMainHome.Size = new Size(897, 764);
+            tpMainHome.Size = new Size(897, 757);
             tpMainHome.TabIndex = 0;
             tpMainHome.UseVisualStyleBackColor = true;
             // 
@@ -384,19 +367,20 @@
             pnReviewMain.Controls.Add(pnReview);
             pnReviewMain.Controls.Add(lbReview);
             pnReviewMain.Dock = DockStyle.Bottom;
-            pnReviewMain.Location = new Point(3, 442);
+            pnReviewMain.Location = new Point(0, 438);
             pnReviewMain.Margin = new Padding(3, 4, 3, 4);
             pnReviewMain.Name = "pnReviewMain";
-            pnReviewMain.Size = new Size(891, 319);
+            pnReviewMain.Size = new Size(897, 319);
             pnReviewMain.TabIndex = 9;
             // 
             // pnReview
             // 
             pnReview.AutoScroll = true;
-            pnReview.Location = new Point(0, 67);
+            pnReview.Dock = DockStyle.Bottom;
+            pnReview.Location = new Point(0, 64);
             pnReview.Margin = new Padding(3, 4, 3, 4);
             pnReview.Name = "pnReview";
-            pnReview.Size = new Size(891, 255);
+            pnReview.Size = new Size(897, 255);
             pnReview.TabIndex = 1;
             // 
             // lbReview
@@ -418,10 +402,10 @@
             pnMain.Controls.Add(btnStart);
             pnMain.Controls.Add(lbTitle);
             pnMain.Dock = DockStyle.Top;
-            pnMain.Location = new Point(3, 3);
+            pnMain.Location = new Point(0, 0);
             pnMain.Margin = new Padding(3, 4, 3, 4);
             pnMain.Name = "pnMain";
-            pnMain.Size = new Size(891, 452);
+            pnMain.Size = new Size(897, 452);
             pnMain.TabIndex = 10;
             // 
             // lbSubTitle
@@ -438,7 +422,7 @@
             // 
             btnStart.Anchor = AnchorStyles.Right;
             btnStart.Font = new Font("굴림", 20.25F, FontStyle.Regular, GraphicsUnit.Point);
-            btnStart.Location = new Point(646, 229);
+            btnStart.Location = new Point(652, 229);
             btnStart.Margin = new Padding(3, 4, 3, 4);
             btnStart.Name = "btnStart";
             btnStart.Size = new Size(179, 61);
@@ -493,7 +477,7 @@
             tpSettings.Location = new Point(4, 9);
             tpSettings.Name = "tpSettings";
             tpSettings.Padding = new Padding(3);
-            tpSettings.Size = new Size(897, 764);
+            tpSettings.Size = new Size(897, 757);
             tpSettings.TabIndex = 1;
             // 
             // pnSettingNor5
@@ -1132,6 +1116,21 @@
             lbSubCellSize.TabIndex = 23;
             lbSubCellSize.Text = "Cell Size";
             // 
+            // btnHide
+            // 
+            btnHide.BackColor = Color.LightGray;
+            btnHide.FlatAppearance.BorderSize = 0;
+            btnHide.FlatAppearance.MouseDownBackColor = Color.WhiteSmoke;
+            btnHide.FlatAppearance.MouseOverBackColor = Color.Gainsboro;
+            btnHide.FlatStyle = FlatStyle.Flat;
+            btnHide.Image = (Image)resources.GetObject("btnHide.Image");
+            btnHide.Location = new Point(1194, 0);
+            btnHide.Name = "btnHide";
+            btnHide.Size = new Size(43, 30);
+            btnHide.TabIndex = 7;
+            btnHide.UseVisualStyleBackColor = false;
+            btnHide.Click += btnHide_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1207,7 +1206,6 @@
         private Button btnHome;
         private Button btnSlideMenu;
         private Button btnClose;
-        private Button btnHide;
         private CustomTabControl tcMainHome;
         private TabPage tpMainHome;
         private Panel pnReviewMain;
@@ -1287,5 +1285,6 @@
         private Label lbNorCellSize;
         private Label lbNormalize;
         private Button btnPresetManage;
+        private Button btnHide;
     }
 }
