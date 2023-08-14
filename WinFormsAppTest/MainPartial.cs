@@ -490,7 +490,7 @@ namespace WinFormsAppTest
                 }
             };
 
-            Dictionary<string, double> plotData = plotSender();
+            
 
             //config 파일 종류별 전처리(종류별로 필요한 데이터 추가)
             switch (confType)
@@ -499,6 +499,7 @@ namespace WinFormsAppTest
                     filePath += @"\config.json";
                     break;
                 case configFileType.Recent:
+                    Dictionary<string, double> plotData = plotSender();
                     setAllparams(ref data);
                     var infoRecent = new
                     {
