@@ -576,7 +576,8 @@ namespace WinFormsAppTest
                 }
             }
 
-            string trunkFilesString = string.Join(", ", filenames_pcd);
+            string trunkFilesString = string.Join(" ", filenames_pcd);
+            trunkFilesString = trunkFilesString.Replace("\\", "/");
 
             JObject segmentCrown = new JObject(
                 new JProperty("Crown_nnearest", paramForm.crownSeg.CrownNN),

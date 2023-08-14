@@ -75,6 +75,7 @@
             tbPlotCircleR.Name = "tbPlotCircleR";
             tbPlotCircleR.Size = new Size(107, 23);
             tbPlotCircleR.TabIndex = 7;
+            tbPlotCircleR.Leave += tbPlotCircleR_Leave;
             // 
             // lbPlotCircleR
             // 
@@ -91,6 +92,7 @@
             tbPlotCircleY.Name = "tbPlotCircleY";
             tbPlotCircleY.Size = new Size(107, 23);
             tbPlotCircleY.TabIndex = 5;
+            tbPlotCircleY.Leave += tbPlotCircleY_Leave;
             // 
             // lbPlotCircleY
             // 
@@ -107,6 +109,7 @@
             tbPlotCircleX.Name = "tbPlotCircleX";
             tbPlotCircleX.Size = new Size(107, 23);
             tbPlotCircleX.TabIndex = 3;
+            tbPlotCircleX.Leave += tbPlotCircleX_Leave;
             // 
             // lbPlotCircleX
             // 
@@ -123,6 +126,7 @@
             tbPlotRecYmax.Name = "tbPlotRecYmax";
             tbPlotRecYmax.Size = new Size(107, 23);
             tbPlotRecYmax.TabIndex = 17;
+            tbPlotRecYmax.Leave += tbPlotRecYmax_Leave;
             // 
             // lbPlotRecText2
             // 
@@ -139,6 +143,7 @@
             tbPlotRecXmax.Name = "tbPlotRecXmax";
             tbPlotRecXmax.Size = new Size(107, 23);
             tbPlotRecXmax.TabIndex = 15;
+            tbPlotRecXmax.Leave += tbPlotRecXmax_Leave;
             // 
             // lbPlotRecText1
             // 
@@ -155,6 +160,7 @@
             tbPlotRecYmin.Name = "tbPlotRecYmin";
             tbPlotRecYmin.Size = new Size(107, 23);
             tbPlotRecYmin.TabIndex = 11;
+            tbPlotRecYmin.Leave += tbPlotRecYmin_Leave;
             // 
             // lbPlotRecY
             // 
@@ -171,6 +177,7 @@
             tbPlotRecXmin.Name = "tbPlotRecXmin";
             tbPlotRecXmin.Size = new Size(107, 23);
             tbPlotRecXmin.TabIndex = 9;
+            tbPlotRecXmin.Leave += tbPlotRecXmin_Leave;
             // 
             // lbPlotRecX
             // 
@@ -333,13 +340,13 @@
             lbPlotPoly.TabIndex = 11;
             lbPlotPoly.Text = "Polygon Plot";
             // 
-            // c_pnPlotSelection
+            // pnPlotSelection
             // 
             pnPlotSelection.BackColor = Color.Transparent;
             pnPlotSelection.Controls.Add(lbPlotSelection);
             pnPlotSelection.Controls.Add(cbPlotShape);
             pnPlotSelection.Location = new Point(13, 73);
-            pnPlotSelection.Name = "c_pnPlotSelection";
+            pnPlotSelection.Name = "pnPlotSelection";
             pnPlotSelection.Size = new Size(494, 60);
             pnPlotSelection.TabIndex = 10;
             // 
@@ -363,14 +370,14 @@
             cbPlotShape.TabIndex = 11;
             cbPlotShape.SelectedIndexChanged += cbPlotShape_SelectedIndexChanged;
             // 
-            // c_pnPlotData
+            // pnPlotData
             // 
             pnPlotData.BackColor = Color.Transparent;
             pnPlotData.Controls.Add(c_btnPlotData);
             pnPlotData.Controls.Add(tbPlotData);
             pnPlotData.Controls.Add(lbPlotData);
             pnPlotData.Location = new Point(13, 16);
-            pnPlotData.Name = "c_pnPlotData";
+            pnPlotData.Name = "pnPlotData";
             pnPlotData.Size = new Size(494, 60);
             pnPlotData.TabIndex = 11;
             // 
