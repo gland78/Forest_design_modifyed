@@ -260,6 +260,13 @@ namespace WinFormsAppTest
         //프리셋 콘피그 파일 갯수만큼 버튼 로드
         private void preConfBtnLoad()
         {
+            string filePath = Path.Combine(configPath, reqDi[(int)configFileType.Preset]);
+
+            if (!Directory.Exists(filePath))
+            {
+                Directory.CreateDirectory(filePath);
+            }
+
             pnSideMenu.Controls.Clear();
 
             pnSideMenu.Controls.Add(btnHome);
@@ -269,7 +276,13 @@ namespace WinFormsAppTest
             pnSideMenu.Controls.Add(btnPresetManage);
 
             //프리셋 콘피그 저장 장소
-            string[] confCheck = Directory.GetFiles(Path.Combine(configPath, reqDi[(int)configFileType.Preset]), "PresetConfig*");
+            string[] confCheck = Directory.GetFiles(filePath, "presetConfig*");
+
+            if(confCheck.Length < 1 )
+            {
+                return;
+            }
+
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             Array.Sort(confCheck);
 
@@ -322,9 +335,22 @@ namespace WinFormsAppTest
         //최근 작업 콘피그 파일 갯수만큼 버튼 로드
         private void recentConfBtnLoad()
         {
+            string filePath = Path.Combine(configPath, reqDi[(int)configFileType.Recent]);
+
+            if (!Directory.Exists(filePath))
+            {
+                Directory.CreateDirectory(filePath);
+            }
+
             pnReview.Controls.Clear();
 
-            string[] confCheck = Directory.GetFiles(Path.Combine(configPath, reqDi[(int)configFileType.Recent]), "RecentConfig*");
+            string[] confCheck = Directory.GetFiles(filePath, "RecentConfig*");
+
+            if(confCheck.Length < 1)
+            {
+                return;
+            }
+
             Array.Sort(confCheck);
 
             Point relativePos = RECENT_BTN_POS;
