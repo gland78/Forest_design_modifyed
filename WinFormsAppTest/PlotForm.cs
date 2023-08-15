@@ -24,6 +24,11 @@ namespace WinFormsAppTest
 
         internal customEventHandler mainPaint;
 
+        internal setterEventHandler mainProgressSet;
+        internal switchEventHandler attachProgressBar;
+
+        internal switchEventHandler attachStartBtn;
+
         public PlotForm(MainForm paramForm)
         {
             InitializeComponent();
@@ -60,13 +65,19 @@ namespace WinFormsAppTest
         {
             initTextBox();
             resultPath = paramForm.gui.resultPath;
+
+            ////////////////////////////////////////////////////////////////
+            attachStartBtn(false);
+            
             Point screenSize = ((Point)Screen.PrimaryScreen.Bounds.Size);
 
             this.Location = new Point((screenSize.X - this.Width) / 2, (screenSize.Y - this.Height) / 2);
         }
 
-        private void btnPlotCancle_Click(object sender, EventArgs e)
+        private void btnPlotCancel_Click(object sender, EventArgs e)
         {
+            attachProgressBar(false);
+            attachStartBtn(true);
             this.Close();
         }
 
@@ -160,6 +171,8 @@ namespace WinFormsAppTest
         /// 전체 과정 실행 버튼
         private void btnPlotOK_Click(object sender, EventArgs e)
         {
+            ///////////////////////////////////////////////////////////////////////
+            attachProgressBar(true);
             //최근 작업 config 생성
             string fileDi = Path.Combine(configPath, reqDi[(int)configFileType.Recent]);
 
@@ -218,6 +231,10 @@ namespace WinFormsAppTest
             //MessageBox.Show(resultPath);
             resultSavedDirectory = resultPath + @"\" + DateTime.Now.ToString("yyyyMMdd_HH_mm_") + originLasName;
             //MessageBox.Show(resultSavedDirectory);
+
+            progress = 0;
+            mainProgressSet(progress);
+            attachProgressBar(true);
 
             preProAndExcuteStep();
 

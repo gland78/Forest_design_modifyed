@@ -46,7 +46,7 @@
             lbPlotPolySet = new Label();
             c_btnPlotPolySet = new CustomBtn();
             btnPlotOK = new Button();
-            btnPlotCancle = new Button();
+            btnPlotCancel = new Button();
             tcPlot = new CustomTabControl();
             tpPlotCircle = new TabPage();
             lbPlotCircle = new Label();
@@ -231,22 +231,22 @@
             btnPlotOK.Name = "btnPlotOK";
             btnPlotOK.Size = new Size(64, 24);
             btnPlotOK.TabIndex = 7;
-            btnPlotOK.Text = "OK";
+            btnPlotOK.Text = "확인";
             btnPlotOK.UseVisualStyleBackColor = false;
             btnPlotOK.Click += btnPlotOK_Click;
             // 
-            // btnPlotCancle
+            // btnPlotCancel
             // 
-            btnPlotCancle.BackColor = Color.Honeydew;
-            btnPlotCancle.FlatAppearance.BorderSize = 0;
-            btnPlotCancle.FlatStyle = FlatStyle.Flat;
-            btnPlotCancle.Location = new Point(445, 334);
-            btnPlotCancle.Name = "btnPlotCancle";
-            btnPlotCancle.Size = new Size(64, 24);
-            btnPlotCancle.TabIndex = 8;
-            btnPlotCancle.Text = "Cancle";
-            btnPlotCancle.UseVisualStyleBackColor = false;
-            btnPlotCancle.Click += btnPlotCancle_Click;
+            btnPlotCancel.BackColor = Color.Honeydew;
+            btnPlotCancel.FlatAppearance.BorderSize = 0;
+            btnPlotCancel.FlatStyle = FlatStyle.Flat;
+            btnPlotCancel.Location = new Point(445, 334);
+            btnPlotCancel.Name = "btnPlotCancel";
+            btnPlotCancel.Size = new Size(64, 24);
+            btnPlotCancel.TabIndex = 8;
+            btnPlotCancel.Text = "취소";
+            btnPlotCancel.UseVisualStyleBackColor = false;
+            btnPlotCancel.Click += btnPlotCancel_Click;
             // 
             // tcPlot
             // 
@@ -427,7 +427,7 @@
             Controls.Add(pnPlotSelection);
             Controls.Add(tcPlot);
             Controls.Add(pnPlotData);
-            Controls.Add(btnPlotCancle);
+            Controls.Add(btnPlotCancel);
             Controls.Add(btnPlotOK);
             FormBorderStyle = FormBorderStyle.None;
             Name = "PlotForm";
@@ -468,7 +468,7 @@
         private Label lbPlotPolySet;
         private CustomBtn c_btnPlotPolySet;
         private Button btnPlotOK;
-        private Button btnPlotCancle;
+        private Button btnPlotCancel;
         private CustomTabControl tcPlot;
         private TabPage tpPlotCircle;
         private TabPage tpPlotRec;

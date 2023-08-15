@@ -50,10 +50,12 @@
             pnReview = new Panel();
             lbReview = new Label();
             pnMain = new CustomPanel();
+            pbLoadingBar = new ProgressBar();
             lbSubTitle = new Label();
             btnStart = new Button();
             lbTitle = new Label();
             tpSettings = new TabPage();
+            btnSettingLoad = new CustomBtn();
             pnSettingNor5 = new CustomPanel();
             tbNorThres = new TextBox();
             lbNorThres = new Label();
@@ -256,7 +258,7 @@
             pnSettingOut1.BackColor = Color.Gray;
             pnSettingOut1.Controls.Add(tbOutlierMethod);
             pnSettingOut1.Controls.Add(lbOutlierMethod);
-            pnSettingOut1.Location = new Point(24, 265);
+            pnSettingOut1.Location = new Point(24, 377);
             pnSettingOut1.Margin = new Padding(3, 4, 3, 4);
             pnSettingOut1.Name = "pnSettingOut1";
             pnSettingOut1.Size = new Size(850, 58);
@@ -264,6 +266,8 @@
             // 
             // tbOutlierMethod
             // 
+            tbOutlierMethod.BorderStyle = BorderStyle.FixedSingle;
+            tbOutlierMethod.Enabled = false;
             tbOutlierMethod.Font = new Font("맑은 고딕", 12F, FontStyle.Regular, GraphicsUnit.Point);
             tbOutlierMethod.Location = new Point(725, 15);
             tbOutlierMethod.Margin = new Padding(3, 4, 3, 4);
@@ -271,6 +275,7 @@
             tbOutlierMethod.ReadOnly = true;
             tbOutlierMethod.Size = new Size(109, 29);
             tbOutlierMethod.TabIndex = 20;
+            tbOutlierMethod.TabStop = false;
             tbOutlierMethod.Text = "statistical";
             // 
             // lbOutlierMethod
@@ -286,6 +291,7 @@
             // 
             // tbOutlierMeank
             // 
+            tbOutlierMeank.BorderStyle = BorderStyle.FixedSingle;
             tbOutlierMeank.Font = new Font("맑은 고딕", 12F, FontStyle.Regular, GraphicsUnit.Point);
             tbOutlierMeank.Location = new Point(725, 15);
             tbOutlierMeank.Margin = new Padding(3, 4, 3, 4);
@@ -295,6 +301,7 @@
             // 
             // tbOutlierMul
             // 
+            tbOutlierMul.BorderStyle = BorderStyle.FixedSingle;
             tbOutlierMul.Font = new Font("맑은 고딕", 12F, FontStyle.Regular, GraphicsUnit.Point);
             tbOutlierMul.Location = new Point(725, 15);
             tbOutlierMul.Margin = new Padding(3, 4, 3, 4);
@@ -329,7 +336,7 @@
             lbOutlierRemove.AutoSize = true;
             lbOutlierRemove.Font = new Font("Microsoft Sans Serif", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
             lbOutlierRemove.ForeColor = Color.White;
-            lbOutlierRemove.Location = new Point(24, 233);
+            lbOutlierRemove.Location = new Point(24, 345);
             lbOutlierRemove.Name = "lbOutlierRemove";
             lbOutlierRemove.Size = new Size(167, 25);
             lbOutlierRemove.TabIndex = 16;
@@ -375,6 +382,7 @@
             // 
             // pnReview
             // 
+            pnReview.AutoScroll = true;
             pnReview.Dock = DockStyle.Bottom;
             pnReview.Location = new Point(0, 64);
             pnReview.Margin = new Padding(3, 4, 3, 4);
@@ -397,6 +405,7 @@
             // 
             pnMain.BackgroundImage = (Image)resources.GetObject("pnMain.BackgroundImage");
             pnMain.BackgroundImageLayout = ImageLayout.Stretch;
+            pnMain.Controls.Add(pbLoadingBar);
             pnMain.Controls.Add(lbSubTitle);
             pnMain.Controls.Add(btnStart);
             pnMain.Controls.Add(lbTitle);
@@ -406,6 +415,16 @@
             pnMain.Name = "pnMain";
             pnMain.Size = new Size(897, 452);
             pnMain.TabIndex = 10;
+            // 
+            // pbLoadingBar
+            // 
+            pbLoadingBar.Location = new Point(36, 370);
+            pbLoadingBar.MarqueeAnimationSpeed = 5;
+            pbLoadingBar.Maximum = 10;
+            pbLoadingBar.Name = "pbLoadingBar";
+            pbLoadingBar.Size = new Size(825, 42);
+            pbLoadingBar.TabIndex = 8;
+            pbLoadingBar.Visible = false;
             // 
             // lbSubTitle
             // 
@@ -445,6 +464,7 @@
             tpSettings.AutoScrollMargin = new Size(0, 20);
             tpSettings.AutoScrollMinSize = new Size(0, 5);
             tpSettings.BackColor = Color.DimGray;
+            tpSettings.Controls.Add(btnSettingLoad);
             tpSettings.Controls.Add(pnSettingNor5);
             tpSettings.Controls.Add(pnSettingNor4);
             tpSettings.Controls.Add(pnSettingNor3);
@@ -479,12 +499,33 @@
             tpSettings.Size = new Size(897, 757);
             tpSettings.TabIndex = 1;
             // 
+            // btnSettingLoad
+            // 
+            btnSettingLoad.BackColor = Color.FromArgb(64, 64, 64);
+            btnSettingLoad.BackgroundColor = Color.FromArgb(64, 64, 64);
+            btnSettingLoad.BorderColor = Color.Transparent;
+            btnSettingLoad.BorderRadius = 10;
+            btnSettingLoad.BorderSize = 1;
+            btnSettingLoad.FlatAppearance.BorderSize = 0;
+            btnSettingLoad.FlatAppearance.MouseDownBackColor = Color.FromArgb(80, 80, 80);
+            btnSettingLoad.FlatStyle = FlatStyle.Flat;
+            btnSettingLoad.Font = new Font("맑은 고딕", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
+            btnSettingLoad.ForeColor = Color.White;
+            btnSettingLoad.Location = new Point(612, 27);
+            btnSettingLoad.Name = "btnSettingLoad";
+            btnSettingLoad.Size = new Size(130, 36);
+            btnSettingLoad.TabIndex = 90;
+            btnSettingLoad.Text = "기본값 불러오기";
+            btnSettingLoad.TextColor = Color.White;
+            btnSettingLoad.UseVisualStyleBackColor = false;
+            btnSettingLoad.Click += btnSettingLoad_Click;
+            // 
             // pnSettingNor5
             // 
             pnSettingNor5.BackColor = Color.Gray;
             pnSettingNor5.Controls.Add(tbNorThres);
             pnSettingNor5.Controls.Add(lbNorThres);
-            pnSettingNor5.Location = new Point(24, 782);
+            pnSettingNor5.Location = new Point(24, 894);
             pnSettingNor5.Margin = new Padding(3, 4, 3, 4);
             pnSettingNor5.Name = "pnSettingNor5";
             pnSettingNor5.Size = new Size(850, 58);
@@ -492,6 +533,7 @@
             // 
             // tbNorThres
             // 
+            tbNorThres.BorderStyle = BorderStyle.FixedSingle;
             tbNorThres.Font = new Font("맑은 고딕", 12F, FontStyle.Regular, GraphicsUnit.Point);
             tbNorThres.Location = new Point(725, 15);
             tbNorThres.Margin = new Padding(3, 4, 3, 4);
@@ -515,7 +557,7 @@
             pnSettingNor4.BackColor = Color.Gray;
             pnSettingNor4.Controls.Add(tbNorScalar);
             pnSettingNor4.Controls.Add(lbNorScalar);
-            pnSettingNor4.Location = new Point(24, 716);
+            pnSettingNor4.Location = new Point(24, 828);
             pnSettingNor4.Margin = new Padding(3, 4, 3, 4);
             pnSettingNor4.Name = "pnSettingNor4";
             pnSettingNor4.Size = new Size(850, 58);
@@ -523,6 +565,7 @@
             // 
             // tbNorScalar
             // 
+            tbNorScalar.BorderStyle = BorderStyle.FixedSingle;
             tbNorScalar.Font = new Font("맑은 고딕", 12F, FontStyle.Regular, GraphicsUnit.Point);
             tbNorScalar.Location = new Point(725, 15);
             tbNorScalar.Margin = new Padding(3, 4, 3, 4);
@@ -546,7 +589,7 @@
             pnSettingNor3.BackColor = Color.Gray;
             pnSettingNor3.Controls.Add(tbNorSlope);
             pnSettingNor3.Controls.Add(lbNorSlope);
-            pnSettingNor3.Location = new Point(24, 650);
+            pnSettingNor3.Location = new Point(24, 762);
             pnSettingNor3.Margin = new Padding(3, 4, 3, 4);
             pnSettingNor3.Name = "pnSettingNor3";
             pnSettingNor3.Size = new Size(850, 58);
@@ -554,6 +597,7 @@
             // 
             // tbNorSlope
             // 
+            tbNorSlope.BorderStyle = BorderStyle.FixedSingle;
             tbNorSlope.Font = new Font("맑은 고딕", 12F, FontStyle.Regular, GraphicsUnit.Point);
             tbNorSlope.Location = new Point(725, 15);
             tbNorSlope.Margin = new Padding(3, 4, 3, 4);
@@ -577,7 +621,7 @@
             pnSettingNor2.BackColor = Color.Gray;
             pnSettingNor2.Controls.Add(tbNorWinSize);
             pnSettingNor2.Controls.Add(lbNorWinSize);
-            pnSettingNor2.Location = new Point(24, 584);
+            pnSettingNor2.Location = new Point(24, 696);
             pnSettingNor2.Margin = new Padding(3, 4, 3, 4);
             pnSettingNor2.Name = "pnSettingNor2";
             pnSettingNor2.Size = new Size(850, 58);
@@ -585,6 +629,7 @@
             // 
             // tbNorWinSize
             // 
+            tbNorWinSize.BorderStyle = BorderStyle.FixedSingle;
             tbNorWinSize.Font = new Font("맑은 고딕", 12F, FontStyle.Regular, GraphicsUnit.Point);
             tbNorWinSize.Location = new Point(725, 15);
             tbNorWinSize.Margin = new Padding(3, 4, 3, 4);
@@ -608,7 +653,7 @@
             pnSettingNor1.BackColor = Color.Gray;
             pnSettingNor1.Controls.Add(tbNorCellSize);
             pnSettingNor1.Controls.Add(lbNorCellSize);
-            pnSettingNor1.Location = new Point(24, 518);
+            pnSettingNor1.Location = new Point(24, 630);
             pnSettingNor1.Margin = new Padding(3, 4, 3, 4);
             pnSettingNor1.Name = "pnSettingNor1";
             pnSettingNor1.Size = new Size(850, 58);
@@ -616,6 +661,7 @@
             // 
             // tbNorCellSize
             // 
+            tbNorCellSize.BorderStyle = BorderStyle.FixedSingle;
             tbNorCellSize.Font = new Font("맑은 고딕", 12F, FontStyle.Regular, GraphicsUnit.Point);
             tbNorCellSize.Location = new Point(725, 15);
             tbNorCellSize.Margin = new Padding(3, 4, 3, 4);
@@ -639,7 +685,7 @@
             lbNormalize.AutoSize = true;
             lbNormalize.Font = new Font("Microsoft Sans Serif", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
             lbNormalize.ForeColor = Color.White;
-            lbNormalize.Location = new Point(24, 485);
+            lbNormalize.Location = new Point(24, 597);
             lbNormalize.Name = "lbNormalize";
             lbNormalize.Size = new Size(117, 25);
             lbNormalize.TabIndex = 89;
@@ -657,7 +703,7 @@
             btnPresetSave.FlatStyle = FlatStyle.Flat;
             btnPresetSave.Font = new Font("맑은 고딕", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
             btnPresetSave.ForeColor = Color.White;
-            btnPresetSave.Location = new Point(636, 27);
+            btnPresetSave.Location = new Point(490, 27);
             btnPresetSave.Name = "btnPresetSave";
             btnPresetSave.Size = new Size(116, 36);
             btnPresetSave.TabIndex = 88;
@@ -671,7 +717,7 @@
             lbSettings.AutoSize = true;
             lbSettings.Font = new Font("맑은 고딕", 24F, FontStyle.Bold, GraphicsUnit.Point);
             lbSettings.ForeColor = Color.White;
-            lbSettings.Location = new Point(24, 23);
+            lbSettings.Location = new Point(24, 135);
             lbSettings.Name = "lbSettings";
             lbSettings.Size = new Size(143, 45);
             lbSettings.TabIndex = 87;
@@ -689,11 +735,11 @@
             btnSettingSave.FlatStyle = FlatStyle.Flat;
             btnSettingSave.Font = new Font("맑은 고딕", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
             btnSettingSave.ForeColor = Color.White;
-            btnSettingSave.Location = new Point(758, 27);
+            btnSettingSave.Location = new Point(748, 27);
             btnSettingSave.Name = "btnSettingSave";
-            btnSettingSave.Size = new Size(100, 36);
+            btnSettingSave.Size = new Size(110, 36);
             btnSettingSave.TabIndex = 86;
-            btnSettingSave.Text = "저장하기";
+            btnSettingSave.Text = "기본값 저장";
             btnSettingSave.TextColor = Color.White;
             btnSettingSave.UseVisualStyleBackColor = false;
             btnSettingSave.Click += btnSettingSave_Click;
@@ -704,7 +750,7 @@
             pnSettingTree4.Controls.Add(customPanel8);
             pnSettingTree4.Controls.Add(tbTreeSegMinDBH);
             pnSettingTree4.Controls.Add(lbTreeMinDBH);
-            pnSettingTree4.Location = new Point(24, 1472);
+            pnSettingTree4.Location = new Point(24, 1584);
             pnSettingTree4.Margin = new Padding(3, 4, 3, 4);
             pnSettingTree4.Name = "pnSettingTree4";
             pnSettingTree4.Size = new Size(850, 58);
@@ -741,6 +787,7 @@
             // 
             // tbTreeSegMinDBH
             // 
+            tbTreeSegMinDBH.BorderStyle = BorderStyle.FixedSingle;
             tbTreeSegMinDBH.Font = new Font("맑은 고딕", 12F, FontStyle.Regular, GraphicsUnit.Point);
             tbTreeSegMinDBH.Location = new Point(725, 15);
             tbTreeSegMinDBH.Margin = new Padding(3, 4, 3, 4);
@@ -764,7 +811,7 @@
             lbMeasureAttribute.AutoSize = true;
             lbMeasureAttribute.Font = new Font("Microsoft Sans Serif", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
             lbMeasureAttribute.ForeColor = Color.White;
-            lbMeasureAttribute.Location = new Point(24, 1560);
+            lbMeasureAttribute.Location = new Point(24, 1672);
             lbMeasureAttribute.Name = "lbMeasureAttribute";
             lbMeasureAttribute.Size = new Size(192, 25);
             lbMeasureAttribute.TabIndex = 63;
@@ -775,7 +822,7 @@
             pnSettingTree3.BackColor = Color.Gray;
             pnSettingTree3.Controls.Add(tbTreeSegHeightThres);
             pnSettingTree3.Controls.Add(lbTreeThres);
-            pnSettingTree3.Location = new Point(24, 1406);
+            pnSettingTree3.Location = new Point(24, 1518);
             pnSettingTree3.Margin = new Padding(3, 4, 3, 4);
             pnSettingTree3.Name = "pnSettingTree3";
             pnSettingTree3.Size = new Size(850, 58);
@@ -783,6 +830,7 @@
             // 
             // tbTreeSegHeightThres
             // 
+            tbTreeSegHeightThres.BorderStyle = BorderStyle.FixedSingle;
             tbTreeSegHeightThres.Font = new Font("맑은 고딕", 12F, FontStyle.Regular, GraphicsUnit.Point);
             tbTreeSegHeightThres.Location = new Point(725, 15);
             tbTreeSegHeightThres.Margin = new Padding(3, 4, 3, 4);
@@ -806,7 +854,7 @@
             pnSettingTree2.BackColor = Color.Gray;
             pnSettingTree2.Controls.Add(lbTreeSmooth);
             pnSettingTree2.Controls.Add(tbTreeSegSmooth);
-            pnSettingTree2.Location = new Point(24, 1340);
+            pnSettingTree2.Location = new Point(24, 1452);
             pnSettingTree2.Margin = new Padding(3, 4, 3, 4);
             pnSettingTree2.Name = "pnSettingTree2";
             pnSettingTree2.Size = new Size(850, 58);
@@ -825,6 +873,7 @@
             // 
             // tbTreeSegSmooth
             // 
+            tbTreeSegSmooth.BorderStyle = BorderStyle.FixedSingle;
             tbTreeSegSmooth.Font = new Font("맑은 고딕", 12F, FontStyle.Regular, GraphicsUnit.Point);
             tbTreeSegSmooth.Location = new Point(725, 15);
             tbTreeSegSmooth.Margin = new Padding(3, 4, 3, 4);
@@ -837,7 +886,7 @@
             pnSettingCrown2.BackColor = Color.Gray;
             pnSettingCrown2.Controls.Add(lbCrownMaxH);
             pnSettingCrown2.Controls.Add(tbCrownMaxHeight);
-            pnSettingCrown2.Location = new Point(24, 1154);
+            pnSettingCrown2.Location = new Point(24, 1266);
             pnSettingCrown2.Margin = new Padding(3, 4, 3, 4);
             pnSettingCrown2.Name = "pnSettingCrown2";
             pnSettingCrown2.Size = new Size(850, 58);
@@ -856,6 +905,7 @@
             // 
             // tbCrownMaxHeight
             // 
+            tbCrownMaxHeight.BorderStyle = BorderStyle.FixedSingle;
             tbCrownMaxHeight.Font = new Font("맑은 고딕", 12F, FontStyle.Regular, GraphicsUnit.Point);
             tbCrownMaxHeight.Location = new Point(725, 15);
             tbCrownMaxHeight.Margin = new Padding(3, 4, 3, 4);
@@ -868,7 +918,7 @@
             lbTreeSegment.AutoSize = true;
             lbTreeSegment.Font = new Font("Microsoft Sans Serif", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
             lbTreeSegment.ForeColor = Color.White;
-            lbTreeSegment.Location = new Point(24, 1242);
+            lbTreeSegment.Location = new Point(24, 1354);
             lbTreeSegment.Name = "lbTreeSegment";
             lbTreeSegment.Size = new Size(152, 25);
             lbTreeSegment.TabIndex = 62;
@@ -879,7 +929,7 @@
             pnSettingTrunk2.BackColor = Color.Gray;
             pnSettingTrunk2.Controls.Add(lbTrunkMaxH);
             pnSettingTrunk2.Controls.Add(tbTrunkMaxHeight);
-            pnSettingTrunk2.Location = new Point(24, 968);
+            pnSettingTrunk2.Location = new Point(24, 1080);
             pnSettingTrunk2.Margin = new Padding(3, 4, 3, 4);
             pnSettingTrunk2.Name = "pnSettingTrunk2";
             pnSettingTrunk2.Size = new Size(850, 58);
@@ -898,6 +948,7 @@
             // 
             // tbTrunkMaxHeight
             // 
+            tbTrunkMaxHeight.BorderStyle = BorderStyle.FixedSingle;
             tbTrunkMaxHeight.Font = new Font("맑은 고딕", 12F, FontStyle.Regular, GraphicsUnit.Point);
             tbTrunkMaxHeight.Location = new Point(725, 15);
             tbTrunkMaxHeight.Margin = new Padding(3, 4, 3, 4);
@@ -910,7 +961,7 @@
             pnSettingOut2.BackColor = Color.Gray;
             pnSettingOut2.Controls.Add(tbOutlierMeank);
             pnSettingOut2.Controls.Add(lbOutlierMeank);
-            pnSettingOut2.Location = new Point(24, 331);
+            pnSettingOut2.Location = new Point(24, 443);
             pnSettingOut2.Margin = new Padding(3, 4, 3, 4);
             pnSettingOut2.Name = "pnSettingOut2";
             pnSettingOut2.Size = new Size(850, 58);
@@ -921,7 +972,7 @@
             lbCrownSlice.AutoSize = true;
             lbCrownSlice.Font = new Font("Microsoft Sans Serif", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
             lbCrownSlice.ForeColor = Color.White;
-            lbCrownSlice.Location = new Point(24, 1056);
+            lbCrownSlice.Location = new Point(24, 1168);
             lbCrownSlice.Name = "lbCrownSlice";
             lbCrownSlice.Size = new Size(130, 25);
             lbCrownSlice.TabIndex = 47;
@@ -932,7 +983,7 @@
             lbTrunkSlice.AutoSize = true;
             lbTrunkSlice.Font = new Font("Microsoft Sans Serif", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
             lbTrunkSlice.ForeColor = Color.White;
-            lbTrunkSlice.Location = new Point(24, 870);
+            lbTrunkSlice.Location = new Point(24, 982);
             lbTrunkSlice.Name = "lbTrunkSlice";
             lbTrunkSlice.Size = new Size(124, 25);
             lbTrunkSlice.TabIndex = 46;
@@ -943,7 +994,7 @@
             pnSettingOut3.BackColor = Color.Gray;
             pnSettingOut3.Controls.Add(tbOutlierMul);
             pnSettingOut3.Controls.Add(lbOutlierMul);
-            pnSettingOut3.Location = new Point(24, 397);
+            pnSettingOut3.Location = new Point(24, 509);
             pnSettingOut3.Margin = new Padding(3, 4, 3, 4);
             pnSettingOut3.Name = "pnSettingOut3";
             pnSettingOut3.Size = new Size(850, 58);
@@ -954,7 +1005,7 @@
             pnSettingMeasure1.BackColor = Color.Gray;
             pnSettingMeasure1.Controls.Add(tbMeasureNN);
             pnSettingMeasure1.Controls.Add(lbMeasureNnear);
-            pnSettingMeasure1.Location = new Point(24, 1592);
+            pnSettingMeasure1.Location = new Point(24, 1704);
             pnSettingMeasure1.Margin = new Padding(3, 4, 3, 4);
             pnSettingMeasure1.Name = "pnSettingMeasure1";
             pnSettingMeasure1.Size = new Size(850, 58);
@@ -962,6 +1013,7 @@
             // 
             // tbMeasureNN
             // 
+            tbMeasureNN.BorderStyle = BorderStyle.FixedSingle;
             tbMeasureNN.Font = new Font("맑은 고딕", 12F, FontStyle.Regular, GraphicsUnit.Point);
             tbMeasureNN.Location = new Point(725, 15);
             tbMeasureNN.Margin = new Padding(3, 4, 3, 4);
@@ -985,7 +1037,7 @@
             lbSubsampling.AutoSize = true;
             lbSubsampling.Font = new Font("Microsoft Sans Serif", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
             lbSubsampling.ForeColor = Color.White;
-            lbSubsampling.Location = new Point(24, 113);
+            lbSubsampling.Location = new Point(24, 225);
             lbSubsampling.Name = "lbSubsampling";
             lbSubsampling.Size = new Size(150, 25);
             lbSubsampling.TabIndex = 22;
@@ -996,7 +1048,7 @@
             pnSettingTree1.BackColor = Color.Gray;
             pnSettingTree1.Controls.Add(lbTreeNnear);
             pnSettingTree1.Controls.Add(tbTreeSegNN);
-            pnSettingTree1.Location = new Point(24, 1274);
+            pnSettingTree1.Location = new Point(24, 1386);
             pnSettingTree1.Margin = new Padding(3, 4, 3, 4);
             pnSettingTree1.Name = "pnSettingTree1";
             pnSettingTree1.Size = new Size(850, 58);
@@ -1015,6 +1067,7 @@
             // 
             // tbTreeSegNN
             // 
+            tbTreeSegNN.BorderStyle = BorderStyle.FixedSingle;
             tbTreeSegNN.Font = new Font("맑은 고딕", 12F, FontStyle.Regular, GraphicsUnit.Point);
             tbTreeSegNN.Location = new Point(725, 15);
             tbTreeSegNN.Margin = new Padding(3, 4, 3, 4);
@@ -1027,7 +1080,7 @@
             pnSettingCrown1.BackColor = Color.Gray;
             pnSettingCrown1.Controls.Add(lbCrownMinH);
             pnSettingCrown1.Controls.Add(tbCrownMinHeight);
-            pnSettingCrown1.Location = new Point(24, 1088);
+            pnSettingCrown1.Location = new Point(24, 1200);
             pnSettingCrown1.Margin = new Padding(3, 4, 3, 4);
             pnSettingCrown1.Name = "pnSettingCrown1";
             pnSettingCrown1.Size = new Size(850, 58);
@@ -1046,6 +1099,7 @@
             // 
             // tbCrownMinHeight
             // 
+            tbCrownMinHeight.BorderStyle = BorderStyle.FixedSingle;
             tbCrownMinHeight.Font = new Font("맑은 고딕", 12F, FontStyle.Regular, GraphicsUnit.Point);
             tbCrownMinHeight.Location = new Point(725, 15);
             tbCrownMinHeight.Margin = new Padding(3, 4, 3, 4);
@@ -1058,7 +1112,7 @@
             pnSettingTrunk1.BackColor = Color.Gray;
             pnSettingTrunk1.Controls.Add(tbTrunkMinHeight);
             pnSettingTrunk1.Controls.Add(lbTrunkMinH);
-            pnSettingTrunk1.Location = new Point(24, 902);
+            pnSettingTrunk1.Location = new Point(24, 1014);
             pnSettingTrunk1.Margin = new Padding(3, 4, 3, 4);
             pnSettingTrunk1.Name = "pnSettingTrunk1";
             pnSettingTrunk1.Size = new Size(850, 58);
@@ -1066,6 +1120,7 @@
             // 
             // tbTrunkMinHeight
             // 
+            tbTrunkMinHeight.BorderStyle = BorderStyle.FixedSingle;
             tbTrunkMinHeight.Font = new Font("맑은 고딕", 12F, FontStyle.Regular, GraphicsUnit.Point);
             tbTrunkMinHeight.Location = new Point(725, 15);
             tbTrunkMinHeight.Margin = new Padding(3, 4, 3, 4);
@@ -1089,7 +1144,7 @@
             pnSettingSub1.BackColor = Color.Gray;
             pnSettingSub1.Controls.Add(tbSubCellSize);
             pnSettingSub1.Controls.Add(lbSubCellSize);
-            pnSettingSub1.Location = new Point(24, 145);
+            pnSettingSub1.Location = new Point(24, 257);
             pnSettingSub1.Margin = new Padding(3, 4, 3, 4);
             pnSettingSub1.Name = "pnSettingSub1";
             pnSettingSub1.Size = new Size(850, 58);
@@ -1097,6 +1152,7 @@
             // 
             // tbSubCellSize
             // 
+            tbSubCellSize.BorderStyle = BorderStyle.FixedSingle;
             tbSubCellSize.Font = new Font("맑은 고딕", 12F, FontStyle.Regular, GraphicsUnit.Point);
             tbSubCellSize.Location = new Point(725, 15);
             tbSubCellSize.Margin = new Padding(3, 4, 3, 4);
@@ -1134,7 +1190,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.White;
+            BackColor = Color.DarkSeaGreen;
             ClientSize = new Size(1280, 800);
             Controls.Add(btnHide);
             Controls.Add(pnSideMenu);
@@ -1285,5 +1341,8 @@
         private Label lbNormalize;
         private Button btnPresetManage;
         private Button btnHide;
+        private CustomBtn btnSettingLoad;
+        private ProgressBar progressBar1;
+        private ProgressBar pbLoadingBar;
     }
 }
