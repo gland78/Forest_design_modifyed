@@ -358,7 +358,6 @@ namespace WinFormsAppTest
                 return;
             }
 
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             Array.Sort(confCheck);
 
             Point relativeBtnPos = PRESET_BTN_POS;
