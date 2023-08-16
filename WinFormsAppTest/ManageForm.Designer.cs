@@ -34,8 +34,8 @@
             infoHeader = new ColumnHeader();
             btnManageTitle = new Button();
             tableLayoutPanel1 = new TableLayoutPanel();
-            btnManageDelete = new Button();
             btnManageCancel = new Button();
+            btnManageDelete = new Button();
             tableLayoutPanel1.SuspendLayout();
             SuspendLayout();
             // 
@@ -104,16 +104,6 @@
             tableLayoutPanel1.Size = new Size(497, 329);
             tableLayoutPanel1.TabIndex = 3;
             // 
-            // btnManageDelete
-            // 
-            btnManageDelete.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnManageDelete.Location = new Point(395, 10);
-            btnManageDelete.Name = "btnManageDelete";
-            btnManageDelete.Size = new Size(92, 32);
-            btnManageDelete.TabIndex = 3;
-            btnManageDelete.Text = "삭제";
-            btnManageDelete.UseVisualStyleBackColor = true;
-            // 
             // btnManageCancel
             // 
             btnManageCancel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
@@ -123,6 +113,17 @@
             btnManageCancel.TabIndex = 4;
             btnManageCancel.Text = "취소";
             btnManageCancel.UseVisualStyleBackColor = true;
+            // 
+            // btnManageDelete
+            // 
+            btnManageDelete.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnManageDelete.Location = new Point(395, 10);
+            btnManageDelete.Name = "btnManageDelete";
+            btnManageDelete.Size = new Size(92, 32);
+            btnManageDelete.TabIndex = 3;
+            btnManageDelete.Text = "삭제";
+            btnManageDelete.UseVisualStyleBackColor = true;
+            btnManageDelete.Click += btnManageDelete_Click;
             // 
             // ManageForm
             // 

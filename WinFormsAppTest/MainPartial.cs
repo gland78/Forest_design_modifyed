@@ -513,133 +513,43 @@ namespace WinFormsAppTest
                 e.Handled = true;
             }
         }
-        private void setAllparams(ref List<object> data)
+        private void setAllparams(ref StringBuilder csvContent)
         {
-            Dictionary<string, double> plotData = new Dictionary<string, double>();
-
-            if (Application.OpenForms["PlotForm"] != null)
-            {
-                plotData = plotSender();
-            }          
-            else
-            {
-                plotData.Add("cx", gui.centerX);
-                plotData.Add("cy", gui.centerY);
-                plotData.Add("radius", gui.radius);
-
-                plotData.Add("xmin", gui.xMin);
-                plotData.Add("ymin", gui.yMin);
-                plotData.Add("xmax", gui.xMax);
-                plotData.Add("ymax", gui.yMax);
-            }
-
-            data = new List<object>
-            {
-                new
-                {
-                    GUI = new
-                    {
-                        circle = new
-                        {
-                            cx = plotData["cx"],
-                            cy = plotData["cy"],
-                            radius = plotData["radius"]
-                        },
-                        rectangle = new
-                        {
-                            xmin = plotData["xmin"],
-                            ymin = plotData["ymin"],
-                            xmax = plotData["xmax"],
-                            ymax = plotData["ymax"]
-                        },
-                        result_path = "..\\result"
-                    }
-                },
-                new
-                {
-                    Crop = new
-                    {
-                        buffer = 120.0
-                    }
-                },
-                new
-                {
-                    Sub = new
-                    {
-                        Sub_cell = double.Parse(tbSubCellSize.Text)
-                    }
-                },
-                new
-                {
-                    Outlier = new
-                    {
-                        method = "statistical",
-                        mean_k = double.Parse(tbOutlierMeank.Text),
-                        multiplier = double.Parse(tbOutlierMul.Text)
-                    }
-                },
-                new
-                {
-                    Ground = new
-                    {
-                        Ground_cell = double.Parse(tbNorCellSize.Text),
-                        window = double.Parse(tbNorWinSize.Text),
-                        slope = double.Parse(tbNorSlope.Text),
-                        scalar = double.Parse(tbNorScalar.Text),
-                        threshold = double.Parse(tbNorThres.Text)
-                    }
-                },
-                new
-                {
-                    TSlice = new
-                    {
-                        T_minheight = double.Parse(tbTrunkMinHeight.Text),
-                        T_maxheight = double.Parse(tbTrunkMaxHeight.Text)
-                    }
-                },
-                new
-                {
-                    CSlice = new
-                    {
-                        C_minheight = double.Parse(tbCrownMinHeight.Text),
-                        C_maxheight = double.Parse(tbCrownMaxHeight.Text)
-                    }
-                },
-                new
-                {
-                    Crownseg = new
-                    {
-                        Crown_nnearest = int.Parse(tbTreeSegNN.Text)
-                    }
-                },
-                new
-                {
-                    Measure = new
-                    {
-                        Measure_nnearest = int.Parse(tbMeasureNN.Text),
-                        minRad = 0.03,
-                        maxRad = 0.5,
-                        iterations = 10000,
-                        zmin_check = 0.2,
-                        zmax_check = 0.7
-                    }
-                },
-                new
-                {
-                    SegmentStem = new
-                    {
-                        smoothness = double.Parse(tbTreeSegSmooth.Text),
-                        mindbh = double.Parse(tbTreeSegMinDBH.Text),
-                        maxdbh = 0.8,
-                        heightThreshold = double.Parse(tbTreeSegHeightThres.Text)
-                    }
-                }
-            };
+            csvContent = new StringBuilder();
+            //일단 고정값 받게 해놓고 추후 plot 값 넣어줄 예정(Recent일 때만)
+            csvContent.AppendLine("gui,public,circle,cx=0.0 cy=0.0 radius=100.0,AAA");
+            csvContent.AppendLine("gui,public,rectangle,xmin=-10.0 ymin=-10.0 xmax=10.0 ymax=10.0,AAA");
+            csvContent.AppendLine("gui,public,result_path,..\\\\result,AAA");
+            csvContent.AppendLine("filters.crop,private,buffer,120,AAA");
+            csvContent.AppendLine($"filters.sample,public,cell,{tbSubCellSize.Text},AAA");
+            csvContent.AppendLine("filters.outlier,private,method,statistical,AAA");
+            csvContent.AppendLine($"filters.outlier,private,mean_k,12,AAA");
+            csvContent.AppendLine($"filters.outlier,private,multiplier,2.2,AAA");
+            csvContent.AppendLine($"filters.smrf,public,cell,{tbNorCellSize.Text},AAA");
+            csvContent.AppendLine($"filters.smrf,public,window,{tbNorWinSize},AAA");
+            csvContent.AppendLine($"filters.smrf,public,slope,{tbNorSlope.Text},AAA");
+            csvContent.AppendLine($"filters.smrf,public,scalar,{tbNorScalar.Text},AAA");
+            csvContent.AppendLine($"filters.smrf,public,threshold,{tbNorThres},AAA");
+            csvContent.AppendLine($"filters.range.trunk,public,minheight,{tbTrunkMinHeight.Text},AAA");
+            csvContent.AppendLine($"filters.range.trunk,public,maxheight,{tbTrunkMaxHeight.Text},AAA");
+            csvContent.AppendLine($"filters.range.crown,public,minheight,{tbCrownMinHeight.Text},AAA");
+            csvContent.AppendLine($"filters.range.crown,public,maxheight,{tbCrownMaxHeight.Text},AAA");
+            csvContent.AppendLine("csp_segmentcrown,private,nnearest,16,AAA");
+            csvContent.AppendLine("csp_segmentstem,private,smoothness,8,AAA");
+            csvContent.AppendLine("csp_segmentstem,private,mindbh,0.01,AAA");
+            csvContent.AppendLine("csp_segmentstem,private,maxdbh,1,AAA");
+            csvContent.AppendLine("csp_segmentstem,private,height_threshold,1,AAA");
+            csvContent.AppendLine("measure,private,nnearest,16,AAA");
+            csvContent.AppendLine("measure,private,minrad,0.03,AAA");
+            csvContent.AppendLine("measure,private,maxrad,0.5,AAA");
+            csvContent.AppendLine("measure,private,iterations,10000,AAA");
+            csvContent.AppendLine("measure,private,zmin_check,0.2,AAA");
+            csvContent.AppendLine("measure,private,zmax_check,0.7,AAA");
         }
 
         private void MakeConfig(configFileType confType)
         {
-            string filePath = configPath + reqDi[(int)confType];
+            string filePath = Path.Combine(configPath, reqDi[(int)confType]);
 
             //해당 폴더 없을 시 만들기
             if (!Directory.Exists(filePath))
@@ -650,111 +560,38 @@ namespace WinFormsAppTest
             //해당 폴더 내 config파일 갯수 확인
             string[] confCheck = Directory.GetFiles(Path.Combine(configPath, reqDi[(int)confType]), "*config*");
 
-            List<object> data = new List<object>
-            {
-                new
-                {
-                    GUI = new
-                    {
-                        circle = new
-                        {
-                            cx = 0.0,
-                            cy = 0.0,
-                            radius = 0.0
-                        },
-                        rectangle = new
-                        {
-                            xmin = 0.0,
-                            ymin = 0.0,
-                            xmax = 0.0,
-                            ymax = 0.0
-                        },
-                        result_path = "..\\result"
-                    }
-                },
-                new
-                {
-                    Crop = new
-                    {
-                        buffer = 120.0
-                    }
-                },
-                new
-                {
-                    Sub = new
-                    {
-                        Sub_cell = 0.03
-                    }
-                },
-                new
-                {
-                    Outlier = new
-                    {
-                        method = "statistical",
-                        mean_k = 12,
-                        multiplier = 2.2
-                    }
-                },
-                new
-                {
-                    Ground = new
-                    {
-                        Ground_cell = 4.0,
-                        window = 16.0,
-                        slope = 0.3,
-                        scalar = 1.25,
-                        threshold = 0.15
-                    }
-                },
-                new
-                {
-                    TSlice = new
-                    {
-                        T_minheight = 0.0,
-                        T_maxheight = 4.8
-                    }
-                },
-                new
-                {
-                    CSlice = new
-                    {
-                        C_minheight = 4.8,
-                        C_maxheight = 100.0
-                    }
-                },
-                new
-                {
-                    Crownseg = new
-                    {
-                        Crown_nnearest = 16
-                    }
-                },
-                new
-                {
-                    Measure = new
-                    {
-                        Measure_nnearest = 16,
-                        minRad = 0.03,
-                        maxRad = 0.5,
-                        iterations = 10000,
-                        zmin_check = 0.2,
-                        zmax_check = 0.7
-                    }
-                },
-                new
-                {
-                    SegmentStem = new
-                    {
-                        smoothness = 16.0,
-                        mindbh = 0.06,
-                        maxdbh = 0.8,
-                        heightThreshold = 9.0
-                    }
-                }
-            };
+            // CSV 내용 생성
+            StringBuilder csvContent = new StringBuilder();
+            csvContent.AppendLine("gui,public,circle,cx=0.0 cy=0.0 radius=100.0,AAA");
+            csvContent.AppendLine("gui,public,rectangle,xmin=-10.0 ymin=-10.0 xmax=10.0 ymax=10.0,AAA");
+            csvContent.AppendLine("gui,public,result_path,..\\\\result,AAA");
+            csvContent.AppendLine("filters.crop,private,buffer,120,AAA");
+            csvContent.AppendLine("filters.sample,public,cell,0.03,AAA");
+            csvContent.AppendLine("filters.outlier,private,method,statistical,AAA");
+            csvContent.AppendLine("filters.outlier,private,mean_k,12,AAA");
+            csvContent.AppendLine("filters.outlier,private,multiplier,2.2,AAA");
+            csvContent.AppendLine("filters.smrf,public,cell,4,AAA");
+            csvContent.AppendLine("filters.smrf,public,window,16,AAA");
+            csvContent.AppendLine("filters.smrf,public,slope,0.3,AAA");
+            csvContent.AppendLine("filters.smrf,public,scalar,1.25,AAA");
+            csvContent.AppendLine("filters.smrf,public,threshold,1,AAA");
+            csvContent.AppendLine("filters.range.trunk,public,minheight,0,AAA");
+            csvContent.AppendLine("filters.range.trunk,public,maxheight,5,AAA");
+            csvContent.AppendLine("filters.range.crown,public,minheight,3,AAA");
+            csvContent.AppendLine("filters.range.crown,public,maxheight,100,AAA");
+            csvContent.AppendLine("csp_segmentcrown,private,nnearest,16,AAA");
+            csvContent.AppendLine("csp_segmentstem,private,smoothness,8,AAA");
+            csvContent.AppendLine("csp_segmentstem,private,mindbh,0.01,AAA");
+            csvContent.AppendLine("csp_segmentstem,private,maxdbh,1,AAA");
+            csvContent.AppendLine("csp_segmentstem,private,height_threshold,1,AAA");
+            csvContent.AppendLine("measure,private,nnearest,16,AAA");
+            csvContent.AppendLine("measure,private,minrad,0.03,AAA");
+            csvContent.AppendLine("measure,private,maxrad,0.5,AAA");
+            csvContent.AppendLine("measure,private,iterations,10000,AAA");
+            csvContent.AppendLine("measure,private,zmin_check,0.2,AAA");
+            csvContent.AppendLine("measure,private,zmax_check,0.7,AAA");
 
-            
-
+            string[] infoRecent = new string[] { };
             //config 파일 종류별 전처리(종류별로 필요한 데이터 추가)
             switch (confType)
             {
@@ -763,57 +600,61 @@ namespace WinFormsAppTest
                     break;
                 case configFileType.Recent:
                     Dictionary<string, double> plotData = plotSender();
-                    setAllparams(ref data);
-                    var infoRecent = new
-                    {
-                        FIleInfo = new
-                        {
-                            fileType = confType,
-                            title = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
-                            selection = plotData["selection"]
-                        }
+                    setAllparams(ref csvContent);
+                    infoRecent = new string[] { 
+                        $"FileInfo,public,fileType,{confType},AAA",
+                        $"FileInfo,public,title,{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")},AAA",
+                        $"FileInfo,public,selection,{plotData["selection"]},AAA" 
                     };
-                    data.Insert(0, infoRecent);
-                    filePath += @"\recentConfig0.json";
+                    for (int i = infoRecent.Length - 1; i >= 0; i--)
+                    {
+                        csvContent.Insert(0, infoRecent[i] + Environment.NewLine);
+                    }
+                    //만들어질 가장 최근 작업 파일을 recentConfig0.csv로, 나머지 번호 1씩 밀기
                     for (int i = confCheck.Length - 1; i >= 0; i--)
                     {
-                        string oldPath = Path.Combine(Path.Combine(configPath, reqDi[(int)configFileType.Recent]) + @"\", $"recentConfig{i}.json");
-                        string newPath = Path.Combine(Path.Combine(configPath, reqDi[(int)configFileType.Recent]), $"recentConfig{i + 1}.json");
-
                         if (i >= 4)
                         {
                             continue;
                         }
+
+                        string oldPath = Path.Combine(filePath, $"recentConfig{i}.csv");
+                        string newPath = Path.Combine(filePath, $"recentConfig{i + 1}.csv");
+                        
                         if (File.Exists(oldPath) && File.Exists(newPath))
                         {
                             File.Delete(newPath);
                         }
                         File.Move(oldPath, newPath);
                     }
+
+                    filePath = Path.Combine(filePath, "recentConfig0.csv");
                     break;
                 case configFileType.Preset:
-                    setAllparams(ref data);
-                    var infoPreset = new
-                    {
-                        FIleInfo = new
-                        {
-                            fileType = confType,
-                            title = "config" + confCheck.Length.ToString(),
-                        }
+                    setAllparams(ref csvContent);
+                    infoRecent = new string[] {
+                        $"FileInfo,public,fileType,{confType},AAA",
+                        $"FileInfo,public,title,{"config" + confCheck.Length.ToString()},AAA"
                     };
-                    data.Insert(0, infoPreset);
-                    filePath += @"\presetConfig" + confCheck.Length.ToString() + ".json";
+                    for (int i = infoRecent.Length - 1; i >= 0; i--)
+                    {
+                        csvContent.Insert(0, infoRecent[i] + Environment.NewLine);
+                    }
+                    filePath = Path.Combine(filePath, $"presetConfig{confCheck.Length.ToString()}.csv");
                     break;
                 default:
                     throw new Exception("unknown error: configFileType.Exception");
             }
 
-            string json = System.Text.Json.JsonSerializer.Serialize(data, new JsonSerializerOptions
+            // CSV 파일 생성 및 내용 기록
+            try
             {
-                WriteIndented = true
-            });
-            
-            File.WriteAllText(filePath, json);
+                File.WriteAllText(filePath, csvContent.ToString());
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("CSV 파일 생성 중 오류 발생: " + ex.Message);
+            }
         }
     }
 }

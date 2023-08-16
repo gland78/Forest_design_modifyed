@@ -391,12 +391,12 @@ namespace WinFormsAppTest
                     {
                         if (line.Contains("title"))
                         {
-                            btnPreConfs.Text = "            " + line.Substring(line.IndexOf(":") + 3, line.Length - line.IndexOf(":") - 4);
+                            btnPreConfs.Text = "            " + line.Split(',')[3];
                             break;
                         }
                     }
                 }
-                btnPreConfs.Name = "presetConfig" + btnNum++.ToString();
+                btnPreConfs.Name = Path.GetFileName(conf);
                 relativeBtnPos.Y = relativeBtnPos.Y + PRESET_BTN_HEIGHT + PRESET_BTN_GAP;
                 if (menuOpen == false)
                 {
@@ -411,16 +411,16 @@ namespace WinFormsAppTest
         //최근 작업 콘피그 파일 갯수만큼 버튼 로드
         private void recentConfBtnLoad()
         {
-            string filePath = Path.Combine(configPath, reqDi[(int)configFileType.Recent]);
+            string fileDi = Path.Combine(configPath, reqDi[(int)configFileType.Recent]);
 
-            if (!Directory.Exists(filePath))
+            if (!Directory.Exists(fileDi))
             {
-                Directory.CreateDirectory(filePath);
+                Directory.CreateDirectory(fileDi);
             }
 
             pnReview.Controls.Clear();
 
-            string[] confCheck = Directory.GetFiles(filePath, "RecentConfig*");
+            string[] confCheck = Directory.GetFiles(fileDi, "recentConfig*");
 
             if (confCheck.Length < 1)
             {
@@ -467,38 +467,40 @@ namespace WinFormsAppTest
                     {
                         if (line.Contains("title"))
                         {
-                            btnText += "   " + line.Substring(line.IndexOf(":") + 3, line.Length - line.IndexOf(":") - 5) + "\n";
+                            btnText += "   " + line.Split(',')[3];
                         }
                         if (line.Contains("selection"))
                         {
-                            int selection = int.Parse(Regex.Replace(line, @"[^0-9]", ""));
+                            int selection = int.Parse(line.Split(',')[3]);
 
                             switch (selection)
                             {
                                 case 0:
-                                    shapeStr = "Circle";
+                                    shapeStr = "circle";
                                     break;
                                 case 1:
-                                    shapeStr = "Rectangle";
+                                    shapeStr = "rectangle";
                                     break;
                                 case 2:
-                                    shapeStr = "Polygon";
+                                    shapeStr = "polygon";
                                     break;
                             }
                             btnText += "   " + shapeStr + "\n";
                         }
-                        if (shapeStr == "Circle" && (line.Contains("cx") || line.Contains("cy") || line.Contains("radius")))
+                        string[] plotData;
+                        if (line.Contains(shapeStr))
                         {
-                            btnText += "   " + Regex.Replace(line, @"[^0-9a-zA-Z:]", "") + "\n";
-                        }
-                        else if (shapeStr == "Rectangle" && (line.Contains("xmin") || line.Contains("ymin") || line.Contains("xmax") || line.Contains("ymax")))
-                        {
-                            btnText += "   " + Regex.Replace(line, @"[^0-9a-zA-Z:]", "") + "\n";
+                            plotData = line.Split(',')[3].Split(" ");
+                            foreach (string str in plotData)
+                            {
+                                btnText += "   " + str + "\n";
+                            }
+                            break;
                         }
                     }
                 }
                 btnRecentConfs.Text = btnText;
-                btnRecentConfs.Name = "recentConfig" + btnNum++.ToString();
+                btnRecentConfs.Name = Path.GetFileName(conf);
                 relativePos.X = relativePos.X + RECENT_BTN_WIDTH + RECENT_BTN_GAP;
             }
             if (pnReview.HorizontalScroll.Enabled == true)
@@ -512,56 +514,70 @@ namespace WinFormsAppTest
 
         private void btnRecentConf_Click(object sender, EventArgs e)
         {
-            string[] confCheck = Directory.GetFiles(Path.Combine(configPath, reqDi[(int)configFileType.Recent]), "recentConfig*");
+            string fileDi = Path.Combine(configPath, reqDi[(int)configFileType.Recent]);
+            string[] confCheck = Directory.GetFiles(fileDi, "recentConfig*");
+            string fileName = ((Button)sender).Name;
 
-            foreach (string conf in confCheck)
+            string? csvLines;
+
+            using (StreamReader sr = new StreamReader(Path.Combine(fileDi, fileName)))
             {
-                string fileName = conf.Substring(conf.IndexOf("recentConfig"), conf.Length - conf.IndexOf("recentConfig") - 5);
-                if (((Button)sender).Name == fileName)
+                while ((csvLines = sr.ReadLine()) != null)
                 {
-                    string json = File.ReadAllText(conf);
-                    var jsonArray = JsonConvert.DeserializeObject<dynamic>(json);
+                    if (csvLines.Contains("sample") && csvLines.Contains("cell"))
+                    {
+                        tbSubCellSize.Text = csvLines.Split(',')[3];
+                    }
 
-                    //subsamplng_textboxes
-                    dynamic JObject = jsonArray[3].Sub;
-                    tbSubCellSize.Text = JObject.Sub_cell.ToString();
+                    else if (csvLines.Contains("smrf") && csvLines.Contains("cell"))
+                    {
+                        tbNorCellSize.Text = csvLines.Split(",")[3];
+                    }
 
-                    //outlierRemoving_textboxes
-                    JObject = jsonArray[4].Outlier;
-                    tbOutlierMeank.Text = JObject.mean_k.ToString();
-                    tbOutlierMul.Text = JObject.multiplier.ToString();
+                    else if (csvLines.Contains("smrf") && csvLines.Contains("window"))
+                    {
+                        tbNorWinSize.Text = csvLines.Split(",")[3];
+                    }
 
-                    //normalize_textboxes
-                    JObject = jsonArray[5].Ground;
-                    tbNorCellSize.Text = JObject.Ground_cell.ToString();
-                    tbNorScalar.Text = JObject.scalar.ToString();
-                    tbNorSlope.Text = JObject.slope.ToString();
-                    tbNorThres.Text = JObject.threshold.ToString();
-                    tbNorWinSize.Text = JObject.window.ToString();
+                    else if (csvLines.Contains("smrf") && csvLines.Contains("slope"))
+                    {
+                        tbNorSlope.Text = csvLines.Split(",")[3];
+                    }
 
-                    //trunkSlice_textboxes
-                    JObject = jsonArray[6].TSlice;
-                    tbTrunkMinHeight.Text = JObject.T_minheight.ToString();
-                    tbTrunkMaxHeight.Text = JObject.T_maxheight.ToString();
+                    else if (csvLines.Contains("smrf") && csvLines.Contains("scalar"))
+                    {
+                        tbNorScalar.Text = csvLines.Split(",")[3];
+                    }
 
-                    //CrownSlice_textboxes
-                    JObject = jsonArray[7].CSlice;
-                    tbCrownMinHeight.Text = JObject.C_minheight.ToString();
-                    tbCrownMaxHeight.Text = JObject.C_maxheight.ToString();
+                    else if (csvLines.Contains("smrf") && csvLines.Contains("scalar"))
+                    {
+                        tbNorScalar.Text = csvLines.Split(",")[3];
+                    }
 
-                    ////treeSegment_textbox
-                    JObject = jsonArray[8].Crownseg;
-                    tbTreeSegNN.Text = JObject.Crown_nnearest.ToString();
+                    else if (csvLines.Contains("smrf") && csvLines.Contains("threshold"))
+                    {
+                        tbNorThres.Text = csvLines.Split(",")[3];
+                    }
 
-                    ////trunkSegment_textboxes
-                    JObject = jsonArray[10].SegmentStem;
-                    tbTreeSegSmooth.Text = JObject.smoothness.ToString();
-                    tbTreeSegMinDBH.Text = JObject.mindbh.ToString();
-                    tbTreeSegHeightThres.Text = JObject.heightThreshold.ToString();
+                    else if (csvLines.Contains("range") && csvLines.Contains("trunk") && csvLines.Contains("minheight"))
+                    {
+                        tbTrunkMinHeight.Text = csvLines.Split(",")[3];
+                    }
 
-                    //measure_textbox
-                    JObject = jsonArray[9].Measure;
-                    tbMeasureNN.Text = JObject.Measure_nnearest.ToString();
+                    else if (csvLines.Contains("range") && csvLines.Contains("trunk") && csvLines.Contains("maxheight"))
+                    {
+                        tbTrunkMaxHeight.Text = csvLines.Split(",")[3];
+                    }
+
+                    else if (csvLines.Contains("range") && csvLines.Contains("crown") && csvLines.Contains("minheight"))
+                    {
+                        tbCrownMinHeight.Text = csvLines.Split(",")[3];
+                    }
+
+                    else if (csvLines.Contains("range") && csvLines.Contains("crown") && csvLines.Contains("maxheight"))
+                    {
+                        tbCrownMaxHeight.Text = csvLines.Split(",")[3];
+                    }
                 }
             }
             tcMainHome.SelectedIndex = 1;

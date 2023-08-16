@@ -30,30 +30,48 @@ namespace WinFormsAppTest
 
         private void preConfLoad()
         {
+            string fileDi = Path.Combine(configPath, reqDi[(int)configFileType.Preset]);
             //프리셋 콘피그 저장 장소
-            string[] confCheck = Directory.GetFiles(Path.Combine(configPath, reqDi[(int)configFileType.Preset]), "PresetConfig*");
+            string[] confCheck = Directory.GetFiles(fileDi, "presetConfig*");
             Array.Sort(confCheck);
 
             lvPresetConf.Items.Clear();
 
+            //config류 csv파일 구조는 0: Type, 1: Visibility, 2: Key, 3: Value, 4: 설명(개발자 전용)이다
+            string title = "";
+            StreamReader sr;
+            List<string> plotData = new();
             foreach (string conf in confCheck)
             {
-                string json = File.ReadAllText(conf);
+                sr = new StreamReader(conf);
+                string csvLines;
+                while ((csvLines = sr.ReadLine()) != null)
+                {
+                    MessageBox.Show(csvLines);
+                    if (csvLines.Contains("title"))
+                    {
+                        title = csvLines.Split(',')[3];
+                    }
+                    else if (csvLines.Contains(",circle,") || csvLines.Contains(",rectangle,"))
+                    {
+                        plotData.Add(csvLines);
+                    }
+                }
 
-                var jsonArray = JsonConvert.DeserializeObject<dynamic>(json);
-                dynamic JObject = jsonArray[0].FIleInfo;
-                string confTitle = JObject.title;
+                string workInfo = "";
+                foreach (string plots in plotData)
+                {
+                    workInfo += plots.Split(',')[3] + " ";
+                }
 
-                json = json.Replace(Environment.NewLine, "");
-                json = json.Replace(" ", "");
-                json = Regex.Replace(json, "[{}]", "");
-
-                string fileName = conf.Substring(conf.IndexOf("presetConfig"), conf.Length - conf.IndexOf("presetConfig") - 5);
+                string fileName = Path.GetFileName(conf);
                 ListViewItem confItem = new ListViewItem();
                 confItem.Name = fileName;
-                confItem.SubItems.Add(confTitle);
-                confItem.SubItems.Add(json);
+                confItem.SubItems.Add(title);
+                confItem.SubItems.Add(workInfo);
                 lvPresetConf.Items.Add(confItem);
+
+                sr.Close();
             }
 
             for (int i = 0; i < lvPresetConf.Items.Count; i++)
@@ -65,7 +83,9 @@ namespace WinFormsAppTest
         private void btnManageTitle_Click(object sender, EventArgs e)
         {
             string fileName = lvPresetConf.SelectedItems[0].Name;
-            string[] confCheck = Directory.GetFiles(Path.Combine(configPath, reqDi[(int)configFileType.Preset]), "PresetConfig*");
+            string oldTitle = lvPresetConf.SelectedItems[0].SubItems[1].Text;
+            string fileDi = Path.Combine(configPath, reqDi[(int)configFileType.Preset]);
+            string[] confCheck = Directory.GetFiles(fileDi, "presetConfig*");
             string? newTitle = Microsoft.VisualBasic.Interaction.InputBox("바꿀 제목을 입력해주세요.", "프리셋 제목 바꾸기");
 
             if (newTitle == null)
@@ -73,19 +93,12 @@ namespace WinFormsAppTest
                 return;
             }
 
-            foreach (string conf in confCheck)
-            {
-                if (conf.Contains(fileName))
-                {
-                    string json = File.ReadAllText(conf);
+            string csv = File.ReadAllText(Path.Combine(fileDi, fileName));
 
-                    var jsonArray = JsonConvert.DeserializeObject<dynamic>(json);
+            csv = csv.Replace(oldTitle, newTitle);
 
-                    dynamic JObject = jsonArray[0].FIleInfo;
-                    JObject.title = newTitle;
-                    File.WriteAllText(conf, jsonArray.ToString());
-                }
-            }
+            File.WriteAllText(Path.Combine(fileDi, fileName), csv);
+
             preConfLoad();
             mainPaint();
         }
@@ -117,8 +130,8 @@ namespace WinFormsAppTest
 
                     for (int i = oldIndex + 1; i < confCheck.Length; i++)
                     {
-                        string oldPath = Path.Combine(Path.Combine(configPath, reqDi[(int)configFileType.Preset]) + @"\", $"presetConfig{i}.json");
-                        string newPath = Path.Combine(Path.Combine(configPath, reqDi[(int)configFileType.Preset]), $"presetConfig{i - 1}.json");
+                        string oldPath = Path.Combine(Path.Combine(configPath, reqDi[(int)configFileType.Preset]) + @"\", $"presetConfig{i}.csv");
+                        string newPath = Path.Combine(Path.Combine(configPath, reqDi[(int)configFileType.Preset]), $"presetConfig{i - 1}.csv");
 
                         if (File.Exists(oldPath) && File.Exists(newPath))
                         {

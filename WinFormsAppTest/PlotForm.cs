@@ -44,19 +44,20 @@ namespace WinFormsAppTest
             paramForm.plotSender += new plotDataHandler(plotPacker);
         }
 
+        //수정 요망
         private Dictionary<string, double> plotPacker()
         {
             Dictionary<string, double> plots = new Dictionary<string, double>();
             plots.Add("selection", cbPlotShape.SelectedIndex);
 
-            plots.Add("cx", double.Parse(tbPlotCircleX.Text));
-            plots.Add("cy", double.Parse(tbPlotCircleY.Text));
-            plots.Add("radius", double.Parse(tbPlotCircleR.Text));
+            plots.Add("cx", paramForm.gui.centerX);
+            plots.Add("cy", paramForm.gui.centerY);
+            plots.Add("radius", paramForm.gui.radius);
 
-            plots.Add("xmin", double.Parse(tbPlotRecXmin.Text));
-            plots.Add("ymin", double.Parse(tbPlotRecYmin.Text));
-            plots.Add("xmax", double.Parse(tbPlotRecXmax.Text));
-            plots.Add("ymax", double.Parse(tbPlotRecYmax.Text));
+            plots.Add("xmin", paramForm.gui.xMin);
+            plots.Add("ymin", paramForm.gui.yMin);
+            plots.Add("xmax", paramForm.gui.xMax);
+            plots.Add("ymax", paramForm.gui.yMax);
 
             return plots;
         }
@@ -72,6 +73,8 @@ namespace WinFormsAppTest
             Point screenSize = ((Point)Screen.PrimaryScreen.Bounds.Size);
 
             this.Location = new Point((screenSize.X - this.Width) / 2, (screenSize.Y - this.Height) / 2);
+
+            cbPlotShape.SelectedIndex = 0;
         }
 
         private void btnPlotCancel_Click(object sender, EventArgs e)
@@ -180,7 +183,7 @@ namespace WinFormsAppTest
             {
                 Directory.CreateDirectory(fileDi);
             }
-            string[] confCheck = Directory.GetFiles(Path.Combine(configPath, reqDi[(int)configFileType.Recent]), "RecentConfig*");
+            string[] confCheck = Directory.GetFiles(fileDi, "recentConfig*");
             configTouch(configFileType.Recent);
             mainPaint();
 
@@ -249,8 +252,7 @@ namespace WinFormsAppTest
         }
 
 
-
-
+        //아래 두 메서드 PlotForm 마우스 드래그 시 윈폼 이동 이벤트
         private void PlotForm_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -258,7 +260,6 @@ namespace WinFormsAppTest
                 relativePformPos = e.Location;
             }
         }
-
         private void PlotForm_MouseMove(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -268,6 +269,7 @@ namespace WinFormsAppTest
             }
         }
 
+        //PlotForm 콤보박스 이벤트
         private void cbPlotShape_SelectedIndexChanged(object sender, EventArgs e)
         {
             tcPlot.SelectedIndex = cbPlotShape.SelectedIndex;
