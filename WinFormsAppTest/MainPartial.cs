@@ -289,15 +289,15 @@ namespace WinFormsAppTest
             csvContent.AppendLine("filters.outlier,private,method,statistical,AAA");
             csvContent.AppendLine("filters.outlier,private,mean_k,12,AAA");
             csvContent.AppendLine("filters.outlier,private,multiplier,2.2,AAA");
-            csvContent.AppendLine("filters.smrf,public,"+groundseg.cellSize+",4,AAA");
-            csvContent.AppendLine("filters.smrf,public,"+groundseg.windowSize+",16,AAA");
-            csvContent.AppendLine("filters.smrf,public,"+groundseg.slope+",0.3,AAA");
-            csvContent.AppendLine("filters.smrf,public,"+groundseg.scalar+",1.25,AAA");
-            csvContent.AppendLine("filters.smrf,public,"+groundseg.threshold+",1,AAA");
-            csvContent.AppendLine("filters.range.trunk,public,"+tSlice.minHeight+",0,AAA");
-            csvContent.AppendLine("filters.range.trunk,public," + tSlice.maxHeight + ",5,AAA");
-            csvContent.AppendLine("filters.range.crown,public," + cSlice.minHeight + ",3,AAA");
-            csvContent.AppendLine("filters.range.crown,public," + cSlice.maxHeight + ",100,AAA");
+            csvContent.AppendLine("filters.smrf,public,cell," + groundseg.cellSize + ",AAA");
+            csvContent.AppendLine("filters.smrf,public,window," + groundseg.windowSize + ",AAA");
+            csvContent.AppendLine("filters.smrf,public,slope," + groundseg.slope + ",AAA");
+            csvContent.AppendLine("filters.smrf,public,scalar," + groundseg.scalar + ",AAA");
+            csvContent.AppendLine("filters.smrf,public,threshold," + groundseg.threshold +",AAA");
+            csvContent.AppendLine("filters.range.trunk,public,minheight,"+tSlice.minHeight+",AAA");
+            csvContent.AppendLine("filters.range.trunk,public,maxheight," + tSlice.maxHeight + ",AAA");
+            csvContent.AppendLine("filters.range.crown,public,minheight," + cSlice.minHeight + ",AAA");
+            csvContent.AppendLine("filters.range.crown,public,maxheight," + cSlice.maxHeight + ",AAA");
             csvContent.AppendLine("csp_segmentcrown,private,nnearest,16,AAA");
             csvContent.AppendLine("csp_segmentstem,private,smoothness,8,AAA");
             csvContent.AppendLine("csp_segmentstem,private,mindbh,0.01,AAA");
@@ -520,8 +520,7 @@ namespace WinFormsAppTest
             if (Application.OpenForms["PlotForm"] != null)
             {
                 plotData = plotSender();
-            }
-            
+            }          
             else
             {
                 plotData.Add("cx", gui.centerX);
