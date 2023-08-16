@@ -72,6 +72,7 @@ namespace WinFormsAppTest
             this.BackColor = Color.MediumSlateBlue;
             this.ForeColor = Color.White;
             this.Resize += new EventHandler(Button_Resize);
+            this.DoubleBuffered = true;
         }
 
         //Methods

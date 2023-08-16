@@ -7,6 +7,7 @@ using WinFormsAppTest.Properties;
 using System.Dynamic;
 using System.Text.RegularExpressions;
 using static WinFormsAppTest.MainForm;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace WinFormsAppTest
 {
@@ -15,6 +16,10 @@ namespace WinFormsAppTest
     internal delegate void customEventHandler();
 
     internal delegate void configHandler(configFileType type);
+
+    internal delegate void setterEventHandler(int setValue);
+
+    internal delegate void switchEventHandler(bool onOff);
 
     public partial class MainForm : Form
     {
@@ -124,6 +129,16 @@ namespace WinFormsAppTest
             btnStart.Click += btnStart_Click;
 
             //이 아래로 전부 설정창의 CustomPanel 객체들 이벤트
+            pnSettingDefault.MouseDown += pnSettingAll_MouseDown;
+            pnSettingDefault.MouseEnter += pnSettingAll_MouseEnter;
+            pnSettingDefault.MouseLeave += pnSettingAll_MouseLeave;
+            pnSettingDefault.MouseUp += pnSettingAll_MouseUp;
+
+            pnSettingPreset.MouseDown += pnSettingAll_MouseDown;
+            pnSettingPreset.MouseEnter += pnSettingAll_MouseEnter;
+            pnSettingPreset.MouseLeave += pnSettingAll_MouseLeave;
+            pnSettingPreset.MouseUp += pnSettingAll_MouseUp;
+
             pnSettingSub1.MouseDown += pnSettingAll_MouseDown;
             pnSettingSub1.MouseEnter += pnSettingAll_MouseEnter;
             pnSettingSub1.MouseLeave += pnSettingAll_MouseLeave;
@@ -143,6 +158,31 @@ namespace WinFormsAppTest
             pnSettingOut3.MouseEnter += pnSettingAll_MouseEnter;
             pnSettingOut3.MouseLeave += pnSettingAll_MouseLeave;
             pnSettingOut3.MouseUp += pnSettingAll_MouseUp;
+
+            pnSettingNor1.MouseDown += pnSettingAll_MouseDown;
+            pnSettingNor1.MouseEnter += pnSettingAll_MouseEnter;
+            pnSettingNor1.MouseLeave += pnSettingAll_MouseLeave;
+            pnSettingNor1.MouseUp += pnSettingAll_MouseUp;
+
+            pnSettingNor2.MouseDown += pnSettingAll_MouseDown;
+            pnSettingNor2.MouseEnter += pnSettingAll_MouseEnter;
+            pnSettingNor2.MouseLeave += pnSettingAll_MouseLeave;
+            pnSettingNor2.MouseUp += pnSettingAll_MouseUp;
+
+            pnSettingNor3.MouseDown += pnSettingAll_MouseDown;
+            pnSettingNor3.MouseEnter += pnSettingAll_MouseEnter;
+            pnSettingNor3.MouseLeave += pnSettingAll_MouseLeave;
+            pnSettingNor3.MouseUp += pnSettingAll_MouseUp;
+
+            pnSettingNor4.MouseDown += pnSettingAll_MouseDown;
+            pnSettingNor4.MouseEnter += pnSettingAll_MouseEnter;
+            pnSettingNor4.MouseLeave += pnSettingAll_MouseLeave;
+            pnSettingNor4.MouseUp += pnSettingAll_MouseUp;
+
+            pnSettingNor5.MouseDown += pnSettingAll_MouseDown;
+            pnSettingNor5.MouseEnter += pnSettingAll_MouseEnter;
+            pnSettingNor5.MouseLeave += pnSettingAll_MouseLeave;
+            pnSettingNor5.MouseUp += pnSettingAll_MouseUp;
 
             pnSettingTrunk1.MouseDown += pnSettingAll_MouseDown;
             pnSettingTrunk1.MouseEnter += pnSettingAll_MouseEnter;
@@ -193,6 +233,16 @@ namespace WinFormsAppTest
         //CustomPanel 색 및 테두리 지정(Designer.cs에서 지정하면 컴파일 시 없어짐)
         private void customPanels_Load()
         {
+            pnSettingDefault.BackColor = Color.Transparent;
+            pnSettingDefault.isFill = true;
+            pnSettingDefault.isBorder = false;
+            pnSettingDefault.fillColor = Color.Gray;
+
+            pnSettingPreset.BackColor = Color.Transparent;
+            pnSettingPreset.isFill = true;
+            pnSettingPreset.isBorder = false;
+            pnSettingPreset.fillColor = Color.Gray;
+
             pnSettingSub1.BackColor = Color.Transparent;
             pnSettingSub1.isFill = true;
             pnSettingSub1.isBorder = false;
@@ -212,6 +262,31 @@ namespace WinFormsAppTest
             pnSettingOut3.isFill = true;
             pnSettingOut3.isBorder = false;
             pnSettingOut3.fillColor = Color.Gray;
+
+            pnSettingNor1.BackColor = Color.Transparent;
+            pnSettingNor1.isFill = true;
+            pnSettingNor1.isBorder = false;
+            pnSettingNor1.fillColor = Color.Gray;
+
+            pnSettingNor2.BackColor = Color.Transparent;
+            pnSettingNor2.isFill = true;
+            pnSettingNor2.isBorder = false;
+            pnSettingNor2.fillColor = Color.Gray;
+
+            pnSettingNor3.BackColor = Color.Transparent;
+            pnSettingNor3.isFill = true;
+            pnSettingNor3.isBorder = false;
+            pnSettingNor3.fillColor = Color.Gray;
+
+            pnSettingNor4.BackColor = Color.Transparent;
+            pnSettingNor4.isFill = true;
+            pnSettingNor4.isBorder = false;
+            pnSettingNor4.fillColor = Color.Gray;
+
+            pnSettingNor5.BackColor = Color.Transparent;
+            pnSettingNor5.isFill = true;
+            pnSettingNor5.isBorder = false;
+            pnSettingNor5.fillColor = Color.Gray;
 
             pnSettingTrunk1.BackColor = Color.Transparent;
             pnSettingTrunk1.isFill = true;
@@ -308,7 +383,8 @@ namespace WinFormsAppTest
                 btnPreConfs.ImageAlign = ContentAlignment.MiddleLeft;
                 btnPreConfs.TextAlign = ContentAlignment.MiddleLeft;
                 btnPreConfs.Font = new Font("Microsoft Sans Serif", 18F, FontStyle.Bold, GraphicsUnit.Point);
-                btnPreConfs.Image = (Image)resources.GetObject("btnPreConf.Image");
+                btnPreConfs.Image = Image.FromFile(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName
+                    + @"\Resources\btnPreConf.Image.png");
                 using (StreamReader sr = new StreamReader(conf))
                 {
                     string line;
@@ -366,20 +442,20 @@ namespace WinFormsAppTest
 
                 CustomBtn btnRecentConfs = new CustomBtn();
                 btnRecentConfs.MouseClick += btnRecentConf_Click;
+                btnRecentConfs.MouseDown += btnRecentConf_Down;
+                btnRecentConfs.MouseUp += btnRecentConf_Up;
 
                 pnReview.Controls.Add(btnRecentConfs);
                 btnRecentConfs.Location = relativePos;
                 btnRecentConfs.Width = RECENT_BTN_WIDTH;
                 btnRecentConfs.Height = RECENT_BTN_HEIGHT;
                 btnRecentConfs.Margin = new Padding(4, 8, 4, 4);
-                btnRecentConfs.BackColor = Color.MintCream;
                 btnRecentConfs.BackgroundColor = Color.MintCream;
-                btnRecentConfs.BorderColor = Color.Transparent;
                 btnRecentConfs.BorderRadius = 20;
                 btnRecentConfs.BorderSize = 0;
                 btnRecentConfs.FlatAppearance.BorderSize = 0;
-                btnRecentConfs.FlatAppearance.MouseDownBackColor = Color.FromArgb(246, 255, 253);
-                btnRecentConfs.FlatAppearance.MouseOverBackColor = Color.FromArgb(240, 255, 250);
+                btnRecentConfs.FlatAppearance.MouseDownBackColor = Color.FromArgb(255, 255, 255);
+                btnRecentConfs.FlatAppearance.MouseOverBackColor = Color.FromArgb(250, 255, 250);
                 btnRecentConfs.FlatStyle = FlatStyle.Flat;
                 btnRecentConfs.TextAlign = ContentAlignment.MiddleLeft;
                 btnRecentConfs.Font = new Font("맑은 고딕", 12F, FontStyle.Regular, GraphicsUnit.Point);
@@ -426,6 +502,11 @@ namespace WinFormsAppTest
                 btnRecentConfs.Name = "recentConfig" + btnNum++.ToString();
                 relativePos.X = relativePos.X + RECENT_BTN_WIDTH + RECENT_BTN_GAP;
             }
+            if (pnReview.HorizontalScroll.Enabled == true)
+            {
+                pnReview.AutoScrollMargin = new Size(50, 0);
+            }
+
             pnReview.ResumeLayout(false);
             pnReview.PerformLayout();
         }
@@ -433,11 +514,6 @@ namespace WinFormsAppTest
         private void btnRecentConf_Click(object sender, EventArgs e)
         {
             string[] confCheck = Directory.GetFiles(Path.Combine(configPath, reqDi[(int)configFileType.Recent]), "recentConfig*");
-            if (MessageBox.Show("해당 설정을 적용하시겠습니까?\n저장되지 않은 설정값은 사라집니다.",
-                "최근 작업기록 적용", MessageBoxButtons.OKCancel) == DialogResult.Cancel)
-            {
-                return;
-            }
 
             foreach (string conf in confCheck)
             {
@@ -489,16 +565,29 @@ namespace WinFormsAppTest
                     tbMeasureNN.Text = JObject.Measure_nnearest.ToString();
                 }
             }
+            tcMainHome.SelectedIndex = 1;
+        }
+
+        private void btnRecentConf_Down(object sender, EventArgs e)
+        {
+            Button btn = (Button)sender;
+            btn.FlatStyle = FlatStyle.Popup;
+            btn.Invalidate();
+        }
+
+        private void btnRecentConf_Up(object sender, EventArgs e)
+        {
+            Button btn = (Button)sender;
+            btn.FlatStyle = FlatStyle.Flat;
+            btn.Invalidate();
         }
 
         private void btnPreConf_Click(object sender, EventArgs e)
         {
             string[] confCheck = Directory.GetFiles(Path.Combine(configPath, reqDi[(int)configFileType.Preset]), "PresetConfig*");
-            if (MessageBox.Show("선택한 프리셋을 적용하시겠습니까?\n저장되지 않은 설정값은 사라집니다.",
-                "프리셋 적용", MessageBoxButtons.OKCancel) == DialogResult.Cancel)
-            {
-                return;
-            }
+
+
+
             foreach (string conf in confCheck)
             {
                 string fileName = conf.Substring(conf.IndexOf("presetConfig"), conf.Length - conf.IndexOf("presetConfig") - 5);
@@ -549,6 +638,8 @@ namespace WinFormsAppTest
                     tbMeasureNN.Text = JObject.Measure_nnearest.ToString();
                 }
             }
+
+            tcMainHome.SelectedIndex = 1;
         }
 
         private void btnStart_Click(object sender, EventArgs e)
@@ -558,6 +649,9 @@ namespace WinFormsAppTest
                 pFrm = new PlotForm(this);
                 pFrm.configTouch += new configHandler(MakeConfig);
                 pFrm.mainPaint += new customEventHandler(recentConfBtnLoad);
+                pFrm.mainProgressSet += new setterEventHandler(progressSetter);
+                pFrm.attachProgressBar += new switchEventHandler(progressAttach);
+                pFrm.attachStartBtn += new switchEventHandler(startBtnAttach);
             }
             pFrm.ShowDialog();
         }
@@ -660,6 +754,7 @@ namespace WinFormsAppTest
                 cPanel.Invalidate();
             }
         }
+
 
         //아래 메서드 3개 커스텀 제목표시줄로 인한 창 이동 이벤트 임의 생성
         private void MainForm_MouseDown(object sender, MouseEventArgs e)
@@ -845,6 +940,41 @@ namespace WinFormsAppTest
         private void btnHide_Click(object sender, EventArgs e)
         {
             this.WindowState = FormWindowState.Minimized;
+        }
+
+        private void btnSettingLoad_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("기본값을 적용하시겠습니까?\n저장되지 않은 설정값은 사라집니다.",
+                "기본 설정 적용", MessageBoxButtons.OKCancel) == DialogResult.Cancel)
+            {
+                return;
+            }
+
+            Initialize_Params();
+            FillTextboxes();
+        }
+
+        private void progressAttach(bool onOff)
+        {
+            pbLoadingBar.Visible = onOff;
+        }
+
+        private void progressSetter(int setValue)
+        {
+            pbLoadingBar.Value = setValue;
+            pbLoadingBar.Invalidate();
+        }
+
+        private void startBtnAttach(bool onOff)
+        {
+            btnStart.Visible = onOff;
+        }
+
+        private void btnSettingApply_Click(object sender, EventArgs e)
+        {
+            UpdateParams();
+            MessageBox.Show("적용되었습니다.");
+            tcMainHome.SelectedIndex = 0;
         }
     }
 }

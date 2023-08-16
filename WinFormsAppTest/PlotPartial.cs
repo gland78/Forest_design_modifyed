@@ -30,7 +30,10 @@ namespace WinFormsAppTest
         //버퍼 계산 시 사용되는 좌표 구조체
         Coords bufferedPolycords = new Coords();
 
+        //PlotForm 윈폼 이동 이벤트 관련 변수
         private Point relativePformPos = new Point();
+
+        //현재는 사용한 곳 없음
         private void InitializeMemberParam()
         {
             //파일경로 관련 파라미터 초기화
@@ -891,7 +894,7 @@ namespace WinFormsAppTest
                     sw.WriteLine("cls");
                     sw.WriteLine("@ECHO OFF");
                     sw.WriteLine("echo 수간 추출 및 하층식생 제거 중...");
-                    //sw.WriteLine("csp_segmentstem " +seven+originLasName+".json");
+                    sw.WriteLine("csp_segmentstem " +seven+originLasName+".json");
                     //최종에서는 명령인수 삭제
                     sw.WriteLine("csp_segmentstem " + paramForm.csp_stem.smoothness + " " + paramForm.csp_stem.minDBH + " " + paramForm.csp_stem.maxDBH + " level1_cropped_" + originLasName + "_B.dat "
                      + originLasName + "_Tslice.pcd");
@@ -987,7 +990,7 @@ namespace WinFormsAppTest
                     sw.WriteLine("PCD2LAS " + FolderName);
                     sw.WriteLine("PCD2LAS " + FolderName2);
 
-                    //pcd 지우는 코드
+                    //pcd 지우는 코드  ---> 배포 시 삭제
                     //sw.WriteLine("for /r \"..\\tree\" %%i in (*.pcd) do (");
                     //sw.WriteLine("    del \"%%i\"");
                     //sw.WriteLine(")");
@@ -1123,7 +1126,6 @@ namespace WinFormsAppTest
 
         private void preProAndExcuteStep()
         {
-            progress = 0;
             MakeResultDirectory_PLOT();
 
             string resultP = resultSavedDirectory + shape;
@@ -1146,39 +1148,49 @@ namespace WinFormsAppTest
                 Normalization();
                 MakeJsonFile();
                 progress++;
+                mainProgressSet(progress);
                 //=====
 
                 RunFileSecond();
                 progress++;
+                mainProgressSet(progress);
 
                 RunFileThird();
                 progress++;
+                mainProgressSet(progress);
 
                 RunFileForth();
                 RunFileForthOne();
                 RunFileForthTwo();
                 progress++;
+                mainProgressSet(progress);
 
                 RunFileFifth();
                 progress++;
+                mainProgressSet(progress);
 
                 RunFileSixth();
                 progress++;
+                mainProgressSet(progress);
 
                 RunFileSeventh();//trunk
                 progress++;
+                mainProgressSet(progress);
                 if (CatchError(resultP + @"\intermediate\", 7)) return;
 
                 RunFileEighth();//tree
                 progress++;
+                mainProgressSet(progress);
                 if (CatchError(resultP + @"\tree\", 8)) return;
 
                 RunFileNinth();//measure
                 progress++;
+                mainProgressSet(progress);
                 if (CatchError(resultP + @"\tree\", 9)) return;
 
                 RunFileTenth();
                 progress++;
+                mainProgressSet(progress);
             }
             else
             {

@@ -27,6 +27,7 @@ namespace WinFormsAppTest
             preConfLoad();
         }
 
+
         private void preConfLoad()
         {
             //프리셋 콘피그 저장 장소
@@ -72,7 +73,7 @@ namespace WinFormsAppTest
                 return;
             }
 
-            foreach (string conf in  confCheck)
+            foreach (string conf in confCheck)
             {
                 if (conf.Contains(fileName))
                 {
