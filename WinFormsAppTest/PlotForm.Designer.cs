@@ -221,6 +221,7 @@
             c_btnPlotPolySet.Text = "File Search";
             c_btnPlotPolySet.TextColor = Color.White;
             c_btnPlotPolySet.UseVisualStyleBackColor = false;
+            c_btnPlotPolySet.Click += c_btnPlotPolySet_Click;
             // 
             // btnPlotOK
             // 

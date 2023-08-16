@@ -103,9 +103,11 @@ namespace WinFormsAppTest
         public double maxHeight { get; set; }
     }
 
-    public struct CrownSeg
+    public struct csp_segmentcrown
     {
         public int CrownNN { get; set; }
+        public string trunkfiles { get; set; }
+        public string pcdFile { get; set; }
     }
 
     public struct Measure
@@ -114,9 +116,11 @@ namespace WinFormsAppTest
         public double minRad { get; set; }
         public double maxRad { get; set; }
         public int iterations { get; set; }
+        public double zmin_check { get; set; }
+        public double zmax_check { get; set; }
     }
 
-    public struct SegmentStem
+    public struct csp_segmentstem
     {
         public double smoothness { get; set; }
         public double minDBH { get; set; }
