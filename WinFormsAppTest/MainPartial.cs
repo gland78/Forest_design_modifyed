@@ -575,7 +575,7 @@ namespace WinFormsAppTest
                     Outlier = new
                     {
                         method = "statistical",
-                        mean_k = int.Parse(tbOutlierMeank.Text),
+                        mean_k = double.Parse(tbOutlierMeank.Text),
                         multiplier = double.Parse(tbOutlierMul.Text)
                     }
                 },
@@ -603,7 +603,7 @@ namespace WinFormsAppTest
                     CSlice = new
                     {
                         C_minheight = double.Parse(tbCrownMinHeight.Text),
-                        C_maxheight = int.Parse(tbCrownMaxHeight.Text)
+                        C_maxheight = double.Parse(tbCrownMaxHeight.Text)
                     }
                 },
                 new
@@ -629,10 +629,10 @@ namespace WinFormsAppTest
                 {
                     SegmentStem = new
                     {
-                        smoothness = int.Parse(tbTreeSegSmooth.Text),
+                        smoothness = double.Parse(tbTreeSegSmooth.Text),
                         mindbh = double.Parse(tbTreeSegMinDBH.Text),
                         maxdbh = 0.8,
-                        heightThreshold = int.Parse(tbTreeSegHeightThres.Text)
+                        heightThreshold = double.Parse(tbTreeSegHeightThres.Text)
                     }
                 }
             };
