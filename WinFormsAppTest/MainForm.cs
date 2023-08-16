@@ -128,6 +128,16 @@ namespace WinFormsAppTest
             btnStart.Click += btnStart_Click;
 
             //이 아래로 전부 설정창의 CustomPanel 객체들 이벤트
+            pnSettingDefault.MouseDown += pnSettingAll_MouseDown;
+            pnSettingDefault.MouseEnter += pnSettingAll_MouseEnter;
+            pnSettingDefault.MouseLeave += pnSettingAll_MouseLeave;
+            pnSettingDefault.MouseUp += pnSettingAll_MouseUp;
+
+            pnSettingPreset.MouseDown += pnSettingAll_MouseDown;
+            pnSettingPreset.MouseEnter += pnSettingAll_MouseEnter;
+            pnSettingPreset.MouseLeave += pnSettingAll_MouseLeave;
+            pnSettingPreset.MouseUp += pnSettingAll_MouseUp;
+
             pnSettingSub1.MouseDown += pnSettingAll_MouseDown;
             pnSettingSub1.MouseEnter += pnSettingAll_MouseEnter;
             pnSettingSub1.MouseLeave += pnSettingAll_MouseLeave;
@@ -147,6 +157,31 @@ namespace WinFormsAppTest
             pnSettingOut3.MouseEnter += pnSettingAll_MouseEnter;
             pnSettingOut3.MouseLeave += pnSettingAll_MouseLeave;
             pnSettingOut3.MouseUp += pnSettingAll_MouseUp;
+
+            pnSettingNor1.MouseDown += pnSettingAll_MouseDown;
+            pnSettingNor1.MouseEnter += pnSettingAll_MouseEnter;
+            pnSettingNor1.MouseLeave += pnSettingAll_MouseLeave;
+            pnSettingNor1.MouseUp += pnSettingAll_MouseUp;
+
+            pnSettingNor2.MouseDown += pnSettingAll_MouseDown;
+            pnSettingNor2.MouseEnter += pnSettingAll_MouseEnter;
+            pnSettingNor2.MouseLeave += pnSettingAll_MouseLeave;
+            pnSettingNor2.MouseUp += pnSettingAll_MouseUp;
+
+            pnSettingNor3.MouseDown += pnSettingAll_MouseDown;
+            pnSettingNor3.MouseEnter += pnSettingAll_MouseEnter;
+            pnSettingNor3.MouseLeave += pnSettingAll_MouseLeave;
+            pnSettingNor3.MouseUp += pnSettingAll_MouseUp;
+
+            pnSettingNor4.MouseDown += pnSettingAll_MouseDown;
+            pnSettingNor4.MouseEnter += pnSettingAll_MouseEnter;
+            pnSettingNor4.MouseLeave += pnSettingAll_MouseLeave;
+            pnSettingNor4.MouseUp += pnSettingAll_MouseUp;
+
+            pnSettingNor5.MouseDown += pnSettingAll_MouseDown;
+            pnSettingNor5.MouseEnter += pnSettingAll_MouseEnter;
+            pnSettingNor5.MouseLeave += pnSettingAll_MouseLeave;
+            pnSettingNor5.MouseUp += pnSettingAll_MouseUp;
 
             pnSettingTrunk1.MouseDown += pnSettingAll_MouseDown;
             pnSettingTrunk1.MouseEnter += pnSettingAll_MouseEnter;
@@ -197,6 +232,16 @@ namespace WinFormsAppTest
         //CustomPanel 색 및 테두리 지정(Designer.cs에서 지정하면 컴파일 시 없어짐)
         private void customPanels_Load()
         {
+            pnSettingDefault.BackColor = Color.Transparent;
+            pnSettingDefault.isFill = true;
+            pnSettingDefault.isBorder = false;
+            pnSettingDefault.fillColor = Color.Gray;
+
+            pnSettingPreset.BackColor = Color.Transparent;
+            pnSettingPreset.isFill = true;
+            pnSettingPreset.isBorder = false;
+            pnSettingPreset.fillColor = Color.Gray;
+
             pnSettingSub1.BackColor = Color.Transparent;
             pnSettingSub1.isFill = true;
             pnSettingSub1.isBorder = false;
@@ -734,10 +779,6 @@ namespace WinFormsAppTest
             isMformDrag = false;
         }
 
-
-
-
-
         private void btnSettingSave_Click(object sender, EventArgs e)
         {
             /*
@@ -915,6 +956,13 @@ namespace WinFormsAppTest
         private void startBtnAttach(bool onOff)
         {
             btnStart.Visible = onOff;
+        }
+
+        private void btnSettingApply_Click(object sender, EventArgs e)
+        {
+            UpdateParams();
+            MessageBox.Show("적용되었습니다.");
+            tcMainHome.SelectedIndex = 0;
         }
     }
 }
