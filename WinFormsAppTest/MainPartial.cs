@@ -8,12 +8,13 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using WK.Libraries.BetterFolderBrowserNS;
 using System.Security;
+using System.Threading.Tasks.Dataflow;
 
 namespace WinFormsAppTest
 {
     partial class MainForm
     {
-        //변수 구조체
+        //변수 구조체   --> public 제외 나머지는 삭제예정
         public GUI gui = new GUI();
         public Crop crop = new Crop();
         public Subsampling subsampling = new Subsampling();
@@ -21,13 +22,27 @@ namespace WinFormsAppTest
         public GroundSeg groundseg = new GroundSeg();
         public TSlice tSlice = new TSlice();
         public CSlice cSlice = new CSlice();
-
-        //임시변수--> 삭제
-        public CrownSeg crownSeg = new CrownSeg();
+        public csp_segmentcrown csp_crown = new csp_segmentcrown();
+        public csp_segmentstem csp_stem = new csp_segmentstem();
         public Measure measure = new Measure();
-        public SegmentStem segmentStem = new SegmentStem();
+
+
+        struct GuiData
+        {
+            public string Type;
+            public string Visibility;
+            public string Key;
+            public string Value;
+        }
+        List<GuiData> guiDataList = new List<GuiData>();
+
+
+        /// <summary>
+        /// json 읽는 함수 삭제해도 됨
+        /// </summary>
         private void Initialize_Params()
         {
+            /*
             // 파일에서 JSON 데이터 읽기
             string filePath = "..\\bin\\config.json";
             string json = File.ReadAllText(filePath);
@@ -84,9 +99,285 @@ namespace WinFormsAppTest
             segmentStem.smoothness = JObject.smoothness;
             segmentStem.minDBH = JObject.mindbh;
             segmentStem.maxDBH = JObject.maxdbh;
-            segmentStem.HeightThreshold = JObject.heightThreshold;
+            segmentStem.HeightThreshold = JObject.heightThreshold;*/
+        }
+        /// <summary>
+        /// csv 읽는 함수
+        /// </summary>
+        private void read_csv()
+        {
+            //csv 읽기
+            string csvFilePath = @"..\bin\config.csv";
+
+            try
+            {
+                using (StreamReader reader = new StreamReader(csvFilePath))
+                {
+                    while (!reader.EndOfStream)
+                    {
+                        string line = reader.ReadLine();
+                        string[] values = line.Split(',');
+
+                        if (values.Length >= 4)
+                        {
+                            GuiData guiData = new GuiData
+                            {
+                                Type = values[0],
+                                Visibility = values[1],
+                                Key = values[2],
+                                Value = values[3]
+                            };
+                            if (guiData.Key == "circle")
+                            {
+                                ExtractCircleValues(guiData.Value);
+                            }
+                            if (guiData.Key == "rectangle")
+                            {
+                                ExtractRectangleValues( guiData.Value);
+                            }
+                            guiDataList.Add(guiData);
+                        }
+                    }
+                }
+
+                // 벡터에 저장된 데이터를 사용하거나 처리하는 부분
+                foreach (GuiData data in guiDataList)
+                {
+                    if (data.Type == "gui" && data.Key == "result_path")
+                    {
+                        gui.resultPath = data.Value;
+                    }
+                    else if (data.Type == "filters.crop" && data.Key == "buffer")
+                    {
+                        crop.buffer = double.Parse(data.Value);
+                    }
+                    else if (data.Type == "filters.sample" && data.Key == "cell")
+                    {
+                        subsampling.cellSize = double.Parse(data.Value);
+                    }
+                    else if (data.Type == "filters.outlier")
+                    {
+                        switch (data.Key)
+                        {
+                            case "method":
+                                outlier.method = data.Value;
+                                break;
+                            case "mean_k":
+                                outlier.mean_k = double.Parse(data.Value);
+                                break;
+                            case "multiplier":
+                                outlier.Multiplier = double.Parse(data.Value);
+                                break;
+                        }
+                    }
+                    else if (data.Type == "filters.smrf")
+                    {
+                        switch (data.Key)
+                        {
+                            case "cell":
+                                groundseg.cellSize = data.Value;
+                                break;
+                            case "window":
+                                groundseg.windowSize = data.Value;
+                                break;
+                            case "slope":
+                                groundseg.slope = data.Value;
+                                break;
+                            case "scalar":
+                                groundseg.scalar = data.Value;
+                                break;
+                            case "threshold":
+                                groundseg.threshold = data.Value;
+                                break;
+                        }
+                    }
+                    else if (data.Type == "filters.range.trunk")
+                    {
+                        switch (data.Key)
+                        {
+                            case "minheight":
+                                tSlice.minHeight = double.Parse(data.Value);
+                                break;
+                            case "maxheight":
+                                tSlice.maxHeight = double.Parse(data.Value);
+                                break;
+                        }
+                    }
+                    else if (data.Type == "filters.range.crown")
+                    {
+                        switch (data.Key)
+                        {
+                            case "minheight":
+                                cSlice.minHeight = double.Parse(data.Value);
+                                break;
+                            case "maxheight":
+                                cSlice.maxHeight = double.Parse(data.Value);
+                                break;
+                        }
+                    }
+                    else if (data.Type == "csp_segmentcrown")
+                    {
+                        switch (data.Key)
+                        {
+                            case "nnearest":
+                                csp_crown.CrownNN = int.Parse(data.Value);
+                                break;
+                        }
+                    }
+                    else if (data.Type == "csp_segmentstem")
+                    {
+                        switch (data.Key)
+                        {
+                            case "smoothness":
+                                csp_stem.smoothness = double.Parse(data.Value);
+                                break;
+                            case "mindbh":
+                                csp_stem.minDBH = double.Parse(data.Value);
+                                break;
+                            case "maxdbh":
+                                csp_stem.maxDBH = double.Parse(data.Value);
+                                break;
+                            case "height_threshold":
+                                csp_stem.HeightThreshold = double.Parse(data.Value);
+                                break;
+                        }
+                    }
+                    else if (data.Type == "measure")
+                    {
+                        switch (data.Key)
+                        {
+                            case "nnearest":
+                                measure.MeasureNN = int.Parse(data.Value);
+                                break;
+                            case "minrad":
+                                measure.minRad = double.Parse(data.Value);
+                                break;
+                            case "maxrad":
+                                measure.maxRad = double.Parse(data.Value);
+                                break;
+                            case "iterations":
+                                measure.iterations = int.Parse(data.Value);
+                                break;
+                            case "zmin_check":
+                                measure.zmin_check = double.Parse(data.Value);
+                                break;
+                            case "zmax_check":
+                                measure.zmax_check = double.Parse(data.Value);
+                                break;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occurred: " + ex.Message);
+            }
         }
 
+        public void write_csv()
+        {
+            // CSV 파일 경로
+            string filePath = @"..\bin\config.csv";
+
+            // CSV 내용 생성
+            StringBuilder csvContent = new StringBuilder();
+            csvContent.AppendLine("gui,public,circle,cx=0.0 cy=0.0 radius=100.0,AAA");
+            csvContent.AppendLine("gui,public,rectangle,xmin=-10.0 ymin=-10.0 xmax=10.0 ymax=10.0,AAA");
+            csvContent.AppendLine("gui,public,result_path,..\\\\result,AAA");
+            csvContent.AppendLine("filters.crop,private,buffer,120,AAA");
+            csvContent.AppendLine("filters.sample,public,cell,"+subsampling.cellSize+",AAA");
+            csvContent.AppendLine("filters.outlier,private,method,statistical,AAA");
+            csvContent.AppendLine("filters.outlier,private,mean_k,12,AAA");
+            csvContent.AppendLine("filters.outlier,private,multiplier,2.2,AAA");
+            csvContent.AppendLine("filters.smrf,public,"+groundseg.cellSize+",4,AAA");
+            csvContent.AppendLine("filters.smrf,public,"+groundseg.windowSize+",16,AAA");
+            csvContent.AppendLine("filters.smrf,public,"+groundseg.slope+",0.3,AAA");
+            csvContent.AppendLine("filters.smrf,public,"+groundseg.scalar+",1.25,AAA");
+            csvContent.AppendLine("filters.smrf,public,"+groundseg.threshold+",1,AAA");
+            csvContent.AppendLine("filters.range.trunk,public,"+tSlice.minHeight+",0,AAA");
+            csvContent.AppendLine("filters.range.trunk,public," + tSlice.maxHeight + ",5,AAA");
+            csvContent.AppendLine("filters.range.crown,public," + cSlice.minHeight + ",3,AAA");
+            csvContent.AppendLine("filters.range.crown,public," + cSlice.maxHeight + ",100,AAA");
+            csvContent.AppendLine("csp_segmentcrown,private,nnearest,16,AAA");
+            csvContent.AppendLine("csp_segmentstem,private,smoothness,8,AAA");
+            csvContent.AppendLine("csp_segmentstem,private,mindbh,0.01,AAA");
+            csvContent.AppendLine("csp_segmentstem,private,maxdbh,1,AAA");
+            csvContent.AppendLine("csp_segmentstem,private,height_threshold,1,AAA");
+            csvContent.AppendLine("measure,private,nnearest,16,AAA");
+            csvContent.AppendLine("measure,private,minrad,0.03,AAA");
+            csvContent.AppendLine("measure,private,maxrad,0.5,AAA");
+            csvContent.AppendLine("measure,private,iterations,10000,AAA");
+            csvContent.AppendLine("measure,private,zmin_check,0.2,AAA");
+            csvContent.AppendLine("measure,private,zmax_check,0.7,AAA");
+
+            // CSV 파일 생성 및 내용 기록
+            try
+            {
+                File.WriteAllText(filePath, csvContent.ToString());
+                MessageBox.Show("CSV 파일이 수정되었습니다.");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("CSV 파일 생성 중 오류 발생: " + ex.Message);
+            }
+        }
+        void ExtractCircleValues(string circleString)
+        {
+            string[] parts = circleString.Split(' ');
+
+            foreach (string part in parts)
+            {
+                string[] keyValue = part.Split('=');
+
+                if (keyValue.Length == 2)
+                {
+                    string key = keyValue[0];
+                    string value = keyValue[1];
+                    switch(key)
+                    {
+                        case "cx":
+                            gui.centerX = double.Parse(value);
+                            break;
+                        case "cy":
+                            gui.centerY = double.Parse(value);
+                            break;
+                        case "radius":
+                            gui.radius = double.Parse(value);
+                            break;
+                    }
+                }
+            }
+        }
+        void ExtractRectangleValues(string rectangleString)
+        {
+            string[] parts = rectangleString.Split(' ');
+
+            foreach (string part in parts)
+            {
+                string[] keyValue = part.Split('=');
+
+                if (keyValue.Length == 2)
+                {
+                    string key = keyValue[0];
+                    string value = keyValue[1];
+                    switch (key)
+                    {
+                        case "xmin":
+                            gui.xMin = double.Parse(value);
+                            break;
+                        case "ymin":
+                            gui.xMax = double.Parse(value);
+                            break;
+                        case "xmax":
+                            gui.yMin = double.Parse(value);
+                            break;
+                        case "ymax":
+                            gui.yMax = double.Parse(value);
+                            break;
+                    }
+                }
+            }
+        }
         private void UpdateParams()
         {
             //subsamplng_textbox
@@ -111,15 +402,15 @@ namespace WinFormsAppTest
             cSlice.maxHeight = double.Parse(tbCrownMaxHeight.Text);
 
             ////treeSegment_textbox
-            crownSeg.CrownNN = int.Parse(tbTreeSegNN.Text);
+            csp_crown.CrownNN = int.Parse(tbTreeSegNN.Text);
 
             //MeasureAttribute_textbox
             measure.MeasureNN = int.Parse(tbMeasureNN.Text);
 
             ////trunkSegment_textboxes
-            segmentStem.smoothness = double.Parse(tbTreeSegSmooth.Text);
-            segmentStem.minDBH = double.Parse(tbTreeSegMinDBH.Text);
-            segmentStem.HeightThreshold = double.Parse(tbTreeSegHeightThres.Text);
+            csp_stem.smoothness = double.Parse(tbTreeSegSmooth.Text);
+            csp_stem.minDBH = double.Parse(tbTreeSegMinDBH.Text);
+            csp_stem.HeightThreshold = double.Parse(tbTreeSegHeightThres.Text);
         }
 
         private void FillTextboxes()
@@ -147,12 +438,12 @@ namespace WinFormsAppTest
             tbCrownMaxHeight.Text = cSlice.maxHeight.ToString();
 
             ////treeSegment_textbox
-            tbTreeSegNN.Text = crownSeg.CrownNN.ToString();
+            tbTreeSegNN.Text = csp_crown.CrownNN.ToString();
 
             ////trunkSegment_textboxes
-            tbTreeSegSmooth.Text = segmentStem.smoothness.ToString();
-            tbTreeSegMinDBH.Text = segmentStem.minDBH.ToString();
-            tbTreeSegHeightThres.Text = segmentStem.HeightThreshold.ToString();
+            tbTreeSegSmooth.Text = csp_stem.smoothness.ToString();
+            tbTreeSegMinDBH.Text = csp_stem.minDBH.ToString();
+            tbTreeSegHeightThres.Text = csp_stem.HeightThreshold.ToString();
 
             //measure_textbox
             tbMeasureNN.Text = measure.MeasureNN.ToString();
@@ -213,28 +504,6 @@ namespace WinFormsAppTest
                 e.Handled = true;
             }
         }
-
-        /*
-        private void customBtn3_Click(object sender, EventArgs e)
-        {
-            var betterFolderBrowser = new BetterFolderBrowser();
-            string[] foldername;
-            string myfoldername = "";
-            betterFolderBrowser.Title = "폴더 찾아보기";
-            betterFolderBrowser.RootFolder = "C:\\";
-
-            // Allow multi-selection of folders.
-            betterFolderBrowser.Multiselect = false;
-
-            if (betterFolderBrowser.ShowDialog() == DialogResult.OK)
-            {
-                foldername = betterFolderBrowser.SelectedFolders;
-                myfoldername = foldername[0];
-            }
-            gui.resultPath = myfoldername;
-        }
-        */
-
         private void TextBox_KeyPress_OnlyInt(object sender, KeyPressEventArgs e)
         {
             // Allow only digits, backspace, and delete keys
@@ -244,28 +513,6 @@ namespace WinFormsAppTest
                 e.Handled = true;
             }
         }
-
-        /*
-        private void setJsonData<T>(List<object> data, string prop, string subProp, T value)
-        {
-            foreach (var obj in data)
-            {
-                var expandoObj = obj as IDictionary<string, object>;
-
-                if (expandoObj != null && expandoObj.ContainsKey(prop))
-                {
-                    var subObject = expandoObj[prop] as IDictionary<string, object>;
-
-                    if (subObject != null && subObject.ContainsKey(subProp))
-                    {
-                        subObject[subProp] = value;
-                        return;  // Exit after setting the value
-                    }
-                }
-            }
-        }
-        */
-
         private void setAllparams(ref List<object> data)
         {
             Dictionary<string, double> plotData = new Dictionary<string, double>();
@@ -569,84 +816,5 @@ namespace WinFormsAppTest
             
             File.WriteAllText(filePath, json);
         }
-
-        /* private bool CheckIntegrity()
-        {
-            //원형 표준지에 필요한 값들이 비어있는경우
-            bool isEmptyVal_cir = x_center_textbox.Text == "" && y_center_textbox.Text == "" && circle_raidus_textbox.Text == "";
-            //radius값이 0이하인지 확인
-            bool isRadiusZero = (double.Parse(circle_raidus_textbox.Text) <= 0);
-
-            //사각형 표준지에 필요한 값들이 비어있는경우
-            bool isEmptyVal_rec = Xmin_textbox.Text == "" && Xmax_textbox.Text == "" && Ymin_textbox.Text == "" && Ymax_textbox.Text == "";
-
-            //LT의 x, RB의 x || LT의 y, RB의 y값이 같은지 확인
-            bool hasEqualXY = (double.Parse(Xmax_textbox.Text) <= double.Parse(Xmin_textbox.Text)) || (double.Parse(Ymax_textbox.Text) <= double.Parse(Ymin_textbox.Text));
-
-
-
-            if (isRadiusZero || isEmptyVal_cir || isEmptyVal_rec || hasEqualXY)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-
-        }*/
-        /*public void ReadConfig()
-        {
-            // 파일에서 JSON 데이터 읽기
-            string filePath = "..\\bin\\config.json";
-            string json = File.ReadAllText(filePath);
-            // JSON 데이터를 객체로 변환
-            var jsonArray = JsonConvert.DeserializeObject<dynamic>(json);
-
-            dynamic Jobj = jsonArray[0].gui;
-
-            gui.radius = Jobj.circle.radius;
-            gui.centerX = Jobj.circle.cx;
-            gui.centerY = Jobj.circle.cy;
-            gui.xMin = Jobj.rectangle.xmin;
-            gui.yMin = Jobj.rectangle.ymin;
-            gui.xMax = Jobj.rectangle.xmax;
-            gui.yMax = Jobj.rectangle.ymax;
-            gui.resultPath = Jobj.result_path;
-
-            Jobj = jsonArray[1].Crop;
-            crop.buffer = Jobj.buffer;
-
-            Jobj = jsonArray[2].Sub;
-            subsampling.cellSize = Jobj.Sub_cell;
-
-            Jobj = jsonArray[3].Outlier;
-            outlier.method = Jobj.method;
-            outlier.mean_k = Jobj.mean_k;
-            outlier.Multiplier = Jobj.multiplier;
-
-            Jobj = jsonArray[4].Ground;
-            groundseg.scalar = Jobj.scalar;
-            groundseg.slope = Jobj.slope;
-            groundseg.cellSize = Jobj.Ground_cell;
-            groundseg.windowSize = Jobj.window;
-            groundseg.threshold = Jobj.threshold;
-
-            Jobj = jsonArray[5].TSlice;
-            tSlice.minHeight = Jobj.T_minheight;
-            tSlice.maxHeight = Jobj.T_maxheight;
-
-            Jobj = jsonArray[6].CSlice;
-            cSlice.minHeight = Jobj.C_minheight;
-            cSlice.maxHeight = Jobj.C_maxheight;
-
-
-            //임시변수--> 삭제
-            Jobj = jsonArray[9].SegmentStem;
-            segmentStem.smoothness = Jobj.smoothness;
-            segmentStem.minDBH = Jobj.mindbh;
-            segmentStem.maxDBH = Jobj.maxdbh;
-
-        }*/
     }
 }

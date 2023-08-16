@@ -90,10 +90,11 @@ namespace WinFormsAppTest
             }
 
             //ReadConfig();
-            Initialize_Params();
+            //Initialize_Params();
+            read_csv();
             FillTextboxes();
             RegistTextBoxHandler();
-
+            
             Point screenSize = ((Point)Screen.PrimaryScreen.Bounds.Size);
 
             this.Location = new Point((screenSize.X - this.Width) / 2, (screenSize.Y - this.Height) / 2);
@@ -778,6 +779,10 @@ namespace WinFormsAppTest
             isMformDrag = false;
         }
 
+
+
+
+        //저장하기 버튼
         private void btnSettingSave_Click(object sender, EventArgs e)
         {
             /*
@@ -787,11 +792,13 @@ namespace WinFormsAppTest
             {
                 MessageBox.Show("좌표설정 혹은 반지름 설정에 문제가 있습니다. 수정해주세요.");
                 return;
-            }*/
+            }
+            */
             //변수들 초기화
             UpdateParams();
 
             //제이슨 파일에 쓰기
+            /*
             string filePath = "..\\bin\\config.json"; ;
             try
             {
@@ -802,7 +809,7 @@ namespace WinFormsAppTest
                 // Update the values in the JSON objects based on the TextBox inputs
                 foreach (JObject jsonObject in jsonArray)
                 {
-                    /*if (jsonObject.ContainsKey("GUI"))
+                    if (jsonObject.ContainsKey("GUI"))
                     {
                         JObject guiObject = jsonObject["GUI"] as JObject;
                         if (guiObject != null && guiObject.ContainsKey("circle"))
@@ -829,7 +836,7 @@ namespace WinFormsAppTest
                         {
                             result_path["result_path"] = plot_resPath;
                         }
-                    }*/
+                    }
 
                     if (jsonObject.ContainsKey("Crop"))
                     {
@@ -892,8 +899,12 @@ namespace WinFormsAppTest
             {
                 throw new Exception("Error while updating JSON file: " + ex.Message);
             }
+            */
+
+            write_csv();
         }
 
+        //프리셋저장버튼
         private void btnPresetSave_Click(object sender, EventArgs e)
         {
             if (mFrm == null)
@@ -914,6 +925,7 @@ namespace WinFormsAppTest
             preConfBtnLoad();
         }
 
+        //프리셋 관리버튼
         private void btnPresetManage_Click(object sender, EventArgs e)
         {
             if (mFrm == null)
@@ -923,7 +935,7 @@ namespace WinFormsAppTest
             }
             mFrm.ShowDialog();
         }
-
+         
         private void btnHide_Click(object sender, EventArgs e)
         {
             this.WindowState = FormWindowState.Minimized;
