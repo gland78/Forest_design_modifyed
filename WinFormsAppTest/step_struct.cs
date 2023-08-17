@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -53,14 +54,17 @@ namespace WinFormsAppTest
         /// </summary>
         public string pointList { get; set; }
     }
+
     public struct Crop
     {
         public double buffer { get; set; }
     }
+
     public struct Subsampling
     {
         public double cellSize { get; set; }
     }
+
     public struct Outlier
     {
         /// <summary>
@@ -86,6 +90,7 @@ namespace WinFormsAppTest
         public string windowSize { get; set; }
         public string threshold { get; set; }
     }
+
     public struct TSlice
     {
         public double minHeight { get; set; }
@@ -97,10 +102,24 @@ namespace WinFormsAppTest
         public double minHeight { get; set; }
         public double maxHeight { get; set; }
     }
-
-    public struct CrownSeg
+    public struct csp_segmentstem
     {
-        public int CrownNN { get; set; }
+        public string coordfile { get; set; }
+        public string trunk_slice_file { get; set; }
+        public double smoothness { get; set; }
+        public double minDBH { get; set; }
+        public double maxDBH { get; set; }
+        //public double HeightThreshold { get; set; }
+        public double nnearest { get; set; }
+        public double nmin { get; set; }
+        public double num_neighbours { get; set; }
+        public double anglemax { get; set; }
+    }
+    public struct csp_segmentcrown
+    {
+        public int num_nn_samples { get; set; }
+        public string trunk_files { get; set; }
+        public string crown_slice_file { get; set; }
     }
     public struct Measure
     {
@@ -108,13 +127,9 @@ namespace WinFormsAppTest
         public double minRad { get; set; }
         public double maxRad { get; set; }
         public int iterations { get; set; }
+        public double zmin_check { get; set; }
+        public double zmax_check { get; set; }
     }
 
-    public struct SegmentStem
-    {
-        public double smoothness { get; set; }
-        public double minDBH { get; set; }
-        public double maxDBH { get; set; }
-        public double HeightThreshold { get; set; }
-    }
+
 }

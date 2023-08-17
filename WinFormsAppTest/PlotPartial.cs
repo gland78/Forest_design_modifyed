@@ -1,10 +1,12 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace WinFormsAppTest
 {
@@ -23,12 +25,16 @@ namespace WinFormsAppTest
 
         //progess표시 변수
         int progress = 0;
+        string configpath = @"..\..\..\bin\config.csv";
 
 
         //버퍼 계산 시 사용되는 좌표 구조체
         Coords bufferedPolycords = new Coords();
 
+        //PlotForm 윈폼 이동 이벤트 관련 변수
         private Point relativePformPos = new Point();
+
+        //현재는 사용한 곳 없음
         private void InitializeMemberParam()
         {
             //파일경로 관련 파라미터 초기화
@@ -161,9 +167,9 @@ namespace WinFormsAppTest
         {
             string one = "level1_cropped_";
             string resultSavedDirectory = this.resultSavedDirectory + shape;
-            double centerX = paramForm.gui.centerX;
-            double centerY = paramForm.gui.centerY;
-            double radius = paramForm.gui.radius;
+            double centerX = double.Parse(tbPlotCircleX.Text);
+            double centerY = double.Parse(tbPlotCircleY.Text);
+            double radius = double.Parse(tbPlotCircleR.Text);
             double buffer = paramForm.crop.buffer;
             {
                 JObject Readers = new JObject(
@@ -191,10 +197,10 @@ namespace WinFormsAppTest
             string one = "level1_cropped_";
             string resultSavedDirectory = this.resultSavedDirectory + shape;
 
-            double xmin = paramForm.gui.xMin;
-            double ymin = paramForm.gui.yMin;
-            double xmax = paramForm.gui.xMax;
-            double ymax = paramForm.gui.yMax;
+            double xmin = double.Parse(tbPlotRecXmin.Text);
+            double ymin = double.Parse(tbPlotRecYmin.Text);
+            double xmax = double.Parse(tbPlotRecXmax.Text);
+            double ymax = double.Parse(tbPlotRecYmax.Text);
             double buffer = paramForm.crop.buffer;
 
             double width = Math.Abs(xmax - xmin);
@@ -516,6 +522,119 @@ namespace WinFormsAppTest
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + six + originLasName + ".json 파일을 생성했습니다.");
             }
         }
+
+        /*private void MakeSevnethJsonFile()
+        {
+            string seven = "level7_segmentTrunk_";
+            {
+                JObject segmentStem = new JObject(
+                    new JProperty("smoothness", paramForm.csp_stem.smoothness),
+                    new JProperty("mindbh", paramForm.csp_stem.minDBH),
+                    new JProperty("maxdbh", paramForm.csp_stem.maxDBH),
+                    new JProperty("height_threshold", paramForm.csp_stem.HeightThreshold)
+                    );
+                JObject root = new JObject(new JProperty("Segmentstem", segmentStem));
+                File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + seven + originLasName + ".json", root.ToString());
+            }
+            
+        }
+        private void MakeEighthJsonFile()
+        {
+            string eight = "level8_segmentCrown_";
+
+            List<String> filenames_pcd = new List<String>();
+
+            String FolderName = resultSavedDirectory + shape + @"\intermediate";
+            System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(FolderName);
+            foreach (System.IO.FileInfo File in di.GetFiles())
+            {
+                if (File.Extension.ToLower().CompareTo(".pcd") == 0 && File.Name.Contains(originLasName) == true && File.Name.Contains("_TRUNK") == true)
+                {
+                    filenames_pcd.Add(File.FullName);
+                }
+            }
+
+            string trunkFilesString = string.Join(" ", filenames_pcd);
+            trunkFilesString = trunkFilesString.Replace("\\", "/");
+
+            JObject segmentCrown = new JObject(
+                new JProperty("Crown_nnearest", paramForm.csp_crown.CrownNN),
+                new JProperty("Trunk_files", trunkFilesString),
+                new JProperty("pcdFiles", originLasName + "_CSlice.pcd")
+            );
+
+            JObject root = new JObject(new JProperty("segmentCrown", segmentCrown));
+            File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + eight + originLasName + ".json", root.ToString());
+
+        }*/
+        private void AppendSeventhCSVFile()
+        {
+            string csvFilePath = @"..\bin\config.csv";
+
+            string coordfile = "";
+            string trunkslicefile = "";
+
+            String FolderName = resultSavedDirectory + shape + @"\intermediate";
+            System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(FolderName);
+            foreach (System.IO.FileInfo File in di.GetFiles())
+            {
+                if (File.Extension.ToLower().CompareTo(".dat") == 0 && File.Name.Contains(originLasName) == true && File.Name.Contains("_B") == true)
+                {
+                    coordfile = File.FullName;
+                }
+            }
+            foreach (System.IO.FileInfo File in di.GetFiles())
+            {
+                if (File.Extension.ToLower().CompareTo(".pcd") == 0 && File.Name.Contains(originLasName) == true && File.Name.Contains("TSlice") == true)
+                {
+                    trunkslicefile = File.FullName;
+                }
+            }
+            paramForm.csp_stem.coordfile = "csp_segmentstem,private,coordfile," + coordfile + ",AAA";
+            paramForm.csp_stem.trunk_slice_file = "csp_segmentstem,private,trunk_slice_file," + trunkslicefile + ",BBBBBBBBBBBBBBBBBBBBB";
+
+            try
+            {
+                File.AppendAllText(csvFilePath, paramForm.csp_stem.coordfile);
+                File.AppendAllText(csvFilePath, Environment.NewLine + paramForm.csp_stem.trunk_slice_file);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("CSV 파일에 내용을 추가하는 중 오류 발생: " + ex.Message);
+            }
+        }
+        private void AppendEighthCSVFile()
+        {
+            string csvFilePath = @"..\bin\config.csv";
+            //StringBuilder csvContent = new StringBuilder();
+
+            List<String> filenames_pcd = new List<String>();
+
+
+            String FolderName = resultSavedDirectory + shape + @"\intermediate";
+            System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(FolderName);
+            foreach (System.IO.FileInfo File in di.GetFiles())
+            {
+                if (File.Extension.ToLower().CompareTo(".pcd") == 0 && File.Name.Contains(originLasName) == true && File.Name.Contains("_TRUNK") == true)
+                {
+                    filenames_pcd.Add(File.FullName);
+                }
+            }
+
+            paramForm.csp_crown.trunk_files = "csp_segmentcrown,private,trunkfiles," + string.Join(" ", filenames_pcd) + ",AAA";
+            paramForm.csp_crown.crown_slice_file = "csp_segmentcrown,private,pcdFile," + originLasName + "_CSlice.pcd" + ",AAA";
+
+            // CSV 파일에 내용 추가
+            try
+            {
+                File.AppendAllText(csvFilePath, Environment.NewLine + paramForm.csp_crown.trunk_files);
+                File.AppendAllText(csvFilePath, Environment.NewLine + paramForm.csp_crown.crown_slice_file);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("CSV 파일에 내용을 추가하는 중 오류 발생: " + ex.Message);
+            }
+        }
         private void ProcessBatch(string num)
         {
             //num(ex. "level1_~";
@@ -786,6 +905,7 @@ namespace WinFormsAppTest
                 ProcessBatch(six);
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + six + originLasName + ".bat 파일을 생성했습니다.");
             }
+            AppendSeventhCSVFile();
         }
         private void RunFileSeventh()
         {
@@ -806,36 +926,23 @@ namespace WinFormsAppTest
                     sw.WriteLine("cls");
                     sw.WriteLine("@ECHO OFF");
                     sw.WriteLine("echo 수간 추출 및 하층식생 제거 중...");
+                    sw.WriteLine("csp_segmentstem " + configpath);
                     //최종에서는 명령인수 삭제
-                    sw.WriteLine("csp_segmentstem " + paramForm.segmentStem.smoothness + " " + paramForm.segmentStem.minDBH + " " + paramForm.segmentStem.maxDBH + " level1_cropped_" + originLasName + "_B.dat "
-                     + originLasName + "_Tslice.pcd");
+                    /*sw.WriteLine("csp_segmentstem " + paramForm.csp_stem.smoothness + " " + paramForm.csp_stem.minDBH + " " + paramForm.csp_stem.maxDBH + " level1_cropped_" + originLasName + "_B.dat "
+                     + originLasName + "_Tslice.pcd");*/
                     sw.WriteLine();
                 }
                 ProcessBatch(seven);
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + originLasName + seven + ".bat 파일을 생성했습니다.");
             }
+            //MakeEighthJsonFile();
+            AppendEighthCSVFile();
         }
         private void RunFileEighth()
         {
             string eight = "level8_segmentCrown_";
             //8단계 개별목 추출 
             {
-                List<String> filenames_pcd = new List<String>();
-
-                string stemlist = "";
-
-                String FolderName = resultSavedDirectory + shape + @"\intermediate";
-                System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(FolderName);
-                foreach (System.IO.FileInfo File in di.GetFiles())
-                {
-                    if (File.Extension.ToLower().CompareTo(".pcd") == 0 && File.Name.Contains(originLasName) == true && File.Name.Contains("_TRUNK") == true)
-                    {
-                        String FileNameOnly = File.Name.Substring(0, File.Name.Length - 4);
-                        String FullFileName = File.FullName;
-
-                        stemlist += FullFileName + " ";
-                    }
-                }
                 string batFilePath = resultSavedDirectory + shape + @"\\intermediate\" + eight + originLasName + ".bat";
                 if (!File.Exists(batFilePath))
                 {
@@ -853,7 +960,7 @@ namespace WinFormsAppTest
                     sw.WriteLine("@ECHO OFF");
                     sw.WriteLine("echo 개별목 추출 중...");
 
-                    sw.WriteLine("csp_segmentcrown " + stemlist + " " + originLasName + "_CSlice.pcd");
+                    sw.WriteLine("csp_segmentcrown " + configpath);
                     sw.WriteLine();
                     sw.WriteLine("set destination=\"{0}\"", destination);
                     sw.WriteLine();
@@ -915,7 +1022,7 @@ namespace WinFormsAppTest
                     sw.WriteLine("PCD2LAS " + FolderName);
                     sw.WriteLine("PCD2LAS " + FolderName2);
 
-                    //pcd 지우는 코드
+                    //pcd 지우는 코드  ---> 배포 시 삭제
                     //sw.WriteLine("for /r \"..\\tree\" %%i in (*.pcd) do (");
                     //sw.WriteLine("    del \"%%i\"");
                     //sw.WriteLine(")");
@@ -1051,7 +1158,6 @@ namespace WinFormsAppTest
 
         private void preProAndExcuteStep()
         {
-            progress = 0;
             MakeResultDirectory_PLOT();
 
             string resultP = resultSavedDirectory + shape;
@@ -1074,44 +1180,55 @@ namespace WinFormsAppTest
                 Normalization();
                 MakeJsonFile();
                 progress++;
+                mainProgressSet(progress);
                 //=====
 
                 RunFileSecond();
                 progress++;
+                mainProgressSet(progress);
 
                 RunFileThird();
                 progress++;
+                mainProgressSet(progress);
 
                 RunFileForth();
                 RunFileForthOne();
                 RunFileForthTwo();
                 progress++;
+                mainProgressSet(progress);
 
                 RunFileFifth();
                 progress++;
+                mainProgressSet(progress);
 
                 RunFileSixth();
                 progress++;
+                mainProgressSet(progress);
 
                 RunFileSeventh();//trunk
                 progress++;
+                mainProgressSet(progress);
                 if (CatchError(resultP + @"\intermediate\", 7)) return;
 
                 RunFileEighth();//tree
                 progress++;
+                mainProgressSet(progress);
                 if (CatchError(resultP + @"\tree\", 8)) return;
 
                 RunFileNinth();//measure
                 progress++;
+                mainProgressSet(progress);
                 if (CatchError(resultP + @"\tree\", 9)) return;
 
                 RunFileTenth();
                 progress++;
+                mainProgressSet(progress);
             }
             else
             {
                 MessageBox.Show("1단계 산출물 에러");
             }
+            paramForm.write_csv();
         }
         bool CatchError(string path, int level)
         {
