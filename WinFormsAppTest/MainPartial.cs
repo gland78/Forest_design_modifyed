@@ -133,7 +133,7 @@ namespace WinFormsAppTest
                             }
                             if (guiData.Key == "rectangle")
                             {
-                                ExtractRectangleValues( guiData.Value);
+                                ExtractRectangleValues(guiData.Value);
                             }
                             guiDataList.Add(guiData);
                         }
@@ -219,8 +219,8 @@ namespace WinFormsAppTest
                     {
                         switch (data.Key)
                         {
-                            case "nnearest":
-                                csp_crown.CrownNN = int.Parse(data.Value);
+                            case "num_nn_samples":
+                                csp_crown.num_nn_samples = int.Parse(data.Value);
                                 break;
                         }
                     }
@@ -237,8 +237,20 @@ namespace WinFormsAppTest
                             case "maxdbh":
                                 csp_stem.maxDBH = double.Parse(data.Value);
                                 break;
-                            case "height_threshold":
+                            /*case "height_threshold":
                                 csp_stem.HeightThreshold = double.Parse(data.Value);
+                                break;*/
+                            case "nnearest":
+                                csp_stem.nnearest = double.Parse(data.Value);
+                                break;
+                            case "nmin":
+                                csp_stem.nmin = double.Parse(data.Value);
+                                break;
+                            case "num_neighbours":
+                                csp_stem.num_neighbours = double.Parse(data.Value);
+                                break;
+                            case "anglemax":
+                                csp_stem.anglemax = double.Parse(data.Value);
                                 break;
                         }
                     }
@@ -281,14 +293,19 @@ namespace WinFormsAppTest
 
             // CSV 내용 생성
             StringBuilder csvContent = new StringBuilder();
-            csvContent.AppendLine("gui,public,circle,cx=0.0 cy=0.0 radius=100.0,AAA");
-            csvContent.AppendLine("gui,public,rectangle,xmin=-10.0 ymin=-10.0 xmax=10.0 ymax=10.0,AAA");
-            csvContent.AppendLine("gui,public,result_path,..\\\\result,AAA");
-            csvContent.AppendLine("filters.crop,private,buffer,120,AAA");
+            foreach (var item in guiDataList)
+            {
+                string str = item.Type.ToString() + "," + item.Visibility.ToString() + "," + item.Key + "," + item.Value + ",AAA";
+                csvContent.AppendLine(str);
+            }
+            /*csvContent.AppendLine("gui,public,circle,cx="+gui.centerX+" cy="+gui.centerY+" radius="+gui.radius+",AAA");
+            csvContent.AppendLine("gui,public,rectangle,xmin="+gui.xMin+" ymin="+gui.yMin+" xmax="+gui.xMax+" ymax="+gui.yMax+",AAA");
+            csvContent.AppendLine("gui,public,result_path,"+gui.resultPath+",AAA");
+            csvContent.AppendLine("filters.crop,private,buffer," + crop.buffer + ",AAA");
             csvContent.AppendLine("filters.sample,public,cell,"+subsampling.cellSize+",AAA");
-            csvContent.AppendLine("filters.outlier,private,method,statistical,AAA");
-            csvContent.AppendLine("filters.outlier,private,mean_k,12,AAA");
-            csvContent.AppendLine("filters.outlier,private,multiplier,2.2,AAA");
+            csvContent.AppendLine("filters.outlier,private,method," + outlier.method + ",AAA");
+            csvContent.AppendLine("filters.outlier,private,mean_k," + outlier.mean_k + ",AAA");
+            csvContent.AppendLine("filters.outlier,private,multiplier," + outlier.Multiplier + ",AAA");
             csvContent.AppendLine("filters.smrf,public,cell," + groundseg.cellSize + ",AAA");
             csvContent.AppendLine("filters.smrf,public,window," + groundseg.windowSize + ",AAA");
             csvContent.AppendLine("filters.smrf,public,slope," + groundseg.slope + ",AAA");
@@ -298,17 +315,20 @@ namespace WinFormsAppTest
             csvContent.AppendLine("filters.range.trunk,public,maxheight," + tSlice.maxHeight + ",AAA");
             csvContent.AppendLine("filters.range.crown,public,minheight," + cSlice.minHeight + ",AAA");
             csvContent.AppendLine("filters.range.crown,public,maxheight," + cSlice.maxHeight + ",AAA");
-            csvContent.AppendLine("csp_segmentcrown,private,nnearest,16,AAA");
-            csvContent.AppendLine("csp_segmentstem,private,smoothness,8,AAA");
-            csvContent.AppendLine("csp_segmentstem,private,mindbh,0.01,AAA");
-            csvContent.AppendLine("csp_segmentstem,private,maxdbh,1,AAA");
-            csvContent.AppendLine("csp_segmentstem,private,height_threshold,1,AAA");
-            csvContent.AppendLine("measure,private,nnearest,16,AAA");
-            csvContent.AppendLine("measure,private,minrad,0.03,AAA");
-            csvContent.AppendLine("measure,private,maxrad,0.5,AAA");
-            csvContent.AppendLine("measure,private,iterations,10000,AAA");
-            csvContent.AppendLine("measure,private,zmin_check,0.2,AAA");
-            csvContent.AppendLine("measure,private,zmax_check,0.7,AAA");
+            csvContent.AppendLine("csp_segmentcrown,private,num_nn_samples," + csp_crown.num_nn_samples + ",AAA");
+            csvContent.AppendLine("csp_segmentstem,private,smoothness," + csp_stem.smoothness + ",AAA");
+            csvContent.AppendLine("csp_segmentstem,private,mindbh," + csp_stem.minDBH + ",AAA");
+            csvContent.AppendLine("csp_segmentstem,private,maxdbh," + csp_stem.maxDBH + ",AAA");
+            csvContent.AppendLine("csp_segmentstem,private,nnearest," + csp_stem.nnearest + ",AAA");
+            csvContent.AppendLine("csp_segmentstem,private,nmin," + csp_stem.nmin + ",AAA");
+            csvContent.AppendLine("csp_segmentstem,private,num_neighbours," + csp_stem.num_neighbours + ",AAA");
+            csvContent.AppendLine("csp_segmentstem,private,anglemax," + csp_stem.anglemax + ",AAA");
+            csvContent.AppendLine("measure,private,nnearest," + measure.MeasureNN + ",AAA");
+            csvContent.AppendLine("measure,private,minrad," + measure.minRad + ",AAA");
+            csvContent.AppendLine("measure,private,maxrad," + measure.maxRad + ",AAA");
+            csvContent.AppendLine("measure,private,iterations," + measure.iterations + ",AAA");
+            csvContent.AppendLine("measure,private,zmin_check," + measure.zmin_check + ",AAA");
+            csvContent.Append("measure,private,zmax_check," + measure.zmax_check + ",AAA");*/
 
             // CSV 파일 생성 및 내용 기록
             try
@@ -333,7 +353,7 @@ namespace WinFormsAppTest
                 {
                     string key = keyValue[0];
                     string value = keyValue[1];
-                    switch(key)
+                    switch (key)
                     {
                         case "cx":
                             gui.centerX = double.Parse(value);
@@ -402,7 +422,7 @@ namespace WinFormsAppTest
             cSlice.maxHeight = double.Parse(tbCrownMaxHeight.Text);
 
             ////treeSegment_textbox
-            csp_crown.CrownNN = int.Parse(tbTreeSegNN.Text);
+            csp_crown.num_nn_samples = int.Parse(tbTreeSegNN.Text);
 
             //MeasureAttribute_textbox
             measure.MeasureNN = int.Parse(tbMeasureNN.Text);
@@ -410,7 +430,7 @@ namespace WinFormsAppTest
             ////trunkSegment_textboxes
             csp_stem.smoothness = double.Parse(tbTreeSegSmooth.Text);
             csp_stem.minDBH = double.Parse(tbTreeSegMinDBH.Text);
-            csp_stem.HeightThreshold = double.Parse(tbTreeSegHeightThres.Text);
+            //csp_stem.HeightThreshold = double.Parse(tbTreeSegHeightThres.Text);
         }
 
         private void FillTextboxes()
@@ -438,12 +458,12 @@ namespace WinFormsAppTest
             tbCrownMaxHeight.Text = cSlice.maxHeight.ToString();
 
             ////treeSegment_textbox
-            tbTreeSegNN.Text = csp_crown.CrownNN.ToString();
+            tbTreeSegNN.Text = csp_crown.num_nn_samples.ToString();
 
             ////trunkSegment_textboxes
             tbTreeSegSmooth.Text = csp_stem.smoothness.ToString();
             tbTreeSegMinDBH.Text = csp_stem.minDBH.ToString();
-            tbTreeSegHeightThres.Text = csp_stem.HeightThreshold.ToString();
+            tbTreeSegHeightThres.Text = csp_stem.nmin.ToString();
 
             //measure_textbox
             tbMeasureNN.Text = measure.MeasureNN.ToString();

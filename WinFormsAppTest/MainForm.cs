@@ -80,6 +80,7 @@ namespace WinFormsAppTest
 
             btnSettings.Width = MIN_BTN_WIDTH;
             btnSettings.Text = "";
+
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -97,6 +98,7 @@ namespace WinFormsAppTest
             
             Point screenSize = ((Point)Screen.PrimaryScreen.Bounds.Size);
 
+        //메인 폼 로드 전 이벤트 전처리(Designer.cs에 넣으면 찾기가 힘듬)
             this.Location = new Point((screenSize.X - this.Width) / 2, (screenSize.Y - this.Height) / 2);
 
             mainForm_AddEvent();
@@ -780,6 +782,7 @@ namespace WinFormsAppTest
                 isMformDrag = true;
             }
         }
+
 
         private void MainForm_MouseMove(object sender, MouseEventArgs e)
         {

@@ -1291,6 +1291,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.DarkSeaGreen;
             ClientSize = new Size(1280, 800);
+            Controls.Add(pnSideMenu);
             Controls.Add(btnHide);
             Controls.Add(pnSideMenu);
             Controls.Add(btnClose);

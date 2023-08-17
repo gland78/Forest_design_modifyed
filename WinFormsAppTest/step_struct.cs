@@ -102,12 +102,24 @@ namespace WinFormsAppTest
         public double minHeight { get; set; }
         public double maxHeight { get; set; }
     }
-
+    public struct csp_segmentstem
+    {
+        public string coordfile { get; set; }
+        public string trunk_slice_file { get; set; }
+        public double smoothness { get; set; }
+        public double minDBH { get; set; }
+        public double maxDBH { get; set; }
+        //public double HeightThreshold { get; set; }
+        public double nnearest { get; set; }
+        public double nmin { get; set; }
+        public double num_neighbours { get; set; }
+        public double anglemax { get; set; }
+    }
     public struct csp_segmentcrown
     {
-        public int CrownNN { get; set; }
-        public string trunkfiles { get; set; }
-        public string pcdFile { get; set; }
+        public int num_nn_samples { get; set; }
+        public string trunk_files { get; set; }
+        public string crown_slice_file { get; set; }
     }
 
     public struct Measure
@@ -120,11 +132,5 @@ namespace WinFormsAppTest
         public double zmax_check { get; set; }
     }
 
-    public struct csp_segmentstem
-    {
-        public double smoothness { get; set; }
-        public double minDBH { get; set; }
-        public double maxDBH { get; set; }
-        public double HeightThreshold { get; set; }
-    }
+
 }

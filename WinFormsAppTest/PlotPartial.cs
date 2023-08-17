@@ -25,6 +25,7 @@ namespace WinFormsAppTest
 
         //progess표시 변수
         int progress = 0;
+        string configpath = @"..\..\..\bin\config.csv";
 
 
         //버퍼 계산 시 사용되는 좌표 구조체
@@ -520,7 +521,6 @@ namespace WinFormsAppTest
                 File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + six + originLasName + ".json", "[" + Readers.ToString() + ", " + sonSpec.ToString() + ", " + Writers.ToString() + "]");
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + six + originLasName + ".json 파일을 생성했습니다.");
             }
-            //MakeSevnethJsonFile();
         }
 
         /*private void MakeSevnethJsonFile()
@@ -567,6 +567,42 @@ namespace WinFormsAppTest
             File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + eight + originLasName + ".json", root.ToString());
 
         }*/
+        private void AppendSeventhCSVFile()
+        {
+            string csvFilePath = @"..\bin\config.csv";
+
+            string coordfile = "";
+            string trunkslicefile = "";
+
+            String FolderName = resultSavedDirectory + shape + @"\intermediate";
+            System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(FolderName);
+            foreach (System.IO.FileInfo File in di.GetFiles())
+            {
+                if (File.Extension.ToLower().CompareTo(".dat") == 0 && File.Name.Contains(originLasName) == true && File.Name.Contains("_B") == true)
+                {
+                    coordfile = File.FullName;
+                }
+            }
+            foreach (System.IO.FileInfo File in di.GetFiles())
+            {
+                if (File.Extension.ToLower().CompareTo(".pcd") == 0 && File.Name.Contains(originLasName) == true && File.Name.Contains("TSlice") == true)
+                {
+                    trunkslicefile = File.FullName;
+                }
+            }
+            paramForm.csp_stem.coordfile = "csp_segmentstem,private,coordfile," + coordfile + ",AAA";
+            paramForm.csp_stem.trunk_slice_file = "csp_segmentstem,private,trunk_slice_file," + trunkslicefile + ",BBBBBBBBBBBBBBBBBBBBB";
+
+            try
+            {
+                File.AppendAllText(csvFilePath, paramForm.csp_stem.coordfile);
+                File.AppendAllText(csvFilePath, Environment.NewLine + paramForm.csp_stem.trunk_slice_file);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("CSV 파일에 내용을 추가하는 중 오류 발생: " + ex.Message);
+            }
+        }
         private void AppendEighthCSVFile()
         {
             string csvFilePath = @"..\bin\config.csv";
@@ -585,23 +621,18 @@ namespace WinFormsAppTest
                 }
             }
 
-            paramForm.csp_crown.trunkfiles = "csp_segmentcrown,private,trunkfiles," + string.Join(" ", filenames_pcd)+",AAA";
-            paramForm.csp_crown.pcdFile = "csp_segmentcrown,private,pcdFile," + originLasName + "_CSlice.pcd" + ",AAA";
+            paramForm.csp_crown.trunk_files = "csp_segmentcrown,private,trunkfiles," + string.Join(" ", filenames_pcd) + ",AAA";
+            paramForm.csp_crown.crown_slice_file = "csp_segmentcrown,private,pcdFile," + originLasName + "_CSlice.pcd" + ",AAA";
 
-            //MessageBox.Show(paramForm.csp_crown.trunkfiles);
-            //MessageBox.Show(paramForm.csp_crown.pcdFile);
-
-            /*csvContent.AppendLine(paramForm.csp_crown.trunkfiles);
-            csvContent.AppendLine(paramForm.csp_crown.pcdFile);*/
             // CSV 파일에 내용 추가
             try
             {
-                File.AppendAllText(csvFilePath, Environment.NewLine + paramForm.csp_crown.trunkfiles);
-                File.AppendAllText(csvFilePath, Environment.NewLine + paramForm.csp_crown.pcdFile);
+                File.AppendAllText(csvFilePath, Environment.NewLine + paramForm.csp_crown.trunk_files);
+                File.AppendAllText(csvFilePath, Environment.NewLine + paramForm.csp_crown.crown_slice_file);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("CSV 파일에 내용을 추가하는 중 오류 발생: " + ex.Message);
+                MessageBox.Show("CSV 파일에 내용을 추가하는 중 오류 발생: " + ex.Message);
             }
         }
         private void ProcessBatch(string num)
@@ -874,6 +905,7 @@ namespace WinFormsAppTest
                 ProcessBatch(six);
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + six + originLasName + ".bat 파일을 생성했습니다.");
             }
+            AppendSeventhCSVFile();
         }
         private void RunFileSeventh()
         {
@@ -894,10 +926,10 @@ namespace WinFormsAppTest
                     sw.WriteLine("cls");
                     sw.WriteLine("@ECHO OFF");
                     sw.WriteLine("echo 수간 추출 및 하층식생 제거 중...");
-                    sw.WriteLine("csp_segmentstem " +seven+originLasName+".json");
+                    sw.WriteLine("csp_segmentstem " + configpath);
                     //최종에서는 명령인수 삭제
-                    sw.WriteLine("csp_segmentstem " + paramForm.csp_stem.smoothness + " " + paramForm.csp_stem.minDBH + " " + paramForm.csp_stem.maxDBH + " level1_cropped_" + originLasName + "_B.dat "
-                     + originLasName + "_Tslice.pcd");
+                    /*sw.WriteLine("csp_segmentstem " + paramForm.csp_stem.smoothness + " " + paramForm.csp_stem.minDBH + " " + paramForm.csp_stem.maxDBH + " level1_cropped_" + originLasName + "_B.dat "
+                     + originLasName + "_Tslice.pcd");*/
                     sw.WriteLine();
                 }
                 ProcessBatch(seven);
@@ -928,7 +960,7 @@ namespace WinFormsAppTest
                     sw.WriteLine("@ECHO OFF");
                     sw.WriteLine("echo 개별목 추출 중...");
 
-                    sw.WriteLine("csp_segmentcrown " + eight+originLasName+".json");
+                    sw.WriteLine("csp_segmentcrown " + configpath);
                     sw.WriteLine();
                     sw.WriteLine("set destination=\"{0}\"", destination);
                     sw.WriteLine();
