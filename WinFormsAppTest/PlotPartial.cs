@@ -522,51 +522,6 @@ namespace WinFormsAppTest
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + six + originLasName + ".json 파일을 생성했습니다.");
             }
         }
-
-        /*private void MakeSevnethJsonFile()
-        {
-            string seven = "level7_segmentTrunk_";
-            {
-                JObject segmentStem = new JObject(
-                    new JProperty("smoothness", paramForm.csp_stem.smoothness),
-                    new JProperty("mindbh", paramForm.csp_stem.minDBH),
-                    new JProperty("maxdbh", paramForm.csp_stem.maxDBH),
-                    new JProperty("height_threshold", paramForm.csp_stem.HeightThreshold)
-                    );
-                JObject root = new JObject(new JProperty("Segmentstem", segmentStem));
-                File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + seven + originLasName + ".json", root.ToString());
-            }
-            
-        }
-        private void MakeEighthJsonFile()
-        {
-            string eight = "level8_segmentCrown_";
-
-            List<String> filenames_pcd = new List<String>();
-
-            String FolderName = resultSavedDirectory + shape + @"\intermediate";
-            System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(FolderName);
-            foreach (System.IO.FileInfo File in di.GetFiles())
-            {
-                if (File.Extension.ToLower().CompareTo(".pcd") == 0 && File.Name.Contains(originLasName) == true && File.Name.Contains("_TRUNK") == true)
-                {
-                    filenames_pcd.Add(File.FullName);
-                }
-            }
-
-            string trunkFilesString = string.Join(" ", filenames_pcd);
-            trunkFilesString = trunkFilesString.Replace("\\", "/");
-
-            JObject segmentCrown = new JObject(
-                new JProperty("Crown_nnearest", paramForm.csp_crown.CrownNN),
-                new JProperty("Trunk_files", trunkFilesString),
-                new JProperty("pcdFiles", originLasName + "_CSlice.pcd")
-            );
-
-            JObject root = new JObject(new JProperty("segmentCrown", segmentCrown));
-            File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + eight + originLasName + ".json", root.ToString());
-
-        }*/
         private void AppendSeventhCSVFile()
         {
             string csvFilePath = @"..\bin\config.csv";

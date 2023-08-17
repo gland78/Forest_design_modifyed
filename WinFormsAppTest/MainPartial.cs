@@ -35,72 +35,7 @@ namespace WinFormsAppTest
             public string Value;
         }
         List<GuiData> guiDataList = new List<GuiData>();
-
-
-        /// <summary>
-        /// json 읽는 함수 삭제해도 됨
-        /// </summary>
-        private void Initialize_Params()
-        {
-            /*
-            // 파일에서 JSON 데이터 읽기
-            string filePath = "..\\bin\\config.json";
-            string json = File.ReadAllText(filePath);
-            // JSON 데이터를 객체로 변환
-            var jsonArray = JsonConvert.DeserializeObject<dynamic>(json);
-
-            dynamic JObject = jsonArray[0].GUI;
-
-            gui.radius = JObject.circle.radius;
-            gui.centerX = JObject.circle.cx;
-            gui.centerY = JObject.circle.cy;
-            gui.xMin = JObject.rectangle.xmin;
-            gui.yMin = JObject.rectangle.ymin;
-            gui.xMax = JObject.rectangle.xmax;
-            gui.yMax = JObject.rectangle.ymax;
-            gui.resultPath = JObject.result_path;
-
-            JObject = jsonArray[1].Crop;
-            crop.buffer = JObject.buffer;
-
-            JObject = jsonArray[2].Sub;
-            subsampling.cellSize = JObject.Sub_cell;
-
-            JObject = jsonArray[3].Outlier;
-            outlier.method = JObject.method;
-            outlier.mean_k = JObject.mean_k;
-            outlier.Multiplier = JObject.multiplier;
-
-            JObject = jsonArray[4].Ground;
-            groundseg.scalar = JObject.scalar;
-            groundseg.slope = JObject.slope;
-            groundseg.cellSize = JObject.Ground_cell;
-            groundseg.windowSize = JObject.window;
-            groundseg.threshold = JObject.threshold;
-
-            JObject = jsonArray[5].TSlice;
-            tSlice.minHeight = JObject.T_minheight;
-            tSlice.maxHeight = JObject.T_maxheight;
-
-            JObject = jsonArray[6].CSlice;
-            cSlice.minHeight = JObject.C_minheight;
-            cSlice.maxHeight = JObject.C_maxheight;
-
-            JObject = jsonArray[7].Crownseg;
-            crownSeg.CrownNN = JObject.Crown_nnearest;
-
-            JObject = jsonArray[8].Measure;
-            measure.MeasureNN = JObject.Measure_nnearest;
-            measure.minRad = JObject.minRad;
-            measure.maxRad = JObject.maxRad;
-            measure.iterations = JObject.iterations;
-
-            JObject = jsonArray[9].SegmentStem;
-            segmentStem.smoothness = JObject.smoothness;
-            segmentStem.minDBH = JObject.mindbh;
-            segmentStem.maxDBH = JObject.maxdbh;
-            segmentStem.HeightThreshold = JObject.heightThreshold;*/
-        }
+  
         /// <summary>
         /// csv 읽는 함수
         /// </summary>
