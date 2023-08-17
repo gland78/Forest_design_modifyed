@@ -47,7 +47,12 @@ namespace WinFormsAppTest
                 string csvLines;
                 while ((csvLines = sr.ReadLine()) != null)
                 {
-                    MessageBox.Show(csvLines);
+
+
+
+                    //MessageBox.Show(csvLines);
+
+
                     if (csvLines.Contains("title"))
                     {
                         title = csvLines.Split(',')[3];
@@ -144,6 +149,11 @@ namespace WinFormsAppTest
                     break;
                 }
             }
+        }
+
+        private void btnManageCancel_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

@@ -90,15 +90,13 @@ namespace WinFormsAppTest
                 MakeConfig(configFileType.Default);
             }
 
-            //ReadConfig();
-            //Initialize_Params();
-            read_csv();
+            read_csv(csv_path);
             FillTextboxes();
             RegistTextBoxHandler();
             
             Point screenSize = ((Point)Screen.PrimaryScreen.Bounds.Size);
 
-        //메인 폼 로드 전 이벤트 전처리(Designer.cs에 넣으면 찾기가 힘듬)
+            //메인 폼 로드 전 이벤트 전처리(Designer.cs에 넣으면 찾기가 힘듬)
             this.Location = new Point((screenSize.X - this.Width) / 2, (screenSize.Y - this.Height) / 2);
 
             mainForm_AddEvent();
@@ -465,11 +463,14 @@ namespace WinFormsAppTest
                 {
                     string line;
                     string shapeStr = "";
-                    while ((line = sr.ReadLine()) != null)
+                    while ((!sr.EndOfStream))
                     {
+                        line = sr.ReadLine();
+                        //MessageBox.Show(line);
                         if (line.Contains("title"))
                         {
                             btnText += "   " + line.Split(',')[3];
+                            continue;
                         }
                         if (line.Contains("selection"))
                         {
@@ -488,6 +489,7 @@ namespace WinFormsAppTest
                                     break;
                             }
                             btnText += "   " + shapeStr + "\n";
+                            continue;
                         }
                         string[] plotData;
                         if (line.Contains(shapeStr))
@@ -497,7 +499,7 @@ namespace WinFormsAppTest
                             {
                                 btnText += "   " + str + "\n";
                             }
-                            break;
+                            continue;
                         }
                     }
                 }
@@ -610,49 +612,7 @@ namespace WinFormsAppTest
                 string fileName = conf.Substring(conf.IndexOf("presetConfig"), conf.Length - conf.IndexOf("presetConfig") - 5);
                 if (((Button)sender).Name == fileName)
                 {
-                    string json = File.ReadAllText(conf);
-                    var jsonArray = JsonConvert.DeserializeObject<dynamic>(json);
-
-                    //subsamplng_textboxes
-                    dynamic JObject = jsonArray[3].Sub;
-                    tbSubCellSize.Text = JObject.Sub_cell.ToString();
-
-                    //outlierRemoving_textboxes
-                    JObject = jsonArray[4].Outlier;
-                    tbOutlierMeank.Text = JObject.mean_k.ToString();
-                    tbOutlierMul.Text = JObject.multiplier.ToString();
-
-                    //normalize_textboxes
-                    JObject = jsonArray[5].Ground;
-                    tbNorCellSize.Text = JObject.Ground_cell.ToString();
-                    tbNorScalar.Text = JObject.scalar.ToString();
-                    tbNorSlope.Text = JObject.slope.ToString();
-                    tbNorThres.Text = JObject.threshold.ToString();
-                    tbNorWinSize.Text = JObject.window.ToString();
-
-                    //trunkSlice_textboxes
-                    JObject = jsonArray[6].TSlice;
-                    tbTrunkMinHeight.Text = JObject.T_minheight.ToString();
-                    tbTrunkMaxHeight.Text = JObject.T_maxheight.ToString();
-
-                    //CrownSlice_textboxes
-                    JObject = jsonArray[7].CSlice;
-                    tbCrownMinHeight.Text = JObject.C_minheight.ToString();
-                    tbCrownMaxHeight.Text = JObject.C_maxheight.ToString();
-
-                    ////treeSegment_textbox
-                    JObject = jsonArray[8].Crownseg;
-                    tbTreeSegNN.Text = JObject.Crown_nnearest.ToString();
-
-                    ////trunkSegment_textboxes
-                    JObject = jsonArray[10].SegmentStem;
-                    tbTreeSegSmooth.Text = JObject.smoothness.ToString();
-                    tbTreeSegMinDBH.Text = JObject.mindbh.ToString();
-                    tbTreeSegHeightThres.Text = JObject.heightThreshold.ToString();
-
-                    //measure_textbox
-                    JObject = jsonArray[9].Measure;
-                    tbMeasureNN.Text = JObject.Measure_nnearest.ToString();
+                    read_csv(fileName);
                 }
             }
 
@@ -807,7 +767,7 @@ namespace WinFormsAppTest
             //변수들 초기화
             UpdateParams();
             // csv 작성
-            write_csv();
+            write_csv(csv_path);
         }
 
         //프리셋저장버튼
@@ -854,8 +814,7 @@ namespace WinFormsAppTest
             {
                 return;
             }
-
-            Initialize_Params();
+            read_csv(csv_path);
             FillTextboxes();
         }
 

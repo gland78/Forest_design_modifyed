@@ -239,6 +239,8 @@ namespace WinFormsAppTest
             mainProgressSet(progress);
             attachProgressBar(true);
 
+            //csv 초기화
+
             preProAndExcuteStep();
 
             if (progress == 10)

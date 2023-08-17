@@ -113,6 +113,7 @@
             btnManageCancel.TabIndex = 4;
             btnManageCancel.Text = "취소";
             btnManageCancel.UseVisualStyleBackColor = true;
+            btnManageCancel.Click += btnManageCancel_Click;
             // 
             // btnManageDelete
             // 

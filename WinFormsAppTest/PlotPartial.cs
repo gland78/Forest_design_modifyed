@@ -545,8 +545,8 @@ namespace WinFormsAppTest
                     trunkslicefile = File.FullName;
                 }
             }
-            paramForm.csp_stem.coordfile = "csp_segmentstem,private,coordfile," + coordfile + ",AAA";
-            paramForm.csp_stem.trunk_slice_file = "csp_segmentstem,private,trunk_slice_file," + trunkslicefile + ",BBBBBBBBBBBBBBBBBBBBB";
+            paramForm.csp_stem.coordfile = "csp_segmentstem,private,coordfile," + coordfile;
+            paramForm.csp_stem.trunk_slice_file = "csp_segmentstem,private,trunk_slice_file," + trunkslicefile;
 
             try
             {
@@ -565,19 +565,25 @@ namespace WinFormsAppTest
 
             List<String> filenames_pcd = new List<String>();
 
-
+            string crownslicefile="";
             String FolderName = resultSavedDirectory + shape + @"\intermediate";
             System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(FolderName);
             foreach (System.IO.FileInfo File in di.GetFiles())
             {
-                if (File.Extension.ToLower().CompareTo(".pcd") == 0 && File.Name.Contains(originLasName) == true && File.Name.Contains("_TRUNK") == true)
+                if (File.Extension.ToLower().CompareTo(".pcd") == 0 && File.Name.Contains(originLasName) == true && File.Name.Contains("trunk") == true)
                 {
                     filenames_pcd.Add(File.FullName);
                 }
             }
-
-            paramForm.csp_crown.trunk_files = "csp_segmentcrown,private,trunkfiles," + string.Join(" ", filenames_pcd) + ",AAA";
-            paramForm.csp_crown.crown_slice_file = "csp_segmentcrown,private,pcdFile," + originLasName + "_CSlice.pcd" + ",AAA";
+            foreach (System.IO.FileInfo File in di.GetFiles())
+            {
+                if (File.Extension.ToLower().CompareTo(".pcd") == 0 && File.Name.Contains(originLasName) == true && File.Name.Contains("CSlice") == true)
+                {
+                    crownslicefile = File.FullName;
+                }
+            }
+            paramForm.csp_crown.trunk_files = "csp_segmentcrown,private,trunk_files," + string.Join(" ", filenames_pcd);
+            paramForm.csp_crown.crown_slice_file = "csp_segmentcrown,private,crown_slice_file," + crownslicefile;
 
             // CSV 파일에 내용 추가
             try
@@ -908,7 +914,7 @@ namespace WinFormsAppTest
                 }
                 using (StreamWriter sw = new StreamWriter(new FileStream(batFilePath, FileMode.OpenOrCreate), Encoding.Default))
                 {
-                    string tree_name = "_TREE_";
+                    string tree_name = "_tree_";
                     string destination = @"..\tree";
                     sw.WriteLine("chcp 65001");
                     sw.WriteLine("cls");
@@ -1183,7 +1189,6 @@ namespace WinFormsAppTest
             {
                 MessageBox.Show("1단계 산출물 에러");
             }
-            paramForm.write_csv();
         }
         bool CatchError(string path, int level)
         {
@@ -1191,11 +1196,11 @@ namespace WinFormsAppTest
             string find;
             if (level == 7)
             {
-                find = "TRUNK";
+                find = "trunk";
             }
             else if (level == 8)
             {
-                find = "TREE";
+                find = "tree";
             }
             else
             {
