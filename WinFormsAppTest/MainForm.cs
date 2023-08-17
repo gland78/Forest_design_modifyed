@@ -10,6 +10,13 @@ namespace WinFormsAppTest
 {
     public partial class MainForm : Form
     {
+        public enum configFileType
+        {
+            Default,
+            Recent,
+            Preset
+        }
+
         private PlotForm? pFrm;
 
         //슬라이딩 메뉴의 최대, 최소 폭 크기 및 그 차이
@@ -23,9 +30,12 @@ namespace WinFormsAppTest
 
         bool menuOpen = false;
 
-        private Point relativeMformPos = new Point();
+        Point relativeMformPos = new Point();
 
-        private bool isMformDrag = false;
+        bool isMformDrag = false;
+
+        string configPath = Directory.GetParent(System.Environment.CurrentDirectory) + @"\bin\";
+        string[] reqDi = { "", "recentConfig", "preSetConfig" };
 
         public MainForm()
         {
@@ -34,27 +44,52 @@ namespace WinFormsAppTest
 
             customPanels_Load();
 
+            pnMain.isBorder = false;
+
             pnSideMenu.Width = MIN_SLIDING_WIDTH;
             tcMainHome.Left -= SLIDING_GAP / 2;
 
             btnSettings.Width = MIN_ICON_WIDTH;
             btnSettings.Text = "";
+
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            if (!File.Exists(configPath + "config.json"))
+            {
+                MakeConfig(configFileType.Default);
+            }
+
+                {
+                    configDi.Create();
+                    touchConfig(configFileType.Preset);
+                }
+            }
+
             //ReadConfig();
             Initialize_Params();
             FillTextboxes();
             RegistTextBoxHandler();
 
-            Point screenSize = ((Point)Screen.PrimaryScreen.Bounds.Size);
 
+        //메인 폼 로드 전 이벤트 전처리(Designer.cs에 넣으면 찾기가 힘듬)
+        {
+            string[] files;
+            if (confType != configFileType.Default)
+            {
+                files = Directory.GetFiles(configPath + reqDi[(int)confType] + @"\", $"{"config*"}");
+                File.Copy(configPath + "config.json", configPath + reqDi[(int)confType] + @"\config" + files.Length.ToString() + ".json");
+            }
+        }
+
+        //메인 폼 로드 전 이벤트 전처리(Designer.cs에 넣으면 찾기가 힘듬)
             this.Location = new Point((screenSize.X - this.Width) / 2, (screenSize.Y - this.Height) / 2);
 
             mainForm_AddEvent();
         }
 
+        //메인 폼 로드 전 이벤트 전처리(Designer.cs에 넣으면 찾기가 힘듬)
         private void mainForm_AddEvent()
         {
             //홈버튼 이벤트
@@ -314,6 +349,7 @@ namespace WinFormsAppTest
             }
         }
 
+
         private void MainForm_MouseMove(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left && isMformDrag)
@@ -328,7 +364,11 @@ namespace WinFormsAppTest
             isMformDrag = false;
         }
 
-
+        /// <summary>
+        /// config 저장하기 버튼 구현 필요
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnSettingSave_Click(object sender, EventArgs e)
         {
             /*
@@ -445,9 +485,9 @@ namespace WinFormsAppTest
             }
         }
 
-        private void btnCreatePre_Click(object sender, EventArgs e)
+        private void btnPresetSave_Click(object sender, EventArgs e)
         {
-            MakeConfig();
+
         }
     }
 }
