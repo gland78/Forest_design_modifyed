@@ -38,11 +38,13 @@ namespace WinFormsAppTest
         List<GuiData> guiDataList = new List<GuiData>();
 
         public string csv_path = @"..\bin\config.csv";
+        
         /// <summary>
         /// csv 읽는 함수
         /// </summary>
         private void read_csv(string filepath)
         {
+            guiDataList.Clear();
             //csv 읽기
             string csvFilePath = filepath;
 
@@ -236,37 +238,6 @@ namespace WinFormsAppTest
                 string str = item.Type.ToString() + "," + item.Visibility.ToString() + "," + item.Key + "," + item.Value + ","+item.explain;
                 csvContent.AppendLine(str);
             }
-            /*csvContent.AppendLine("gui,public,circle,cx="+gui.centerX+" cy="+gui.centerY+" radius="+gui.radius+guiDataList[0].explain);
-            csvContent.AppendLine("gui,public,rectangle,xmin="+gui.xMin+" ymin="+gui.yMin+" xmax="+gui.xMax+" ymax="+gui.yMax+guiDataList[0].explain);
-            csvContent.AppendLine("gui,public,result_path,"+gui.resultPath+guiDataList[0].explain);
-            csvContent.AppendLine("filters.crop,private,buffer," + crop.buffer ,{guiDataList[0].explain}");
-            csvContent.AppendLine("filters.sample,public,cell,"+subsampling.cellSize+guiDataList[0].explain);
-            csvContent.AppendLine("filters.outlier,private,method," + outlier.method ,{guiDataList[0].explain}");
-            csvContent.AppendLine("filters.outlier,private,mean_k," + outlier.mean_k ,{guiDataList[0].explain}");
-            csvContent.AppendLine("filters.outlier,private,multiplier," + outlier.Multiplier ,{guiDataList[0].explain}");
-            csvContent.AppendLine("filters.smrf,public,cell," + groundseg.cellSize ,{guiDataList[0].explain}");
-            csvContent.AppendLine("filters.smrf,public,window," + groundseg.windowSize ,{guiDataList[0].explain}");
-            csvContent.AppendLine("filters.smrf,public,slope," + groundseg.slope ,{guiDataList[0].explain}");
-            csvContent.AppendLine("filters.smrf,public,scalar," + groundseg.scalar ,{guiDataList[0].explain}");
-            csvContent.AppendLine("filters.smrf,public,threshold," + groundseg.threshold +guiDataList[0].explain);
-            csvContent.AppendLine("filters.range.trunk,public,minheight,"+tSlice.minHeight+guiDataList[0].explain);
-            csvContent.AppendLine("filters.range.trunk,public,maxheight," + tSlice.maxHeight ,{guiDataList[0].explain}");
-            csvContent.AppendLine("filters.range.crown,public,minheight," + cSlice.minHeight ,{guiDataList[0].explain}");
-            csvContent.AppendLine("filters.range.crown,public,maxheight," + cSlice.maxHeight ,{guiDataList[0].explain}");
-            csvContent.AppendLine("csp_segmentcrown,private,num_nn_samples," + csp_crown.num_nn_samples ,{guiDataList[0].explain}");
-            csvContent.AppendLine("csp_segmentstem,private,smoothness," + csp_stem.smoothness ,{guiDataList[0].explain}");
-            csvContent.AppendLine("csp_segmentstem,private,mindbh," + csp_stem.minDBH ,{guiDataList[0].explain}");
-            csvContent.AppendLine("csp_segmentstem,private,maxdbh," + csp_stem.maxDBH ,{guiDataList[0].explain}");
-            csvContent.AppendLine("csp_segmentstem,private,nnearest," + csp_stem.nnearest ,{guiDataList[0].explain}");
-            csvContent.AppendLine("csp_segmentstem,private,nmin," + csp_stem.nmin ,{guiDataList[0].explain}");
-            csvContent.AppendLine("csp_segmentstem,private,num_neighbours," + csp_stem.num_neighbours ,{guiDataList[0].explain}");
-            csvContent.AppendLine("csp_segmentstem,private,anglemax," + csp_stem.anglemax ,{guiDataList[0].explain}");
-            csvContent.AppendLine("measure,private,nnearest," + measure.MeasureNN ,{guiDataList[0].explain}");
-            csvContent.AppendLine("measure,private,minrad," + measure.minRad ,{guiDataList[0].explain}");
-            csvContent.AppendLine("measure,private,maxrad," + measure.maxRad ,{guiDataList[0].explain}");
-            csvContent.AppendLine("measure,private,iterations," + measure.iterations ,{guiDataList[0].explain}");
-            csvContent.AppendLine("measure,private,zmin_check," + measure.zmin_check ,{guiDataList[0].explain}");
-            csvContent.Append("measure,private,zmax_check," + measure.zmax_check ,{guiDataList[0].explain}");*/
 
             // CSV 파일 생성 및 내용 기록
             try
@@ -336,6 +307,7 @@ namespace WinFormsAppTest
                 }
             }
         }
+        //textbox-> 구조체 
         private void UpdateParams()
         {
             //subsamplng_textbox
@@ -371,6 +343,7 @@ namespace WinFormsAppTest
             //csp_stem.HeightThreshold = double.Parse(tbTreeSegHeightThres.Text);
         }
 
+        //구조체 -> textbox
         private void FillTextboxes()
         {
             //subsamplng_textboxes

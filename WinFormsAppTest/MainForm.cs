@@ -605,8 +605,6 @@ namespace WinFormsAppTest
         {
             string[] confCheck = Directory.GetFiles(Path.Combine(configPath, reqDi[(int)configFileType.Preset]), "PresetConfig*");
 
-
-
             foreach (string conf in confCheck)
             {
                 string fileName = conf.Substring(conf.IndexOf("presetConfig"), conf.Length - conf.IndexOf("presetConfig") - 5);
@@ -758,9 +756,6 @@ namespace WinFormsAppTest
             isMformDrag = false;
         }
 
-
-
-
         //저장하기 버튼
         private void btnSettingSave_Click(object sender, EventArgs e)
         {
@@ -815,6 +810,7 @@ namespace WinFormsAppTest
                 return;
             }
             read_csv(csv_path);
+
             FillTextboxes();
         }
 
