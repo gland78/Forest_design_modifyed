@@ -984,13 +984,15 @@ namespace WinFormsAppTest
                     sw.WriteLine("PCD2LAS " + FolderName2);
 
                     //pcd 지우는 코드  ---> 배포 시 삭제
-                    //sw.WriteLine("for /r \"..\\tree\" %%i in (*.pcd) do (");
-                    //sw.WriteLine("    del \"%%i\"");
-                    //sw.WriteLine(")");
+                    sw.WriteLine("for /r \"..\\tree\" %%i in (*.pcd) do (");
+                    sw.WriteLine("    del \"%%i\"");
+                    sw.WriteLine(")");
 
-                    //sw.WriteLine("for /r \".\" %%i in (*.pcd) do (");
-                    //sw.WriteLine("    del \"%%i\"");
-                    //sw.WriteLine(")");
+                    sw.WriteLine("for /r \".\" %%i in (*.pcd) do (");
+                    sw.WriteLine("    del \"%%i\"");
+                    sw.WriteLine(")");
+
+                    sw.WriteLine("attrib +h ../intermediate");
                 }
 
                 ProcessBatch(ten);

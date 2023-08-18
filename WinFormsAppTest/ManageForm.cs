@@ -26,8 +26,6 @@ namespace WinFormsAppTest
         {
             preConfLoad();
         }
-
-
         private void preConfLoad()
         {
             string fileDi = Path.Combine(configPath, reqDi[(int)configFileType.Preset]);
@@ -47,12 +45,7 @@ namespace WinFormsAppTest
                 string csvLines;
                 while ((csvLines = sr.ReadLine()) != null)
                 {
-
-
-
                     //MessageBox.Show(csvLines);
-
-
                     if (csvLines.Contains("title"))
                     {
                         title = csvLines.Split(',')[3];

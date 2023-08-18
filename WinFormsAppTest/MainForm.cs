@@ -610,7 +610,9 @@ namespace WinFormsAppTest
                 string fileName = conf.Substring(conf.IndexOf("presetConfig"), conf.Length - conf.IndexOf("presetConfig") - 5);
                 if (((Button)sender).Name == fileName)
                 {
+                    MessageBox.Show(fileName);
                     read_csv(fileName);
+                    FillTextboxes();
                 }
             }
 
@@ -762,7 +764,12 @@ namespace WinFormsAppTest
             //변수들 초기화
             UpdateParams();
             // csv 작성
-            write_csv(csv_path);
+            try
+            {
+                write_csv(csv_path);
+                MessageBox.Show("CSV 파일이 수정되었습니다.");
+            }
+            catch { };
         }
 
         //프리셋저장버튼
@@ -810,6 +817,10 @@ namespace WinFormsAppTest
                 return;
             }
             read_csv(csv_path);
+            /*foreach (GuiData g in guiDataList)
+                MessageBox.Show(g.Value);*/
+
+            //MessageBox.Show(groundseg.cellSize+" "+ groundseg.scalar);
 
             FillTextboxes();
         }

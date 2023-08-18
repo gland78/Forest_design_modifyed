@@ -240,8 +240,11 @@ namespace WinFormsAppTest
             attachProgressBar(true);
 
             //csv 초기화
-
+           
             preProAndExcuteStep();
+
+ 
+            paramForm.write_csv(paramForm.csv_path);
 
             if (progress == 10)
             {
