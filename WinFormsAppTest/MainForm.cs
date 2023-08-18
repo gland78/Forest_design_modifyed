@@ -516,6 +516,7 @@ namespace WinFormsAppTest
             pnReview.PerformLayout();
         }
 
+        //recetnConfig 버튼 관련 이벤트 처리 코드
         private void btnRecentConf_Click(object sender, EventArgs e)
         {
             string fileDi = Path.Combine(configPath, reqDi[(int)configFileType.Recent]);
@@ -600,7 +601,7 @@ namespace WinFormsAppTest
             btn.FlatStyle = FlatStyle.Flat;
             btn.Invalidate();
         }
-
+        //preConfig 버튼 클릭 이벤트 처리 코드
         private void btnPreConf_Click(object sender, EventArgs e)
         {
             string[] confCheck = Directory.GetFiles(Path.Combine(configPath, reqDi[(int)configFileType.Preset]), "PresetConfig*");
@@ -619,6 +620,7 @@ namespace WinFormsAppTest
             tcMainHome.SelectedIndex = 1;
         }
 
+        //사이드메뉴 버튼 관련 이벤트 처리 코드
         private void btnStart_Click(object sender, EventArgs e)
         {
             if (pFrm == null)
@@ -743,7 +745,6 @@ namespace WinFormsAppTest
             }
         }
 
-
         private void MainForm_MouseMove(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left && isMformDrag)
@@ -758,7 +759,7 @@ namespace WinFormsAppTest
             isMformDrag = false;
         }
 
-        //저장하기 버튼
+        //저장하기 버튼 클릭 이벤트
         private void btnSettingSave_Click(object sender, EventArgs e)
         {
             //변수들 초기화
@@ -772,7 +773,7 @@ namespace WinFormsAppTest
             catch { };
         }
 
-        //프리셋저장버튼
+        //프리셋 저장 버튼 클릭 이벤트
         private void btnPresetSave_Click(object sender, EventArgs e)
         {
             if (mFrm == null)
@@ -793,7 +794,7 @@ namespace WinFormsAppTest
             preConfBtnLoad();
         }
 
-        //프리셋 관리버튼
+        //프리셋 관리 버튼 클릭 이벤트
         private void btnPresetManage_Click(object sender, EventArgs e)
         {
             if (mFrm == null)
@@ -809,6 +810,7 @@ namespace WinFormsAppTest
             this.WindowState = FormWindowState.Minimized;
         }
 
+        //기본값 불러오기 버튼
         private void btnSettingLoad_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show("기본값을 적용하시겠습니까?\n저장되지 않은 설정값은 사라집니다.",
@@ -825,6 +827,7 @@ namespace WinFormsAppTest
             FillTextboxes();
         }
 
+        //프로그램 동작시 프로그래바,start 버튼 숨김기능 관련 이벤트
         private void progressAttach(bool onOff)
         {
             pbLoadingBar.Visible = onOff;
@@ -841,6 +844,7 @@ namespace WinFormsAppTest
             btnStart.Visible = onOff;
         }
 
+        //적용하기 버튼 이벤트
         private void btnSettingApply_Click(object sender, EventArgs e)
         {
             UpdateParams();

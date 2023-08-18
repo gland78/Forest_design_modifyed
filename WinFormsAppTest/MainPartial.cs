@@ -26,7 +26,9 @@ namespace WinFormsAppTest
         public csp_segmentstem csp_stem = new csp_segmentstem();
         public Measure measure = new Measure();
 
-
+        /// <summary>
+        ///  csv 관련 변수
+        /// </summary>
         struct GuiData
         {
             public string Type;
@@ -40,7 +42,7 @@ namespace WinFormsAppTest
         public string csv_path = @"..\bin\config.csv";
         
         /// <summary>
-        /// csv 읽는 함수
+        /// csv 읽는 함수 
         /// </summary>
         private void read_csv(string filepath)
         {
@@ -225,30 +227,6 @@ namespace WinFormsAppTest
                 Console.WriteLine("An error occurred: " + ex.Message);
             }
         }
-
-        public void write_csv(string filepath)
-        {
-            // CSV 파일 경로
-            string filePath = filepath;
-
-            // CSV 내용 생성
-            StringBuilder csvContent = new StringBuilder();
-            foreach (var item in guiDataList)
-            {
-                string str = item.Type.ToString() + "," + item.Visibility.ToString() + "," + item.Key + "," + item.Value + ","+item.explain;
-                csvContent.AppendLine(str);
-            }
-
-            // CSV 파일 생성 및 내용 기록
-            try
-            {
-                File.WriteAllText(filePath, csvContent.ToString());
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("CSV 파일 생성 중 오류 발생: " + ex.Message);
-            }
-        }
         void ExtractCircleValues(string circleString)
         {
             string[] parts = circleString.Split(' ');
@@ -306,7 +284,32 @@ namespace WinFormsAppTest
                 }
             }
         }
-        //textbox-> 구조체 
+        //csv 쓰는 함수
+        public void write_csv(string filepath)
+        {
+            // CSV 파일 경로
+            string filePath = filepath;
+
+            // CSV 내용 생성
+            StringBuilder csvContent = new StringBuilder();
+            foreach (var item in guiDataList)
+            {
+                string str = item.Type.ToString() + "," + item.Visibility.ToString() + "," + item.Key + "," + item.Value + ","+item.explain;
+                csvContent.AppendLine(str);
+            }
+
+            // CSV 파일 생성 및 내용 기록
+            try
+            {
+                File.WriteAllText(filePath, csvContent.ToString());
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("CSV 파일 생성 중 오류 발생: " + ex.Message);
+            }
+        }
+        
+        //textbox 값 -> 구조체로 대입 
         private void UpdateParams()
         {
             //subsamplng_textbox
@@ -342,7 +345,7 @@ namespace WinFormsAppTest
             //csp_stem.HeightThreshold = double.Parse(tbTreeSegHeightThres.Text);
         }
 
-        //구조체 -> textbox
+        //구조체 값 -> textbox 대입
         private void FillTextboxes()
         {
             //subsamplng_textboxes
@@ -379,7 +382,9 @@ namespace WinFormsAppTest
             tbMeasureNN.Text = measure.MeasureNN.ToString();
             ///
         }
-
+        /// <summary>
+        /// 무결성 검사를 위한 코드
+        /// </summary>
         private void RegistTextBoxHandler()
         {
             //double형만 입력가능하도록 키 등록
@@ -443,6 +448,10 @@ namespace WinFormsAppTest
                 e.Handled = true;
             }
         }
+        /// <summary>
+        /// preset,recent 설정파일 저장용코드
+        /// </summary>
+        /// <param name="csvContent"></param>
         private void setAllparams(ref StringBuilder csvContent)
         {
             csvContent = new StringBuilder();

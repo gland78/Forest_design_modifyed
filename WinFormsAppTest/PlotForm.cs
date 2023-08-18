@@ -279,8 +279,6 @@ namespace WinFormsAppTest
         {
             tcPlot.SelectedIndex = cbPlotShape.SelectedIndex;
         }
-
-
         private void tbPlotCircleX_Leave(object sender, EventArgs e)
         {
             int dummy1 = 1;
@@ -298,7 +296,6 @@ namespace WinFormsAppTest
             }
             paramForm.gui.centerX = double.Parse(tbPlotCircleX.Text);
         }
-
         private void tbPlotCircleY_Leave(object sender, EventArgs e)
         {
             int dummy1 = 1;
@@ -316,7 +313,6 @@ namespace WinFormsAppTest
             }
             paramForm.gui.centerY = double.Parse(tbPlotCircleY.Text);
         }
-
         private void tbPlotCircleR_Leave(object sender, EventArgs e)
         {
             int dummy1 = 1;
@@ -334,7 +330,6 @@ namespace WinFormsAppTest
             }
             paramForm.gui.radius = double.Parse(tbPlotCircleR.Text);
         }
-
         private void tbPlotRecXmin_Leave(object sender, EventArgs e)
         {
             int dummy1 = 1;
@@ -352,7 +347,6 @@ namespace WinFormsAppTest
             }
             paramForm.gui.xMin = double.Parse(tbPlotRecXmin.Text);
         }
-
         private void tbPlotRecXmax_Leave(object sender, EventArgs e)
         {
             int dummy1 = 1;
@@ -370,7 +364,6 @@ namespace WinFormsAppTest
             }
             paramForm.gui.xMax = double.Parse(tbPlotRecXmax.Text);
         }
-
         private void tbPlotRecYmin_Leave(object sender, EventArgs e)
         {
             int dummy1 = 1;
@@ -388,7 +381,6 @@ namespace WinFormsAppTest
             }
             paramForm.gui.yMin = double.Parse(tbPlotRecYmin.Text);
         }
-
         private void tbPlotRecYmax_Leave(object sender, EventArgs e)
         {
             int dummy1 = 1;

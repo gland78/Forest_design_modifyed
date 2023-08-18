@@ -545,8 +545,8 @@ namespace WinFormsAppTest
                     trunkslicefile = File.FullName;
                 }
             }
-            paramForm.csp_stem.coordfile = "csp_segmentstem,private,coordfile," + coordfile;
-            paramForm.csp_stem.trunk_slice_file = "csp_segmentstem,private,trunk_slice_file," + trunkslicefile;
+            paramForm.csp_stem.coordfile = "csp_segmentstem,private,coordfile," + coordfile + ",csp_segmentstem실행에 사용되는 1단계 산출물(표준지 외곽좌표를 담은 data파일) 경로";
+            paramForm.csp_stem.trunk_slice_file = "csp_segmentstem,private,trunk_slice_file," + trunkslicefile+ ",csp_segmentstem실행에 사용되는 5단계 산출물(사용자가 지정한 filters.range.trunk의 minheight~maxheight 높이의 표준지 추출 파일) 경로";
 
             try
             {
@@ -582,8 +582,8 @@ namespace WinFormsAppTest
                     crownslicefile = File.FullName;
                 }
             }
-            paramForm.csp_crown.trunk_files = "csp_segmentcrown,private,trunk_files," + string.Join(" ", filenames_pcd);
-            paramForm.csp_crown.crown_slice_file = "csp_segmentcrown,private,crown_slice_file," + crownslicefile;
+            paramForm.csp_crown.trunk_files = "csp_segmentcrown,private,trunk_files," + string.Join(" ", filenames_pcd)+",csp_segmentcrown실행에 사용되는 7단계 산출물(trunk 파일들) 경로";
+            paramForm.csp_crown.crown_slice_file = "csp_segmentcrown,private,crown_slice_file," + crownslicefile+ ",csp_segmentcrown실행에 사용되는 6단계 산출물(사용자가 지정한 filters.range.crown의 minheight~maxheight 높이의 표준지 추출 파일) 경로";
 
             // CSV 파일에 내용 추가
             try
@@ -611,7 +611,6 @@ namespace WinFormsAppTest
             proc.WaitForExit();
             proc.Close();
         }
-
         private void RunFileSecond()
         {
             string two = "level2_subsampled_";
@@ -962,7 +961,6 @@ namespace WinFormsAppTest
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + nine + originLasName + ".bat 파일을 생성했습니다.");
             }
         }
-
         private void RunFileTenth()
         {
             string ten = "level10_PCDtoLAS";
@@ -1010,7 +1008,6 @@ namespace WinFormsAppTest
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + ten + originLasName + ".bat 파일을 생성했습니다.");
             }
         }
-
         private void ChangeLasName()
         {
             string destinationDirectory = resultSavedDirectory + shape + @"\intermediate";
@@ -1041,7 +1038,6 @@ namespace WinFormsAppTest
                 File.Move(lasFile, newFilePath);
             }
         }
-
         private void MakeInfoFile()
         {
             try
@@ -1118,7 +1114,6 @@ namespace WinFormsAppTest
                 MessageBox.Show(e.ToString());
             }
         }
-
         private void preProAndExcuteStep()
         {
             MakeResultDirectory_PLOT();
@@ -1228,7 +1223,6 @@ namespace WinFormsAppTest
 
             return isError;
         }
-
         private void tbPlotData_TextChanged(object sender, EventArgs e)
         {
             paramForm.gui.loadPath = tbPlotData.Text;
@@ -1237,8 +1231,6 @@ namespace WinFormsAppTest
             originLasName = Path.GetFileNameWithoutExtension(originLasPath);
             originLasDirectory = Path.GetDirectoryName(originLasPath);
         }
-
-
         public void FindExtremeCoordinates(point[] points)
         {
             // 초기화를 위해 첫 번째 점을 기준으로 설정
@@ -1263,7 +1255,5 @@ namespace WinFormsAppTest
                     bufferedPolycords.left = temppoint;
             }
         }
-
-
     }
 }
