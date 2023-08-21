@@ -608,11 +608,10 @@ namespace WinFormsAppTest
 
             foreach (string conf in confCheck)
             {
-                string fileName = conf.Substring(conf.IndexOf("presetConfig"), conf.Length - conf.IndexOf("presetConfig") - 5);
-                if (((Button)sender).Name == fileName)
-                {
-                    MessageBox.Show(fileName);
-                    read_csv(fileName);
+                string fileName = conf.Substring(conf.IndexOf("presetConfig"), conf.Length - conf.IndexOf("presetConfig") - 4);
+                if (((Button)sender).Name == fileName+".csv")
+                {                    
+                    read_csv(conf);
                     FillTextboxes();
                 }
             }
