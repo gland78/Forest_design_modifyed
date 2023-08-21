@@ -36,14 +36,6 @@
             btnSettings = new Button();
             btnSlideMenu = new Button();
             btnClose = new Button();
-            pnSettingOut1 = new CustomPanel();
-            tbOutlierMethod = new TextBox();
-            lbOutlierMethod = new Label();
-            tbOutlierMeank = new TextBox();
-            tbOutlierMul = new TextBox();
-            lbOutlierMul = new Label();
-            lbOutlierMeank = new Label();
-            lbOutlierRemove = new Label();
             tcMainHome = new CustomTabControl();
             tpMainHome = new TabPage();
             pnReviewMain = new Panel();
@@ -82,37 +74,15 @@
             lbNorCellSize = new Label();
             lbNormalize = new Label();
             lbSettings = new Label();
-            pnSettingTree4 = new CustomPanel();
-            customPanel8 = new CustomPanel();
-            textBox12 = new TextBox();
-            lbMaxDBH = new Label();
-            tbTreeSegMinDBH = new TextBox();
-            lbTreeMinDBH = new Label();
-            lbMeasureAttribute = new Label();
-            pnSettingTree3 = new CustomPanel();
-            tbTreeSegHeightThres = new TextBox();
-            lbTreeThres = new Label();
-            pnSettingTree2 = new CustomPanel();
-            lbTreeSmooth = new Label();
-            tbTreeSegSmooth = new TextBox();
             pnSettingCrown2 = new CustomPanel();
             lbCrownMaxH = new Label();
             tbCrownMaxHeight = new TextBox();
-            lbTreeSegment = new Label();
             pnSettingTrunk2 = new CustomPanel();
             lbTrunkMaxH = new Label();
             tbTrunkMaxHeight = new TextBox();
-            pnSettingOut2 = new CustomPanel();
             lbCrownSlice = new Label();
             lbTrunkSlice = new Label();
-            pnSettingOut3 = new CustomPanel();
-            pnSettingMeasure1 = new CustomPanel();
-            tbMeasureNN = new TextBox();
-            lbMeasureNnear = new Label();
             lbSubsampling = new Label();
-            pnSettingTree1 = new CustomPanel();
-            lbTreeNnear = new Label();
-            tbTreeSegNN = new TextBox();
             pnSettingCrown1 = new CustomPanel();
             lbCrownMinH = new Label();
             tbCrownMinHeight = new TextBox();
@@ -124,7 +94,6 @@
             lbSubCellSize = new Label();
             btnHide = new Button();
             pnSideMenu.SuspendLayout();
-            pnSettingOut1.SuspendLayout();
             tcMainHome.SuspendLayout();
             tpMainHome.SuspendLayout();
             pnReviewMain.SuspendLayout();
@@ -137,16 +106,8 @@
             pnSettingNor3.SuspendLayout();
             pnSettingNor2.SuspendLayout();
             pnSettingNor1.SuspendLayout();
-            pnSettingTree4.SuspendLayout();
-            customPanel8.SuspendLayout();
-            pnSettingTree3.SuspendLayout();
-            pnSettingTree2.SuspendLayout();
             pnSettingCrown2.SuspendLayout();
             pnSettingTrunk2.SuspendLayout();
-            pnSettingOut2.SuspendLayout();
-            pnSettingOut3.SuspendLayout();
-            pnSettingMeasure1.SuspendLayout();
-            pnSettingTree1.SuspendLayout();
             pnSettingCrown1.SuspendLayout();
             pnSettingTrunk1.SuspendLayout();
             pnSettingSub1.SuspendLayout();
@@ -261,95 +222,6 @@
             btnClose.Size = new Size(43, 30);
             btnClose.TabIndex = 1;
             btnClose.UseVisualStyleBackColor = false;
-            // 
-            // pnSettingOut1
-            // 
-            pnSettingOut1.BackColor = Color.Gray;
-            pnSettingOut1.Controls.Add(tbOutlierMethod);
-            pnSettingOut1.Controls.Add(lbOutlierMethod);
-            pnSettingOut1.Location = new Point(24, 447);
-            pnSettingOut1.Margin = new Padding(3, 4, 3, 4);
-            pnSettingOut1.Name = "pnSettingOut1";
-            pnSettingOut1.Size = new Size(850, 58);
-            pnSettingOut1.TabIndex = 22;
-            // 
-            // tbOutlierMethod
-            // 
-            tbOutlierMethod.BorderStyle = BorderStyle.FixedSingle;
-            tbOutlierMethod.Enabled = false;
-            tbOutlierMethod.Font = new Font("맑은 고딕", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            tbOutlierMethod.Location = new Point(725, 15);
-            tbOutlierMethod.Margin = new Padding(3, 4, 3, 4);
-            tbOutlierMethod.Name = "tbOutlierMethod";
-            tbOutlierMethod.ReadOnly = true;
-            tbOutlierMethod.Size = new Size(109, 29);
-            tbOutlierMethod.TabIndex = 20;
-            tbOutlierMethod.TabStop = false;
-            tbOutlierMethod.Text = "statistical";
-            // 
-            // lbOutlierMethod
-            // 
-            lbOutlierMethod.AutoSize = true;
-            lbOutlierMethod.Font = new Font("맑은 고딕", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-            lbOutlierMethod.ForeColor = Color.White;
-            lbOutlierMethod.Location = new Point(21, 21);
-            lbOutlierMethod.Name = "lbOutlierMethod";
-            lbOutlierMethod.Size = new Size(57, 17);
-            lbOutlierMethod.TabIndex = 17;
-            lbOutlierMethod.Text = "Method";
-            // 
-            // tbOutlierMeank
-            // 
-            tbOutlierMeank.BorderStyle = BorderStyle.FixedSingle;
-            tbOutlierMeank.Font = new Font("맑은 고딕", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            tbOutlierMeank.Location = new Point(725, 15);
-            tbOutlierMeank.Margin = new Padding(3, 4, 3, 4);
-            tbOutlierMeank.Name = "tbOutlierMeank";
-            tbOutlierMeank.Size = new Size(109, 29);
-            tbOutlierMeank.TabIndex = 22;
-            // 
-            // tbOutlierMul
-            // 
-            tbOutlierMul.BorderStyle = BorderStyle.FixedSingle;
-            tbOutlierMul.Font = new Font("맑은 고딕", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            tbOutlierMul.Location = new Point(725, 15);
-            tbOutlierMul.Margin = new Padding(3, 4, 3, 4);
-            tbOutlierMul.Name = "tbOutlierMul";
-            tbOutlierMul.Size = new Size(109, 29);
-            tbOutlierMul.TabIndex = 21;
-            // 
-            // lbOutlierMul
-            // 
-            lbOutlierMul.AutoSize = true;
-            lbOutlierMul.Font = new Font("맑은 고딕", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-            lbOutlierMul.ForeColor = Color.White;
-            lbOutlierMul.Location = new Point(21, 21);
-            lbOutlierMul.Name = "lbOutlierMul";
-            lbOutlierMul.Size = new Size(74, 17);
-            lbOutlierMul.TabIndex = 19;
-            lbOutlierMul.Text = "Mulitiplier";
-            // 
-            // lbOutlierMeank
-            // 
-            lbOutlierMeank.AutoSize = true;
-            lbOutlierMeank.Font = new Font("맑은 고딕", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-            lbOutlierMeank.ForeColor = Color.White;
-            lbOutlierMeank.Location = new Point(21, 21);
-            lbOutlierMeank.Name = "lbOutlierMeank";
-            lbOutlierMeank.Size = new Size(50, 17);
-            lbOutlierMeank.TabIndex = 18;
-            lbOutlierMeank.Text = "Meank";
-            // 
-            // lbOutlierRemove
-            // 
-            lbOutlierRemove.AutoSize = true;
-            lbOutlierRemove.Font = new Font("Microsoft Sans Serif", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
-            lbOutlierRemove.ForeColor = Color.White;
-            lbOutlierRemove.Location = new Point(24, 415);
-            lbOutlierRemove.Name = "lbOutlierRemove";
-            lbOutlierRemove.Size = new Size(167, 25);
-            lbOutlierRemove.TabIndex = 16;
-            lbOutlierRemove.Text = "OutlierRemove";
             // 
             // tcMainHome
             // 
@@ -483,25 +355,14 @@
             tpSettings.Controls.Add(pnSettingNor1);
             tpSettings.Controls.Add(lbNormalize);
             tpSettings.Controls.Add(lbSettings);
-            tpSettings.Controls.Add(pnSettingTree4);
-            tpSettings.Controls.Add(lbMeasureAttribute);
-            tpSettings.Controls.Add(pnSettingTree3);
-            tpSettings.Controls.Add(pnSettingTree2);
             tpSettings.Controls.Add(pnSettingCrown2);
-            tpSettings.Controls.Add(lbTreeSegment);
             tpSettings.Controls.Add(pnSettingTrunk2);
-            tpSettings.Controls.Add(pnSettingOut2);
             tpSettings.Controls.Add(lbCrownSlice);
             tpSettings.Controls.Add(lbTrunkSlice);
-            tpSettings.Controls.Add(pnSettingOut3);
-            tpSettings.Controls.Add(pnSettingMeasure1);
             tpSettings.Controls.Add(lbSubsampling);
-            tpSettings.Controls.Add(pnSettingTree1);
             tpSettings.Controls.Add(pnSettingCrown1);
             tpSettings.Controls.Add(pnSettingTrunk1);
             tpSettings.Controls.Add(pnSettingSub1);
-            tpSettings.Controls.Add(lbOutlierRemove);
-            tpSettings.Controls.Add(pnSettingOut1);
             tpSettings.Location = new Point(4, 9);
             tpSettings.Name = "tpSettings";
             tpSettings.Padding = new Padding(3);
@@ -666,7 +527,7 @@
             pnSettingNor5.BackColor = Color.Gray;
             pnSettingNor5.Controls.Add(tbNorThres);
             pnSettingNor5.Controls.Add(lbNorThres);
-            pnSettingNor5.Location = new Point(24, 964);
+            pnSettingNor5.Location = new Point(24, 711);
             pnSettingNor5.Margin = new Padding(3, 4, 3, 4);
             pnSettingNor5.Name = "pnSettingNor5";
             pnSettingNor5.Size = new Size(850, 58);
@@ -698,7 +559,7 @@
             pnSettingNor4.BackColor = Color.Gray;
             pnSettingNor4.Controls.Add(tbNorScalar);
             pnSettingNor4.Controls.Add(lbNorScalar);
-            pnSettingNor4.Location = new Point(24, 898);
+            pnSettingNor4.Location = new Point(24, 645);
             pnSettingNor4.Margin = new Padding(3, 4, 3, 4);
             pnSettingNor4.Name = "pnSettingNor4";
             pnSettingNor4.Size = new Size(850, 58);
@@ -730,7 +591,7 @@
             pnSettingNor3.BackColor = Color.Gray;
             pnSettingNor3.Controls.Add(tbNorSlope);
             pnSettingNor3.Controls.Add(lbNorSlope);
-            pnSettingNor3.Location = new Point(24, 832);
+            pnSettingNor3.Location = new Point(24, 579);
             pnSettingNor3.Margin = new Padding(3, 4, 3, 4);
             pnSettingNor3.Name = "pnSettingNor3";
             pnSettingNor3.Size = new Size(850, 58);
@@ -762,7 +623,7 @@
             pnSettingNor2.BackColor = Color.Gray;
             pnSettingNor2.Controls.Add(tbNorWinSize);
             pnSettingNor2.Controls.Add(lbNorWinSize);
-            pnSettingNor2.Location = new Point(24, 766);
+            pnSettingNor2.Location = new Point(24, 513);
             pnSettingNor2.Margin = new Padding(3, 4, 3, 4);
             pnSettingNor2.Name = "pnSettingNor2";
             pnSettingNor2.Size = new Size(850, 58);
@@ -794,7 +655,7 @@
             pnSettingNor1.BackColor = Color.Gray;
             pnSettingNor1.Controls.Add(tbNorCellSize);
             pnSettingNor1.Controls.Add(lbNorCellSize);
-            pnSettingNor1.Location = new Point(24, 700);
+            pnSettingNor1.Location = new Point(24, 447);
             pnSettingNor1.Margin = new Padding(3, 4, 3, 4);
             pnSettingNor1.Name = "pnSettingNor1";
             pnSettingNor1.Size = new Size(850, 58);
@@ -826,7 +687,7 @@
             lbNormalize.AutoSize = true;
             lbNormalize.Font = new Font("Microsoft Sans Serif", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
             lbNormalize.ForeColor = Color.White;
-            lbNormalize.Location = new Point(24, 667);
+            lbNormalize.Location = new Point(24, 415);
             lbNormalize.Name = "lbNormalize";
             lbNormalize.Size = new Size(117, 25);
             lbNormalize.TabIndex = 89;
@@ -843,149 +704,12 @@
             lbSettings.TabIndex = 87;
             lbSettings.Text = "Settings";
             // 
-            // pnSettingTree4
-            // 
-            pnSettingTree4.BackColor = Color.Gray;
-            pnSettingTree4.Controls.Add(customPanel8);
-            pnSettingTree4.Controls.Add(tbTreeSegMinDBH);
-            pnSettingTree4.Controls.Add(lbTreeMinDBH);
-            pnSettingTree4.Location = new Point(24, 1654);
-            pnSettingTree4.Margin = new Padding(3, 4, 3, 4);
-            pnSettingTree4.Name = "pnSettingTree4";
-            pnSettingTree4.Size = new Size(850, 58);
-            pnSettingTree4.TabIndex = 85;
-            // 
-            // customPanel8
-            // 
-            customPanel8.BackColor = Color.Gray;
-            customPanel8.Controls.Add(textBox12);
-            customPanel8.Controls.Add(lbMaxDBH);
-            customPanel8.Location = new Point(6, 55);
-            customPanel8.Margin = new Padding(3, 4, 3, 4);
-            customPanel8.Name = "customPanel8";
-            customPanel8.Size = new Size(850, 58);
-            customPanel8.TabIndex = 87;
-            // 
-            // textBox12
-            // 
-            textBox12.Location = new Point(154, 12);
-            textBox12.Margin = new Padding(3, 4, 3, 4);
-            textBox12.Name = "textBox12";
-            textBox12.Size = new Size(109, 23);
-            textBox12.TabIndex = 88;
-            // 
-            // lbMaxDBH
-            // 
-            lbMaxDBH.AutoSize = true;
-            lbMaxDBH.Font = new Font("맑은 고딕", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-            lbMaxDBH.Location = new Point(42, 16);
-            lbMaxDBH.Name = "lbMaxDBH";
-            lbMaxDBH.Size = new Size(63, 17);
-            lbMaxDBH.TabIndex = 87;
-            lbMaxDBH.Text = "MaxDBH";
-            // 
-            // tbTreeSegMinDBH
-            // 
-            tbTreeSegMinDBH.BorderStyle = BorderStyle.FixedSingle;
-            tbTreeSegMinDBH.Font = new Font("맑은 고딕", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            tbTreeSegMinDBH.Location = new Point(725, 15);
-            tbTreeSegMinDBH.Margin = new Padding(3, 4, 3, 4);
-            tbTreeSegMinDBH.Name = "tbTreeSegMinDBH";
-            tbTreeSegMinDBH.Size = new Size(109, 29);
-            tbTreeSegMinDBH.TabIndex = 86;
-            // 
-            // lbTreeMinDBH
-            // 
-            lbTreeMinDBH.AutoSize = true;
-            lbTreeMinDBH.Font = new Font("맑은 고딕", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-            lbTreeMinDBH.ForeColor = Color.White;
-            lbTreeMinDBH.Location = new Point(21, 21);
-            lbTreeMinDBH.Name = "lbTreeMinDBH";
-            lbTreeMinDBH.Size = new Size(61, 17);
-            lbTreeMinDBH.TabIndex = 85;
-            lbTreeMinDBH.Text = "MinDBH";
-            // 
-            // lbMeasureAttribute
-            // 
-            lbMeasureAttribute.AutoSize = true;
-            lbMeasureAttribute.Font = new Font("Microsoft Sans Serif", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
-            lbMeasureAttribute.ForeColor = Color.White;
-            lbMeasureAttribute.Location = new Point(24, 1742);
-            lbMeasureAttribute.Name = "lbMeasureAttribute";
-            lbMeasureAttribute.Size = new Size(192, 25);
-            lbMeasureAttribute.TabIndex = 63;
-            lbMeasureAttribute.Text = "MeasureAttribute";
-            // 
-            // pnSettingTree3
-            // 
-            pnSettingTree3.BackColor = Color.Gray;
-            pnSettingTree3.Controls.Add(tbTreeSegHeightThres);
-            pnSettingTree3.Controls.Add(lbTreeThres);
-            pnSettingTree3.Location = new Point(24, 1588);
-            pnSettingTree3.Margin = new Padding(3, 4, 3, 4);
-            pnSettingTree3.Name = "pnSettingTree3";
-            pnSettingTree3.Size = new Size(850, 58);
-            pnSettingTree3.TabIndex = 83;
-            // 
-            // tbTreeSegHeightThres
-            // 
-            tbTreeSegHeightThres.BorderStyle = BorderStyle.FixedSingle;
-            tbTreeSegHeightThres.Font = new Font("맑은 고딕", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            tbTreeSegHeightThres.Location = new Point(725, 15);
-            tbTreeSegHeightThres.Margin = new Padding(3, 4, 3, 4);
-            tbTreeSegHeightThres.Name = "tbTreeSegHeightThres";
-            tbTreeSegHeightThres.Size = new Size(109, 29);
-            tbTreeSegHeightThres.TabIndex = 84;
-            // 
-            // lbTreeThres
-            // 
-            lbTreeThres.AutoSize = true;
-            lbTreeThres.Font = new Font("맑은 고딕", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-            lbTreeThres.ForeColor = Color.White;
-            lbTreeThres.Location = new Point(21, 21);
-            lbTreeThres.Name = "lbTreeThres";
-            lbTreeThres.Size = new Size(117, 17);
-            lbTreeThres.TabIndex = 83;
-            lbTreeThres.Text = "Threshold Height";
-            // 
-            // pnSettingTree2
-            // 
-            pnSettingTree2.BackColor = Color.Gray;
-            pnSettingTree2.Controls.Add(lbTreeSmooth);
-            pnSettingTree2.Controls.Add(tbTreeSegSmooth);
-            pnSettingTree2.Location = new Point(24, 1522);
-            pnSettingTree2.Margin = new Padding(3, 4, 3, 4);
-            pnSettingTree2.Name = "pnSettingTree2";
-            pnSettingTree2.Size = new Size(850, 58);
-            pnSettingTree2.TabIndex = 78;
-            // 
-            // lbTreeSmooth
-            // 
-            lbTreeSmooth.AutoSize = true;
-            lbTreeSmooth.Font = new Font("맑은 고딕", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-            lbTreeSmooth.ForeColor = Color.White;
-            lbTreeSmooth.Location = new Point(21, 21);
-            lbTreeSmooth.Name = "lbTreeSmooth";
-            lbTreeSmooth.Size = new Size(83, 17);
-            lbTreeSmooth.TabIndex = 81;
-            lbTreeSmooth.Text = "Smoothness";
-            // 
-            // tbTreeSegSmooth
-            // 
-            tbTreeSegSmooth.BorderStyle = BorderStyle.FixedSingle;
-            tbTreeSegSmooth.Font = new Font("맑은 고딕", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            tbTreeSegSmooth.Location = new Point(725, 15);
-            tbTreeSegSmooth.Margin = new Padding(3, 4, 3, 4);
-            tbTreeSegSmooth.Name = "tbTreeSegSmooth";
-            tbTreeSegSmooth.Size = new Size(109, 29);
-            tbTreeSegSmooth.TabIndex = 82;
-            // 
             // pnSettingCrown2
             // 
             pnSettingCrown2.BackColor = Color.Gray;
             pnSettingCrown2.Controls.Add(lbCrownMaxH);
             pnSettingCrown2.Controls.Add(tbCrownMaxHeight);
-            pnSettingCrown2.Location = new Point(24, 1336);
+            pnSettingCrown2.Location = new Point(24, 1083);
             pnSettingCrown2.Margin = new Padding(3, 4, 3, 4);
             pnSettingCrown2.Name = "pnSettingCrown2";
             pnSettingCrown2.Size = new Size(850, 58);
@@ -1012,23 +736,12 @@
             tbCrownMaxHeight.Size = new Size(109, 29);
             tbCrownMaxHeight.TabIndex = 53;
             // 
-            // lbTreeSegment
-            // 
-            lbTreeSegment.AutoSize = true;
-            lbTreeSegment.Font = new Font("Microsoft Sans Serif", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
-            lbTreeSegment.ForeColor = Color.White;
-            lbTreeSegment.Location = new Point(24, 1424);
-            lbTreeSegment.Name = "lbTreeSegment";
-            lbTreeSegment.Size = new Size(152, 25);
-            lbTreeSegment.TabIndex = 62;
-            lbTreeSegment.Text = "TreeSegment";
-            // 
             // pnSettingTrunk2
             // 
             pnSettingTrunk2.BackColor = Color.Gray;
             pnSettingTrunk2.Controls.Add(lbTrunkMaxH);
             pnSettingTrunk2.Controls.Add(tbTrunkMaxHeight);
-            pnSettingTrunk2.Location = new Point(24, 1150);
+            pnSettingTrunk2.Location = new Point(24, 897);
             pnSettingTrunk2.Margin = new Padding(3, 4, 3, 4);
             pnSettingTrunk2.Name = "pnSettingTrunk2";
             pnSettingTrunk2.Size = new Size(850, 58);
@@ -1055,23 +768,12 @@
             tbTrunkMaxHeight.Size = new Size(109, 29);
             tbTrunkMaxHeight.TabIndex = 55;
             // 
-            // pnSettingOut2
-            // 
-            pnSettingOut2.BackColor = Color.Gray;
-            pnSettingOut2.Controls.Add(tbOutlierMeank);
-            pnSettingOut2.Controls.Add(lbOutlierMeank);
-            pnSettingOut2.Location = new Point(24, 513);
-            pnSettingOut2.Margin = new Padding(3, 4, 3, 4);
-            pnSettingOut2.Name = "pnSettingOut2";
-            pnSettingOut2.Size = new Size(850, 58);
-            pnSettingOut2.TabIndex = 23;
-            // 
             // lbCrownSlice
             // 
             lbCrownSlice.AutoSize = true;
             lbCrownSlice.Font = new Font("Microsoft Sans Serif", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
             lbCrownSlice.ForeColor = Color.White;
-            lbCrownSlice.Location = new Point(24, 1238);
+            lbCrownSlice.Location = new Point(24, 985);
             lbCrownSlice.Name = "lbCrownSlice";
             lbCrownSlice.Size = new Size(130, 25);
             lbCrownSlice.TabIndex = 47;
@@ -1082,54 +784,11 @@
             lbTrunkSlice.AutoSize = true;
             lbTrunkSlice.Font = new Font("Microsoft Sans Serif", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
             lbTrunkSlice.ForeColor = Color.White;
-            lbTrunkSlice.Location = new Point(24, 1052);
+            lbTrunkSlice.Location = new Point(24, 799);
             lbTrunkSlice.Name = "lbTrunkSlice";
             lbTrunkSlice.Size = new Size(124, 25);
             lbTrunkSlice.TabIndex = 46;
             lbTrunkSlice.Text = "TrunkSlice";
-            // 
-            // pnSettingOut3
-            // 
-            pnSettingOut3.BackColor = Color.Gray;
-            pnSettingOut3.Controls.Add(tbOutlierMul);
-            pnSettingOut3.Controls.Add(lbOutlierMul);
-            pnSettingOut3.Location = new Point(24, 579);
-            pnSettingOut3.Margin = new Padding(3, 4, 3, 4);
-            pnSettingOut3.Name = "pnSettingOut3";
-            pnSettingOut3.Size = new Size(850, 58);
-            pnSettingOut3.TabIndex = 23;
-            // 
-            // pnSettingMeasure1
-            // 
-            pnSettingMeasure1.BackColor = Color.Gray;
-            pnSettingMeasure1.Controls.Add(tbMeasureNN);
-            pnSettingMeasure1.Controls.Add(lbMeasureNnear);
-            pnSettingMeasure1.Location = new Point(24, 1774);
-            pnSettingMeasure1.Margin = new Padding(3, 4, 3, 4);
-            pnSettingMeasure1.Name = "pnSettingMeasure1";
-            pnSettingMeasure1.Size = new Size(850, 58);
-            pnSettingMeasure1.TabIndex = 78;
-            // 
-            // tbMeasureNN
-            // 
-            tbMeasureNN.BorderStyle = BorderStyle.FixedSingle;
-            tbMeasureNN.Font = new Font("맑은 고딕", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            tbMeasureNN.Location = new Point(725, 15);
-            tbMeasureNN.Margin = new Padding(3, 4, 3, 4);
-            tbMeasureNN.Name = "tbMeasureNN";
-            tbMeasureNN.Size = new Size(109, 29);
-            tbMeasureNN.TabIndex = 67;
-            // 
-            // lbMeasureNnear
-            // 
-            lbMeasureNnear.AutoSize = true;
-            lbMeasureNnear.Font = new Font("맑은 고딕", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-            lbMeasureNnear.ForeColor = Color.White;
-            lbMeasureNnear.Location = new Point(19, 21);
-            lbMeasureNnear.Name = "lbMeasureNnear";
-            lbMeasureNnear.Size = new Size(63, 17);
-            lbMeasureNnear.TabIndex = 65;
-            lbMeasureNnear.Text = "Nnearest";
             // 
             // lbSubsampling
             // 
@@ -1142,44 +801,12 @@
             lbSubsampling.TabIndex = 22;
             lbSubsampling.Text = "SubSampling";
             // 
-            // pnSettingTree1
-            // 
-            pnSettingTree1.BackColor = Color.Gray;
-            pnSettingTree1.Controls.Add(lbTreeNnear);
-            pnSettingTree1.Controls.Add(tbTreeSegNN);
-            pnSettingTree1.Location = new Point(24, 1456);
-            pnSettingTree1.Margin = new Padding(3, 4, 3, 4);
-            pnSettingTree1.Name = "pnSettingTree1";
-            pnSettingTree1.Size = new Size(850, 58);
-            pnSettingTree1.TabIndex = 77;
-            // 
-            // lbTreeNnear
-            // 
-            lbTreeNnear.AutoSize = true;
-            lbTreeNnear.Font = new Font("맑은 고딕", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-            lbTreeNnear.ForeColor = Color.White;
-            lbTreeNnear.Location = new Point(21, 21);
-            lbTreeNnear.Name = "lbTreeNnear";
-            lbTreeNnear.Size = new Size(63, 17);
-            lbTreeNnear.TabIndex = 79;
-            lbTreeNnear.Text = "Nnearest";
-            // 
-            // tbTreeSegNN
-            // 
-            tbTreeSegNN.BorderStyle = BorderStyle.FixedSingle;
-            tbTreeSegNN.Font = new Font("맑은 고딕", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            tbTreeSegNN.Location = new Point(725, 15);
-            tbTreeSegNN.Margin = new Padding(3, 4, 3, 4);
-            tbTreeSegNN.Name = "tbTreeSegNN";
-            tbTreeSegNN.Size = new Size(109, 29);
-            tbTreeSegNN.TabIndex = 80;
-            // 
             // pnSettingCrown1
             // 
             pnSettingCrown1.BackColor = Color.Gray;
             pnSettingCrown1.Controls.Add(lbCrownMinH);
             pnSettingCrown1.Controls.Add(tbCrownMinHeight);
-            pnSettingCrown1.Location = new Point(24, 1270);
+            pnSettingCrown1.Location = new Point(24, 1017);
             pnSettingCrown1.Margin = new Padding(3, 4, 3, 4);
             pnSettingCrown1.Name = "pnSettingCrown1";
             pnSettingCrown1.Size = new Size(850, 58);
@@ -1211,7 +838,7 @@
             pnSettingTrunk1.BackColor = Color.Gray;
             pnSettingTrunk1.Controls.Add(tbTrunkMinHeight);
             pnSettingTrunk1.Controls.Add(lbTrunkMinH);
-            pnSettingTrunk1.Location = new Point(24, 1084);
+            pnSettingTrunk1.Location = new Point(24, 831);
             pnSettingTrunk1.Margin = new Padding(3, 4, 3, 4);
             pnSettingTrunk1.Name = "pnSettingTrunk1";
             pnSettingTrunk1.Size = new Size(850, 58);
@@ -1291,7 +918,6 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.DarkSeaGreen;
             ClientSize = new Size(1280, 800);
-            Controls.Add(pnSideMenu);
             Controls.Add(btnHide);
             Controls.Add(pnSideMenu);
             Controls.Add(btnClose);
@@ -1306,8 +932,6 @@
             MouseMove += MainForm_MouseMove;
             MouseUp += MainForm_MouseUp;
             pnSideMenu.ResumeLayout(false);
-            pnSettingOut1.ResumeLayout(false);
-            pnSettingOut1.PerformLayout();
             tcMainHome.ResumeLayout(false);
             tpMainHome.ResumeLayout(false);
             pnReviewMain.ResumeLayout(false);
@@ -1330,26 +954,10 @@
             pnSettingNor2.PerformLayout();
             pnSettingNor1.ResumeLayout(false);
             pnSettingNor1.PerformLayout();
-            pnSettingTree4.ResumeLayout(false);
-            pnSettingTree4.PerformLayout();
-            customPanel8.ResumeLayout(false);
-            customPanel8.PerformLayout();
-            pnSettingTree3.ResumeLayout(false);
-            pnSettingTree3.PerformLayout();
-            pnSettingTree2.ResumeLayout(false);
-            pnSettingTree2.PerformLayout();
             pnSettingCrown2.ResumeLayout(false);
             pnSettingCrown2.PerformLayout();
             pnSettingTrunk2.ResumeLayout(false);
             pnSettingTrunk2.PerformLayout();
-            pnSettingOut2.ResumeLayout(false);
-            pnSettingOut2.PerformLayout();
-            pnSettingOut3.ResumeLayout(false);
-            pnSettingOut3.PerformLayout();
-            pnSettingMeasure1.ResumeLayout(false);
-            pnSettingMeasure1.PerformLayout();
-            pnSettingTree1.ResumeLayout(false);
-            pnSettingTree1.PerformLayout();
             pnSettingCrown1.ResumeLayout(false);
             pnSettingCrown1.PerformLayout();
             pnSettingTrunk1.ResumeLayout(false);
@@ -1375,21 +983,11 @@
         private Button btnStart;
         private Label lbTitle;
         private TabPage tpSettings;
-        private TextBox tbOutlierMeank;
-        private TextBox tbOutlierMul;
-        private TextBox tbOutlierMethod;
-        private Label lbOutlierMul;
-        private Label lbOutlierMeank;
-        private Label lbOutlierMethod;
-        private Label lbOutlierRemove;
         private TextBox tbSubCellSize;
         private Label lbSubsampling;
         private Label lbSubCellSize;
         private Button btnSettings;
-        private CustomPanel pnSettingOut1;
         private CustomPanel pnSettingSub1;
-        private CustomPanel pnSettingTree1;
-        private Label lbTreeSegment;
         private CustomPanel pnSettingCrown1;
         private TextBox tbCrownMaxHeight;
         private TextBox tbCrownMinHeight;
@@ -1402,28 +1000,8 @@
         private Label lbTrunkMinH;
         private Label lbTrunkMaxH;
         private TextBox tbTrunkMinHeight;
-        private CustomPanel pnSettingMeasure1;
-        private TextBox tbMeasureNN;
-        private Label lbMeasureAttribute;
-        private Label lbMeasureNnear;
-        private CustomPanel pnSettingOut2;
-        private CustomPanel pnSettingOut3;
         private CustomPanel pnSettingTrunk2;
         private CustomPanel pnSettingCrown2;
-        private CustomPanel pnSettingTree4;
-        private CustomPanel customPanel8;
-        private TextBox textBox12;
-        private Label lbMaxDBH;
-        private TextBox tbTreeSegMinDBH;
-        private Label lbTreeMinDBH;
-        private CustomPanel pnSettingTree3;
-        private TextBox tbTreeSegHeightThres;
-        private Label lbTreeThres;
-        private CustomPanel pnSettingTree2;
-        private Label lbTreeSmooth;
-        private TextBox tbTreeSegSmooth;
-        private Label lbTreeNnear;
-        private TextBox tbTreeSegNN;
         private CustomBtn btnSettingSave;
         private Label lbSettings;
         private CustomBtn btnPresetSave;
@@ -1446,7 +1024,6 @@
         private Button btnPresetManage;
         private Button btnHide;
         private CustomBtn btnSettingLoad;
-        private ProgressBar progressBar1;
         private ProgressBar pbLoadingBar;
         private CustomPanel pnSettingPreset;
         private Label lbSettingPreset;

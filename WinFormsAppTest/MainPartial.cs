@@ -39,7 +39,7 @@ namespace WinFormsAppTest
         }
         List<GuiData> guiDataList = new List<GuiData>();
 
-        public string csv_path = @"..\bin\config.csv";
+        public string csv_path = Path.Combine(configPath, "config.csv");
         
         /// <summary>
         /// csv 읽는 함수 
@@ -315,10 +315,7 @@ namespace WinFormsAppTest
             //subsamplng_textbox
             subsampling.cellSize = double.Parse(tbSubCellSize.Text);
 
-            //outlierRemoving_textboxes
-            outlier.mean_k = int.Parse(tbOutlierMeank.Text);
-            outlier.Multiplier = double.Parse(tbOutlierMul.Text);
-
+            //Normalize_textboxes
             groundseg.scalar = tbNorScalar.Text;
             groundseg.cellSize = tbNorCellSize.Text;
             groundseg.slope = tbNorSlope.Text;
@@ -333,15 +330,6 @@ namespace WinFormsAppTest
             cSlice.minHeight = double.Parse(tbCrownMinHeight.Text);
             cSlice.maxHeight = double.Parse(tbCrownMaxHeight.Text);
 
-            ////treeSegment_textbox
-            csp_crown.num_nn_samples = int.Parse(tbTreeSegNN.Text);
-
-            //MeasureAttribute_textbox
-            measure.MeasureNN = int.Parse(tbMeasureNN.Text);
-
-            ////trunkSegment_textboxes
-            csp_stem.smoothness = double.Parse(tbTreeSegSmooth.Text);
-            csp_stem.minDBH = double.Parse(tbTreeSegMinDBH.Text);
             //csp_stem.HeightThreshold = double.Parse(tbTreeSegHeightThres.Text);
         }
 
@@ -350,10 +338,6 @@ namespace WinFormsAppTest
         {
             //subsamplng_textboxes
             tbSubCellSize.Text = subsampling.cellSize.ToString();
-
-            //outlierRemoving_textboxes
-            tbOutlierMeank.Text = outlier.mean_k.ToString();
-            tbOutlierMul.Text = outlier.Multiplier.ToString();
 
             //normalize_textboxes
             tbNorCellSize.Text = groundseg.cellSize;
@@ -369,18 +353,6 @@ namespace WinFormsAppTest
             //CrownSlice_textboxes
             tbCrownMinHeight.Text = cSlice.minHeight.ToString();
             tbCrownMaxHeight.Text = cSlice.maxHeight.ToString();
-
-            ////treeSegment_textbox
-            tbTreeSegNN.Text = csp_crown.num_nn_samples.ToString();
-
-            ////trunkSegment_textboxes
-            tbTreeSegSmooth.Text = csp_stem.smoothness.ToString();
-            tbTreeSegMinDBH.Text = csp_stem.minDBH.ToString();
-            tbTreeSegHeightThres.Text = csp_stem.nmin.ToString();
-
-            //measure_textbox
-            tbMeasureNN.Text = measure.MeasureNN.ToString();
-            ///
         }
         /// <summary>
         /// 무결성 검사를 위한 코드
@@ -389,8 +361,6 @@ namespace WinFormsAppTest
         {
             //double형만 입력가능하도록 키 등록
             tbSubCellSize.KeyPress += TextBox_KeyPressOnlyNumbers;
-            tbOutlierMeank.KeyPress += TextBox_KeyPressOnlyNumbers;
-            tbOutlierMul.KeyPress += TextBox_KeyPressOnlyNumbers;
             tbNorScalar.KeyPress += TextBox_KeyPressOnlyNumbers;
             tbNorSlope.KeyPress += TextBox_KeyPressOnlyNumbers;
             tbNorThres.KeyPress += TextBox_KeyPressOnlyNumbers;
@@ -398,11 +368,6 @@ namespace WinFormsAppTest
             tbTrunkMaxHeight.KeyPress += TextBox_KeyPressOnlyNumbers;
             tbCrownMinHeight.KeyPress += TextBox_KeyPressOnlyNumbers;
             tbCrownMaxHeight.KeyPress += TextBox_KeyPressOnlyNumbers;
-            tbTreeSegSmooth.KeyPress += TextBox_KeyPressOnlyNumbers;
-            tbTreeSegMinDBH.KeyPress += TextBox_KeyPressOnlyNumbers;
-            tbTreeSegHeightThres.KeyPress += TextBox_KeyPressOnlyNumbers;
-            tbTreeSegNN.KeyPress += TextBox_KeyPressOnlyNumbers;
-            tbMeasureNN.KeyPress += TextBox_KeyPressOnlyNumbers;
             /*
             ground_threshold_textbox.KeyPress += TextBox_KeyPressOnlyNumbers;
             TSlice_minHeight_textbox.KeyPress += TextBox_KeyPressOnlyNumbers;
@@ -423,8 +388,6 @@ namespace WinFormsAppTest
             //정수만 입력하도록 하는 핸들러
             tbNorCellSize.KeyPress += TextBox_KeyPress_OnlyInt;
             tbNorWinSize.KeyPress += TextBox_KeyPress_OnlyInt;
-            tbTreeSegNN.KeyPress += TextBox_KeyPress_OnlyInt;
-            tbTreeSegNN.KeyPress += TextBox_KeyPress_OnlyInt;
             //CSP_nnearest_textbox.KeyPress += TextBox_KeyPress_OnlyInt;
             //measure_iterations_textbox.KeyPress += TextBox_KeyPress_OnlyInt;
 
@@ -504,44 +467,13 @@ namespace WinFormsAppTest
 
             // CSV 내용 생성
             StringBuilder csvContent = new StringBuilder();
-            csvContent.AppendLine($"gui,public,circle,cx={gui.centerX} cy={gui.centerY} radius={gui.radius},{guiDataList[0].explain}");
-            csvContent.AppendLine($"gui,public,rectangle,xmin= {gui.xMin} ymin={gui.yMin} xmax={gui.xMax} ymax={gui.yMax},{guiDataList[1].explain}");
-            csvContent.AppendLine($"gui,public,result_path,{gui.resultPath},{guiDataList[2].explain}");
-            csvContent.AppendLine($"filters.crop,private,buffer,{crop.buffer} ,{guiDataList[3].explain}");
-            csvContent.AppendLine($"filters.sample,public,cell,{tbSubCellSize.Text},{guiDataList[4].explain}");
-            csvContent.AppendLine($"filters.outlier,private,method,{outlier.method},{guiDataList[5].explain}");
-            csvContent.AppendLine($"filters.outlier,private,mean_k,{outlier.mean_k},{guiDataList[6].explain}");
-            csvContent.AppendLine($"filters.outlier,private,multiplier,{outlier.Multiplier} ,{guiDataList[7].explain}");
-            csvContent.AppendLine($"filters.smrf,public,cell,{groundseg.cellSize} ,{guiDataList[8].explain}");
-            csvContent.AppendLine($"filters.smrf,public,window,{ groundseg.windowSize} ,{guiDataList[9].explain}");
-            csvContent.AppendLine($"filters.smrf,public,slope,{ groundseg.slope} ,{guiDataList[10].explain}");
-            csvContent.AppendLine($"filters.smrf,public,scalar,{ groundseg.scalar} ,{guiDataList[11].explain}");
-            csvContent.AppendLine($"filters.smrf,public,threshold,{ groundseg.threshold},{guiDataList[12].explain}");
-            csvContent.AppendLine($"filters.range.trunk,public,minheight,{ tSlice.minHeight} ,{guiDataList[13].explain}");
-            csvContent.AppendLine($"filters.range.trunk,public,maxheight,{ tSlice.maxHeight} ,{guiDataList[14].explain}");
-            csvContent.AppendLine($"filters.range.crown,public,minheight,{ cSlice.minHeight} ,{guiDataList[15].explain}");
-            csvContent.AppendLine($"filters.range.crown,public,maxheight,{ cSlice.maxHeight} ,{guiDataList[16].explain}");
-            csvContent.AppendLine($"csp_segmentcrown,private,num_nn_samples,{csp_crown.num_nn_samples},{guiDataList[17].explain}");
-            csvContent.AppendLine($"csp_segmentstem,private,smoothness,{csp_stem.smoothness} ,{guiDataList[18].explain}");
-            csvContent.AppendLine($"csp_segmentstem,private,mindbh,{csp_stem.minDBH} ,{guiDataList[19].explain}");
-            csvContent.AppendLine($"csp_segmentstem,private,maxdbh,{csp_stem.maxDBH},{guiDataList[20].explain}");
-            csvContent.AppendLine($"csp_segmentstem,private,nnearest,{csp_stem.nnearest} ,{guiDataList[21].explain}");
-            csvContent.AppendLine($"csp_segmentstem,private,nmin,{csp_stem.nmin},{guiDataList[22].explain}");
-            csvContent.AppendLine($"csp_segmentstem,private,num_neighbours,{csp_stem.num_neighbours} ,{guiDataList[23].explain}");
-            csvContent.AppendLine($"csp_segmentstem,private,anglemax,{csp_stem.anglemax} ,{guiDataList[24].explain}");
-            csvContent.AppendLine($"measure,private,nnearest,{measure.MeasureNN},{guiDataList[25].explain}");
-            csvContent.AppendLine($"measure,private,minrad,{measure.minRad} ,{guiDataList[26].explain}");
-            csvContent.AppendLine($"measure,private,maxrad,{measure.maxRad} ,{guiDataList[27].explain}");
-            csvContent.AppendLine($"measure,private,iterations,{measure.iterations} ,{guiDataList[28].explain}");
-            csvContent.AppendLine($"measure,private,zmin_check,{measure.zmin_check},{guiDataList[29].explain}");
-            csvContent.Append($"measure,private,zmax_check,{measure.zmax_check},{guiDataList[30].explain}");
 
             string[] infoRecent = new string[] { };
             //config 파일 종류별 전처리(종류별로 필요한 데이터 추가)
             switch (confType)
             {
                 case configFileType.Default:
-                    filePath += @"\config.json";
+                    filePath += @"\config.csv";
                     break;
                 case configFileType.Recent:
                     Dictionary<string, double> plotData = plotSender();

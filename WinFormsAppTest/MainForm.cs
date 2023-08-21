@@ -59,11 +59,10 @@ namespace WinFormsAppTest
         bool menuOpen = false;
 
         Point relativeMformPos = new Point();
-        Point relativeRpanelPos = new Point();
 
         bool isMformDrag = false;
 
-        internal static string configPath = Directory.GetParent(System.Environment.CurrentDirectory) + @"\bin\";
+        internal static string configPath = (Environment.CurrentDirectory).ToString();
         internal static string[] reqDi = { "", "RecentConfig", "PresetConfig" };
 
         public MainForm()
@@ -85,15 +84,17 @@ namespace WinFormsAppTest
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            if (!File.Exists(configPath + "config.json"))
+            if (!File.Exists(Path.Combine(configPath, "config.csv")))
             {
-                MakeConfig(configFileType.Default);
+                MessageBox.Show("config.csv파일이 없습니다. 프로그램 개발 측으로 문의해주세요.\n" +
+                    $"filepath : {Environment.CurrentDirectory}", "기본 설정 파일 오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Application.Exit();
             }
 
             read_csv(csv_path);
             FillTextboxes();
             RegistTextBoxHandler();
-            
+
             Point screenSize = ((Point)Screen.PrimaryScreen.Bounds.Size);
 
             //메인 폼 로드 전 이벤트 전처리(Designer.cs에 넣으면 찾기가 힘듬)
@@ -144,21 +145,6 @@ namespace WinFormsAppTest
             pnSettingSub1.MouseLeave += pnSettingAll_MouseLeave;
             pnSettingSub1.MouseUp += pnSettingAll_MouseUp;
 
-            pnSettingOut1.MouseDown += pnSettingAll_MouseDown;
-            pnSettingOut1.MouseEnter += pnSettingAll_MouseEnter;
-            pnSettingOut1.MouseLeave += pnSettingAll_MouseLeave;
-            pnSettingOut1.MouseUp += pnSettingAll_MouseUp;
-
-            pnSettingOut2.MouseDown += pnSettingAll_MouseDown;
-            pnSettingOut2.MouseEnter += pnSettingAll_MouseEnter;
-            pnSettingOut2.MouseLeave += pnSettingAll_MouseLeave;
-            pnSettingOut2.MouseUp += pnSettingAll_MouseUp;
-
-            pnSettingOut3.MouseDown += pnSettingAll_MouseDown;
-            pnSettingOut3.MouseEnter += pnSettingAll_MouseEnter;
-            pnSettingOut3.MouseLeave += pnSettingAll_MouseLeave;
-            pnSettingOut3.MouseUp += pnSettingAll_MouseUp;
-
             pnSettingNor1.MouseDown += pnSettingAll_MouseDown;
             pnSettingNor1.MouseEnter += pnSettingAll_MouseEnter;
             pnSettingNor1.MouseLeave += pnSettingAll_MouseLeave;
@@ -203,31 +189,6 @@ namespace WinFormsAppTest
             pnSettingCrown2.MouseEnter += pnSettingAll_MouseEnter;
             pnSettingCrown2.MouseLeave += pnSettingAll_MouseLeave;
             pnSettingCrown2.MouseUp += pnSettingAll_MouseUp;
-
-            pnSettingTree1.MouseDown += pnSettingAll_MouseDown;
-            pnSettingTree1.MouseEnter += pnSettingAll_MouseEnter;
-            pnSettingTree1.MouseLeave += pnSettingAll_MouseLeave;
-            pnSettingTree1.MouseUp += pnSettingAll_MouseUp;
-
-            pnSettingTree2.MouseDown += pnSettingAll_MouseDown;
-            pnSettingTree2.MouseEnter += pnSettingAll_MouseEnter;
-            pnSettingTree2.MouseLeave += pnSettingAll_MouseLeave;
-            pnSettingTree2.MouseUp += pnSettingAll_MouseUp;
-
-            pnSettingTree3.MouseDown += pnSettingAll_MouseDown;
-            pnSettingTree3.MouseEnter += pnSettingAll_MouseEnter;
-            pnSettingTree3.MouseLeave += pnSettingAll_MouseLeave;
-            pnSettingTree3.MouseUp += pnSettingAll_MouseUp;
-
-            pnSettingTree4.MouseDown += pnSettingAll_MouseDown;
-            pnSettingTree4.MouseEnter += pnSettingAll_MouseEnter;
-            pnSettingTree4.MouseLeave += pnSettingAll_MouseLeave;
-            pnSettingTree4.MouseUp += pnSettingAll_MouseUp;
-
-            pnSettingMeasure1.MouseDown += pnSettingAll_MouseDown;
-            pnSettingMeasure1.MouseEnter += pnSettingAll_MouseEnter;
-            pnSettingMeasure1.MouseLeave += pnSettingAll_MouseLeave;
-            pnSettingMeasure1.MouseUp += pnSettingAll_MouseUp;
         }
 
         //CustomPanel 색 및 테두리 지정(Designer.cs에서 지정하면 컴파일 시 없어짐)
@@ -247,21 +208,6 @@ namespace WinFormsAppTest
             pnSettingSub1.isFill = true;
             pnSettingSub1.isBorder = false;
             pnSettingSub1.fillColor = Color.Gray;
-
-            pnSettingOut1.BackColor = Color.Transparent;
-            pnSettingOut1.isFill = true;
-            pnSettingOut1.isBorder = false;
-            pnSettingOut1.fillColor = Color.Gray;
-
-            pnSettingOut2.BackColor = Color.Transparent;
-            pnSettingOut2.isFill = true;
-            pnSettingOut2.isBorder = false;
-            pnSettingOut2.fillColor = Color.Gray;
-
-            pnSettingOut3.BackColor = Color.Transparent;
-            pnSettingOut3.isFill = true;
-            pnSettingOut3.isBorder = false;
-            pnSettingOut3.fillColor = Color.Gray;
 
             pnSettingNor1.BackColor = Color.Transparent;
             pnSettingNor1.isFill = true;
@@ -307,31 +253,6 @@ namespace WinFormsAppTest
             pnSettingCrown2.isFill = true;
             pnSettingCrown2.isBorder = false;
             pnSettingCrown2.fillColor = Color.Gray;
-
-            pnSettingTree1.BackColor = Color.Transparent;
-            pnSettingTree1.isFill = true;
-            pnSettingTree1.isBorder = false;
-            pnSettingTree1.fillColor = Color.Gray;
-
-            pnSettingTree2.BackColor = Color.Transparent;
-            pnSettingTree2.isFill = true;
-            pnSettingTree2.isBorder = false;
-            pnSettingTree2.fillColor = Color.Gray;
-
-            pnSettingTree3.BackColor = Color.Transparent;
-            pnSettingTree3.isFill = true;
-            pnSettingTree3.isBorder = false;
-            pnSettingTree3.fillColor = Color.Gray;
-
-            pnSettingTree4.BackColor = Color.Transparent;
-            pnSettingTree4.isFill = true;
-            pnSettingTree4.isBorder = false;
-            pnSettingTree4.fillColor = Color.Gray;
-
-            pnSettingMeasure1.BackColor = Color.Transparent;
-            pnSettingMeasure1.isFill = true;
-            pnSettingMeasure1.isBorder = false;
-            pnSettingMeasure1.fillColor = Color.Gray;
         }
 
         //프리셋 콘피그 파일 갯수만큼 버튼 로드
@@ -381,7 +302,7 @@ namespace WinFormsAppTest
                 btnPreConfs.FlatStyle = FlatStyle.Flat;
                 btnPreConfs.ImageAlign = ContentAlignment.MiddleLeft;
                 btnPreConfs.TextAlign = ContentAlignment.MiddleLeft;
-                btnPreConfs.Font = new Font("Microsoft Sans Serif", 18F, FontStyle.Bold, GraphicsUnit.Point);
+                btnPreConfs.Font = new Font("맑은 고딕", 18F, FontStyle.Bold, GraphicsUnit.Point);
                 btnPreConfs.Image = Image.FromFile(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName
                     + @"\Resources\btnPreConf.Image.png");
                 using (StreamReader sr = new StreamReader(conf))
@@ -609,8 +530,8 @@ namespace WinFormsAppTest
             foreach (string conf in confCheck)
             {
                 string fileName = conf.Substring(conf.IndexOf("presetConfig"), conf.Length - conf.IndexOf("presetConfig") - 4);
-                if (((Button)sender).Name == fileName+".csv")
-                {                    
+                if (((Button)sender).Name == fileName + ".csv")
+                {
                     read_csv(conf);
                     FillTextboxes();
                 }
@@ -803,7 +724,7 @@ namespace WinFormsAppTest
             }
             mFrm.ShowDialog();
         }
-         
+
         private void btnHide_Click(object sender, EventArgs e)
         {
             this.WindowState = FormWindowState.Minimized;
