@@ -10,8 +10,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Xml.Linq;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using static WinFormsAppTest.MainForm;
 
 namespace WinFormsAppTest
@@ -69,7 +67,7 @@ namespace WinFormsAppTest
 
             ////////////////////////////////////////////////////////////////
             attachStartBtn(false);
-            
+
             Point screenSize = ((Point)Screen.PrimaryScreen.Bounds.Size);
 
             this.Location = new Point((screenSize.X - this.Width) / 2, (screenSize.Y - this.Height) / 2);
@@ -240,10 +238,10 @@ namespace WinFormsAppTest
             attachProgressBar(true);
 
             //csv 초기화
-           
+
             preProAndExcuteStep();
 
- 
+
             paramForm.write_csv(paramForm.csv_path);
 
             if (progress == 10)

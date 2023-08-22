@@ -1,8 +1,5 @@
-using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
 using Timer = System.Windows.Forms.Timer;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using WinFormsAppTest.Properties;
 using System.Dynamic;
 using System.Text.RegularExpressions;
@@ -769,6 +766,11 @@ namespace WinFormsAppTest
         {
             UpdateParams();
             MessageBox.Show("적용되었습니다.");
+            tcMainHome.SelectedIndex = 0;
+        }
+
+        private void btnSettingCancel_Click(object sender, EventArgs e)
+        {
             tcMainHome.SelectedIndex = 0;
         }
     }

@@ -58,7 +58,6 @@ namespace WinFormsAppTest
                     {
                         string line = reader.ReadLine();
                         string[] values = line.Split(',');
-
                         if (values.Length >= 4)
                         {
                             GuiData guiData = new GuiData
@@ -77,7 +76,7 @@ namespace WinFormsAppTest
                             {
                                 ExtractRectangleValues(guiData.Value);
                             }
-                            guiDataList.Add(guiData);
+                            guiDataList.Add(guiData);                           
                         }
                     }
                 }
@@ -292,11 +291,42 @@ namespace WinFormsAppTest
 
             // CSV 내용 생성
             StringBuilder csvContent = new StringBuilder();
-            foreach (var item in guiDataList)
+            /*foreach (var item in guiDataList)
             {
                 string str = item.Type.ToString() + "," + item.Visibility.ToString() + "," + item.Key + "," + item.Value + ","+item.explain;
                 csvContent.AppendLine(str);
-            }
+            }*/
+            csvContent.AppendLine($"gui,public,circle,cx={gui.centerX} cy={gui.centerY} radius={gui.radius},{guiDataList[0].explain}");
+            csvContent.AppendLine($"gui,public,rectangle,xmin= {gui.xMin} ymin={gui.yMin} xmax={gui.xMax} ymax={gui.yMax},{guiDataList[1].explain}");
+            csvContent.AppendLine($"gui,public,result_path,{gui.resultPath},{guiDataList[2].explain}");
+            csvContent.AppendLine($"filters.crop,private,buffer,{crop.buffer} ,{guiDataList[3].explain}");
+            csvContent.AppendLine($"filters.sample,public,cell,{tbSubCellSize.Text},{guiDataList[4].explain}");
+            csvContent.AppendLine($"filters.outlier,private,method,{outlier.method},{guiDataList[5].explain}");
+            csvContent.AppendLine($"filters.outlier,private,mean_k,{outlier.mean_k},{guiDataList[6].explain}");
+            csvContent.AppendLine($"filters.outlier,private,multiplier,{outlier.Multiplier} ,{guiDataList[7].explain}");
+            csvContent.AppendLine($"filters.smrf,public,cell,{tbNorCellSize.Text},{guiDataList[8].explain}");
+            csvContent.AppendLine($"filters.smrf,public,window,{tbNorWinSize.Text},{guiDataList[9].explain}");
+            csvContent.AppendLine($"filters.smrf,public,slope,{tbNorSlope.Text},{guiDataList[10].explain}");
+            csvContent.AppendLine($"filters.smrf,public,scalar,{tbNorScalar.Text},{guiDataList[11].explain}");
+            csvContent.AppendLine($"filters.smrf,public,threshold,{tbNorThres.Text},{guiDataList[12].explain}");
+            csvContent.AppendLine($"filters.range.trunk,public,minheight,{tbTrunkMinHeight.Text},{guiDataList[13].explain}");
+            csvContent.AppendLine($"filters.range.trunk,public,maxheight,{tbTrunkMaxHeight.Text},{guiDataList[14].explain}");
+            csvContent.AppendLine($"filters.range.crown,public,minheight,{tbCrownMinHeight.Text},{guiDataList[15].explain}");
+            csvContent.AppendLine($"filters.range.crown,public,maxheight,{tbCrownMaxHeight.Text},{guiDataList[16].explain}");
+            csvContent.AppendLine($"csp_segmentcrown,private,num_nn_samples,{csp_crown.num_nn_samples},{guiDataList[17].explain}");
+            csvContent.AppendLine($"csp_segmentstem,private,smoothness,{csp_stem.smoothness} ,{guiDataList[18].explain}");
+            csvContent.AppendLine($"csp_segmentstem,private,mindbh,{csp_stem.minDBH} ,{guiDataList[19].explain}");
+            csvContent.AppendLine($"csp_segmentstem,private,maxdbh,{csp_stem.maxDBH},{guiDataList[20].explain}");
+            csvContent.AppendLine($"csp_segmentstem,private,nnearest,{csp_stem.nnearest} ,{guiDataList[21].explain}");
+            csvContent.AppendLine($"csp_segmentstem,private,nmin,{csp_stem.nmin},{guiDataList[22].explain}");
+            csvContent.AppendLine($"csp_segmentstem,private,num_neighbours,{csp_stem.num_neighbours} ,{guiDataList[23].explain}");
+            csvContent.AppendLine($"csp_segmentstem,private,anglemax,{csp_stem.anglemax} ,{guiDataList[24].explain}");
+            csvContent.AppendLine($"measure,private,nnearest,{measure.MeasureNN},{guiDataList[25].explain}");
+            csvContent.AppendLine($"measure,private,minrad,{measure.minRad} ,{guiDataList[26].explain}");
+            csvContent.AppendLine($"measure,private,maxrad,{measure.maxRad} ,{guiDataList[27].explain}");
+            csvContent.AppendLine($"measure,private,iterations,{measure.iterations} ,{guiDataList[28].explain}");
+            csvContent.AppendLine($"measure,private,zmin_check,{measure.zmin_check},{guiDataList[29].explain}");
+            csvContent.Append($"measure,private,zmax_check,{measure.zmax_check},{guiDataList[30].explain}");
 
             // CSV 파일 생성 및 내용 기록
             try
@@ -313,22 +343,22 @@ namespace WinFormsAppTest
         private void UpdateParams()
         {
             //subsamplng_textbox
-            subsampling.cellSize = double.Parse(tbSubCellSize.Text);
+            subsampling.cellSize = double.Parse(tbSubCellSize.Text.Trim());
 
             //Normalize_textboxes
-            groundseg.scalar = tbNorScalar.Text;
-            groundseg.cellSize = tbNorCellSize.Text;
-            groundseg.slope = tbNorSlope.Text;
-            groundseg.windowSize = tbNorWinSize.Text;
-            groundseg.threshold = tbNorThres.Text;
+            groundseg.scalar = tbNorScalar.Text.Trim();
+            groundseg.cellSize = tbNorCellSize.Text.Trim();
+            groundseg.slope = tbNorSlope.Text.Trim();
+            groundseg.windowSize = tbNorWinSize.Text.Trim();
+            groundseg.threshold = tbNorThres.Text.Trim();
 
             //trunkSlice_textboxes
-            tSlice.minHeight = double.Parse(tbTrunkMinHeight.Text);
-            tSlice.maxHeight = double.Parse(tbTrunkMaxHeight.Text);
+            tSlice.minHeight = double.Parse(tbTrunkMinHeight.Text.Trim());
+            tSlice.maxHeight = double.Parse(tbTrunkMaxHeight.Text.Trim());
 
             //CrownSlice_textboxes
-            cSlice.minHeight = double.Parse(tbCrownMinHeight.Text);
-            cSlice.maxHeight = double.Parse(tbCrownMaxHeight.Text);
+            cSlice.minHeight = double.Parse(tbCrownMinHeight.Text.Trim());
+            cSlice.maxHeight = double.Parse(tbCrownMaxHeight.Text.Trim());
 
             //csp_stem.HeightThreshold = double.Parse(tbTreeSegHeightThres.Text);
         }

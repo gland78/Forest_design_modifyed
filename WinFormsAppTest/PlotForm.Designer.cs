@@ -35,13 +35,13 @@
             tbPlotCircleX = new TextBox();
             lbPlotCircleX = new Label();
             tbPlotRecYmax = new TextBox();
-            lbPlotRecText2 = new Label();
+            lbPlotRecYmax = new Label();
             tbPlotRecXmax = new TextBox();
-            lbPlotRecText1 = new Label();
+            lbPlotRecXmax = new Label();
             tbPlotRecYmin = new TextBox();
-            lbPlotRecY = new Label();
+            lbPlotRecYmin = new Label();
             tbPlotRecXmin = new TextBox();
-            lbPlotRecX = new Label();
+            lbPlotRecXmin = new Label();
             tbPlotPolySet = new TextBox();
             lbPlotPolySet = new Label();
             c_btnPlotPolySet = new CustomBtn();
@@ -122,37 +122,37 @@
             // 
             // tbPlotRecYmax
             // 
-            tbPlotRecYmax.Location = new Point(279, 90);
+            tbPlotRecYmax.Location = new Point(304, 90);
             tbPlotRecYmax.Name = "tbPlotRecYmax";
             tbPlotRecYmax.Size = new Size(107, 23);
             tbPlotRecYmax.TabIndex = 17;
             tbPlotRecYmax.Leave += tbPlotRecYmax_Leave;
             // 
-            // lbPlotRecText2
+            // lbPlotRecYmax
             // 
-            lbPlotRecText2.AutoSize = true;
-            lbPlotRecText2.Location = new Point(253, 94);
-            lbPlotRecText2.Name = "lbPlotRecText2";
-            lbPlotRecText2.Size = new Size(15, 15);
-            lbPlotRecText2.TabIndex = 16;
-            lbPlotRecText2.Text = "~";
+            lbPlotRecYmax.AutoSize = true;
+            lbPlotRecYmax.Location = new Point(261, 93);
+            lbPlotRecYmax.Name = "lbPlotRecYmax";
+            lbPlotRecYmax.Size = new Size(37, 15);
+            lbPlotRecYmax.TabIndex = 16;
+            lbPlotRecYmax.Text = "Ymax";
             // 
             // tbPlotRecXmax
             // 
-            tbPlotRecXmax.Location = new Point(279, 48);
+            tbPlotRecXmax.Location = new Point(304, 48);
             tbPlotRecXmax.Name = "tbPlotRecXmax";
             tbPlotRecXmax.Size = new Size(107, 23);
             tbPlotRecXmax.TabIndex = 15;
             tbPlotRecXmax.Leave += tbPlotRecXmax_Leave;
             // 
-            // lbPlotRecText1
+            // lbPlotRecXmax
             // 
-            lbPlotRecText1.AutoSize = true;
-            lbPlotRecText1.Location = new Point(253, 52);
-            lbPlotRecText1.Name = "lbPlotRecText1";
-            lbPlotRecText1.Size = new Size(15, 15);
-            lbPlotRecText1.TabIndex = 14;
-            lbPlotRecText1.Text = "~";
+            lbPlotRecXmax.AutoSize = true;
+            lbPlotRecXmax.Location = new Point(261, 51);
+            lbPlotRecXmax.Name = "lbPlotRecXmax";
+            lbPlotRecXmax.Size = new Size(37, 15);
+            lbPlotRecXmax.TabIndex = 14;
+            lbPlotRecXmax.Text = "Xmax";
             // 
             // tbPlotRecYmin
             // 
@@ -162,14 +162,14 @@
             tbPlotRecYmin.TabIndex = 11;
             tbPlotRecYmin.Leave += tbPlotRecYmin_Leave;
             // 
-            // lbPlotRecY
+            // lbPlotRecYmin
             // 
-            lbPlotRecY.AutoSize = true;
-            lbPlotRecY.Location = new Point(67, 94);
-            lbPlotRecY.Name = "lbPlotRecY";
-            lbPlotRecY.Size = new Size(14, 15);
-            lbPlotRecY.TabIndex = 10;
-            lbPlotRecY.Text = "Y";
+            lbPlotRecYmin.AutoSize = true;
+            lbPlotRecYmin.Location = new Point(67, 94);
+            lbPlotRecYmin.Name = "lbPlotRecYmin";
+            lbPlotRecYmin.Size = new Size(35, 15);
+            lbPlotRecYmin.TabIndex = 10;
+            lbPlotRecYmin.Text = "Ymin";
             // 
             // tbPlotRecXmin
             // 
@@ -179,14 +179,14 @@
             tbPlotRecXmin.TabIndex = 9;
             tbPlotRecXmin.Leave += tbPlotRecXmin_Leave;
             // 
-            // lbPlotRecX
+            // lbPlotRecXmin
             // 
-            lbPlotRecX.AutoSize = true;
-            lbPlotRecX.Location = new Point(67, 52);
-            lbPlotRecX.Name = "lbPlotRecX";
-            lbPlotRecX.Size = new Size(14, 15);
-            lbPlotRecX.TabIndex = 8;
-            lbPlotRecX.Text = "X";
+            lbPlotRecXmin.AutoSize = true;
+            lbPlotRecXmin.Location = new Point(67, 52);
+            lbPlotRecXmin.Name = "lbPlotRecXmin";
+            lbPlotRecXmin.Size = new Size(35, 15);
+            lbPlotRecXmin.TabIndex = 8;
+            lbPlotRecXmin.Text = "Xmin";
             // 
             // tbPlotPolySet
             // 
@@ -295,12 +295,12 @@
             tpPlotRec.BackColor = Color.YellowGreen;
             tpPlotRec.Controls.Add(lbPlotRec);
             tpPlotRec.Controls.Add(tbPlotRecYmax);
-            tpPlotRec.Controls.Add(lbPlotRecText2);
-            tpPlotRec.Controls.Add(lbPlotRecX);
+            tpPlotRec.Controls.Add(lbPlotRecYmax);
+            tpPlotRec.Controls.Add(lbPlotRecXmin);
             tpPlotRec.Controls.Add(tbPlotRecXmax);
             tpPlotRec.Controls.Add(tbPlotRecXmin);
-            tpPlotRec.Controls.Add(lbPlotRecText1);
-            tpPlotRec.Controls.Add(lbPlotRecY);
+            tpPlotRec.Controls.Add(lbPlotRecXmax);
+            tpPlotRec.Controls.Add(lbPlotRecYmin);
             tpPlotRec.Controls.Add(tbPlotRecYmin);
             tpPlotRec.Location = new Point(4, 9);
             tpPlotRec.Name = "tpPlotRec";
@@ -458,13 +458,13 @@
         private TextBox tbPlotCircleX;
         private Label lbPlotCircleX;
         private TextBox tbPlotRecYmin;
-        private Label lbPlotRecY;
+        private Label lbPlotRecYmin;
         private TextBox tbPlotRecXmin;
-        private Label lbPlotRecX;
+        private Label lbPlotRecXmin;
         private TextBox tbPlotRecYmax;
-        private Label lbPlotRecText2;
+        private Label lbPlotRecYmax;
         private TextBox tbPlotRecXmax;
-        private Label lbPlotRecText1;
+        private Label lbPlotRecXmax;
         private TextBox tbPlotPolySet;
         private Label lbPlotPolySet;
         private CustomBtn c_btnPlotPolySet;

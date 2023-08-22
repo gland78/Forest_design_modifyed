@@ -47,8 +47,10 @@
             btnStart = new Button();
             lbTitle = new Label();
             tpSettings = new TabPage();
+            btnSettingCancel = new CustomBtn();
             btnSettingApply = new CustomBtn();
             pnSettingDefault = new CustomPanel();
+            btn_factory_reset = new CustomBtn();
             lbSettingDefault = new Label();
             lbSettingDefaultInfo = new Label();
             btnSettingLoad = new CustomBtn();
@@ -345,6 +347,7 @@
             tpSettings.AutoScrollMargin = new Size(0, 20);
             tpSettings.AutoScrollMinSize = new Size(0, 5);
             tpSettings.BackColor = Color.DimGray;
+            tpSettings.Controls.Add(btnSettingCancel);
             tpSettings.Controls.Add(btnSettingApply);
             tpSettings.Controls.Add(pnSettingDefault);
             tpSettings.Controls.Add(pnSettingPreset);
@@ -369,6 +372,27 @@
             tpSettings.Size = new Size(897, 757);
             tpSettings.TabIndex = 1;
             // 
+            // btnSettingCancel
+            // 
+            btnSettingCancel.BackColor = Color.FromArgb(64, 64, 64);
+            btnSettingCancel.BackgroundColor = Color.FromArgb(64, 64, 64);
+            btnSettingCancel.BorderColor = Color.Transparent;
+            btnSettingCancel.BorderRadius = 10;
+            btnSettingCancel.BorderSize = 1;
+            btnSettingCancel.FlatAppearance.BorderSize = 0;
+            btnSettingCancel.FlatAppearance.MouseDownBackColor = Color.FromArgb(80, 80, 80);
+            btnSettingCancel.FlatStyle = FlatStyle.Flat;
+            btnSettingCancel.Font = new Font("맑은 고딕", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            btnSettingCancel.ForeColor = Color.White;
+            btnSettingCancel.Location = new Point(743, 38);
+            btnSettingCancel.Name = "btnSettingCancel";
+            btnSettingCancel.Size = new Size(115, 40);
+            btnSettingCancel.TabIndex = 91;
+            btnSettingCancel.Text = "취소";
+            btnSettingCancel.TextColor = Color.White;
+            btnSettingCancel.UseVisualStyleBackColor = false;
+            btnSettingCancel.Click += btnSettingCancel_Click;
+            // 
             // btnSettingApply
             // 
             btnSettingApply.BackColor = Color.FromArgb(64, 64, 64);
@@ -381,7 +405,7 @@
             btnSettingApply.FlatStyle = FlatStyle.Flat;
             btnSettingApply.Font = new Font("맑은 고딕", 12F, FontStyle.Bold, GraphicsUnit.Point);
             btnSettingApply.ForeColor = Color.White;
-            btnSettingApply.Location = new Point(743, 38);
+            btnSettingApply.Location = new Point(622, 38);
             btnSettingApply.Name = "btnSettingApply";
             btnSettingApply.Size = new Size(115, 40);
             btnSettingApply.TabIndex = 90;
@@ -393,6 +417,7 @@
             // pnSettingDefault
             // 
             pnSettingDefault.BackColor = Color.Gray;
+            pnSettingDefault.Controls.Add(btn_factory_reset);
             pnSettingDefault.Controls.Add(lbSettingDefault);
             pnSettingDefault.Controls.Add(lbSettingDefaultInfo);
             pnSettingDefault.Controls.Add(btnSettingLoad);
@@ -402,6 +427,26 @@
             pnSettingDefault.Name = "pnSettingDefault";
             pnSettingDefault.Size = new Size(850, 72);
             pnSettingDefault.TabIndex = 90;
+            // 
+            // btn_factory_reset
+            // 
+            btn_factory_reset.BackColor = Color.FromArgb(64, 64, 64);
+            btn_factory_reset.BackgroundColor = Color.FromArgb(64, 64, 64);
+            btn_factory_reset.BorderColor = Color.Transparent;
+            btn_factory_reset.BorderRadius = 10;
+            btn_factory_reset.BorderSize = 1;
+            btn_factory_reset.FlatAppearance.BorderSize = 0;
+            btn_factory_reset.FlatAppearance.MouseDownBackColor = Color.FromArgb(80, 80, 80);
+            btn_factory_reset.FlatStyle = FlatStyle.Flat;
+            btn_factory_reset.Font = new Font("맑은 고딕", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
+            btn_factory_reset.ForeColor = Color.White;
+            btn_factory_reset.Location = new Point(470, 18);
+            btn_factory_reset.Name = "btn_factory_reset";
+            btn_factory_reset.Size = new Size(104, 36);
+            btn_factory_reset.TabIndex = 91;
+            btn_factory_reset.Text = "공장초기화";
+            btn_factory_reset.TextColor = Color.White;
+            btn_factory_reset.UseVisualStyleBackColor = false;
             // 
             // lbSettingDefault
             // 
@@ -1032,5 +1077,7 @@
         private Label lbSettingDefault;
         private Label lbSettingDefaultInfo;
         private CustomBtn btnSettingApply;
+        private CustomBtn btnSettingCancel;
+        private CustomBtn btn_factory_reset;
     }
 }
