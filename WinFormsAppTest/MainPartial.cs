@@ -40,7 +40,7 @@ namespace WinFormsAppTest
         List<GuiData> guiDataList = new List<GuiData>();
 
         public string csv_path = Path.Combine(configPath, "config.csv");
-        
+
         /// <summary>
         /// csv 읽는 함수 
         /// </summary>
@@ -66,7 +66,7 @@ namespace WinFormsAppTest
                                 Visibility = values[1],
                                 Key = values[2],
                                 Value = values[3],
-                                explain= values[4]
+                                explain = values[4]
                             };
                             if (guiData.Key == "circle")
                             {
@@ -76,7 +76,7 @@ namespace WinFormsAppTest
                             {
                                 ExtractRectangleValues(guiData.Value);
                             }
-                            guiDataList.Add(guiData);                           
+                            guiDataList.Add(guiData);
                         }
                     }
                 }
@@ -223,7 +223,7 @@ namespace WinFormsAppTest
             }
             catch (Exception ex)
             {
-                Console.WriteLine("An error occurred: " + ex.Message);
+                Console.WriteLine("CSV파일 읽는 중 오류 발생: " + ex.Message);
             }
         }
         void ExtractCircleValues(string circleString)
@@ -297,13 +297,13 @@ namespace WinFormsAppTest
                 csvContent.AppendLine(str);
             }*/
             csvContent.AppendLine($"gui,public,circle,cx={gui.centerX} cy={gui.centerY} radius={gui.radius},{guiDataList[0].explain}");
-            csvContent.AppendLine($"gui,public,rectangle,xmin= {gui.xMin} ymin={gui.yMin} xmax={gui.xMax} ymax={gui.yMax},{guiDataList[1].explain}");
+            csvContent.AppendLine($"gui,public,rectangle,xmin={gui.xMin} ymin={gui.yMin} xmax={gui.xMax} ymax={gui.yMax},{guiDataList[1].explain}");
             csvContent.AppendLine($"gui,public,result_path,{gui.resultPath},{guiDataList[2].explain}");
-            csvContent.AppendLine($"filters.crop,private,buffer,{crop.buffer} ,{guiDataList[3].explain}");
+            csvContent.AppendLine($"filters.crop,private,buffer,{crop.buffer},{guiDataList[3].explain}");
             csvContent.AppendLine($"filters.sample,public,cell,{tbSubCellSize.Text},{guiDataList[4].explain}");
             csvContent.AppendLine($"filters.outlier,private,method,{outlier.method},{guiDataList[5].explain}");
             csvContent.AppendLine($"filters.outlier,private,mean_k,{outlier.mean_k},{guiDataList[6].explain}");
-            csvContent.AppendLine($"filters.outlier,private,multiplier,{outlier.Multiplier} ,{guiDataList[7].explain}");
+            csvContent.AppendLine($"filters.outlier,private,multiplier,{outlier.Multiplier},{guiDataList[7].explain}");
             csvContent.AppendLine($"filters.smrf,public,cell,{tbNorCellSize.Text},{guiDataList[8].explain}");
             csvContent.AppendLine($"filters.smrf,public,window,{tbNorWinSize.Text},{guiDataList[9].explain}");
             csvContent.AppendLine($"filters.smrf,public,slope,{tbNorSlope.Text},{guiDataList[10].explain}");
@@ -314,17 +314,17 @@ namespace WinFormsAppTest
             csvContent.AppendLine($"filters.range.crown,public,minheight,{tbCrownMinHeight.Text},{guiDataList[15].explain}");
             csvContent.AppendLine($"filters.range.crown,public,maxheight,{tbCrownMaxHeight.Text},{guiDataList[16].explain}");
             csvContent.AppendLine($"csp_segmentcrown,private,num_nn_samples,{csp_crown.num_nn_samples},{guiDataList[17].explain}");
-            csvContent.AppendLine($"csp_segmentstem,private,smoothness,{csp_stem.smoothness} ,{guiDataList[18].explain}");
-            csvContent.AppendLine($"csp_segmentstem,private,mindbh,{csp_stem.minDBH} ,{guiDataList[19].explain}");
+            csvContent.AppendLine($"csp_segmentstem,private,smoothness,{csp_stem.smoothness},{guiDataList[18].explain}");
+            csvContent.AppendLine($"csp_segmentstem,private,mindbh,{csp_stem.minDBH},{guiDataList[19].explain}");
             csvContent.AppendLine($"csp_segmentstem,private,maxdbh,{csp_stem.maxDBH},{guiDataList[20].explain}");
-            csvContent.AppendLine($"csp_segmentstem,private,nnearest,{csp_stem.nnearest} ,{guiDataList[21].explain}");
+            csvContent.AppendLine($"csp_segmentstem,private,nnearest,{csp_stem.nnearest},{guiDataList[21].explain}");
             csvContent.AppendLine($"csp_segmentstem,private,nmin,{csp_stem.nmin},{guiDataList[22].explain}");
-            csvContent.AppendLine($"csp_segmentstem,private,num_neighbours,{csp_stem.num_neighbours} ,{guiDataList[23].explain}");
-            csvContent.AppendLine($"csp_segmentstem,private,anglemax,{csp_stem.anglemax} ,{guiDataList[24].explain}");
+            csvContent.AppendLine($"csp_segmentstem,private,num_neighbours,{csp_stem.num_neighbours},{guiDataList[23].explain}");
+            csvContent.AppendLine($"csp_segmentstem,private,anglemax,{csp_stem.anglemax},{guiDataList[24].explain}");
             csvContent.AppendLine($"measure,private,nnearest,{measure.MeasureNN},{guiDataList[25].explain}");
-            csvContent.AppendLine($"measure,private,minrad,{measure.minRad} ,{guiDataList[26].explain}");
-            csvContent.AppendLine($"measure,private,maxrad,{measure.maxRad} ,{guiDataList[27].explain}");
-            csvContent.AppendLine($"measure,private,iterations,{measure.iterations} ,{guiDataList[28].explain}");
+            csvContent.AppendLine($"measure,private,minrad,{measure.minRad},{guiDataList[26].explain}");
+            csvContent.AppendLine($"measure,private,maxrad,{measure.maxRad},{guiDataList[27].explain}");
+            csvContent.AppendLine($"measure,private,iterations,{measure.iterations},{guiDataList[28].explain}");
             csvContent.AppendLine($"measure,private,zmin_check,{measure.zmin_check},{guiDataList[29].explain}");
             csvContent.Append($"measure,private,zmax_check,{measure.zmax_check},{guiDataList[30].explain}");
 
@@ -335,10 +335,10 @@ namespace WinFormsAppTest
             }
             catch (Exception ex)
             {
-                MessageBox.Show("CSV 파일 생성 중 오류 발생: " + ex.Message);
+                MessageBox.Show("CSV 파일 작성 중 오류 발생: " + ex.Message);
             }
         }
-        
+
         //textbox 값 -> 구조체로 대입 
         private void UpdateParams()
         {
@@ -449,14 +449,14 @@ namespace WinFormsAppTest
         {
             csvContent = new StringBuilder();
             //일단 고정값 받게 해놓고 추후 plot 값 넣어줄 예정(Recent일 때만)
-            csvContent.AppendLine($"gui,public,circle,cx={gui.centerX} cy={gui.centerY} radius={ gui.radius},{ guiDataList[0].explain}");
-            csvContent.AppendLine($"gui,public,rectangle,xmin= {gui.xMin} ymin={gui.yMin} xmax={gui.xMax} ymax={gui.yMax},{guiDataList[1].explain}");
-            csvContent.AppendLine($"gui,public,result_path,{ gui.resultPath},{guiDataList[2].explain}");
-            csvContent.AppendLine($"filters.crop,private,buffer,{ crop.buffer} ,{guiDataList[3].explain}");
+            csvContent.AppendLine($"gui,public,circle,cx={gui.centerX} cy={gui.centerY} radius={gui.radius},{guiDataList[0].explain}");
+            csvContent.AppendLine($"gui,public,rectangle,xmin={gui.xMin} ymin={gui.yMin} xmax={gui.xMax} ymax={gui.yMax},{guiDataList[1].explain}");
+            csvContent.AppendLine($"gui,public,result_path,{gui.resultPath},{guiDataList[2].explain}");
+            csvContent.AppendLine($"filters.crop,private,buffer,{crop.buffer},{guiDataList[3].explain}");
             csvContent.AppendLine($"filters.sample,public,cell,{tbSubCellSize.Text},{guiDataList[4].explain}");
-            csvContent.AppendLine($"filters.outlier,private,method,{ outlier.method},{guiDataList[5].explain}");
-            csvContent.AppendLine($"filters.outlier,private,mean_k,{ outlier.mean_k },{guiDataList[6].explain}");
-            csvContent.AppendLine($"filters.outlier,private,multiplier,{ outlier.Multiplier} ,{guiDataList[7].explain}");
+            csvContent.AppendLine($"filters.outlier,private,method,{outlier.method},{guiDataList[5].explain}");
+            csvContent.AppendLine($"filters.outlier,private,mean_k,{outlier.mean_k},{guiDataList[6].explain}");
+            csvContent.AppendLine($"filters.outlier,private,multiplier,{outlier.Multiplier},{guiDataList[7].explain}");
             csvContent.AppendLine($"filters.smrf,public,cell,{tbNorCellSize.Text},{guiDataList[8].explain}");
             csvContent.AppendLine($"filters.smrf,public,window,{tbNorWinSize.Text},{guiDataList[9].explain}");
             csvContent.AppendLine($"filters.smrf,public,slope,{tbNorSlope.Text},{guiDataList[10].explain}");
@@ -467,19 +467,19 @@ namespace WinFormsAppTest
             csvContent.AppendLine($"filters.range.crown,public,minheight,{tbCrownMinHeight.Text},{guiDataList[15].explain}");
             csvContent.AppendLine($"filters.range.crown,public,maxheight,{tbCrownMaxHeight.Text},{guiDataList[16].explain}");
             csvContent.AppendLine($"csp_segmentcrown,private,num_nn_samples,{csp_crown.num_nn_samples},{guiDataList[17].explain}");
-            csvContent.AppendLine($"csp_segmentstem,private,smoothness,{ csp_stem.smoothness} ,{guiDataList[18].explain}");
-            csvContent.AppendLine($"csp_segmentstem,private,mindbh,{ csp_stem.minDBH} ,{guiDataList[19].explain}");
-            csvContent.AppendLine($"csp_segmentstem,private,maxdbh,{ csp_stem.maxDBH },{guiDataList[20].explain}");
-            csvContent.AppendLine($"csp_segmentstem,private,nnearest,{ csp_stem.nnearest} ,{guiDataList[21].explain}");
-            csvContent.AppendLine($"csp_segmentstem,private,nmin,{ csp_stem.nmin },{guiDataList[22].explain}");
-            csvContent.AppendLine($"csp_segmentstem,private,num_neighbours,{ csp_stem.num_neighbours} ,{guiDataList[23].explain}");
-            csvContent.AppendLine($"csp_segmentstem,private,anglemax,{ csp_stem.anglemax} ,{guiDataList[24].explain}");
-            csvContent.AppendLine($"measure,private,nnearest,{ measure.MeasureNN },{guiDataList[25].explain}");
-            csvContent.AppendLine($"measure,private,minrad,{ measure.minRad} ,{guiDataList[26].explain}");
-            csvContent.AppendLine($"measure,private,maxrad,{ measure.maxRad} ,{guiDataList[27].explain}");
-            csvContent.AppendLine($"measure,private,iterations,{ measure.iterations} ,{guiDataList[28].explain}");
-            csvContent.AppendLine($"measure,private,zmin_check,{ measure.zmin_check },{guiDataList[29].explain}");
-            csvContent.Append($"measure,private,zmax_check,{ measure.zmax_check },{guiDataList[30].explain}");
+            csvContent.AppendLine($"csp_segmentstem,private,smoothness,{csp_stem.smoothness},{guiDataList[18].explain}");
+            csvContent.AppendLine($"csp_segmentstem,private,mindbh,{csp_stem.minDBH},{guiDataList[19].explain}");
+            csvContent.AppendLine($"csp_segmentstem,private,maxdbh,{csp_stem.maxDBH},{guiDataList[20].explain}");
+            csvContent.AppendLine($"csp_segmentstem,private,nnearest,{csp_stem.nnearest},{guiDataList[21].explain}");
+            csvContent.AppendLine($"csp_segmentstem,private,nmin,{csp_stem.nmin},{guiDataList[22].explain}");
+            csvContent.AppendLine($"csp_segmentstem,private,num_neighbours,{csp_stem.num_neighbours},{guiDataList[23].explain}");
+            csvContent.AppendLine($"csp_segmentstem,private,anglemax,{csp_stem.anglemax},{guiDataList[24].explain}");
+            csvContent.AppendLine($"measure,private,nnearest,{measure.MeasureNN},{guiDataList[25].explain}");
+            csvContent.AppendLine($"measure,private,minrad,{measure.minRad},{guiDataList[26].explain}");
+            csvContent.AppendLine($"measure,private,maxrad,{measure.maxRad},{guiDataList[27].explain}");
+            csvContent.AppendLine($"measure,private,iterations,{measure.iterations},{guiDataList[28].explain}");
+            csvContent.AppendLine($"measure,private,zmin_check,{measure.zmin_check},{guiDataList[29].explain}");
+            csvContent.Append($"measure,private,zmax_check,{measure.zmax_check},{guiDataList[30].explain}");
         }
 
         private void MakeConfig(configFileType confType)
@@ -508,10 +508,10 @@ namespace WinFormsAppTest
                 case configFileType.Recent:
                     Dictionary<string, double> plotData = plotSender();
                     setAllparams(ref csvContent);
-                    infoRecent = new string[] { 
+                    infoRecent = new string[] {
                         $"FileInfo,public,fileType,{confType},AAA",
                         $"FileInfo,public,title,{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")},AAA",
-                        $"FileInfo,public,selection,{plotData["selection"]},AAA" 
+                        $"FileInfo,public,selection,{plotData["selection"]},AAA"
                     };
                     for (int i = infoRecent.Length - 1; i >= 0; i--)
                     {
@@ -527,7 +527,7 @@ namespace WinFormsAppTest
 
                         string oldPath = Path.Combine(filePath, $"recentConfig{i}.csv");
                         string newPath = Path.Combine(filePath, $"recentConfig{i + 1}.csv");
-                        
+
                         if (File.Exists(oldPath) && File.Exists(newPath))
                         {
                             File.Delete(newPath);
@@ -561,6 +561,59 @@ namespace WinFormsAppTest
             catch (Exception ex)
             {
                 MessageBox.Show("CSV 파일 생성 중 오류 발생: " + ex.Message);
+            }
+        }
+
+
+        private void FactoryReset(string filepath)
+        {
+            // CSV 파일 경로
+            string filePath = filepath;
+
+            // CSV 내용 생성
+            StringBuilder csvContent = new StringBuilder();
+
+            //설명 변경해야함
+            csvContent.AppendLine("gui,public,circle,cx=0 cy=0 radius=100,AAA");
+            csvContent.AppendLine("gui,public,rectangle,xmin=-10 ymin=-10 xmax=10 ymax=10,AAA");
+            csvContent.AppendLine("gui,public,result_path,..\\result,AAA");
+            csvContent.AppendLine("filters.crop,private,buffer,120 ,AAA");
+            csvContent.AppendLine("filters.sample,public,cell,0.01,AAA");
+            csvContent.AppendLine("filters.outlier,private,method,statistical,AAA");
+            csvContent.AppendLine("filters.outlier,private,mean_k,12,AAA");
+            csvContent.AppendLine("filters.outlier,private,multiplier,2.2 ,AAA");
+            csvContent.AppendLine("filters.smrf,public,cell,4,AAA");
+            csvContent.AppendLine("filters.smrf,public,window,16,AAA");
+            csvContent.AppendLine("filters.smrf,public,slope,0.3,AAA");
+            csvContent.AppendLine("filters.smrf,public,scalar,1.25,AAA");
+            csvContent.AppendLine("filters.smrf,public,threshold,1,AAA");
+            csvContent.AppendLine("filters.range.trunk,public,minheight,0,AAA");
+            csvContent.AppendLine("filters.range.trunk,public,maxheight,5,AAA");
+            csvContent.AppendLine("filters.range.crown,public,minheight,3,AAA");
+            csvContent.AppendLine("filters.range.crown,public,maxheight,100,AAA");
+            csvContent.AppendLine("csp_segmentcrown,private,num_nn_samples,16,AAA");
+            csvContent.AppendLine("csp_segmentstem,private,smoothness,10,AAA");
+            csvContent.AppendLine("csp_segmentstem,private,mindbh,0.01,AAA");
+            csvContent.AppendLine("csp_segmentstem,private,maxdbh,1,AAA");
+            csvContent.AppendLine("csp_segmentstem,private,nnearest,10,AAA");
+            csvContent.AppendLine("csp_segmentstem,private,nmin,50,AAA");
+            csvContent.AppendLine("csp_segmentstem,private,num_neighbours,50,AAA");
+            csvContent.AppendLine("csp_segmentstem,private,anglemax,20,AAA");
+            csvContent.AppendLine("measure,private,nnearest,16,AAA");
+            csvContent.AppendLine("measure,private,minrad,0.03 ,AAA");
+            csvContent.AppendLine("measure,private,maxrad,0.5 ,AAA");
+            csvContent.AppendLine("measure,private,iterations,10000 ,AAA");
+            csvContent.AppendLine("measure,private,zmin_check,0.2,AAA");
+            csvContent.Append("measure,private,zmax_check,0.7,AAA");
+
+            // CSV 파일 생성 및 내용 기록
+            try
+            {
+                File.WriteAllText(filePath, csvContent.ToString());
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("CSV 파일 작성 중 오류 발생: " + ex.Message);
             }
         }
     }

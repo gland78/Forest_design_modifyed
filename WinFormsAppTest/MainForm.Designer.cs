@@ -447,6 +447,7 @@
             btn_factory_reset.Text = "공장초기화";
             btn_factory_reset.TextColor = Color.White;
             btn_factory_reset.UseVisualStyleBackColor = false;
+            btn_factory_reset.Click += btn_factory_reset_Click;
             // 
             // lbSettingDefault
             // 

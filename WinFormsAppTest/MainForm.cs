@@ -773,5 +773,11 @@ namespace WinFormsAppTest
         {
             tcMainHome.SelectedIndex = 0;
         }
+
+        private void btn_factory_reset_Click(object sender, EventArgs e)
+        {
+            FactoryReset(csv_path);
+            MessageBox.Show("설정 파일이 초기화 되었습니다.");
+        }
     }
 }
