@@ -545,8 +545,8 @@ namespace WinFormsAppTest
                     trunkslicefile = File.FullName;
                 }
             }
-            paramForm.csp_stem.coordfile = "csp_segmentstem,private,coordfile," + coordfile + ",csp_segmentstem실행에 사용되는 1단계 산출물(표준지 외곽좌표를 담은 data파일) 경로";
-            paramForm.csp_stem.trunk_slice_file = "csp_segmentstem,private,trunk_slice_file," + trunkslicefile+ ",csp_segmentstem실행에 사용되는 5단계 산출물(사용자가 지정한 filters.range.trunk의 minheight~maxheight 높이의 표준지 추출 파일) 경로";
+            paramForm.csp_stem.coordfile = "csp_segmentstem,private,coordfile," + coordfile + ",plot 영역의 정보를 저장하는 파일 이름이다. ";
+            paramForm.csp_stem.trunk_slice_file = "csp_segmentstem,private,trunk_slice_file," + trunkslicefile+ ",수간부(trunk) 슬라이스에 해당하는 점들을 저장하는 파일 이름이다. ";
 
             try
             {
@@ -582,8 +582,8 @@ namespace WinFormsAppTest
                     crownslicefile = File.FullName;
                 }
             }
-            paramForm.csp_crown.trunk_files = "csp_segmentcrown,private,trunk_files," + string.Join(" ", filenames_pcd)+",csp_segmentcrown실행에 사용되는 7단계 산출물(trunk 파일들) 경로";
-            paramForm.csp_crown.crown_slice_file = "csp_segmentcrown,private,crown_slice_file," + crownslicefile+ ",csp_segmentcrown실행에 사용되는 6단계 산출물(사용자가 지정한 filters.range.crown의 minheight~maxheight 높이의 표준지 추출 파일) 경로";
+            paramForm.csp_crown.trunk_files = "csp_segmentcrown,private,trunk_files," + string.Join(" ", filenames_pcd)+ ",csp_segmentstem 단계에서 생성된 수간부(trunk) 파일들을 저장한다. ";
+            paramForm.csp_crown.crown_slice_file = "csp_segmentcrown,private,crown_slice_file," + crownslicefile+ ",수관부(crown) 슬라이스에 해당하는 점들을 저장하는 파일 이름이다. ";
 
             // CSV 파일에 내용 추가
             try
