@@ -564,7 +564,7 @@ namespace WinFormsAppTest
             }
         }
 
-
+        //공장초기화 함수
         private void FactoryReset(string filepath)
         {
             // CSV 파일 경로

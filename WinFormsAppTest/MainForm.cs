@@ -736,11 +736,6 @@ namespace WinFormsAppTest
                 return;
             }
             read_csv(csv_path);
-            /*foreach (GuiData g in guiDataList)
-                MessageBox.Show(g.Value);*/
-
-            //MessageBox.Show(groundseg.cellSize+" "+ groundseg.scalar);
-
             FillTextboxes();
         }
 
@@ -769,11 +764,14 @@ namespace WinFormsAppTest
             tcMainHome.SelectedIndex = 0;
         }
 
+        //취소버튼 
         private void btnSettingCancel_Click(object sender, EventArgs e)
         {
+            FillTextboxes();
             tcMainHome.SelectedIndex = 0;
         }
 
+        //공장초기화 버튼
         private void btn_factory_reset_Click(object sender, EventArgs e)
         {
             FactoryReset(csv_path);
