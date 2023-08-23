@@ -104,7 +104,7 @@ namespace WinFormsAppTest
                 }
             }
 
-            validation(filePath);
+            //validation(filePath);
         }
 
         /// 다각형 꼭짓점 정보 파일 읽기 버튼

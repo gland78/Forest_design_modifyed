@@ -524,8 +524,7 @@ namespace WinFormsAppTest
         }
         private void AppendSeventhCSVFile()
         {
-            string csvFilePath = @"./config.csv";
-
+            string csvFilePath = Path.Combine((Environment.CurrentDirectory).ToString(), "config.csv");
             string coordfile = "";
             string trunkslicefile = "";
 
@@ -560,7 +559,7 @@ namespace WinFormsAppTest
         }
         private void AppendEighthCSVFile()
         {
-            string csvFilePath = @"./config.csv";
+            string csvFilePath = Path.Combine((Environment.CurrentDirectory).ToString(), "config.csv");
             //StringBuilder csvContent = new StringBuilder();
 
             List<String> filenames_pcd = new List<String>();
