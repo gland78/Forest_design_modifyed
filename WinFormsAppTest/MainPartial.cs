@@ -52,11 +52,12 @@ namespace WinFormsAppTest
 
             try
             {
-                using (StreamReader reader = new StreamReader(csvFilePath))
+                using (StreamReader reader = new StreamReader(csvFilePath,Encoding.UTF8))
                 {
                     while (!reader.EndOfStream)
                     {
                         string line = reader.ReadLine();
+                        //MessageBox.Show(line);
                         string[] values = line.Split(',');
                         if (values.Length >= 4)
                         {
@@ -76,7 +77,7 @@ namespace WinFormsAppTest
                             {
                                 ExtractRectangleValues(guiData.Value);
                             }
-                            guiDataList.Add(guiData);
+                            guiDataList.Add(guiData);                            
                         }
                     }
                 }

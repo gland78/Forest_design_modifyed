@@ -42,6 +42,7 @@ namespace WinFormsAppTest
             cbPlotShape.SelectedIndex = 0;
             this.paramForm = paramForm;
             paramForm.plotSender += new plotDataHandler(plotPacker);
+            configpath = paramForm.csv_path;
         }
 
         //수정 요망

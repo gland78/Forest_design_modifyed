@@ -25,7 +25,8 @@ namespace WinFormsAppTest
 
         //progess표시 변수
         int progress = 0;
-        string configpath = @"..\..\..\bin\config.csv";
+
+        string configpath = "";
 
 
         //버퍼 계산 시 사용되는 좌표 구조체
@@ -524,10 +525,12 @@ namespace WinFormsAppTest
         }
         private void AppendSeventhCSVFile()
         {
-            string csvFilePath = Path.Combine((Environment.CurrentDirectory).ToString(), "config.csv");
+            //string csvFilePath = "config.csv";
+            string csvFilePath = Path.Combine(Environment.CurrentDirectory.ToString(),"config.csv");
+            MessageBox.Show(csvFilePath);
             string coordfile = "";
             string trunkslicefile = "";
-
+            
             String FolderName = resultSavedDirectory + shape + @"\intermediate";
             System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(FolderName);
             foreach (System.IO.FileInfo File in di.GetFiles())
@@ -544,13 +547,15 @@ namespace WinFormsAppTest
                     trunkslicefile = File.FullName;
                 }
             }
-            paramForm.csp_stem.coordfile = "csp_segmentstem,private,coordfile," + coordfile + ",plot 영역의 정보를 저장하는 파일 이름이다. ";
-            paramForm.csp_stem.trunk_slice_file = "csp_segmentstem,private,trunk_slice_file," + trunkslicefile+ ",수간부(trunk) 슬라이스에 해당하는 점들을 저장하는 파일 이름이다. ";
 
+            paramForm.csp_stem.coordfile = "csp_segmentstem,private,coordfile," + coordfile + ",aaa";
+            paramForm.csp_stem.trunk_slice_file = "csp_segmentstem,private,trunk_slice_file," + trunkslicefile + ",aaa";
+            
+            StringBuilder csvContent = new StringBuilder();
             try
             {
-                File.AppendAllText(csvFilePath, paramForm.csp_stem.coordfile);
-                File.AppendAllText(csvFilePath, Environment.NewLine + paramForm.csp_stem.trunk_slice_file);
+                File.AppendAllText(csvFilePath, "csp_segmentstem,private,coordfile," + coordfile + ",aaa");
+                File.AppendAllText(csvFilePath, Environment.NewLine + "csp_segmentstem,private,trunk_slice_file," + trunkslicefile + ",aaa");
             }
             catch (Exception ex)
             {
@@ -559,7 +564,7 @@ namespace WinFormsAppTest
         }
         private void AppendEighthCSVFile()
         {
-            string csvFilePath = Path.Combine((Environment.CurrentDirectory).ToString(), "config.csv");
+            string csvFilePath = configpath;
             //StringBuilder csvContent = new StringBuilder();
 
             List<String> filenames_pcd = new List<String>();
@@ -581,8 +586,10 @@ namespace WinFormsAppTest
                     crownslicefile = File.FullName;
                 }
             }
-            paramForm.csp_crown.trunk_files = "csp_segmentcrown,private,trunk_files," + string.Join(" ", filenames_pcd)+ ",csp_segmentstem 단계에서 생성된 수간부(trunk) 파일들을 저장한다. ";
-            paramForm.csp_crown.crown_slice_file = "csp_segmentcrown,private,crown_slice_file," + crownslicefile+ ",수관부(crown) 슬라이스에 해당하는 점들을 저장하는 파일 이름이다. ";
+            //paramForm.csp_crown.trunk_files = "csp_segmentcrown,private,trunk_files," + string.Join(" ", filenames_pcd)+ ",csp_segmentstem 단계에서 생성된 수간부(trunk) 파일들을 저장한다. ";
+            //paramForm.csp_crown.crown_slice_file = "csp_segmentcrown,private,crown_slice_file," + crownslicefile+ ",수관부(crown) 슬라이스에 해당하는 점들을 저장하는 파일 이름이다. ";
+            paramForm.csp_crown.trunk_files = "csp_segmentcrown,private,trunk_files," + string.Join(" ", filenames_pcd) + ",aaa";
+            paramForm.csp_crown.crown_slice_file = "csp_segmentcrown,private,crown_slice_file," + crownslicefile + ",aaa";
 
             // CSV 파일에 내용 추가
             try
