@@ -192,6 +192,7 @@
             // 
             tbPlotPolySet.Location = new Point(154, 48);
             tbPlotPolySet.Name = "tbPlotPolySet";
+            tbPlotPolySet.ReadOnly = true;
             tbPlotPolySet.Size = new Size(216, 23);
             tbPlotPolySet.TabIndex = 5;
             // 

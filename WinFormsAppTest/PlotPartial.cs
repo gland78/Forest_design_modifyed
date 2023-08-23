@@ -282,7 +282,7 @@ namespace WinFormsAppTest
                 LogWrite(resultSavedDirectory + @"\intermediate\" + one + originLasName + "_B.las 파일을 생성했습니다.");
             }
         }
-        //데이터 전처리 단계
+        //데이터 전처리 단계, 1~6단계 JSON 생성, 7~8단계 csv append line
         private void Subsampling()
         {
             string two = "level2_subsampled_";
@@ -524,7 +524,7 @@ namespace WinFormsAppTest
         }
         private void AppendSeventhCSVFile()
         {
-            string csvFilePath = @"..\bin\config.csv";
+            string csvFilePath = @"./config.csv";
 
             string coordfile = "";
             string trunkslicefile = "";
@@ -560,7 +560,7 @@ namespace WinFormsAppTest
         }
         private void AppendEighthCSVFile()
         {
-            string csvFilePath = @"..\bin\config.csv";
+            string csvFilePath = @"./config.csv";
             //StringBuilder csvContent = new StringBuilder();
 
             List<String> filenames_pcd = new List<String>();
@@ -596,6 +596,7 @@ namespace WinFormsAppTest
                 MessageBox.Show("CSV 파일에 내용을 추가하는 중 오류 발생: " + ex.Message);
             }
         }
+        //배치파일 실행 코드
         private void ProcessBatch(string num)
         {
             //num(ex. "level1_~";
@@ -611,6 +612,7 @@ namespace WinFormsAppTest
             proc.WaitForExit();
             proc.Close();
         }
+        //배치파일 작성 코드
         private void RunFileSecond()
         {
             string two = "level2_subsampled_";
@@ -982,14 +984,16 @@ namespace WinFormsAppTest
                     sw.WriteLine("PCD2LAS " + FolderName2);
 
                     //pcd 지우는 코드  ---> 배포 시 삭제
-                    sw.WriteLine("for /r \"..\\tree\" %%i in (*.pcd) do (");
+                    /*sw.WriteLine("for /r \"..\\tree\" %%i in (*.pcd) do (");
                     sw.WriteLine("    del \"%%i\"");
                     sw.WriteLine(")");
 
                     sw.WriteLine("for /r \".\" %%i in (*.pcd) do (");
                     sw.WriteLine("    del \"%%i\"");
-                    sw.WriteLine(")");
+                    sw.WriteLine(")");*/
 
+
+                    //intermediate 폴더 숨김처리 코드
                     sw.WriteLine("attrib +h ../intermediate");
                 }
 
@@ -1008,6 +1012,7 @@ namespace WinFormsAppTest
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + ten + originLasName + ".bat 파일을 생성했습니다.");
             }
         }
+        //LAS파일 이름 변경 코드
         private void ChangeLasName()
         {
             string destinationDirectory = resultSavedDirectory + shape + @"\intermediate";
@@ -1038,6 +1043,7 @@ namespace WinFormsAppTest
                 File.Move(lasFile, newFilePath);
             }
         }
+        //info파일 생성코드
         private void MakeInfoFile()
         {
             try
@@ -1080,6 +1086,7 @@ namespace WinFormsAppTest
                 MessageBox.Show("10단계 오류 : " + ex.Message);
             }
         }
+        //로그 작성 코드
         private void LogWrite(string message)
         {
 
@@ -1114,6 +1121,7 @@ namespace WinFormsAppTest
                 MessageBox.Show(e.ToString());
             }
         }
+        //전체 process 실행 코드
         private void preProAndExcuteStep()
         {
             MakeResultDirectory_PLOT();
@@ -1187,6 +1195,7 @@ namespace WinFormsAppTest
                 MessageBox.Show("1단계 산출물 에러");
             }
         }
+        //파일 생성을 기준, 에러 확인 코드
         bool CatchError(string path, int level)
         {
             bool isError = true;
@@ -1223,6 +1232,7 @@ namespace WinFormsAppTest
 
             return isError;
         }
+        //LAS 데이터 텍스트 박스 change 이벤트 처리 코드
         private void tbPlotData_TextChanged(object sender, EventArgs e)
         {
             paramForm.gui.loadPath = tbPlotData.Text;
@@ -1231,6 +1241,8 @@ namespace WinFormsAppTest
             originLasName = Path.GetFileNameWithoutExtension(originLasPath);
             originLasDirectory = Path.GetDirectoryName(originLasPath);
         }
+
+        //폴리곤 plot 실행 시 buffer 적용을 위해 사각형 꼭지점 찾는 코드
         public void FindExtremeCoordinates(point[] points)
         {
             // 초기화를 위해 첫 번째 점을 기준으로 설정

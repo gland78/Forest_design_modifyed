@@ -11,6 +11,8 @@ using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Xml.Linq;
 using static WinFormsAppTest.MainForm;
+using Newtonsoft.Json.Linq;
+using System.Security.Policy;
 
 namespace WinFormsAppTest
 {
@@ -101,6 +103,8 @@ namespace WinFormsAppTest
                     tbPlotData.Text = filePath;
                 }
             }
+
+            validation(filePath);
         }
 
         /// 다각형 꼭짓점 정보 파일 읽기 버튼
@@ -277,6 +281,7 @@ namespace WinFormsAppTest
         {
             tcPlot.SelectedIndex = cbPlotShape.SelectedIndex;
         }
+        //텍스트 박스 무결성 체크
         private void tbPlotCircleX_Leave(object sender, EventArgs e)
         {
             int dummy1 = 1;
@@ -396,6 +401,7 @@ namespace WinFormsAppTest
             }
             paramForm.gui.yMax = double.Parse(tbPlotRecYmax.Text);
         }
+        //텍스트박스 초기화
         private void initTextBox()
         {
             tbPlotCircleX.Text = paramForm.gui.centerX.ToString();
@@ -406,6 +412,85 @@ namespace WinFormsAppTest
             tbPlotRecXmax.Text = paramForm.gui.xMax.ToString();
             tbPlotRecYmin.Text = paramForm.gui.yMin.ToString();
             tbPlotRecYmax.Text = paramForm.gui.yMax.ToString();
+        }
+
+        //사용자가 입력한 좌표값이 올바른지 체크하기 위한 함수
+        private void validation(string filepath)
+        {
+            string infoDir = @"./LAS_info";
+            string filename = Path.GetFileNameWithoutExtension(filepath);
+            if (!Directory.Exists(infoDir))
+            {
+                Directory.CreateDirectory(infoDir);
+            }
+            try
+            {
+                // Create the target folder if it doesn't exist
+
+                string dat_filePath = Path.Combine(infoDir, filename + ".dat");
+                if (!File.Exists(dat_filePath))
+                {
+                    MakeInfo(filepath, infoDir);
+                }
+                else
+                {
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error reorganizing folder: {ex.Message}");
+            }
+
+        }
+        private void MakeInfo(string filepath, string dirpath)
+        {
+            string filename = Path.GetFileNameWithoutExtension(filepath);
+            ProcessStartInfo psi = new ProcessStartInfo
+            {
+                FileName = "cmd.exe",
+                RedirectStandardInput = true,
+                RedirectStandardOutput = true,
+                UseShellExecute = false,
+                CreateNoWindow = false
+            };
+            using (Process process = new Process { StartInfo = psi })
+            {
+                process.Start();
+                string str = "Extracting information from the first run target file...";
+
+                process.StandardInput.WriteLine(@"echo OFF");
+                process.StandardInput.WriteLine($@"@echo {str} & pdal info {filepath} > {Path.Combine(dirpath, filename)}.json");
+                process.StandardInput.WriteLine("exit");
+                process.WaitForExit();
+            }
+
+            FileInfo fileInfo1 = new FileInfo(Path.Combine(dirpath, $"{filename}.json"));
+            if (fileInfo1.Exists)
+            {
+                try
+                {
+                    string JsonText1 = System.IO.File.ReadAllText(fileInfo1.FullName);
+                    JObject JsonData1 = JObject.Parse(JsonText1);
+                    JToken minx = JsonData1["stats"]["bbox"]["native"]["bbox"]["minx"];
+                    JToken maxx = JsonData1["stats"]["bbox"]["native"]["bbox"]["maxx"];
+                    JToken miny = JsonData1["stats"]["bbox"]["native"]["bbox"]["miny"];
+                    JToken maxy = JsonData1["stats"]["bbox"]["native"]["bbox"]["maxy"];
+
+                    // Create the .dat file in the specified directory
+                    string datFilePath = Path.Combine(dirpath, $"{filename}.dat");
+                    File.WriteAllText(datFilePath, minx + " " + maxx + " " + miny + " " + maxy);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"{filename}.dat 파일 생성 오류.");
+                    return;
+                }
+            }
+            else
+            {
+                MessageBox.Show($"{filename}.json 파일을 찾을 수 없음");
+            }
         }
     }
 }
