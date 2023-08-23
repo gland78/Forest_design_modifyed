@@ -13,6 +13,7 @@ using System.Xml.Linq;
 using static WinFormsAppTest.MainForm;
 using Newtonsoft.Json.Linq;
 using System.Security.Policy;
+using System.Reflection;
 
 namespace WinFormsAppTest
 {
@@ -101,10 +102,10 @@ namespace WinFormsAppTest
                     filePath = openFileDialog.FileName;
 
                     tbPlotData.Text = filePath;
+
+                    validation(filePath);
                 }
             }
-
-            validation(filePath);
         }
 
         /// 다각형 꼭짓점 정보 파일 읽기 버튼
@@ -179,7 +180,7 @@ namespace WinFormsAppTest
             ///////////////////////////////////////////////////////////////////////
             attachProgressBar(true);
             //최근 작업 config 생성
-            string fileDi = Path.Combine(configPath, reqDi[(int)configFileType.Recent]);
+            string fileDi = Path.Combine(basePath, reqDi[(int)configFileType.Recent]);
 
             if (!Directory.Exists(fileDi))
             {
@@ -415,26 +416,42 @@ namespace WinFormsAppTest
         }
 
         //사용자가 입력한 좌표값이 올바른지 체크하기 위한 함수
-        private void validation(string filepath)
+        private async void validation(string filePath)
         {
-            string infoDir = @"./LAS_info";
-            string filename = Path.GetFileNameWithoutExtension(filepath);
+            string infoDir = Path.Combine(basePath, "LAS_info");
+            string fileName = Path.GetFileNameWithoutExtension(filePath);
             if (!Directory.Exists(infoDir))
             {
                 Directory.CreateDirectory(infoDir);
             }
             try
             {
-                // Create the target folder if it doesn't exist
-
-                string dat_filePath = Path.Combine(infoDir, filename + ".dat");
+                string dat_filePath = Path.Combine(infoDir, fileName + ".dat");
                 if (!File.Exists(dat_filePath))
                 {
-                    MakeInfo(filepath, infoDir);
+                    string str = "Extracting information from the first run target file...";
+
+                    var progressDialog = new Form
+                    {
+                        Width = 200,
+                        Height = 100,
+                        FormBorderStyle = FormBorderStyle.FixedDialog,
+                        Text = "Progress",
+                        StartPosition = FormStartPosition.CenterScreen
+                    };
+
+                    var label = new Label { Left = 50, Top = 20, Text = "Extracting..." };
+
+                    progressDialog.Controls.Add(label);
+                    progressDialog.Show();
+
+                    MakeInfo(filePath, infoDir);
+
+                    progressDialog.Dispose();
                 }
                 else
                 {
-
+                    readInfo(filePath, infoDir);
                 }
             }
             catch (Exception ex)
@@ -443,53 +460,99 @@ namespace WinFormsAppTest
             }
 
         }
-        private void MakeInfo(string filepath, string dirpath)
+        private async void MakeInfo(string filePath, string dirPath)
         {
-            string filename = Path.GetFileNameWithoutExtension(filepath);
+            string fileName = Path.GetFileNameWithoutExtension(filePath);
+
+            //프로세스 클래스로 pdal 명령어 실행
             ProcessStartInfo psi = new ProcessStartInfo
             {
                 FileName = "cmd.exe",
                 RedirectStandardInput = true,
                 RedirectStandardOutput = true,
                 UseShellExecute = false,
-                CreateNoWindow = false
+                CreateNoWindow = true
             };
             using (Process process = new Process { StartInfo = psi })
             {
-                process.Start();
-                string str = "Extracting information from the first run target file...";
-
-                process.StandardInput.WriteLine(@"echo OFF");
-                process.StandardInput.WriteLine($@"@echo {str} & pdal info {filepath} > {Path.Combine(dirpath, filename)}.json");
+                //process.StandardInput.WriteLine($"echo {str}");
+                //process.StandardInput.WriteLine("echo off");
+                process.StandardInput.WriteLine($"pdal info {filePath} > {Path.Combine(dirPath, fileName)}.json");
                 process.StandardInput.WriteLine("exit");
                 process.WaitForExit();
             }
 
-            FileInfo fileInfo1 = new FileInfo(Path.Combine(dirpath, $"{filename}.json"));
-            if (fileInfo1.Exists)
+            //실행되어 추출된 파일을 읽고, 구조체에 넣는 과정
+            FileInfo fileInfo1 = new FileInfo(Path.Combine(dirPath, $"{fileName}.json"));
+            if (!fileInfo1.Exists)
             {
-                try
-                {
-                    string JsonText1 = System.IO.File.ReadAllText(fileInfo1.FullName);
-                    JObject JsonData1 = JObject.Parse(JsonText1);
-                    JToken minx = JsonData1["stats"]["bbox"]["native"]["bbox"]["minx"];
-                    JToken maxx = JsonData1["stats"]["bbox"]["native"]["bbox"]["maxx"];
-                    JToken miny = JsonData1["stats"]["bbox"]["native"]["bbox"]["miny"];
-                    JToken maxy = JsonData1["stats"]["bbox"]["native"]["bbox"]["maxy"];
+                MessageBox.Show($"{fileName}.json 파일을 찾을 수 없음");
+                return;
+            }
 
-                    // Create the .dat file in the specified directory
-                    string datFilePath = Path.Combine(dirpath, $"{filename}.dat");
-                    File.WriteAllText(datFilePath, minx + " " + maxx + " " + miny + " " + maxy);
-                }
-                catch (Exception ex)
+            try
+            {
+                string jsonText = File.ReadAllText(fileInfo1.FullName);
+                //JObject JsonData1 = JObject.Parse(JsonText1);
+                JToken jsonSizeTok = JObject.Parse(jsonText)["stats"]["bbox"]["native"]["bbox"];
+                lasSize.minx = (double)jsonSizeTok["minx"];
+                lasSize.maxx = (double)jsonSizeTok["maxx"];
+                lasSize.miny = (double)jsonSizeTok["miny"];
+                lasSize.maxy = (double)jsonSizeTok["maxy"];
+
+                // Create the .dat file in the specified directory
+                string datFilePath = Path.Combine(dirPath, $"{fileName}.dat");
+                string sizeText = "";
+                Type type = typeof(LasSize);
+                FieldInfo[] lasProp = type.GetFields();
+
+                foreach (FieldInfo fi in lasProp)
                 {
-                    MessageBox.Show($"{filename}.dat 파일 생성 오류.");
-                    return;
+                    sizeText += $"{fi.Name},{fi.GetValue(lasSize)}\n";
+                }
+                File.WriteAllText(datFilePath, sizeText);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{fileName}.dat 파일 생성 오류.");
+                return;
+            }
+        }
+
+        private void readInfo(string filePath, string dirPath)
+        {
+            string datPath = Path.Combine(dirPath, Path.GetFileNameWithoutExtension(filePath) + ".dat");
+            try
+            {
+                string sizeLine = "";
+                string[] sizeTok;
+                using(StreamReader reader = new StreamReader(datPath))
+                {
+                    while ((sizeLine = reader.ReadLine()) != null)
+                    {
+                        sizeTok = sizeLine.Split(',');
+                        switch(sizeTok[0])
+                        {
+                            case "maxx":
+                                lasSize.maxx = double.Parse(sizeTok[1]);
+                                break;
+                            case "minx":
+                                lasSize.minx = double.Parse(sizeTok[1]);
+                                break;
+                            case "maxy":
+                                lasSize.maxy = double.Parse(sizeTok[1]);
+                                break;
+                            case "miny":
+                                lasSize.miny = double.Parse(sizeTok[1]);
+                                break;
+                        }
+                    }
                 }
             }
-            else
+            catch(Exception e)
             {
-                MessageBox.Show($"{filename}.json 파일을 찾을 수 없음");
+                MessageBox.Show($"Las파일 사이즈 읽기 실패\n{e}", "사이즈 파일 읽기 오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
         }
     }

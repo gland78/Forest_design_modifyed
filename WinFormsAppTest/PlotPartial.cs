@@ -27,12 +27,21 @@ namespace WinFormsAppTest
         int progress = 0;
         string configpath = @"..\..\..\bin\config.csv";
 
-
         //버퍼 계산 시 사용되는 좌표 구조체
         Coords bufferedPolycords = new Coords();
 
         //PlotForm 윈폼 이동 이벤트 관련 변수
         private Point relativePformPos = new Point();
+
+        //las파일 크기 저장 구조체
+        struct LasSize
+        {
+            public double maxx;
+            public double maxy;
+            public double minx;
+            public double miny;
+        }
+        LasSize lasSize = new LasSize();
 
         //현재는 사용한 곳 없음
         private void InitializeMemberParam()
