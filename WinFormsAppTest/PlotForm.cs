@@ -475,6 +475,7 @@ namespace WinFormsAppTest
             };
             using (Process process = new Process { StartInfo = psi })
             {
+                process.Start();
                 //process.StandardInput.WriteLine($"echo {str}");
                 //process.StandardInput.WriteLine("echo off");
                 process.StandardInput.WriteLine($"pdal info {filePath} > {Path.Combine(dirPath, fileName)}.json");
