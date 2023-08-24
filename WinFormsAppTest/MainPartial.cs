@@ -56,11 +56,11 @@ namespace WinFormsAppTest
                 {
                     while (!reader.EndOfStream)
                     {
-                        string line = reader.ReadLine();
-                        //MessageBox.Show(line);
-                        string[] values = line.Split(',');
+                        string line = reader.ReadLine();                        
+                        string[] values = ParseString(line);
+                        //string[] values = line.Split(',');
                         if (values.Length >= 4)
-                        {
+                        {                           
                             GuiData guiData = new GuiData
                             {
                                 Type = values[0],
@@ -69,6 +69,7 @@ namespace WinFormsAppTest
                                 Value = values[3],
                                 explain = values[4]
                             };
+                            MessageBox.Show(guiData.explain);
                             if (guiData.Key == "circle")
                             {
                                 ExtractCircleValues(guiData.Value);
@@ -284,6 +285,16 @@ namespace WinFormsAppTest
                 }
             }
         }
+        static string[] ParseString(string input)
+        {
+            // 쉼표로 문자열을 분할
+            string[] splitParts = input.Split(',');
+
+            // 마지막 부분에 따옴표로 끝나는 부분을 제거
+            splitParts[splitParts.Length - 1] = splitParts[splitParts.Length - 1].TrimEnd('\"');
+
+            return splitParts;
+        }
         //csv 쓰는 함수
         public void write_csv(string filepath)
         {
@@ -332,7 +343,7 @@ namespace WinFormsAppTest
             // CSV 파일 생성 및 내용 기록
             try
             {
-                File.WriteAllText(filePath, csvContent.ToString());
+                File.WriteAllText(filePath, csvContent.ToString(),Encoding.UTF8);
             }
             catch (Exception ex)
             {
@@ -510,9 +521,9 @@ namespace WinFormsAppTest
                     Dictionary<string, double> plotData = plotSender();
                     setAllparams(ref csvContent);
                     infoRecent = new string[] {
-                        $"FileInfo,public,fileType,{confType},AAA",
-                        $"FileInfo,public,title,{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")},AAA",
-                        $"FileInfo,public,selection,{plotData["selection"]},AAA"
+                        $"FileInfo,public,fileType,{confType},파일의 타입을 구분 (preset default recent).",
+                        $"FileInfo,public,title,{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")},gui에 표시될 파일의 제목",
+                        $"FileInfo,public,selection,{plotData["selection"]},최근 설정한 좌표 정보"
                     };
                     for (int i = infoRecent.Length - 1; i >= 0; i--)
                     {
@@ -557,7 +568,7 @@ namespace WinFormsAppTest
             // CSV 파일 생성 및 내용 기록
             try
             {
-                File.WriteAllText(filePath, csvContent.ToString());
+                File.WriteAllText(filePath, csvContent.ToString(),Encoding.UTF8);
             }
             catch (Exception ex)
             {
@@ -575,42 +586,42 @@ namespace WinFormsAppTest
             StringBuilder csvContent = new StringBuilder();
 
             //설명 변경해야함
-            csvContent.AppendLine("gui,public,circle,cx=0 cy=0 radius=100,AAA");
-            csvContent.AppendLine("gui,public,rectangle,xmin=-10 ymin=-10 xmax=10 ymax=10,AAA");
-            csvContent.AppendLine("gui,public,result_path,..\\result,AAA");
-            csvContent.AppendLine("filters.crop,private,buffer,120 ,AAA");
-            csvContent.AppendLine("filters.sample,public,cell,0.01,AAA");
-            csvContent.AppendLine("filters.outlier,private,method,statistical,AAA");
-            csvContent.AppendLine("filters.outlier,private,mean_k,12,AAA");
-            csvContent.AppendLine("filters.outlier,private,multiplier,2.2 ,AAA");
-            csvContent.AppendLine("filters.smrf,public,cell,4,AAA");
-            csvContent.AppendLine("filters.smrf,public,window,16,AAA");
-            csvContent.AppendLine("filters.smrf,public,slope,0.3,AAA");
-            csvContent.AppendLine("filters.smrf,public,scalar,1.25,AAA");
-            csvContent.AppendLine("filters.smrf,public,threshold,1,AAA");
-            csvContent.AppendLine("filters.range.trunk,public,minheight,0,AAA");
-            csvContent.AppendLine("filters.range.trunk,public,maxheight,5,AAA");
-            csvContent.AppendLine("filters.range.crown,public,minheight,3,AAA");
-            csvContent.AppendLine("filters.range.crown,public,maxheight,100,AAA");
-            csvContent.AppendLine("csp_segmentcrown,private,num_nn_samples,16,AAA");
-            csvContent.AppendLine("csp_segmentstem,private,smoothness,10,AAA");
-            csvContent.AppendLine("csp_segmentstem,private,mindbh,0.01,AAA");
-            csvContent.AppendLine("csp_segmentstem,private,maxdbh,1,AAA");
-            csvContent.AppendLine("csp_segmentstem,private,nnearest,10,AAA");
-            csvContent.AppendLine("csp_segmentstem,private,nmin,50,AAA");
-            csvContent.AppendLine("csp_segmentstem,private,num_neighbours,50,AAA");
-            csvContent.AppendLine("csp_segmentstem,private,anglemax,20,AAA");
-            csvContent.AppendLine("measure,private,nnearest,16,AAA");
-            csvContent.AppendLine("measure,private,minrad,0.03 ,AAA");
-            csvContent.AppendLine("measure,private,maxrad,0.5 ,AAA");
-            csvContent.AppendLine("measure,private,iterations,10000 ,AAA");
-            csvContent.AppendLine("measure,private,zmin_check,0.2,AAA");
-            csvContent.Append("measure,private,zmax_check,0.7,AAA");
+            csvContent.AppendLine("gui,public,circle,cx=0 cy=0 radius=100,cx cy radius는 중심점 좌표와 반지름입니다.");
+            csvContent.AppendLine("gui,public,rectangle,xmin=-10 ymin=-10 xmax=10 ymax=10,xmin xmax ymin ymax는 범위 자료입니다. ");
+            csvContent.AppendLine("gui,public,result_path,..\\result,결과를 저장하는 폴더입니다. ");
+            csvContent.AppendLine("filters.crop,private,buffer,120,plot 영역보다 120% 큰 영역을 의미한다.");
+            csvContent.AppendLine("filters.sample,public,cell,0.01,복셀 크기 (예: 0.03m)");
+            csvContent.AppendLine("filters.outlier,private,method,statistical,통계 기반으로 이상치(이상점) 제거한다.");
+            csvContent.AppendLine("filters.outlier,private,mean_k,12,최근접 이웃의 개수를 지정한다. ");
+            csvContent.AppendLine("filters.outlier,private,multiplier,2.2,거리의 표준편차의 계수를 지정한다. ");
+            csvContent.AppendLine("filters.smrf,public,cell,4,셀 크기를 지정한다. PDAL 기본값이 1.0m인데, ForestLi는 4m를 사용하는데, 확인이 필요하다.");
+            csvContent.AppendLine("filters.smrf,public,window,16,max window size를 지정한다. PDAL 기본값이 18m인데, ForestLi는 16m를 사용하는데, 확인이 필요하다.");
+            csvContent.AppendLine("filters.smrf,public,slope,0.3,slope(rise over run)을 지정한다. PDAL 기본값이 0.15인데, ForestLi는 0.3를 사용하는데, 확인이 필요하다. 단위가 무엇일까? Radian인가?");
+            csvContent.AppendLine("filters.smrf,public,scalar,1.25,Elevation scalar를 지정한다. 단위가 무엇일까? meter인가?");
+            csvContent.AppendLine("filters.smrf,public,threshold,1,Elevation threshold를 지정한다. 단위가 무엇일까? meter인가?");
+            csvContent.AppendLine("filters.range.trunk,public,minheight,0,수간(trunk)으로 조사하는 영역의 높이의 최솟값을 지정한다. 보통은 0m으로 지정한다. Public인지 private인지 고민해 보자.");
+            csvContent.AppendLine("filters.range.trunk,public,maxheight,5,수간(trunk)으로 조사하는 영역의 높이의 최댓값을 지정한다. 보통은 5m으로 지정한다. Public인지 private인지 고민해 보자.");
+            csvContent.AppendLine("filters.range.crown,public,minheight,3,수관(crown)으로 조사하는 영역의 높이의 최솟값을 지정한다. ");
+            csvContent.AppendLine("filters.range.crown,public,maxheight,100,수관(crown)으로 조사하는 영역의 높이의 최댓값을 지정한다. ");
+            csvContent.AppendLine("csp_segmentcrown,private,num_nn_samples,16,최근접 이웃 점들의 개수를 지정하는 값이다. 지정된 최근접 이웃 점들까지 거리를 계산하여 거리의 평균과 표준편차를 결정한다.");
+            csvContent.AppendLine("csp_segmentstem,private,smoothness,10,smoothness (degrees)는 ??이다. 영역성장(regiongrowing) 알고리즘의 smoothness를 설정하는 값이다. 영역성장 알고리즘 파악이 우선이다. ");
+            csvContent.AppendLine("csp_segmentstem,private,mindbh,0.01,수간(trunk)에서 흉고직경의 최솟값이다. 기본적으로 0.01m를 사용한다. ");
+            csvContent.AppendLine("csp_segmentstem,private,maxdbh,1,수간(trunk)에서 흉고직경의 최댓값이다. 기본적으로 1m를 사용한다. ");
+            csvContent.AppendLine("csp_segmentstem,private,nnearest,10,최근접 이웃의 개수를 지정한다. 시스템 인자이다. 사용자가 알 필요가 없다.");
+            csvContent.AppendLine("csp_segmentstem,private,nmin,50,유클리디어 군집화에서 클러스터를 이루는 점들의 최소 개수이다. 시스템 인자이다. 사용자가 알 필요가 없다.");
+            csvContent.AppendLine("csp_segmentstem,private,num_neighbours,50,영역성장(regiongrowing) 알고리즘의 최근접 이웃 점들의 개수를 설정하는 값이다. 영역성장 알고리즘 파악이 우선이다. ");
+            csvContent.AppendLine("csp_segmentstem,private,anglemax,20,주성분 분석에서 수간부의 실린더가 기울기를 설정하는 값이다. 예를 들면, 20 일 때, 수간부(trunk)의 기울기는 70도와 110도 사이에 존재한다.");
+            csvContent.AppendLine("measure,private,nnearest,16,DBH(흉고직경) 측정할 때 stem에서 원형 모델을 찾을 경우, 이웃한 점들의 거리의 표준편차를 사용하는데, 표준편차를 구할때 사용되는 이웃 점들의 개수를 의미한다");
+            csvContent.AppendLine("measure,private,minrad,0.03,찾는 원형모델의 최소 반지름이다");
+            csvContent.AppendLine("measure,private,maxrad,0.5,찾는 원형모델의 최대 반지름이다");
+            csvContent.AppendLine("measure,private,iterations,10000,원형모델을 찾는 RANSAC 알고리즘의 최대 시도 횟수이다");
+            csvContent.AppendLine("measure,private,zmin_check,0.2,나무가 표준지의 속하는지 판단하기 위해 사용 된다. 기준포인트들 중 최하점의 높이다");
+            csvContent.Append("measure,private,zmax_check,0.7,나무가 표준지의 속하는지 판단하기 위해 사용 된. 기준포인트들 중 최상점의 높이다");
 
             // CSV 파일 생성 및 내용 기록
             try
             {
-                File.WriteAllText(filePath, csvContent.ToString());
+                File.WriteAllText(filePath, csvContent.ToString(),Encoding.UTF8);
             }
             catch (Exception ex)
             {
