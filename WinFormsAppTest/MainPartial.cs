@@ -57,8 +57,8 @@ namespace WinFormsAppTest
                     while (!reader.EndOfStream)
                     {
                         string line = reader.ReadLine();                        
-                        string[] values = ParseString(line);
-                        //string[] values = line.Split(',');
+                        //string[] values = ParseString(line);
+                        string[] values = line.Split(',');
                         if (values.Length >= 4)
                         {                           
                             GuiData guiData = new GuiData
@@ -69,7 +69,7 @@ namespace WinFormsAppTest
                                 Value = values[3],
                                 explain = values[4]
                             };
-                            MessageBox.Show(guiData.explain);
+                            //MessageBox.Show(guiData.explain);
                             if (guiData.Key == "circle")
                             {
                                 ExtractCircleValues(guiData.Value);

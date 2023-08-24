@@ -248,7 +248,7 @@ namespace WinFormsAppTest
             preProAndExcuteStep();
 
 
-            //paramForm.write_csv(paramForm.csv_path);
+            paramForm.write_csv(paramForm.csv_path);
 
             if (progress == 10)
             {
