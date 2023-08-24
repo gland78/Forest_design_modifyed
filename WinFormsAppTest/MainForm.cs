@@ -59,7 +59,8 @@ namespace WinFormsAppTest
 
         bool isMformDrag = false;
 
-        internal static string configPath = (Environment.CurrentDirectory).ToString();
+        //exe파일이 위치한 기본 폴더와 그 내부 config 폴더들
+        internal static string basePath = (Environment.CurrentDirectory).ToString();
         internal static string[] reqDi = { "", "RecentConfig", "PresetConfig" };
 
         public MainForm()
@@ -81,7 +82,7 @@ namespace WinFormsAppTest
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            if (!File.Exists(Path.Combine(configPath, "config.csv")))
+            if (!File.Exists(Path.Combine(basePath, "config.csv")))
             {
                 MessageBox.Show("config.csv파일이 없습니다. 프로그램 개발 측으로 문의해주세요.\n" +
                     $"filepath : {Environment.CurrentDirectory}", "기본 설정 파일 오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -255,7 +256,7 @@ namespace WinFormsAppTest
         //프리셋 콘피그 파일 갯수만큼 버튼 로드
         private void preConfBtnLoad()
         {
-            string filePath = Path.Combine(configPath, reqDi[(int)configFileType.Preset]);
+            string filePath = Path.Combine(basePath, reqDi[(int)configFileType.Preset]);
 
             if (!Directory.Exists(filePath))
             {
@@ -329,7 +330,7 @@ namespace WinFormsAppTest
         //최근 작업 콘피그 파일 갯수만큼 버튼 로드
         private void recentConfBtnLoad()
         {
-            string fileDi = Path.Combine(configPath, reqDi[(int)configFileType.Recent]);
+            string fileDi = Path.Combine(basePath, reqDi[(int)configFileType.Recent]);
 
             if (!Directory.Exists(fileDi))
             {
@@ -437,7 +438,7 @@ namespace WinFormsAppTest
         //recetnConfig 버튼 관련 이벤트 처리 코드
         private void btnRecentConf_Click(object sender, EventArgs e)
         {
-            string fileDi = Path.Combine(configPath, reqDi[(int)configFileType.Recent]);
+            string fileDi = Path.Combine(basePath, reqDi[(int)configFileType.Recent]);
             string[] confCheck = Directory.GetFiles(fileDi, "recentConfig*");
             string fileName = ((Button)sender).Name;
 
@@ -522,7 +523,7 @@ namespace WinFormsAppTest
         //preConfig 버튼 클릭 이벤트 처리 코드
         private void btnPreConf_Click(object sender, EventArgs e)
         {
-            string[] confCheck = Directory.GetFiles(Path.Combine(configPath, reqDi[(int)configFileType.Preset]), "PresetConfig*");
+            string[] confCheck = Directory.GetFiles(Path.Combine(basePath, reqDi[(int)configFileType.Preset]), "PresetConfig*");
 
             foreach (string conf in confCheck)
             {

@@ -28,7 +28,7 @@ namespace WinFormsAppTest
         }
         private void preConfLoad()
         {
-            string fileDi = Path.Combine(configPath, reqDi[(int)configFileType.Preset]);
+            string fileDi = Path.Combine(basePath, reqDi[(int)configFileType.Preset]);
             //프리셋 콘피그 저장 장소
             string[] confCheck = Directory.GetFiles(fileDi, "presetConfig*");
             Array.Sort(confCheck);
@@ -82,7 +82,7 @@ namespace WinFormsAppTest
         {
             string fileName = lvPresetConf.SelectedItems[0].Name;
             string oldTitle = lvPresetConf.SelectedItems[0].SubItems[1].Text;
-            string fileDi = Path.Combine(configPath, reqDi[(int)configFileType.Preset]);
+            string fileDi = Path.Combine(basePath, reqDi[(int)configFileType.Preset]);
             string[] confCheck = Directory.GetFiles(fileDi, "presetConfig*");
             string? newTitle = Microsoft.VisualBasic.Interaction.InputBox("바꿀 제목을 입력해주세요.", "프리셋 제목 바꾸기");
 
@@ -109,7 +109,7 @@ namespace WinFormsAppTest
                 return;
             }
 
-            string[] confCheck = Directory.GetFiles(Path.Combine(configPath, reqDi[(int)configFileType.Preset]), "PresetConfig*");
+            string[] confCheck = Directory.GetFiles(Path.Combine(basePath, reqDi[(int)configFileType.Preset]), "PresetConfig*");
             if (MessageBox.Show("선택한 프리셋을 삭제하시겠습니까?",
                 "프리셋 삭제", MessageBoxButtons.OKCancel) == DialogResult.Cancel)
             {
@@ -128,8 +128,8 @@ namespace WinFormsAppTest
 
                     for (int i = oldIndex + 1; i < confCheck.Length; i++)
                     {
-                        string oldPath = Path.Combine(Path.Combine(configPath, reqDi[(int)configFileType.Preset]) + @"\", $"presetConfig{i}.csv");
-                        string newPath = Path.Combine(Path.Combine(configPath, reqDi[(int)configFileType.Preset]), $"presetConfig{i - 1}.csv");
+                        string oldPath = Path.Combine(Path.Combine(basePath, reqDi[(int)configFileType.Preset]) + @"\", $"presetConfig{i}.csv");
+                        string newPath = Path.Combine(Path.Combine(basePath, reqDi[(int)configFileType.Preset]), $"presetConfig{i - 1}.csv");
 
                         if (File.Exists(oldPath) && File.Exists(newPath))
                         {

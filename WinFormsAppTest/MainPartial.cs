@@ -39,7 +39,7 @@ namespace WinFormsAppTest
         }
         List<GuiData> guiDataList = new List<GuiData>();
 
-        public string csv_path = Path.Combine(configPath, "config.csv");
+        public string csv_path = Path.Combine(basePath, "config.csv");
 
         /// <summary>
         /// csv 읽는 함수 
@@ -485,7 +485,7 @@ namespace WinFormsAppTest
 
         private void MakeConfig(configFileType confType)
         {
-            string filePath = Path.Combine(configPath, reqDi[(int)confType]);
+            string filePath = Path.Combine(basePath, reqDi[(int)confType]);
 
             //해당 폴더 없을 시 만들기
             if (!Directory.Exists(filePath))
@@ -494,7 +494,7 @@ namespace WinFormsAppTest
             }
 
             //해당 폴더 내 config파일 갯수 확인
-            string[] confCheck = Directory.GetFiles(Path.Combine(configPath, reqDi[(int)confType]), "*config*");
+            string[] confCheck = Directory.GetFiles(Path.Combine(basePath, reqDi[(int)confType]), "*config*");
 
             // CSV 내용 생성
             StringBuilder csvContent = new StringBuilder();
