@@ -16,28 +16,11 @@ namespace WinFormsAppTest
     {
         //변수 구조체   --> public 제외 나머지는 삭제예정
         public GUI gui = new GUI();
-        public Crop crop = new Crop();
-        public Subsampling subsampling = new Subsampling();
-        public Outlier outlier = new Outlier();
-        public GroundSeg groundseg = new GroundSeg();
-        public TSlice tSlice = new TSlice();
-        public CSlice cSlice = new CSlice();
-        public csp_segmentcrown csp_crown = new csp_segmentcrown();
-        public csp_segmentstem csp_stem = new csp_segmentstem();
-        public Measure measure = new Measure();
 
         /// <summary>
         ///  csv 관련 변수
         /// </summary>
-        struct GuiData
-        {
-            public string Type;
-            public string Visibility;
-            public string Key;
-            public string Value;
-            public string explain;
-        }
-        List<GuiData> guiDataList = new List<GuiData>();
+        public List<List<string>> csv_data = new List<List<string>>();
 
         public string csv_path = Path.Combine(basePath, "config.csv");
 
@@ -46,181 +29,37 @@ namespace WinFormsAppTest
         /// </summary>
         private void read_csv(string filepath)
         {
-            guiDataList.Clear();
+            csv_data.Clear();
             //csv 읽기
             string csvFilePath = filepath;
 
             try
             {
-                using (StreamReader reader = new StreamReader(csvFilePath,Encoding.UTF8))
+                using (StreamReader reader = new StreamReader(csvFilePath, Encoding.UTF8))
                 {
                     while (!reader.EndOfStream)
                     {
-                        string line = reader.ReadLine();                        
-                        //string[] values = ParseString(line);
+                        string line = reader.ReadLine();
                         string[] values = line.Split(',');
-                        if (values.Length >= 4)
-                        {                           
-                            GuiData guiData = new GuiData
-                            {
-                                Type = values[0],
-                                Visibility = values[1],
-                                Key = values[2],
-                                Value = values[3],
-                                explain = values[4]
-                            };
-                            //MessageBox.Show(guiData.explain);
-                            if (guiData.Key == "circle")
-                            {
-                                ExtractCircleValues(guiData.Value);
-                            }
-                            if (guiData.Key == "rectangle")
-                            {
-                                ExtractRectangleValues(guiData.Value);
-                            }
-                            guiDataList.Add(guiData);                            
-                        }
-                    }
-                }
+                        List<string> string_data = new List<string>();
 
-                // 벡터에 저장된 데이터를 사용하거나 처리하는 부분
-                foreach (GuiData data in guiDataList)
-                {
-                    if (data.Type == "gui" && data.Key == "result_path")
-                    {
-                        gui.resultPath = data.Value;
-                    }
-                    else if (data.Type == "filters.crop" && data.Key == "buffer")
-                    {
-                        crop.buffer = double.Parse(data.Value);
-                    }
-                    else if (data.Type == "filters.sample" && data.Key == "cell")
-                    {
-                        subsampling.cellSize = double.Parse(data.Value);
-                    }
-                    else if (data.Type == "filters.outlier")
-                    {
-                        switch (data.Key)
+                        if (values.Length >= 4)
                         {
-                            case "method":
-                                outlier.method = data.Value;
-                                break;
-                            case "mean_k":
-                                outlier.mean_k = double.Parse(data.Value);
-                                break;
-                            case "multiplier":
-                                outlier.Multiplier = double.Parse(data.Value);
-                                break;
+                            foreach (var v in values)
+                            {
+                                string_data.Add(v);
+                                //MessageBox.Show(v);
+                            }
+                            
+                            csv_data.Add(string_data);
+                        }
+                        else
+                        {
+                            MessageBox.Show("config.csv 형식에 문제가 있습니다.");
                         }
                     }
-                    else if (data.Type == "filters.smrf")
-                    {
-                        switch (data.Key)
-                        {
-                            case "cell":
-                                groundseg.cellSize = data.Value;
-                                break;
-                            case "window":
-                                groundseg.windowSize = data.Value;
-                                break;
-                            case "slope":
-                                groundseg.slope = data.Value;
-                                break;
-                            case "scalar":
-                                groundseg.scalar = data.Value;
-                                break;
-                            case "threshold":
-                                groundseg.threshold = data.Value;
-                                break;
-                        }
-                    }
-                    else if (data.Type == "filters.range.trunk")
-                    {
-                        switch (data.Key)
-                        {
-                            case "minheight":
-                                tSlice.minHeight = double.Parse(data.Value);
-                                break;
-                            case "maxheight":
-                                tSlice.maxHeight = double.Parse(data.Value);
-                                break;
-                        }
-                    }
-                    else if (data.Type == "filters.range.crown")
-                    {
-                        switch (data.Key)
-                        {
-                            case "minheight":
-                                cSlice.minHeight = double.Parse(data.Value);
-                                break;
-                            case "maxheight":
-                                cSlice.maxHeight = double.Parse(data.Value);
-                                break;
-                        }
-                    }
-                    else if (data.Type == "csp_segmentcrown")
-                    {
-                        switch (data.Key)
-                        {
-                            case "num_nn_samples":
-                                csp_crown.num_nn_samples = int.Parse(data.Value);
-                                break;
-                        }
-                    }
-                    else if (data.Type == "csp_segmentstem")
-                    {
-                        switch (data.Key)
-                        {
-                            case "smoothness":
-                                csp_stem.smoothness = double.Parse(data.Value);
-                                break;
-                            case "mindbh":
-                                csp_stem.minDBH = double.Parse(data.Value);
-                                break;
-                            case "maxdbh":
-                                csp_stem.maxDBH = double.Parse(data.Value);
-                                break;
-                            /*case "height_threshold":
-                                csp_stem.HeightThreshold = double.Parse(data.Value);
-                                break;*/
-                            case "nnearest":
-                                csp_stem.nnearest = double.Parse(data.Value);
-                                break;
-                            case "nmin":
-                                csp_stem.nmin = double.Parse(data.Value);
-                                break;
-                            case "num_neighbours":
-                                csp_stem.num_neighbours = double.Parse(data.Value);
-                                break;
-                            case "anglemax":
-                                csp_stem.anglemax = double.Parse(data.Value);
-                                break;
-                        }
-                    }
-                    else if (data.Type == "measure")
-                    {
-                        switch (data.Key)
-                        {
-                            case "nnearest":
-                                measure.MeasureNN = int.Parse(data.Value);
-                                break;
-                            case "minrad":
-                                measure.minRad = double.Parse(data.Value);
-                                break;
-                            case "maxrad":
-                                measure.maxRad = double.Parse(data.Value);
-                                break;
-                            case "iterations":
-                                measure.iterations = int.Parse(data.Value);
-                                break;
-                            case "zmin_check":
-                                measure.zmin_check = double.Parse(data.Value);
-                                break;
-                            case "zmax_check":
-                                measure.zmax_check = double.Parse(data.Value);
-                                break;
-                        }
-                    }
+                    ExtractCircleValues(csv_data[0][3]);
+                    ExtractRectangleValues(csv_data[1][3]);
                 }
             }
             catch (Exception ex)
@@ -285,16 +124,6 @@ namespace WinFormsAppTest
                 }
             }
         }
-        static string[] ParseString(string input)
-        {
-            // 쉼표로 문자열을 분할
-            string[] splitParts = input.Split(',');
-
-            // 마지막 부분에 따옴표로 끝나는 부분을 제거
-            splitParts[splitParts.Length - 1] = splitParts[splitParts.Length - 1].TrimEnd('\"');
-
-            return splitParts;
-        }
         //csv 쓰는 함수
         public void write_csv(string filepath)
         {
@@ -303,47 +132,28 @@ namespace WinFormsAppTest
 
             // CSV 내용 생성
             StringBuilder csvContent = new StringBuilder();
-            /*foreach (var item in guiDataList)
+
+            for (int i = 0; i < csv_data.Count; i++)
             {
-                string str = item.Type.ToString() + "," + item.Visibility.ToString() + "," + item.Key + "," + item.Value + ","+item.explain;
+                string str = "";
+                for (int j = 0; j < csv_data[i].Count; j++)
+                {
+                    if(j== csv_data[i].Count - 1)
+                    {
+                        str += csv_data[i][j];
+                        break;
+                    }
+                    str += csv_data[i][j] + ",";
+
+                }
+                //MessageBox.Show(str);
                 csvContent.AppendLine(str);
-            }*/
-            csvContent.AppendLine($"gui,public,circle,cx={gui.centerX} cy={gui.centerY} radius={gui.radius},{guiDataList[0].explain}");
-            csvContent.AppendLine($"gui,public,rectangle,xmin={gui.xMin} ymin={gui.yMin} xmax={gui.xMax} ymax={gui.yMax},{guiDataList[1].explain}");
-            csvContent.AppendLine($"gui,public,result_path,{gui.resultPath},{guiDataList[2].explain}");
-            csvContent.AppendLine($"filters.crop,private,buffer,{crop.buffer},{guiDataList[3].explain}");
-            csvContent.AppendLine($"filters.sample,public,cell,{tbSubCellSize.Text},{guiDataList[4].explain}");
-            csvContent.AppendLine($"filters.outlier,private,method,{outlier.method},{guiDataList[5].explain}");
-            csvContent.AppendLine($"filters.outlier,private,mean_k,{outlier.mean_k},{guiDataList[6].explain}");
-            csvContent.AppendLine($"filters.outlier,private,multiplier,{outlier.Multiplier},{guiDataList[7].explain}");
-            csvContent.AppendLine($"filters.smrf,public,cell,{tbNorCellSize.Text},{guiDataList[8].explain}");
-            csvContent.AppendLine($"filters.smrf,public,window,{tbNorWinSize.Text},{guiDataList[9].explain}");
-            csvContent.AppendLine($"filters.smrf,public,slope,{tbNorSlope.Text},{guiDataList[10].explain}");
-            csvContent.AppendLine($"filters.smrf,public,scalar,{tbNorScalar.Text},{guiDataList[11].explain}");
-            csvContent.AppendLine($"filters.smrf,public,threshold,{tbNorThres.Text},{guiDataList[12].explain}");
-            csvContent.AppendLine($"filters.range.trunk,public,minheight,{tbTrunkMinHeight.Text},{guiDataList[13].explain}");
-            csvContent.AppendLine($"filters.range.trunk,public,maxheight,{tbTrunkMaxHeight.Text},{guiDataList[14].explain}");
-            csvContent.AppendLine($"filters.range.crown,public,minheight,{tbCrownMinHeight.Text},{guiDataList[15].explain}");
-            csvContent.AppendLine($"filters.range.crown,public,maxheight,{tbCrownMaxHeight.Text},{guiDataList[16].explain}");
-            csvContent.AppendLine($"csp_segmentcrown,private,num_nn_samples,{csp_crown.num_nn_samples},{guiDataList[17].explain}");
-            csvContent.AppendLine($"csp_segmentstem,private,smoothness,{csp_stem.smoothness},{guiDataList[18].explain}");
-            csvContent.AppendLine($"csp_segmentstem,private,mindbh,{csp_stem.minDBH},{guiDataList[19].explain}");
-            csvContent.AppendLine($"csp_segmentstem,private,maxdbh,{csp_stem.maxDBH},{guiDataList[20].explain}");
-            csvContent.AppendLine($"csp_segmentstem,private,nnearest,{csp_stem.nnearest},{guiDataList[21].explain}");
-            csvContent.AppendLine($"csp_segmentstem,private,nmin,{csp_stem.nmin},{guiDataList[22].explain}");
-            csvContent.AppendLine($"csp_segmentstem,private,num_neighbours,{csp_stem.num_neighbours},{guiDataList[23].explain}");
-            csvContent.AppendLine($"csp_segmentstem,private,anglemax,{csp_stem.anglemax},{guiDataList[24].explain}");
-            csvContent.AppendLine($"measure,private,nnearest,{measure.MeasureNN},{guiDataList[25].explain}");
-            csvContent.AppendLine($"measure,private,minrad,{measure.minRad},{guiDataList[26].explain}");
-            csvContent.AppendLine($"measure,private,maxrad,{measure.maxRad},{guiDataList[27].explain}");
-            csvContent.AppendLine($"measure,private,iterations,{measure.iterations},{guiDataList[28].explain}");
-            csvContent.AppendLine($"measure,private,zmin_check,{measure.zmin_check},{guiDataList[29].explain}");
-            csvContent.Append($"measure,private,zmax_check,{measure.zmax_check},{guiDataList[30].explain}");
+            }
 
             // CSV 파일 생성 및 내용 기록
             try
             {
-                File.WriteAllText(filePath, csvContent.ToString(),Encoding.UTF8);
+                File.WriteAllText(filePath, csvContent.ToString(), Encoding.UTF8);
             }
             catch (Exception ex)
             {
@@ -351,50 +161,48 @@ namespace WinFormsAppTest
             }
         }
 
-        //textbox 값 -> 구조체로 대입 
+        //textbox 값 -> List 테이블로 대입 
         private void UpdateParams()
         {
             //subsamplng_textbox
-            subsampling.cellSize = double.Parse(tbSubCellSize.Text.Trim());
+            setParam("filters.sample", "cell", tbSubCellSize.Text.Trim());
 
             //Normalize_textboxes
-            groundseg.scalar = tbNorScalar.Text.Trim();
-            groundseg.cellSize = tbNorCellSize.Text.Trim();
-            groundseg.slope = tbNorSlope.Text.Trim();
-            groundseg.windowSize = tbNorWinSize.Text.Trim();
-            groundseg.threshold = tbNorThres.Text.Trim();
+            setParam("filters.smrf", "cell", tbNorCellSize.Text.Trim());
+            setParam("filters.smrf", "scalar", tbNorScalar.Text.Trim());
+            setParam("filters.smrf", "slope", tbNorSlope.Text.Trim());
+            setParam("filters.smrf", "window", tbNorWinSize.Text.Trim()); 
+            setParam("filters.smrf", "threshold", tbNorThres.Text.Trim());
 
             //trunkSlice_textboxes
-            tSlice.minHeight = double.Parse(tbTrunkMinHeight.Text.Trim());
-            tSlice.maxHeight = double.Parse(tbTrunkMaxHeight.Text.Trim());
+            setParam("filters.range.trunk", "minheight", tbTrunkMinHeight.Text.Trim());
+            setParam("filters.range.trunk", "maxheight", tbTrunkMaxHeight.Text.Trim());
 
             //CrownSlice_textboxes
-            cSlice.minHeight = double.Parse(tbCrownMinHeight.Text.Trim());
-            cSlice.maxHeight = double.Parse(tbCrownMaxHeight.Text.Trim());
-
-            //csp_stem.HeightThreshold = double.Parse(tbTreeSegHeightThres.Text);
+            setParam("filters.range.crown", "minheight", tbCrownMinHeight.Text.Trim());
+            setParam("filters.range.crown", "maxheight", tbCrownMaxHeight.Text.Trim());
         }
 
-        //구조체 값 -> textbox 대입
+        //List 테이블 -> textbox 대입
         private void FillTextboxes()
         {
             //subsamplng_textboxes
-            tbSubCellSize.Text = subsampling.cellSize.ToString();
+            tbSubCellSize.Text = getParam("filters.sample","cell");
 
             //normalize_textboxes
-            tbNorCellSize.Text = groundseg.cellSize;
-            tbNorScalar.Text = groundseg.scalar;
-            tbNorSlope.Text = groundseg.slope;
-            tbNorThres.Text = groundseg.threshold;
-            tbNorWinSize.Text = groundseg.windowSize;
+            tbNorCellSize.Text = getParam("filters.smrf","cell");
+            tbNorScalar.Text = getParam("filters.smrf", "scalar");
+            tbNorSlope.Text = getParam("filters.smrf", "slope");
+            tbNorThres.Text = getParam("filters.smrf", "threshold");
+            tbNorWinSize.Text = getParam("filters.smrf", "window");
 
             //trunkSlice_textboxes
-            tbTrunkMinHeight.Text = tSlice.minHeight.ToString();
-            tbTrunkMaxHeight.Text = tSlice.maxHeight.ToString();
+            tbTrunkMinHeight.Text = getParam("filters.range.trunk","minheight");
+            tbTrunkMaxHeight.Text = getParam("filters.range.trunk", "maxheight");
 
             //CrownSlice_textboxes
-            tbCrownMinHeight.Text = cSlice.minHeight.ToString();
-            tbCrownMaxHeight.Text = cSlice.maxHeight.ToString();
+            tbCrownMinHeight.Text = getParam("filters.range.crown", "minheight");
+            tbCrownMaxHeight.Text = getParam("filters.range.crown", "maxheight");
         }
         /// <summary>
         /// 무결성 검사를 위한 코드
@@ -410,28 +218,11 @@ namespace WinFormsAppTest
             tbTrunkMaxHeight.KeyPress += TextBox_KeyPressOnlyNumbers;
             tbCrownMinHeight.KeyPress += TextBox_KeyPressOnlyNumbers;
             tbCrownMaxHeight.KeyPress += TextBox_KeyPressOnlyNumbers;
-            /*
-            ground_threshold_textbox.KeyPress += TextBox_KeyPressOnlyNumbers;
-            TSlice_minHeight_textbox.KeyPress += TextBox_KeyPressOnlyNumbers;
-            TSlice_maxHeight_textbox.KeyPress += TextBox_KeyPressOnlyNumbers;
-            CSlice_minHeight_textbox.KeyPress += TextBox_KeyPressOnlyNumbers;
-            CSlice_maxHeight_textbox.KeyPress += TextBox_KeyPressOnlyNumbers;
-            CSP_nnearest_textbox.KeyPress += TextBox_KeyPressOnlyNumbers;
-            measure_nnearest_textbox.KeyPress += TextBox_KeyPressOnlyNumbers;
-            segStem_maxDBH_textbox.KeyPress += TextBox_KeyPressOnlyNumbers;
-            segStem_minDBH_textbox.KeyPress += TextBox_KeyPressOnlyNumbers;
-            segStem_smoothness_textbox.KeyPress += TextBox_KeyPressOnlyNumbers;
-            threshold_height_textbox.KeyPress += TextBox_KeyPressOnlyNumbers;
-            measure_maxRad_textbox.KeyPress += TextBox_KeyPressOnlyNumbers;
-            measure_minRad_textbox.KeyPress += TextBox_KeyPressOnlyNumbers;
-            */
 
 
             //정수만 입력하도록 하는 핸들러
             tbNorCellSize.KeyPress += TextBox_KeyPress_OnlyInt;
             tbNorWinSize.KeyPress += TextBox_KeyPress_OnlyInt;
-            //CSP_nnearest_textbox.KeyPress += TextBox_KeyPress_OnlyInt;
-            //measure_iterations_textbox.KeyPress += TextBox_KeyPress_OnlyInt;
 
 
         }
@@ -453,45 +244,30 @@ namespace WinFormsAppTest
                 e.Handled = true;
             }
         }
-        /// <summary>
         /// preset,recent 설정파일 저장용코드
-        /// </summary>
-        /// <param name="csvContent"></param>
         private void setAllparams(ref StringBuilder csvContent)
         {
             csvContent = new StringBuilder();
-            //일단 고정값 받게 해놓고 추후 plot 값 넣어줄 예정(Recent일 때만)
-            csvContent.AppendLine($"gui,public,circle,cx={gui.centerX} cy={gui.centerY} radius={gui.radius},{guiDataList[0].explain}");
-            csvContent.AppendLine($"gui,public,rectangle,xmin={gui.xMin} ymin={gui.yMin} xmax={gui.xMax} ymax={gui.yMax},{guiDataList[1].explain}");
-            csvContent.AppendLine($"gui,public,result_path,{gui.resultPath},{guiDataList[2].explain}");
-            csvContent.AppendLine($"filters.crop,private,buffer,{crop.buffer},{guiDataList[3].explain}");
-            csvContent.AppendLine($"filters.sample,public,cell,{tbSubCellSize.Text},{guiDataList[4].explain}");
-            csvContent.AppendLine($"filters.outlier,private,method,{outlier.method},{guiDataList[5].explain}");
-            csvContent.AppendLine($"filters.outlier,private,mean_k,{outlier.mean_k},{guiDataList[6].explain}");
-            csvContent.AppendLine($"filters.outlier,private,multiplier,{outlier.Multiplier},{guiDataList[7].explain}");
-            csvContent.AppendLine($"filters.smrf,public,cell,{tbNorCellSize.Text},{guiDataList[8].explain}");
-            csvContent.AppendLine($"filters.smrf,public,window,{tbNorWinSize.Text},{guiDataList[9].explain}");
-            csvContent.AppendLine($"filters.smrf,public,slope,{tbNorSlope.Text},{guiDataList[10].explain}");
-            csvContent.AppendLine($"filters.smrf,public,scalar,{tbNorScalar.Text},{guiDataList[11].explain}");
-            csvContent.AppendLine($"filters.smrf,public,threshold,{tbNorThres.Text},{guiDataList[12].explain}");
-            csvContent.AppendLine($"filters.range.trunk,public,minheight,{tbTrunkMinHeight.Text},{guiDataList[13].explain}");
-            csvContent.AppendLine($"filters.range.trunk,public,maxheight,{tbTrunkMaxHeight.Text},{guiDataList[14].explain}");
-            csvContent.AppendLine($"filters.range.crown,public,minheight,{tbCrownMinHeight.Text},{guiDataList[15].explain}");
-            csvContent.AppendLine($"filters.range.crown,public,maxheight,{tbCrownMaxHeight.Text},{guiDataList[16].explain}");
-            csvContent.AppendLine($"csp_segmentcrown,private,num_nn_samples,{csp_crown.num_nn_samples},{guiDataList[17].explain}");
-            csvContent.AppendLine($"csp_segmentstem,private,smoothness,{csp_stem.smoothness},{guiDataList[18].explain}");
-            csvContent.AppendLine($"csp_segmentstem,private,mindbh,{csp_stem.minDBH},{guiDataList[19].explain}");
-            csvContent.AppendLine($"csp_segmentstem,private,maxdbh,{csp_stem.maxDBH},{guiDataList[20].explain}");
-            csvContent.AppendLine($"csp_segmentstem,private,nnearest,{csp_stem.nnearest},{guiDataList[21].explain}");
-            csvContent.AppendLine($"csp_segmentstem,private,nmin,{csp_stem.nmin},{guiDataList[22].explain}");
-            csvContent.AppendLine($"csp_segmentstem,private,num_neighbours,{csp_stem.num_neighbours},{guiDataList[23].explain}");
-            csvContent.AppendLine($"csp_segmentstem,private,anglemax,{csp_stem.anglemax},{guiDataList[24].explain}");
-            csvContent.AppendLine($"measure,private,nnearest,{measure.MeasureNN},{guiDataList[25].explain}");
-            csvContent.AppendLine($"measure,private,minrad,{measure.minRad},{guiDataList[26].explain}");
-            csvContent.AppendLine($"measure,private,maxrad,{measure.maxRad},{guiDataList[27].explain}");
-            csvContent.AppendLine($"measure,private,iterations,{measure.iterations},{guiDataList[28].explain}");
-            csvContent.AppendLine($"measure,private,zmin_check,{measure.zmin_check},{guiDataList[29].explain}");
-            csvContent.Append($"measure,private,zmax_check,{measure.zmax_check},{guiDataList[30].explain}");
+
+            UpdateParams();
+            csvContent = new StringBuilder();
+            csv_data[0][3] = $"cx={gui.centerX} cy={gui.centerY} radius={gui.radius}";
+            csv_data[1][3] = $"xmin={gui.xMin} ymin={gui.yMin} xmax={gui.xMax} ymax={gui.yMax}";
+            for (int i = 0; i < csv_data.Count; i++)
+            {
+                string str = "";
+                for (int j = 0; j < csv_data[i].Count; j++)
+                {
+                    if (j == csv_data[i].Count - 1)
+                    {
+                        str += csv_data[i][j];
+                        break;
+                    }
+                    str += csv_data[i][j] + ",";
+
+                }
+                csvContent.AppendLine(str);
+            }
         }
 
         private void MakeConfig(configFileType confType)
@@ -568,7 +344,7 @@ namespace WinFormsAppTest
             // CSV 파일 생성 및 내용 기록
             try
             {
-                File.WriteAllText(filePath, csvContent.ToString(),Encoding.UTF8);
+                File.WriteAllText(filePath, csvContent.ToString(), Encoding.UTF8);
             }
             catch (Exception ex)
             {
@@ -586,11 +362,11 @@ namespace WinFormsAppTest
             StringBuilder csvContent = new StringBuilder();
 
             //설명 변경해야함
-            csvContent.AppendLine("gui,public,circle,cx=0 cy=0 radius=100,cx cy radius는 중심점 좌표와 반지름입니다.");
-            csvContent.AppendLine("gui,public,rectangle,xmin=-10 ymin=-10 xmax=10 ymax=10,xmin xmax ymin ymax는 범위 자료입니다. ");
-            csvContent.AppendLine("gui,public,result_path,..\\result,결과를 저장하는 폴더입니다. ");
+            csvContent.AppendLine("gui,private,circle,cx=0 cy=0 radius=100,cx,cy,radius는 중심점 좌표와 반지름입니다.");
+            csvContent.AppendLine("gui,private,rectangle,xmin=-10 ymin=-10 xmax=10 ymax=10,xmin,xmax,ymin,ymax는 범위 자료입니다. ");
+            csvContent.AppendLine("gui,private,result_path,..\\result,결과를 저장하는 폴더입니다. ");
             csvContent.AppendLine("filters.crop,private,buffer,120,plot 영역보다 120% 큰 영역을 의미한다.");
-            csvContent.AppendLine("filters.sample,public,cell,0.01,복셀 크기 (예: 0.03m)");
+            csvContent.AppendLine("filters.sample,public,cell,0.03,복셀 크기 (예: 0.03m)");
             csvContent.AppendLine("filters.outlier,private,method,statistical,통계 기반으로 이상치(이상점) 제거한다.");
             csvContent.AppendLine("filters.outlier,private,mean_k,12,최근접 이웃의 개수를 지정한다. ");
             csvContent.AppendLine("filters.outlier,private,multiplier,2.2,거리의 표준편차의 계수를 지정한다. ");
@@ -616,16 +392,65 @@ namespace WinFormsAppTest
             csvContent.AppendLine("measure,private,maxrad,0.5,찾는 원형모델의 최대 반지름이다");
             csvContent.AppendLine("measure,private,iterations,10000,원형모델을 찾는 RANSAC 알고리즘의 최대 시도 횟수이다");
             csvContent.AppendLine("measure,private,zmin_check,0.2,나무가 표준지의 속하는지 판단하기 위해 사용 된다. 기준포인트들 중 최하점의 높이다");
-            csvContent.Append("measure,private,zmax_check,0.7,나무가 표준지의 속하는지 판단하기 위해 사용 된. 기준포인트들 중 최상점의 높이다");
+            csvContent.Append("measure,private,zmax_check,0.7,나무가 표준지의 속하는지 판단하기 위해 사용 된다. 기준포인트들 중 최상점의 높이다");
 
             // CSV 파일 생성 및 내용 기록
             try
             {
-                File.WriteAllText(filePath, csvContent.ToString(),Encoding.UTF8);
+                File.WriteAllText(filePath, csvContent.ToString(), Encoding.UTF8);
             }
             catch (Exception ex)
             {
                 MessageBox.Show("CSV 파일 작성 중 오류 발생: " + ex.Message);
+            }
+
+            read_csv(filePath);
+            FillTextboxes();
+
+        }
+
+        //csv_data를 저장해놓은 List에서 값을 가져오는 함수
+        public string getParam(string Type,string Key)
+        {
+            string ret = "";
+            for (int i = 0; i < csv_data.Count; i++)
+            {
+                if (csv_data[i][0] != Type)
+                {
+                    continue;
+                }
+                else if (csv_data[i][2] != Key)
+                {
+                    continue;
+                }
+                else
+                {
+                    ret = csv_data[i][3];
+                    break;
+                }
+            }
+            //MessageBox.Show(ret);
+            return ret;
+        }
+        //csv_data를 저장해놓은 List에 값을 설정하는 함수
+        public void setParam(string Type, string Key, string Value)
+        {
+            for (int i = 0; i < csv_data.Count; i++)
+            {
+                if (csv_data[i][0] != Type)
+                {
+                    continue;
+                }
+                else if (csv_data[i][2] != Key)
+                {
+                    continue;
+                }
+                else
+                {
+                    csv_data[i][3] = Value;
+                   //MessageBox.Show(csv_data[i][3]); 
+                    return;
+                }
             }
         }
     }

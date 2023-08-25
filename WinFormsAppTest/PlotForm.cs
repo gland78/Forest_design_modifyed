@@ -67,7 +67,7 @@ namespace WinFormsAppTest
         private void PlotForm_Load(object sender, EventArgs e)
         {
             initTextBox();
-            resultPath = paramForm.gui.resultPath;
+            resultPath = paramForm.getParam("gui", "result_path");
 
             ////////////////////////////////////////////////////////////////
             attachStartBtn(false);
@@ -476,7 +476,7 @@ namespace WinFormsAppTest
             tbPlotRecYmax.Text = paramForm.gui.yMax.ToString();
         }
 
-        //사용자가 입력한 좌표값이 올바른지 체크하기 위한 함수
+        //사용자가 입력한 좌표값이 올바른지 체크하기 위한 함수들
         private async void validation(string filePath)
         {
             string infoDir = Path.Combine(basePath, "LAS_info");

@@ -51,7 +51,7 @@ namespace WinFormsAppTest
 
             shape = "_circle";
 
-            resultPath = paramForm.gui.resultPath;
+            resultPath = paramForm.getParam("gui", "result_path");
         }
         //PLOT
         private void MakeResultDirectory_PLOT()
@@ -180,7 +180,7 @@ namespace WinFormsAppTest
             double centerX = double.Parse(tbPlotCircleX.Text);
             double centerY = double.Parse(tbPlotCircleY.Text);
             double radius = double.Parse(tbPlotCircleR.Text);
-            double buffer = paramForm.crop.buffer;
+            double buffer = double.Parse(paramForm.getParam("filters.crop", "buffer"));
             {
                 JObject Readers = new JObject(
                   new JProperty("type", "readers.las"),
@@ -211,7 +211,7 @@ namespace WinFormsAppTest
             double ymin = double.Parse(tbPlotRecYmin.Text);
             double xmax = double.Parse(tbPlotRecXmax.Text);
             double ymax = double.Parse(tbPlotRecYmax.Text);
-            double buffer = paramForm.crop.buffer;
+            double buffer = double.Parse(paramForm.getParam("filters.crop","buffer"));
 
             double width = Math.Abs(xmax - xmin);
             double height = Math.Abs(ymax - ymin);
@@ -251,7 +251,7 @@ namespace WinFormsAppTest
         /// Cropping step, 사용자가 입력한 좌표를(다각형의 꼭짓점) 읽어온 후 표준지를 다각형으로 자릅니다.
         private void MakePolygonPlot()
         {
-            double buffer = paramForm.crop.buffer;
+            double buffer = double.Parse(paramForm.getParam("filters.crop","buffer"));
             string one = "level1_cropped_";
             string resultSavedDirectory = this.resultSavedDirectory + shape;
 
@@ -305,7 +305,7 @@ namespace WinFormsAppTest
               );
                 JObject sonSpec = new JObject(
                    new JProperty("type", "filters.sample"),
-                   new JProperty("cell", paramForm.subsampling.cellSize)
+                   new JProperty("cell", paramForm.getParam("filters.sample","cell"))
                );
                 JObject Writers = new JObject(
                    new JProperty("type", "writers.las"),
@@ -348,8 +348,8 @@ namespace WinFormsAppTest
                 JObject Outlier = new JObject(
                   new JProperty("type", "filters.outlier"),
                   new JProperty("method", "statistical"),
-                   new JProperty("mean_k", paramForm.outlier.mean_k),
-                new JProperty("multiplier", paramForm.outlier.Multiplier)
+                  new JProperty("mean_k", paramForm.getParam("filters.outlier","mean_k")),
+                  new JProperty("multiplier", paramForm.getParam("filters.outlier", "multiplier"))
               );
                 JObject secondout = new JObject(
                    new JProperty("type", "writers.las"),
@@ -380,11 +380,11 @@ namespace WinFormsAppTest
               );
                 JObject smrf = new JObject(
                    new JProperty("type", "filters.smrf"),
-                   new JProperty("cell", paramForm.groundseg.cellSize),
-                   new JProperty("window", paramForm.groundseg.windowSize),
-                   new JProperty("slope", paramForm.groundseg.slope),
-                   new JProperty("threshold", paramForm.groundseg.threshold),
-                   new JProperty("scalar", paramForm.groundseg.scalar)
+                   new JProperty("cell", paramForm.getParam("filters.smrf", "cell")),
+                   new JProperty("window", paramForm.getParam("filters.smrf", "window")),
+                   new JProperty("slope", paramForm.getParam("filters.smrf", "slope")),
+                   new JProperty("threshold", paramForm.getParam("filters.smrf", "threshold")),
+                   new JProperty("scalar", paramForm.getParam("filters.smrf", "scalar"))
                );
                 JObject hagnn = new JObject(
                   new JProperty("type", "filters.hag_nn")
@@ -505,7 +505,7 @@ namespace WinFormsAppTest
               );
                 JObject sonSpec = new JObject(
                    new JProperty("type", "filters.range"),
-                   new JProperty("limits", @"Z[" + paramForm.tSlice.minHeight + ":" + paramForm.tSlice.maxHeight + "]")
+                   new JProperty("limits", @"Z[" + paramForm.getParam("filters.range.trunk","minheight") + ":" + paramForm.getParam("filters.range.trunk", "maxheight") + "]")
                );
                 JObject Writers = new JObject(
                    new JProperty("type", "writers.pcd"),
@@ -522,7 +522,7 @@ namespace WinFormsAppTest
               );
                 JObject sonSpec = new JObject(
                    new JProperty("type", "filters.range"),
-                   new JProperty("limits", @"Z[" + paramForm.cSlice.minHeight + ":" + paramForm.cSlice.maxHeight + "]")
+                   new JProperty("limits", @"Z[" + paramForm.getParam("filters.range.crown","minheight") + ":" + paramForm.getParam("filters.range.crown", "maxheight") + "]")
                );
                 JObject Writers = new JObject(
                    new JProperty("type", "writers.pcd"),
@@ -535,11 +535,11 @@ namespace WinFormsAppTest
         private void AppendSeventhCSVFile()
         {
             //string csvFilePath = "config.csv";
-            string csvFilePath = Path.Combine(Environment.CurrentDirectory.ToString(),"config.csv");
+            string csvFilePath = Path.Combine(Environment.CurrentDirectory.ToString(), "config.csv");
             //MessageBox.Show(csvFilePath);
             string coordfile = "";
             string trunkslicefile = "";
-            
+
             String FolderName = resultSavedDirectory + shape + @"\intermediate";
             System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(FolderName);
             foreach (System.IO.FileInfo File in di.GetFiles())
@@ -557,14 +557,14 @@ namespace WinFormsAppTest
                 }
             }
 
-            paramForm.csp_stem.coordfile = "csp_segmentstem,private,coordfile," + coordfile + ",plot 영역의 정보를 저장하는 파일 이름이다. ";
-            paramForm.csp_stem.trunk_slice_file = "csp_segmentstem,private,trunk_slice_file," + trunkslicefile + ",수간부(trunk) 슬라이스에 해당하는 점들을 저장하는 파일 이름이다. ";
-            
+            string coord_file = "csp_segmentstem,private,coordfile," + coordfile + ",plot 영역의 정보를 저장하는 파일 이름이다. ";
+            string trunk_slice_file = "csp_segmentstem,private,trunk_slice_file," + trunkslicefile + ",수간부(trunk) 슬라이스에 해당하는 점들을 저장하는 파일 이름이다. ";
+
             StringBuilder csvContent = new StringBuilder();
             try
             {
-                File.AppendAllText(csvFilePath, Environment.NewLine + "csp_segmentstem,private,coordfile," + coordfile + ",aaa", Encoding.UTF8);
-                File.AppendAllText(csvFilePath, Environment.NewLine + "csp_segmentstem,private,trunk_slice_file," + trunkslicefile + ",aaa", Encoding.UTF8);
+                File.AppendAllText(csvFilePath, Environment.NewLine + coord_file, Encoding.UTF8);
+                File.AppendAllText(csvFilePath, Environment.NewLine + trunk_slice_file, Encoding.UTF8);
             }
             catch (Exception ex)
             {
@@ -578,7 +578,7 @@ namespace WinFormsAppTest
 
             List<String> filenames_pcd = new List<String>();
 
-            string crownslicefile="";
+            string crownslicefile = "";
             String FolderName = resultSavedDirectory + shape + @"\intermediate";
             System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(FolderName);
             foreach (System.IO.FileInfo File in di.GetFiles())
@@ -595,14 +595,14 @@ namespace WinFormsAppTest
                     crownslicefile = File.FullName;
                 }
             }
-            paramForm.csp_crown.trunk_files = "csp_segmentcrown,private,trunk_files," + string.Join(" ", filenames_pcd)+ ",csp_segmentstem 단계에서 생성된 수간부(trunk) 파일들을 저장한다. ";
-            paramForm.csp_crown.crown_slice_file = "csp_segmentcrown,private,crown_slice_file," + crownslicefile+ ",수관부(crown) 슬라이스에 해당하는 점들을 저장하는 파일 이름이다. ";
+            string trunk_files = "csp_segmentcrown,private,trunk_files," + string.Join(" ", filenames_pcd) + ",csp_segmentstem 단계에서 생성된 수간부(trunk) 파일들을 저장한다. ";
+            string crown_slice_file = "csp_segmentcrown,private,crown_slice_file," + crownslicefile + ",수관부(crown) 슬라이스에 해당하는 점들을 저장하는 파일 이름이다. ";
 
             // CSV 파일에 내용 추가
             try
             {
-                File.AppendAllText(csvFilePath, Environment.NewLine + paramForm.csp_crown.trunk_files, Encoding.UTF8);
-                File.AppendAllText(csvFilePath, Environment.NewLine + paramForm.csp_crown.crown_slice_file, Encoding.UTF8);
+                File.AppendAllText(csvFilePath, Environment.NewLine + trunk_files, Encoding.UTF8);
+                File.AppendAllText(csvFilePath, Environment.NewLine + crown_slice_file, Encoding.UTF8);
             }
             catch (Exception ex)
             {
@@ -970,7 +970,7 @@ namespace WinFormsAppTest
                     sw.WriteLine("cls");
                     sw.WriteLine("@ECHO OFF");
                     sw.WriteLine("echo 산림 속성 정보 계산중...  ");
-                    sw.WriteLine("measure " + FolderName + " " + FolderName2 +" "+ paramForm.csv_path);
+                    sw.WriteLine("measure " + FolderName + " " + FolderName2 + " " + paramForm.csv_path);
                 }
                 ProcessBatch(nine);
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + nine + originLasName + ".bat 파일을 생성했습니다.");
@@ -1021,6 +1021,15 @@ namespace WinFormsAppTest
                 }
 
                 MakeInfoFile();
+
+
+
+                string FilePath = resultSavedDirectory + shape + @"\Log\Log_" + DateTime.Today.ToString("yyyyMMdd") + ".log";
+                try
+                {
+                    write_config(FilePath);
+                }
+                catch (Exception e) { MessageBox.Show(e.ToString()); }
 
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + ten + originLasName + ".bat 파일을 생성했습니다.");
             }
@@ -1256,7 +1265,7 @@ namespace WinFormsAppTest
         }
 
         //폴리곤 plot 실행 시 buffer 적용을 위해 사각형 꼭지점 찾는 코드
-        public void FindExtremeCoordinates(point[] points)
+        private void FindExtremeCoordinates(point[] points)
         {
             // 초기화를 위해 첫 번째 점을 기준으로 설정
             bufferedPolycords.top = bufferedPolycords.bottom = bufferedPolycords.right = bufferedPolycords.left = points[0];
@@ -1278,6 +1287,39 @@ namespace WinFormsAppTest
                 // 최좌단 좌표 찾기
                 if (temppoint.x < bufferedPolycords.left.x)
                     bufferedPolycords.left = temppoint;
+            }
+        }
+
+        private void write_config(string path)
+        {
+            string filePath = path;
+
+            // CSV 내용 생성
+            StringBuilder csvContent = new StringBuilder();
+
+            for (int i = 0; i < paramForm.csv_data.Count; i++)
+            {
+                string str = "";
+                for (int j = 0; j < 4; j++)
+                {
+                    if(j==3)
+                    {
+                        str += paramForm.csv_data[i][j];
+                        break;
+                    }
+                    str += paramForm.csv_data[i][j] + ",";
+                }
+                csvContent.AppendLine(str);
+            }
+
+            // CSV 파일 생성 및 내용 기록
+            try
+            {
+                File.AppendAllText(filePath, csvContent.ToString(), Encoding.UTF8);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("CSV 파일 작성 중 오류 발생: " + ex.Message);
             }
         }
     }
