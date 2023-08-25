@@ -438,12 +438,11 @@ namespace WinFormsAppTest
         //recetnConfig 버튼 관련 이벤트 처리 코드
         private void btnRecentConf_Click(object sender, EventArgs e)
         {
-            string fileDi = Path.Combine(basePath, reqDi[(int)configFileType.Recent]);
+            /*string fileDi = Path.Combine(basePath, reqDi[(int)configFileType.Recent]);
             string[] confCheck = Directory.GetFiles(fileDi, "recentConfig*");
             string fileName = ((Button)sender).Name;
 
             string? csvLines;
-
             using (StreamReader sr = new StreamReader(Path.Combine(fileDi, fileName)))
             {
                 while ((csvLines = sr.ReadLine()) != null)
@@ -504,6 +503,21 @@ namespace WinFormsAppTest
                     }
                 }
             }
+            tcMainHome.SelectedIndex = 1;*/
+
+            string[] confCheck = Directory.GetFiles(Path.Combine(basePath, reqDi[(int)configFileType.Preset]), "RecentConfig*");
+
+            foreach (string conf in confCheck)
+            {
+                string fileName = conf.Substring(conf.IndexOf("recentConfig"), conf.Length - conf.IndexOf("recentConfig") - 4);
+                if (((Button)sender).Name == fileName + ".csv")
+                {
+                    read_csv(conf);
+                    gui.loadPath=getParam("FileInfo", "Lasfilename");
+                    FillTextboxes();
+                }
+            }
+
             tcMainHome.SelectedIndex = 1;
         }
 
@@ -531,6 +545,7 @@ namespace WinFormsAppTest
                 if (((Button)sender).Name == fileName + ".csv")
                 {
                     read_csv(conf);
+                    gui.loadPath = getParam("FileInfo", "Lasfilename");
                     FillTextboxes();
                 }
             }

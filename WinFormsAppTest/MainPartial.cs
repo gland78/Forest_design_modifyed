@@ -250,6 +250,7 @@ namespace WinFormsAppTest
             csvContent = new StringBuilder();
 
             UpdateParams();
+
             csvContent = new StringBuilder();
             csv_data[0][3] = $"cx={gui.centerX} cy={gui.centerY} radius={gui.radius}";
             csv_data[1][3] = $"xmin={gui.xMin} ymin={gui.yMin} xmax={gui.xMax} ymax={gui.yMax}";
@@ -269,7 +270,6 @@ namespace WinFormsAppTest
                 csvContent.AppendLine(str);
             }
         }
-
         private void MakeConfig(configFileType confType)
         {
             string filePath = Path.Combine(basePath, reqDi[(int)confType]);
@@ -283,6 +283,8 @@ namespace WinFormsAppTest
             //해당 폴더 내 config파일 갯수 확인
             string[] confCheck = Directory.GetFiles(Path.Combine(basePath, reqDi[(int)confType]), "*config*");
 
+            string temp1 = csv_data[0][3], temp2 = csv_data[0][3];
+
             // CSV 내용 생성
             StringBuilder csvContent = new StringBuilder();
 
@@ -295,11 +297,15 @@ namespace WinFormsAppTest
                     break;
                 case configFileType.Recent:
                     Dictionary<string, double> plotData = plotSender();
+                    
                     setAllparams(ref csvContent);
                     infoRecent = new string[] {
                         $"FileInfo,public,fileType,{confType},파일의 타입을 구분 (preset default recent).",
                         $"FileInfo,public,title,{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")},gui에 표시될 파일의 제목",
-                        $"FileInfo,public,selection,{plotData["selection"]},최근 설정한 좌표 정보"
+                        $"FileInfo,public,selection,{plotData["selection"]},최근 설정한 좌표 정보",
+
+                        //추가
+                        $"FileInfo,public,Lasfilename,{gui.loadPath},최근 사용한 LAS파일 경로"
                     };
                     for (int i = infoRecent.Length - 1; i >= 0; i--)
                     {
@@ -324,18 +330,26 @@ namespace WinFormsAppTest
                     }
 
                     filePath = Path.Combine(filePath, "recentConfig0.csv");
+                    csv_data[0][3] = temp1;
+                    csv_data[1][3] = temp2;
                     break;
                 case configFileType.Preset:
                     setAllparams(ref csvContent);
                     infoRecent = new string[] {
-                        $"FileInfo,public,fileType,{confType},AAA",
-                        $"FileInfo,public,title,{"config" + confCheck.Length.ToString()},AAA"
+                        $"FileInfo,public,fileType,{confType},파일의 타입을 구분 (preset default recent).",
+                        $"FileInfo,public,title,{"config" + confCheck.Length.ToString()},gui에 표시될 파일의 제목",
+                        
+                        
+                        //추가
+                        $"FileInfo,public,Lasfilename,{gui.loadPath},설정을 저장할 LAS파일 경로"
                     };
                     for (int i = infoRecent.Length - 1; i >= 0; i--)
                     {
                         csvContent.Insert(0, infoRecent[i] + Environment.NewLine);
                     }
                     filePath = Path.Combine(filePath, $"presetConfig{confCheck.Length.ToString()}.csv");
+                    csv_data[0][3] = temp1;
+                    csv_data[1][3] = temp2;
                     break;
                 default:
                     throw new Exception("unknown error: configFileType.Exception");
