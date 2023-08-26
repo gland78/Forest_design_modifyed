@@ -95,7 +95,7 @@ namespace WinFormsAppTest
 
             csv = csv.Replace(oldTitle, newTitle);
 
-            File.WriteAllText(Path.Combine(fileDi, fileName), csv);
+            File.WriteAllText(Path.Combine(fileDi, fileName), csv, Encoding.UTF8);
 
             preConfLoad();
             mainPaint();

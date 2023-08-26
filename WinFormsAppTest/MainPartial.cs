@@ -24,6 +24,7 @@ namespace WinFormsAppTest
 
         public string csv_path = Path.Combine(basePath, "config.csv");
 
+        public string filetype = "";
         /// <summary>
         /// csv 읽는 함수 
         /// </summary>
@@ -247,11 +248,7 @@ namespace WinFormsAppTest
         /// preset,recent 설정파일 저장용코드
         private void setAllparams(ref StringBuilder csvContent)
         {
-            csvContent = new StringBuilder();
-
             UpdateParams();
-
-            csvContent = new StringBuilder();
             csv_data[0][3] = $"cx={gui.centerX} cy={gui.centerY} radius={gui.radius}";
             csv_data[1][3] = $"xmin={gui.xMin} ymin={gui.yMin} xmax={gui.xMax} ymax={gui.yMax}";
             for (int i = 0; i < csv_data.Count; i++)
@@ -272,6 +269,7 @@ namespace WinFormsAppTest
         }
         private void MakeConfig(configFileType confType)
         {
+            read_csv(csv_path);
             string filePath = Path.Combine(basePath, reqDi[(int)confType]);
 
             //해당 폴더 없을 시 만들기

@@ -505,7 +505,7 @@ namespace WinFormsAppTest
             }
             tcMainHome.SelectedIndex = 1;*/
 
-            string[] confCheck = Directory.GetFiles(Path.Combine(basePath, reqDi[(int)configFileType.Preset]), "RecentConfig*");
+            string[] confCheck = Directory.GetFiles(Path.Combine(basePath, reqDi[(int)configFileType.Recent]), "RecentConfig*");
 
             foreach (string conf in confCheck)
             {
@@ -513,7 +513,7 @@ namespace WinFormsAppTest
                 if (((Button)sender).Name == fileName + ".csv")
                 {
                     read_csv(conf);
-                    gui.loadPath=getParam("FileInfo", "Lasfilename");
+                    gui.loadPath = getParam("FileInfo", "Lasfilename");
                     FillTextboxes();
                 }
             }
@@ -545,7 +545,6 @@ namespace WinFormsAppTest
                 if (((Button)sender).Name == fileName + ".csv")
                 {
                     read_csv(conf);
-                    gui.loadPath = getParam("FileInfo", "Lasfilename");
                     FillTextboxes();
                 }
             }
@@ -565,6 +564,7 @@ namespace WinFormsAppTest
                 pFrm.attachProgressBar += new switchEventHandler(progressAttach);
                 pFrm.attachStartBtn += new switchEventHandler(startBtnAttach);
             }
+            filetype = getParam("FileInfo", "fileType");
             pFrm.ShowDialog();
         }
 

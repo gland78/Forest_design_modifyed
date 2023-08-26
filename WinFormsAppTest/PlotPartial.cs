@@ -1302,6 +1302,8 @@ namespace WinFormsAppTest
                 string str = "";
                 for (int j = 0; j < 4; j++)
                 {
+                    if (j == 1)
+                        continue;
                     if(j==3)
                     {
                         str += paramForm.csv_data[i][j];

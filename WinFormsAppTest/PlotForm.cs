@@ -247,8 +247,8 @@ namespace WinFormsAppTest
 
             preProAndExcuteStep();
 
-
-            paramForm.write_csv(paramForm.csv_path);
+            if(paramForm.filetype == "")
+                paramForm.write_csv(paramForm.csv_path);
 
             if (progress == 10)
             {
@@ -475,10 +475,9 @@ namespace WinFormsAppTest
             tbPlotRecYmin.Text = paramForm.gui.yMin.ToString();
             tbPlotRecYmax.Text = paramForm.gui.yMax.ToString();
 
-            if (paramForm.gui.loadPath.Length > 0)
-            {
-                tbPlotData.Text = paramForm.gui.loadPath;
-            }
+            
+            tbPlotData.Text = paramForm.gui.loadPath;
+            
         }
 
         //사용자가 입력한 좌표값이 올바른지 체크하기 위한 함수들
