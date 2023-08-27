@@ -301,9 +301,14 @@ namespace WinFormsAppTest
                 btnPreConfs.ImageAlign = ContentAlignment.MiddleLeft;
                 btnPreConfs.TextAlign = ContentAlignment.MiddleLeft;
                 btnPreConfs.Font = new Font("¸¼Àº °íµñ", 18F, FontStyle.Bold, GraphicsUnit.Point);
-                btnPreConfs.Image = Image.FromFile(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName
-                    + @"\Resources\btnPreConf.Image.png");
-                using (StreamReader sr = new StreamReader(conf))
+                //MessageBox.Show(Environment.CurrentDirectory.ToString());
+                btnPreConfs.Image = Image.FromFile(Environment.CurrentDirectory.ToString() +  @"\btnPreConf.Image.png");
+
+                
+                //btnPreConfs.Image = Image.FromFile(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName
+                //   + @"\Resources\btnPreConf.Image.png");
+                
+                using (StreamReader sr = new StreamReader(conf)) 
                 {
                     string line;
                     while ((line = sr.ReadLine()) != null)
