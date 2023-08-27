@@ -438,7 +438,7 @@ namespace WinFormsAppTest
         //recetnConfig 버튼 관련 이벤트 처리 코드
         private void btnRecentConf_Click(object sender, EventArgs e)
         {
-            /*string fileDi = Path.Combine(basePath, reqDi[(int)configFileType.Recent]);
+            string fileDi = Path.Combine(basePath, reqDi[(int)configFileType.Recent]);
             string[] confCheck = Directory.GetFiles(fileDi, "recentConfig*");
             string fileName = ((Button)sender).Name;
 
@@ -447,6 +447,14 @@ namespace WinFormsAppTest
             {
                 while ((csvLines = sr.ReadLine()) != null)
                 {
+                    if (csvLines.Contains("FileInfo") && csvLines.Contains("fileType"))
+                    {
+                        filetype = csvLines.Split(',')[3];
+                    }
+                    if (csvLines.Contains("FileInfo") && csvLines.Contains("Lasfilename"))
+                    {
+                        gui.loadPath= csvLines.Split(',')[3];
+                    }
                     if (csvLines.Contains("sample") && csvLines.Contains("cell"))
                     {
                         tbSubCellSize.Text = csvLines.Split(',')[3];
@@ -503,21 +511,6 @@ namespace WinFormsAppTest
                     }
                 }
             }
-            tcMainHome.SelectedIndex = 1;*/
-
-            string[] confCheck = Directory.GetFiles(Path.Combine(basePath, reqDi[(int)configFileType.Recent]), "RecentConfig*");
-
-            foreach (string conf in confCheck)
-            {
-                string fileName = conf.Substring(conf.IndexOf("recentConfig"), conf.Length - conf.IndexOf("recentConfig") - 4);
-                if (((Button)sender).Name == fileName + ".csv")
-                {
-                    read_csv(conf);
-                    gui.loadPath = getParam("FileInfo", "Lasfilename");
-                    FillTextboxes();
-                }
-            }
-
             tcMainHome.SelectedIndex = 1;
         }
 
@@ -537,18 +530,79 @@ namespace WinFormsAppTest
         //preConfig 버튼 클릭 이벤트 처리 코드
         private void btnPreConf_Click(object sender, EventArgs e)
         {
+            string fileDi = Path.Combine(basePath, reqDi[(int)configFileType.Preset]);
             string[] confCheck = Directory.GetFiles(Path.Combine(basePath, reqDi[(int)configFileType.Preset]), "PresetConfig*");
+            string fileName = ((Button)sender).Name;
 
-            foreach (string conf in confCheck)
+            string? csvLines;
+            using (StreamReader sr = new StreamReader(Path.Combine(fileDi, fileName)))
             {
-                string fileName = conf.Substring(conf.IndexOf("presetConfig"), conf.Length - conf.IndexOf("presetConfig") - 4);
-                if (((Button)sender).Name == fileName + ".csv")
+                while ((csvLines = sr.ReadLine()) != null)
                 {
-                    read_csv(conf);
-                    FillTextboxes();
+                    if (csvLines.Contains("FileInfo") && csvLines.Contains("fileType"))
+                    {
+                        filetype = csvLines.Split(',')[3];
+                    }
+                    if (csvLines.Contains("FileInfo") && csvLines.Contains("Lasfilename"))
+                    {
+                        gui.loadPath = csvLines.Split(',')[3];
+                    }
+                    if (csvLines.Contains("sample") && csvLines.Contains("cell"))
+                    {
+                        tbSubCellSize.Text = csvLines.Split(',')[3];
+                    }
+
+                    else if (csvLines.Contains("smrf") && csvLines.Contains("cell"))
+                    {
+                        tbNorCellSize.Text = csvLines.Split(",")[3];
+                    }
+
+                    else if (csvLines.Contains("smrf") && csvLines.Contains("window"))
+                    {
+                        tbNorWinSize.Text = csvLines.Split(",")[3];
+                    }
+
+                    else if (csvLines.Contains("smrf") && csvLines.Contains("slope"))
+                    {
+                        tbNorSlope.Text = csvLines.Split(",")[3];
+                    }
+
+                    else if (csvLines.Contains("smrf") && csvLines.Contains("scalar"))
+                    {
+                        tbNorScalar.Text = csvLines.Split(",")[3];
+                    }
+
+                    else if (csvLines.Contains("smrf") && csvLines.Contains("scalar"))
+                    {
+                        tbNorScalar.Text = csvLines.Split(",")[3];
+                    }
+
+                    else if (csvLines.Contains("smrf") && csvLines.Contains("threshold"))
+                    {
+                        tbNorThres.Text = csvLines.Split(",")[3];
+                    }
+
+                    else if (csvLines.Contains("range") && csvLines.Contains("trunk") && csvLines.Contains("minheight"))
+                    {
+                        tbTrunkMinHeight.Text = csvLines.Split(",")[3];
+                    }
+
+                    else if (csvLines.Contains("range") && csvLines.Contains("trunk") && csvLines.Contains("maxheight"))
+                    {
+                        tbTrunkMaxHeight.Text = csvLines.Split(",")[3];
+                    }
+
+                    else if (csvLines.Contains("range") && csvLines.Contains("crown") && csvLines.Contains("minheight"))
+                    {
+                        tbCrownMinHeight.Text = csvLines.Split(",")[3];
+                    }
+
+                    else if (csvLines.Contains("range") && csvLines.Contains("crown") && csvLines.Contains("maxheight"))
+                    {
+                        tbCrownMaxHeight.Text = csvLines.Split(",")[3];
+                    }
                 }
             }
-
             tcMainHome.SelectedIndex = 1;
         }
 
@@ -753,6 +807,7 @@ namespace WinFormsAppTest
             }
             read_csv(csv_path);
             FillTextboxes();
+            filetype = "";
         }
 
         //프로그램 동작시 프로그래바,start 버튼 숨김기능 관련 이벤트
@@ -776,6 +831,10 @@ namespace WinFormsAppTest
         private void btnSettingApply_Click(object sender, EventArgs e)
         {
             UpdateParams();
+            if(filetype=="")
+            {
+                gui.loadPath = "";
+            }
             MessageBox.Show("적용되었습니다.");
             tcMainHome.SelectedIndex = 0;
         }
