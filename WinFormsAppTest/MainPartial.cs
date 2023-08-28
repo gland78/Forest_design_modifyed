@@ -22,9 +22,13 @@ namespace WinFormsAppTest
         /// </summary>
         public List<List<string>> csv_data = new List<List<string>>();
 
+        //exe파일이 위치한 기본 폴더와 그 내부 config 폴더들
+        internal static string basePath = (Environment.CurrentDirectory).ToString();
+        internal static string[] reqDi = { "", "RecentConfig", "PresetConfig" };
         public string csv_path = Path.Combine(basePath, "config.csv");
 
-        public string filetype = "";
+        public string fileType = "";
+
         /// <summary>
         /// csv 읽는 함수 
         /// </summary>
@@ -300,10 +304,8 @@ namespace WinFormsAppTest
                     infoRecent = new string[] {
                         $"FileInfo,public,fileType,{confType},파일의 타입을 구분 (preset default recent).",
                         $"FileInfo,public,title,{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")},gui에 표시될 파일의 제목",
-                        $"FileInfo,public,selection,{plotData["selection"]},최근 설정한 좌표 정보",
-
-                        //추가
-                        $"FileInfo,public,Lasfilename,{gui.loadPath},최근 사용한 LAS파일 경로"
+                        $"FileInfo,public,Lasfilename,{gui.loadPath},최근 사용한 LAS파일 경로",
+                        $"FileInfo,public,selection,{plotData["selection"]},최근 설정한 좌표 정보"
                     };
                     for (int i = infoRecent.Length - 1; i >= 0; i--)
                     {
@@ -336,11 +338,8 @@ namespace WinFormsAppTest
                     infoRecent = new string[] {
                         $"FileInfo,public,fileType,{confType},파일의 타입을 구분 (preset default recent).",
                         $"FileInfo,public,title,{"config" + confCheck.Length.ToString()},gui에 표시될 파일의 제목",
-                        //아래 두개 교수님 권고니 반영할 것
                         $"FileInfo,public,date,{DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")},해당 파일이 만들어진 날짜 및 시간",
                         $"FileInfo,public,info, ,사용자가 입력할 해당 설정값의 설명",
-                        
-                        //추가
                         $"FileInfo,public,Lasfilename,{gui.loadPath},설정을 저장할 LAS파일 경로"
                     };
                     for (int i = infoRecent.Length - 1; i >= 0; i--)
@@ -369,6 +368,15 @@ namespace WinFormsAppTest
         //공장초기화 함수
         private void FactoryReset(string filepath)
         {
+
+            DialogResult dialogResult = MessageBox.Show("기본 설정값을 초기로 되돌립니다.\n현재 설정된 기본값은 저장되지 않습니다.", 
+                "공장 초기화", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
+
+            if (dialogResult == DialogResult.Cancel)
+            {
+                return;
+            }
+
             // CSV 파일 경로
             string filePath = filepath;
 
@@ -420,7 +428,7 @@ namespace WinFormsAppTest
 
             read_csv(filePath);
             FillTextboxes();
-
+            MessageBox.Show("설정 파일이 초기화 되었습니다.");
         }
 
         //csv_data를 저장해놓은 List에서 값을 가져오는 함수
