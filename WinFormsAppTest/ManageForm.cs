@@ -16,11 +16,6 @@ namespace WinFormsAppTest
     public partial class ManageForm : Form
     {
         internal customEventHandler mainPaint;
-        internal presetReflectHandler presetReflect;
-
-        internal MainForm mainForm;
-
-        string? presetInfoLas = "";
 
         public ManageForm()
         {
@@ -29,12 +24,7 @@ namespace WinFormsAppTest
 
         private void ManageForm_Load(object sender, EventArgs e)
         {
-            Point screenSize = ((Point)Screen.PrimaryScreen.Bounds.Size);
-
-            this.Location = new Point((screenSize.X - this.Width) / 2, (screenSize.Y - this.Height) / 2);
-
             preConfLoad();
-            lvPresetConf_SizeChanged(sender, e);
         }
         private void preConfLoad()
         {
@@ -84,17 +74,11 @@ namespace WinFormsAppTest
 
         private void btnManageTitle_Click(object sender, EventArgs e)
         {
-            if (lvPresetConf.SelectedItems.Count < 1)
-            {
-                MessageBox.Show("제목을 변경할 사용자 설정을 선택해주세요");
-                return;
-            }
-
             string fileName = lvPresetConf.SelectedItems[0].Name;
-            string oldTitle = lvPresetConf.SelectedItems[0].SubItems[0].Text;
+            string oldTitle = lvPresetConf.SelectedItems[0].SubItems[1].Text;
             string fileDi = Path.Combine(basePath, reqDi[(int)configFileType.Preset]);
             string[] confCheck = Directory.GetFiles(fileDi, "presetConfig*");
-            string? newTitle = Microsoft.VisualBasic.Interaction.InputBox("바꿀 제목을 입력해주세요.", "사용자 설정 제목 바꾸기");
+            string? newTitle = Microsoft.VisualBasic.Interaction.InputBox("바꿀 제목을 입력해주세요.", "프리셋 제목 바꾸기");
 
             if (newTitle == null)
             {
@@ -115,27 +99,26 @@ namespace WinFormsAppTest
         {
             if (lvPresetConf.SelectedItems.Count < 1)
             {
-                MessageBox.Show("삭제할 사용자 설정을 선택해주세요");
+                MessageBox.Show("삭제할 프리셋을 선택해주세요");
                 return;
             }
 
             string[] confCheck = Directory.GetFiles(Path.Combine(basePath, reqDi[(int)configFileType.Preset]), "PresetConfig*");
-            if (MessageBox.Show("선택한 사용자 설정을 삭제하시겠습니까?",
-                "사용자 설정 삭제", MessageBoxButtons.OKCancel) == DialogResult.Cancel)
+            if (MessageBox.Show("선택한 프리셋을 삭제하시겠습니까?",
+                "프리셋 삭제", MessageBoxButtons.OKCancel) == DialogResult.Cancel)
             {
                 return;
             }
 
             foreach (string conf in confCheck)
             {
-                string fileName = Path.GetFileNameWithoutExtension(conf);
+                string fileName = conf.Substring(conf.IndexOf("presetConfig"), conf.Length - conf.IndexOf("presetConfig") - 5);
                 if (lvPresetConf.SelectedItems[0].Name == fileName)
                 {
                     lvPresetConf.SelectedItems[0].Remove();
                     File.Delete(conf);
 
-                    //int oldIndex = int.Parse(fileName.Substring(12));
-                    int oldIndex = int.Parse(Regex.Replace(fileName, @"\D", ""));
+                    int oldIndex = int.Parse(fileName.Substring(12));
 
                     for (int i = oldIndex + 1; i < confCheck.Length; i++)
                     {
@@ -160,7 +143,6 @@ namespace WinFormsAppTest
             this.Close();
         }
 
-        //반영할 것
         private void lvPresetConf_SizeChanged(object sender, EventArgs e)
         {
             lvPresetConf.Columns[2].Width = lvPresetConf.Width - lvPresetConf.Columns[0].Width - lvPresetConf.Columns[1].Width;
@@ -168,47 +150,7 @@ namespace WinFormsAppTest
 
         private void btnManageInfo_Click(object sender, EventArgs e)
         {
-            string fileName = lvPresetConf.SelectedItems[0].Name;
-            string oldInfo = lvPresetConf.SelectedItems[0].SubItems[2].Text;
-            string fileDi = Path.Combine(basePath, reqDi[(int)configFileType.Preset]);
-            string? newInfo = Microsoft.VisualBasic.Interaction.InputBox("설정값에 붙일 설명을 입력해주세요", "사용자 설정값 설명 바꾸기");
 
-            if (newInfo == null)
-            {
-                return;
-            }
-
-            string? csvLines;
-            StringBuilder sb = new StringBuilder();
-
-            using (StreamReader reader = new StreamReader(Path.Combine(fileDi, fileName)))
-            {
-                while ((csvLines = reader.ReadLine()) != null)
-                {
-                    if (csvLines.Contains("info"))
-                    {
-                        csvLines = csvLines.Replace("," + oldInfo + ",", "," + newInfo + ",");
-                    }
-                    sb.AppendLine(csvLines);
-                }
-            }
-
-            File.WriteAllText(Path.Combine(fileDi, fileName), sb.ToString(), Encoding.UTF8);
-
-            preConfLoad();
-        }
-
-        private void lvPresetConf_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            if(lvPresetConf.SelectedItems.Count < 1)
-            {
-                return;
-            }
-
-            string fileDi = Path.Combine(basePath, reqDi[(int)configFileType.Preset]);
-            string fileName = lvPresetConf.SelectedItems[0].Name;
-            presetReflect(fileDi, fileName);
-            this.Close();
         }
     }
 }

@@ -25,7 +25,7 @@ namespace WinFormsAppTest
 
         internal customEventHandler mainPaint;
 
-        internal setIntEventHandler mainProgressSet;
+        internal setterEventHandler mainProgressSet;
         internal switchEventHandler attachProgressBar;
 
         internal switchEventHandler attachStartBtn;
@@ -87,8 +87,9 @@ namespace WinFormsAppTest
         }
 
         //원본 Las 파일 찾기 버튼
-        private void btnPlotData_Click(object sender, EventArgs e)
+        private void c_btnPlotData_Click(object sender, EventArgs e)
         {
+            String fileContent = string.Empty;
             String filePath = string.Empty;
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
@@ -110,7 +111,7 @@ namespace WinFormsAppTest
 
         /// 다각형 꼭짓점 정보 파일 읽기 버튼
         /// 해당 텍스트 파일을 읽어서 x,y값을 gui 구조체의 pointList에 저장
-        private void btnPlotPolySet_Click(object sender, EventArgs e)
+        private void c_btnPlotPolySet_Click(object sender, EventArgs e)
         {
             String filePath = string.Empty;
 
@@ -246,7 +247,7 @@ namespace WinFormsAppTest
 
             preProAndExcuteStep();
 
-            if (paramForm.fileType == "")
+            if(paramForm.filetype == "")
                 paramForm.write_csv(paramForm.csv_path);
 
             if (progress == 10)
@@ -474,9 +475,9 @@ namespace WinFormsAppTest
             tbPlotRecYmin.Text = paramForm.gui.yMin.ToString();
             tbPlotRecYmax.Text = paramForm.gui.yMax.ToString();
 
-
+            
             tbPlotData.Text = paramForm.gui.loadPath;
-
+            
         }
 
         //사용자가 입력한 좌표값이 올바른지 체크하기 위한 함수들

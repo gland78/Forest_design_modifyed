@@ -8,20 +8,15 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace WinFormsAppTest
 {
-    //델리게이트 메서드들. private인 일반 메서드를 다른 form에서 쓸 수 있게하는 역할
     internal delegate Dictionary<string, double> plotDataHandler();
 
     internal delegate void customEventHandler();
 
     internal delegate void configHandler(configFileType type);
 
-    internal delegate void setIntEventHandler(int setValue);
-
-    internal delegate void setStringEventHandler(string setValue);
+    internal delegate void setterEventHandler(int setValue);
 
     internal delegate void switchEventHandler(bool onOff);
-
-    internal delegate void presetReflectHandler(string fileDi, string fileName);
 
     public partial class MainForm : Form
     {
@@ -64,6 +59,10 @@ namespace WinFormsAppTest
 
         bool isMformDrag = false;
 
+        //exe파일이 위치한 기본 폴더와 그 내부 config 폴더들
+        internal static string basePath = (Environment.CurrentDirectory).ToString();
+        internal static string[] reqDi = { "", "RecentConfig", "PresetConfig" };
+
         public MainForm()
         {
             InitializeComponent();
@@ -96,6 +95,7 @@ namespace WinFormsAppTest
 
             Point screenSize = ((Point)Screen.PrimaryScreen.Bounds.Size);
 
+            //메인 폼 로드 전 이벤트 전처리(Designer.cs에 넣으면 찾기가 힘듬)
             this.Location = new Point((screenSize.X - this.Width) / 2, (screenSize.Y - this.Height) / 2);
 
             mainForm_AddEvent();
@@ -302,13 +302,13 @@ namespace WinFormsAppTest
                 btnPreConfs.TextAlign = ContentAlignment.MiddleLeft;
                 btnPreConfs.Font = new Font("맑은 고딕", 18F, FontStyle.Bold, GraphicsUnit.Point);
                 //MessageBox.Show(Environment.CurrentDirectory.ToString());
-                btnPreConfs.Image = Image.FromFile(Environment.CurrentDirectory.ToString() + @"\btnPreConf.Image.png");
+                btnPreConfs.Image = Image.FromFile(Environment.CurrentDirectory.ToString() +  @"\btnPreConf.Image.png");
 
-
+                
                 //btnPreConfs.Image = Image.FromFile(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName
                 //   + @"\Resources\btnPreConf.Image.png");
-
-                using (StreamReader sr = new StreamReader(conf))
+                
+                using (StreamReader sr = new StreamReader(conf)) 
                 {
                     string line;
                     while ((line = sr.ReadLine()) != null)
@@ -393,14 +393,10 @@ namespace WinFormsAppTest
                         //MessageBox.Show(line);
                         if (line.Contains("title"))
                         {
-                            btnText += "   " + line.Split(',')[3] + Environment.NewLine;
+                            btnText += "   " + line.Split(',')[3];
                             continue;
                         }
-                        else if (line.Contains("Lasfilename"))
-                        {
-                            btnText += "   " + line.Split(',')[3] + Environment.NewLine;
-                        }
-                        else if (line.Contains("selection"))
+                        if (line.Contains("selection"))
                         {
                             int selection = int.Parse(line.Split(',')[3]);
 
@@ -416,16 +412,16 @@ namespace WinFormsAppTest
                                     shapeStr = "polygon";
                                     break;
                             }
-                            btnText += ("   " + shapeStr + Environment.NewLine);
+                            btnText += "   " + shapeStr + "\n";
                             continue;
                         }
                         string[] plotData;
-                        if (shapeStr != "" && line.Contains(shapeStr))
+                        if (line.Contains(shapeStr))
                         {
                             plotData = line.Split(',')[3].Split(" ");
                             foreach (string str in plotData)
                             {
-                                btnText += "   " + str + Environment.NewLine;
+                                btnText += "   " + str + "\n";
                             }
                             continue;
                         }
@@ -448,9 +444,79 @@ namespace WinFormsAppTest
         private void btnRecentConf_Click(object sender, EventArgs e)
         {
             string fileDi = Path.Combine(basePath, reqDi[(int)configFileType.Recent]);
+            string[] confCheck = Directory.GetFiles(fileDi, "recentConfig*");
             string fileName = ((Button)sender).Name;
 
-            reflectConfs(fileDi, fileName);
+            string? csvLines;
+            using (StreamReader sr = new StreamReader(Path.Combine(fileDi, fileName)))
+            {
+                while ((csvLines = sr.ReadLine()) != null)
+                {
+                    if (csvLines.Contains("FileInfo") && csvLines.Contains("fileType"))
+                    {
+                        filetype = csvLines.Split(',')[3];
+                    }
+                    if (csvLines.Contains("FileInfo") && csvLines.Contains("Lasfilename"))
+                    {
+                        gui.loadPath= csvLines.Split(',')[3];
+                    }
+                    if (csvLines.Contains("sample") && csvLines.Contains("cell"))
+                    {
+                        tbSubCellSize.Text = csvLines.Split(',')[3];
+                    }
+
+                    else if (csvLines.Contains("smrf") && csvLines.Contains("cell"))
+                    {
+                        tbNorCellSize.Text = csvLines.Split(",")[3];
+                    }
+
+                    else if (csvLines.Contains("smrf") && csvLines.Contains("window"))
+                    {
+                        tbNorWinSize.Text = csvLines.Split(",")[3];
+                    }
+
+                    else if (csvLines.Contains("smrf") && csvLines.Contains("slope"))
+                    {
+                        tbNorSlope.Text = csvLines.Split(",")[3];
+                    }
+
+                    else if (csvLines.Contains("smrf") && csvLines.Contains("scalar"))
+                    {
+                        tbNorScalar.Text = csvLines.Split(",")[3];
+                    }
+
+                    else if (csvLines.Contains("smrf") && csvLines.Contains("scalar"))
+                    {
+                        tbNorScalar.Text = csvLines.Split(",")[3];
+                    }
+
+                    else if (csvLines.Contains("smrf") && csvLines.Contains("threshold"))
+                    {
+                        tbNorThres.Text = csvLines.Split(",")[3];
+                    }
+
+                    else if (csvLines.Contains("range") && csvLines.Contains("trunk") && csvLines.Contains("minheight"))
+                    {
+                        tbTrunkMinHeight.Text = csvLines.Split(",")[3];
+                    }
+
+                    else if (csvLines.Contains("range") && csvLines.Contains("trunk") && csvLines.Contains("maxheight"))
+                    {
+                        tbTrunkMaxHeight.Text = csvLines.Split(",")[3];
+                    }
+
+                    else if (csvLines.Contains("range") && csvLines.Contains("crown") && csvLines.Contains("minheight"))
+                    {
+                        tbCrownMinHeight.Text = csvLines.Split(",")[3];
+                    }
+
+                    else if (csvLines.Contains("range") && csvLines.Contains("crown") && csvLines.Contains("maxheight"))
+                    {
+                        tbCrownMaxHeight.Text = csvLines.Split(",")[3];
+                    }
+                }
+            }
+            tcMainHome.SelectedIndex = 1;
         }
 
         private void btnRecentConf_Down(object sender, EventArgs e)
@@ -470,9 +536,79 @@ namespace WinFormsAppTest
         private void btnPreConf_Click(object sender, EventArgs e)
         {
             string fileDi = Path.Combine(basePath, reqDi[(int)configFileType.Preset]);
+            string[] confCheck = Directory.GetFiles(Path.Combine(basePath, reqDi[(int)configFileType.Preset]), "PresetConfig*");
             string fileName = ((Button)sender).Name;
 
-            reflectConfs(fileDi, fileName);
+            string? csvLines;
+            using (StreamReader sr = new StreamReader(Path.Combine(fileDi, fileName)))
+            {
+                while ((csvLines = sr.ReadLine()) != null)
+                {
+                    if (csvLines.Contains("FileInfo") && csvLines.Contains("fileType"))
+                    {
+                        filetype = csvLines.Split(',')[3];
+                    }
+                    if (csvLines.Contains("FileInfo") && csvLines.Contains("Lasfilename"))
+                    {
+                        gui.loadPath = csvLines.Split(',')[3];
+                    }
+                    if (csvLines.Contains("sample") && csvLines.Contains("cell"))
+                    {
+                        tbSubCellSize.Text = csvLines.Split(',')[3];
+                    }
+
+                    else if (csvLines.Contains("smrf") && csvLines.Contains("cell"))
+                    {
+                        tbNorCellSize.Text = csvLines.Split(",")[3];
+                    }
+
+                    else if (csvLines.Contains("smrf") && csvLines.Contains("window"))
+                    {
+                        tbNorWinSize.Text = csvLines.Split(",")[3];
+                    }
+
+                    else if (csvLines.Contains("smrf") && csvLines.Contains("slope"))
+                    {
+                        tbNorSlope.Text = csvLines.Split(",")[3];
+                    }
+
+                    else if (csvLines.Contains("smrf") && csvLines.Contains("scalar"))
+                    {
+                        tbNorScalar.Text = csvLines.Split(",")[3];
+                    }
+
+                    else if (csvLines.Contains("smrf") && csvLines.Contains("scalar"))
+                    {
+                        tbNorScalar.Text = csvLines.Split(",")[3];
+                    }
+
+                    else if (csvLines.Contains("smrf") && csvLines.Contains("threshold"))
+                    {
+                        tbNorThres.Text = csvLines.Split(",")[3];
+                    }
+
+                    else if (csvLines.Contains("range") && csvLines.Contains("trunk") && csvLines.Contains("minheight"))
+                    {
+                        tbTrunkMinHeight.Text = csvLines.Split(",")[3];
+                    }
+
+                    else if (csvLines.Contains("range") && csvLines.Contains("trunk") && csvLines.Contains("maxheight"))
+                    {
+                        tbTrunkMaxHeight.Text = csvLines.Split(",")[3];
+                    }
+
+                    else if (csvLines.Contains("range") && csvLines.Contains("crown") && csvLines.Contains("minheight"))
+                    {
+                        tbCrownMinHeight.Text = csvLines.Split(",")[3];
+                    }
+
+                    else if (csvLines.Contains("range") && csvLines.Contains("crown") && csvLines.Contains("maxheight"))
+                    {
+                        tbCrownMaxHeight.Text = csvLines.Split(",")[3];
+                    }
+                }
+            }
+            tcMainHome.SelectedIndex = 1;
         }
 
         //사이드메뉴 버튼 관련 이벤트 처리 코드
@@ -483,11 +619,11 @@ namespace WinFormsAppTest
                 pFrm = new PlotForm(this);
                 pFrm.configTouch += new configHandler(MakeConfig);
                 pFrm.mainPaint += new customEventHandler(recentConfBtnLoad);
-                pFrm.mainProgressSet += new setIntEventHandler(progressSetter);
+                pFrm.mainProgressSet += new setterEventHandler(progressSetter);
                 pFrm.attachProgressBar += new switchEventHandler(progressAttach);
                 pFrm.attachStartBtn += new switchEventHandler(startBtnAttach);
             }
-            fileType = getParam("FileInfo", "fileType");
+            filetype = getParam("FileInfo", "fileType");
             pFrm.ShowDialog();
         }
 
@@ -636,7 +772,6 @@ namespace WinFormsAppTest
             {
                 mFrm = new ManageForm();
                 mFrm.mainPaint += new customEventHandler(this.preConfBtnLoad);
-                mFrm.presetReflect += new presetReflectHandler(this.reflectConfs);
             }
 
             if (pFrm == null)
@@ -645,21 +780,10 @@ namespace WinFormsAppTest
                 pFrm.configTouch += new configHandler(MakeConfig);
                 pFrm.mainPaint += new customEventHandler(recentConfBtnLoad);
             }
+            MakeConfig(configFileType.Preset);
 
-            using (OpenFileDialog openFileDialog = new OpenFileDialog())
-            {
-                openFileDialog.Filter = "las files (*.las)|*.las";
-                openFileDialog.FilterIndex = 2;
-                openFileDialog.RestoreDirectory = true;
-
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    gui.loadPath = openFileDialog.FileName;
-                    MakeConfig(configFileType.Preset);
-                    mFrm.ShowDialog();
-                    preConfBtnLoad();
-                }
-            }
+            mFrm.ShowDialog();
+            preConfBtnLoad();
         }
 
         //프리셋 관리 버튼 클릭 이벤트
@@ -669,7 +793,6 @@ namespace WinFormsAppTest
             {
                 mFrm = new ManageForm();
                 mFrm.mainPaint += new customEventHandler(this.preConfBtnLoad);
-                mFrm.presetReflect += new presetReflectHandler(this.reflectConfs);
             }
             mFrm.ShowDialog();
         }
@@ -689,7 +812,7 @@ namespace WinFormsAppTest
             }
             read_csv(csv_path);
             FillTextboxes();
-            fileType = "";
+            filetype = "";
         }
 
         //프로그램 동작시 프로그래바,start 버튼 숨김기능 관련 이벤트
@@ -713,7 +836,7 @@ namespace WinFormsAppTest
         private void btnSettingApply_Click(object sender, EventArgs e)
         {
             UpdateParams();
-            if (fileType == "")
+            if(filetype=="")
             {
                 gui.loadPath = "";
             }
@@ -732,90 +855,7 @@ namespace WinFormsAppTest
         private void btn_factory_reset_Click(object sender, EventArgs e)
         {
             FactoryReset(csv_path);
-        }
-
-        private void btnRecentInfo_MouseHover(object sender, EventArgs e)
-        {
-            ttMainInfo.SetToolTip(btnRecentInfo, "최근 작업한 설정값을 보존합니다.\n기록을 클릭할 시 설정창에 반영됩니다.(설정 적용 필요)");
-        }
-
-        private void btnPresetManage_MouseHover(object sender, EventArgs e)
-        {
-            ttMainInfo.SetToolTip(btnPresetManage, "사용자 설정 관리창을 엽니다");
-        }
-
-        private void reflectConfs(string fileDi, string fileName)
-        {
-            string? csvLines;
-            using (StreamReader sr = new StreamReader(Path.Combine(fileDi, fileName)))
-            {
-                while ((csvLines = sr.ReadLine()) != null)
-                {
-                    if (csvLines.Contains("FileInfo") && csvLines.Contains("fileType"))
-                    {
-                        fileType = csvLines.Split(',')[3];
-                    }
-                    if (csvLines.Contains("FileInfo") && csvLines.Contains("Lasfilename"))
-                    {
-                        gui.loadPath = csvLines.Split(',')[3];
-                    }
-                    if (csvLines.Contains("sample") && csvLines.Contains("cell"))
-                    {
-                        tbSubCellSize.Text = csvLines.Split(',')[3];
-                    }
-
-                    else if (csvLines.Contains("smrf") && csvLines.Contains("cell"))
-                    {
-                        tbNorCellSize.Text = csvLines.Split(",")[3];
-                    }
-
-                    else if (csvLines.Contains("smrf") && csvLines.Contains("window"))
-                    {
-                        tbNorWinSize.Text = csvLines.Split(",")[3];
-                    }
-
-                    else if (csvLines.Contains("smrf") && csvLines.Contains("slope"))
-                    {
-                        tbNorSlope.Text = csvLines.Split(",")[3];
-                    }
-
-                    else if (csvLines.Contains("smrf") && csvLines.Contains("scalar"))
-                    {
-                        tbNorScalar.Text = csvLines.Split(",")[3];
-                    }
-
-                    else if (csvLines.Contains("smrf") && csvLines.Contains("scalar"))
-                    {
-                        tbNorScalar.Text = csvLines.Split(",")[3];
-                    }
-
-                    else if (csvLines.Contains("smrf") && csvLines.Contains("threshold"))
-                    {
-                        tbNorThres.Text = csvLines.Split(",")[3];
-                    }
-
-                    else if (csvLines.Contains("range") && csvLines.Contains("trunk") && csvLines.Contains("minheight"))
-                    {
-                        tbTrunkMinHeight.Text = csvLines.Split(",")[3];
-                    }
-
-                    else if (csvLines.Contains("range") && csvLines.Contains("trunk") && csvLines.Contains("maxheight"))
-                    {
-                        tbTrunkMaxHeight.Text = csvLines.Split(",")[3];
-                    }
-
-                    else if (csvLines.Contains("range") && csvLines.Contains("crown") && csvLines.Contains("minheight"))
-                    {
-                        tbCrownMinHeight.Text = csvLines.Split(",")[3];
-                    }
-
-                    else if (csvLines.Contains("range") && csvLines.Contains("crown") && csvLines.Contains("maxheight"))
-                    {
-                        tbCrownMaxHeight.Text = csvLines.Split(",")[3];
-                    }
-                }
-            }
-            tcMainHome.SelectedIndex = 1;
+            MessageBox.Show("설정 파일이 초기화 되었습니다.");
         }
     }
 }
