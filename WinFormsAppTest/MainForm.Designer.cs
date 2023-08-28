@@ -473,6 +473,7 @@
             btn_factory_reset.TextColor = Color.White;
             btn_factory_reset.UseVisualStyleBackColor = false;
             btn_factory_reset.Click += btn_factory_reset_Click;
+            btn_factory_reset.MouseHover += btn_factory_reset_MouseHover;
             // 
             // lbSettingDefault
             // 

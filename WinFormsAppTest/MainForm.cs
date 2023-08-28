@@ -734,6 +734,11 @@ namespace WinFormsAppTest
             FactoryReset(csv_path);
         }
 
+        private void btn_factory_reset_MouseHover(object sender, EventArgs e)
+        {
+            ttMainInfo.SetToolTip(btn_factory_reset, "기본 설정값을 초기로 되돌립니다\n기존의 기본값은 따로 저장되지 않습니다");
+        }
+
         private void btnRecentInfo_MouseHover(object sender, EventArgs e)
         {
             ttMainInfo.SetToolTip(btnRecentInfo, "최근 작업한 설정값을 보존합니다.\n기록을 클릭할 시 설정창에 반영됩니다.(설정 적용 필요)");

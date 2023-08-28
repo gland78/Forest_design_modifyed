@@ -20,8 +20,6 @@ namespace WinFormsAppTest
 
         internal MainForm mainForm;
 
-        string? presetInfoLas = "";
-
         public ManageForm()
         {
             InitializeComponent();
@@ -200,15 +198,15 @@ namespace WinFormsAppTest
 
         private void lvPresetConf_MouseDoubleClick(object sender, MouseEventArgs e)
         {
+            if (lvPresetConf.SelectedItems.Count < 1)
+            {
+                return;
+            }
 
-        private void lvPresetConf_SizeChanged(object sender, EventArgs e)
-        {
-            lvPresetConf.Columns[2].Width = lvPresetConf.Width - lvPresetConf.Columns[0].Width - lvPresetConf.Columns[1].Width;
-        }
-
-        private void btnManageInfo_Click(object sender, EventArgs e)
-        {
-
+            string fileDi = Path.Combine(basePath, reqDi[(int)configFileType.Preset]);
+            string fileName = lvPresetConf.SelectedItems[0].Name;
+            presetReflect(fileDi, fileName);
+            this.Close();
         }
     }
 }
