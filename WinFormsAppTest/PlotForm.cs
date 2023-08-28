@@ -500,12 +500,12 @@ namespace WinFormsAppTest
                     {
                         Width = 200,
                         Height = 100,
-                        FormBorderStyle = FormBorderStyle.FixedDialog,
+                        FormBorderStyle = FormBorderStyle.None,
                         Text = "Progress",
                         StartPosition = FormStartPosition.CenterScreen
                     };
 
-                    var label = new Label { Left = 50, Top = 20, Text = "Extracting..." };
+                    var label = new Label { Left = 50, Top = 20, Text = str };
 
                     progressDialog.Controls.Add(label);
                     progressDialog.Show();

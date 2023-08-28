@@ -37,8 +37,9 @@ namespace WinFormsAppTest
 
             //config류 csv파일 구조는 0: Type, 1: Visibility, 2: Key, 3: Value, 4: 설명(개발자 전용)이다
             string title = "";
+            string date = "";
+            string workInfo = "";
             StreamReader sr;
-            List<string> plotData = new();
             foreach (string conf in confCheck)
             {
                 sr = new StreamReader(conf);
@@ -50,31 +51,24 @@ namespace WinFormsAppTest
                     {
                         title = csvLines.Split(',')[3];
                     }
-                    else if (csvLines.Contains(",circle,") || csvLines.Contains(",rectangle,"))
+                    else if (csvLines.Contains("date"))
                     {
-                        plotData.Add(csvLines);
+                        date = csvLines.Split(',')[3];
+                    }
+                    else if (csvLines.Contains("info"))
+                    {
+                        workInfo = csvLines.Split(",")[3];
                     }
                 }
 
-                string workInfo = "";
-                foreach (string plots in plotData)
-                {
-                    workInfo += plots.Split(',')[3] + " ";
-                }
-
                 string fileName = Path.GetFileName(conf);
-                ListViewItem confItem = new ListViewItem();
+                ListViewItem confItem = new ListViewItem(title);
                 confItem.Name = fileName;
-                confItem.SubItems.Add(title);
+                confItem.SubItems.Add(date);
                 confItem.SubItems.Add(workInfo);
                 lvPresetConf.Items.Add(confItem);
 
                 sr.Close();
-            }
-
-            for (int i = 0; i < lvPresetConf.Items.Count; i++)
-            {
-                lvPresetConf.Items[i].Text = i.ToString();
             }
         }
 
@@ -147,6 +141,16 @@ namespace WinFormsAppTest
         private void btnManageCancel_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void lvPresetConf_SizeChanged(object sender, EventArgs e)
+        {
+            lvPresetConf.Columns[2].Width = lvPresetConf.Width - lvPresetConf.Columns[0].Width - lvPresetConf.Columns[1].Width;
+        }
+
+        private void btnManageInfo_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -336,7 +336,9 @@ namespace WinFormsAppTest
                     infoRecent = new string[] {
                         $"FileInfo,public,fileType,{confType},파일의 타입을 구분 (preset default recent).",
                         $"FileInfo,public,title,{"config" + confCheck.Length.ToString()},gui에 표시될 파일의 제목",
-                        
+                        //아래 두개 교수님 권고니 반영할 것
+                        $"FileInfo,public,date,{DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")},해당 파일이 만들어진 날짜 및 시간",
+                        $"FileInfo,public,info, ,사용자가 입력할 해당 설정값의 설명",
                         
                         //추가
                         $"FileInfo,public,Lasfilename,{gui.loadPath},설정을 저장할 LAS파일 경로"
