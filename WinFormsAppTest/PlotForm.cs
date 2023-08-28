@@ -22,7 +22,7 @@ namespace WinFormsAppTest
 
         internal customEventHandler mainPaint;
 
-        internal setterEventHandler mainProgressSet;
+        internal setIntEventHandler mainProgressSet;
         internal switchEventHandler attachProgressBar;
 
         internal switchEventHandler attachStartBtn;
@@ -83,9 +83,8 @@ namespace WinFormsAppTest
         }
 
         //원본 Las 파일 찾기 버튼
-        private void c_btnPlotData_Click(object sender, EventArgs e)
+        private void btnPlotData_Click(object sender, EventArgs e)
         {
-            String fileContent = string.Empty;
             String filePath = string.Empty;
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
@@ -105,7 +104,7 @@ namespace WinFormsAppTest
 
         /// 다각형 꼭짓점 정보 파일 읽기 버튼
         /// 해당 텍스트 파일을 읽어서 x,y값을 gui 구조체의 pointList에 저장
-        private void c_btnPlotPolySet_Click(object sender, EventArgs e)
+        private void btnPlotPolySet_Click(object sender, EventArgs e)
         {
             String filePath = string.Empty;
 
@@ -241,8 +240,8 @@ namespace WinFormsAppTest
 
             preProAndExcuteStep();
 
-
-            paramForm.write_csv(paramForm.csv_path);
+            if (paramForm.fileType == "")
+                paramForm.write_csv(paramForm.csv_path);
 
             if (progress == 10)
             {
@@ -277,6 +276,7 @@ namespace WinFormsAppTest
         {
             tcPlot.SelectedIndex = cbPlotShape.SelectedIndex;
         }
+        //텍스트 박스 무결성 체크
         private void tbPlotCircleX_Leave(object sender, EventArgs e)
         {
             int dummy1 = 1;
@@ -292,7 +292,23 @@ namespace WinFormsAppTest
                 this.ActiveControl = tbPlotCircleX;
                 return;
             }
-            paramForm.gui.centerX = double.Parse(tbPlotCircleX.Text);
+            double cx = double.Parse(tbPlotCircleX.Text);
+            if (tbPlotData.Text != "" && cx < lasSize.minx)
+            {
+                MessageBox.Show($"선택하신 las 파일의 최소 x좌표값보다 작습니다.{lasSize.minx}보다 크게 설정해주세요");
+                tbPlotCircleX.Clear();
+                this.ActiveControl = tbPlotCircleX;
+                return;
+            }
+            if (tbPlotData.Text != "" && cx > lasSize.maxx)
+            {
+                MessageBox.Show($"선택하신 las 파일의 최대 x좌표값보다 큽니다.{lasSize.maxx}보다 작게 설정해주세요");
+                tbPlotCircleX.Clear();
+                this.ActiveControl = tbPlotCircleX;
+                return;
+            }
+
+            paramForm.gui.centerX = cx;
         }
         private void tbPlotCircleY_Leave(object sender, EventArgs e)
         {
@@ -309,7 +325,23 @@ namespace WinFormsAppTest
                 this.ActiveControl = tbPlotCircleY;
                 return;
             }
-            paramForm.gui.centerY = double.Parse(tbPlotCircleY.Text);
+            double cy = double.Parse(tbPlotCircleY.Text);
+            if (tbPlotData.Text != "" && cy < lasSize.miny)
+            {
+                MessageBox.Show($"선택하신 las 파일의 최소 y좌표값보다 작습니다.{lasSize.miny}보다 크게 설정해주세요");
+                tbPlotCircleY.Clear();
+                this.ActiveControl = tbPlotCircleY;
+                return;
+            }
+            if (tbPlotData.Text != "" && cy > lasSize.maxy)
+            {
+                MessageBox.Show($"선택하신 las 파일의 최대 y좌표값보다 큽니다.{lasSize.maxy}보다 작게 설정해주세요");
+                tbPlotCircleY.Clear();
+                this.ActiveControl = tbPlotCircleY;
+                return;
+            }
+
+            paramForm.gui.centerY = cy;
         }
         private void tbPlotCircleR_Leave(object sender, EventArgs e)
         {
@@ -343,6 +375,13 @@ namespace WinFormsAppTest
                 this.ActiveControl = tbPlotRecXmin;
                 return;
             }
+            if (tbPlotData.Text != "" && double.Parse(tbPlotRecXmin.Text) < lasSize.minx)
+            {
+                MessageBox.Show($"선택하신 las 파일의 최소 x좌표값보다 작습니다.{lasSize.minx}보다 크게 설정해주세요");
+                tbPlotRecXmin.Clear();
+                this.ActiveControl = tbPlotRecXmin;
+                return;
+            }
             paramForm.gui.xMin = double.Parse(tbPlotRecXmin.Text);
         }
         private void tbPlotRecXmax_Leave(object sender, EventArgs e)
@@ -356,6 +395,13 @@ namespace WinFormsAppTest
             else if (!double.TryParse(tbPlotRecXmax.Text, out dummy2))
             {
                 MessageBox.Show("실수형 숫자만 입력할 수 있습니다.");
+                tbPlotRecXmax.Clear();
+                this.ActiveControl = tbPlotRecXmax;
+                return;
+            }
+            if (tbPlotData.Text != "" && double.Parse(tbPlotRecXmax.Text) < lasSize.maxx)
+            {
+                MessageBox.Show($"선택하신 las 파일의 최대 x좌표값보다 큽니다.{lasSize.maxx}보다 작게 설정해주세요");
                 tbPlotRecXmax.Clear();
                 this.ActiveControl = tbPlotRecXmax;
                 return;
@@ -377,6 +423,13 @@ namespace WinFormsAppTest
                 this.ActiveControl = tbPlotRecYmin;
                 return;
             }
+            if (tbPlotData.Text != "" && double.Parse(tbPlotRecYmin.Text) < lasSize.miny)
+            {
+                MessageBox.Show($"선택하신 las 파일의 최소 y좌표값보다 작습니다.{lasSize.miny}보다 크게 설정해주세요");
+                tbPlotRecYmin.Clear();
+                this.ActiveControl = tbPlotRecYmin;
+                return;
+            }
             paramForm.gui.yMin = double.Parse(tbPlotRecYmin.Text);
         }
         private void tbPlotRecYmax_Leave(object sender, EventArgs e)
@@ -394,8 +447,16 @@ namespace WinFormsAppTest
                 this.ActiveControl = tbPlotRecYmax;
                 return;
             }
+            if (tbPlotData.Text != "" && double.Parse(tbPlotRecYmax.Text) < lasSize.maxy)
+            {
+                MessageBox.Show($"선택하신 las 파일의 최대 y좌표값보다 큽니다.{lasSize.maxy}보다 작게 설정해주세요");
+                tbPlotRecYmax.Clear();
+                this.ActiveControl = tbPlotRecYmax;
+                return;
+            }
             paramForm.gui.yMax = double.Parse(tbPlotRecYmax.Text);
         }
+        //텍스트박스 초기화
         private void initTextBox()
         {
             tbPlotCircleX.Text = paramForm.gui.centerX.ToString();
@@ -406,6 +467,153 @@ namespace WinFormsAppTest
             tbPlotRecXmax.Text = paramForm.gui.xMax.ToString();
             tbPlotRecYmin.Text = paramForm.gui.yMin.ToString();
             tbPlotRecYmax.Text = paramForm.gui.yMax.ToString();
+
+
+            tbPlotData.Text = paramForm.gui.loadPath;
+
+        }
+
+        //사용자가 입력한 좌표값이 올바른지 체크하기 위한 함수들
+        private async void validation(string filePath)
+        {
+            string infoDir = Path.Combine(basePath, "LAS_info");
+            string fileName = Path.GetFileNameWithoutExtension(filePath);
+            if (!Directory.Exists(infoDir))
+            {
+                Directory.CreateDirectory(infoDir);
+            }
+            try
+            {
+                string dat_filePath = Path.Combine(infoDir, fileName + ".dat");
+                if (!File.Exists(dat_filePath))
+                {
+                    string str = "Extracting information from the first run target file...";
+
+                    var progressDialog = new Form
+                    {
+                        Width = 200,
+                        Height = 100,
+                        FormBorderStyle = FormBorderStyle.None,
+                        Text = "Progress",
+                        StartPosition = FormStartPosition.CenterScreen
+                    };
+
+                    var label = new Label { Left = 50, Top = 20, Text = str };
+
+                    progressDialog.Controls.Add(label);
+                    progressDialog.Show();
+
+                    MakeInfo(filePath, infoDir);
+
+                    progressDialog.Dispose();
+                    readInfo(filePath, infoDir);
+                }
+                else
+                {
+                    readInfo(filePath, infoDir);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error reorganizing folder: {ex.Message}");
+            }
+
+        }
+        private async void MakeInfo(string filePath, string dirPath)
+        {
+            string fileName = Path.GetFileNameWithoutExtension(filePath);
+
+            //프로세스 클래스로 pdal 명령어 실행
+            ProcessStartInfo psi = new ProcessStartInfo
+            {
+                FileName = "cmd.exe",
+                RedirectStandardInput = true,
+                RedirectStandardOutput = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            };
+            using (Process process = new Process { StartInfo = psi })
+            {
+                process.Start();
+                //process.StandardInput.WriteLine($"echo {str}");
+                //process.StandardInput.WriteLine("echo off");
+                process.StandardInput.WriteLine($"pdal info {filePath} > {Path.Combine(dirPath, fileName)}.json");
+                process.StandardInput.WriteLine("exit");
+                process.WaitForExit();
+            }
+
+            //실행되어 추출된 파일을 읽고, 구조체에 넣는 과정
+            FileInfo fileInfo1 = new FileInfo(Path.Combine(dirPath, $"{fileName}.json"));
+            if (!fileInfo1.Exists)
+            {
+                MessageBox.Show($"{fileName}.json 파일을 찾을 수 없음");
+                return;
+            }
+
+            try
+            {
+                string jsonText = File.ReadAllText(fileInfo1.FullName);
+                //JObject JsonData1 = JObject.Parse(JsonText1);
+                JToken jsonSizeTok = JObject.Parse(jsonText)["stats"]["bbox"]["native"]["bbox"];
+                lasSize.minx = (double)jsonSizeTok["minx"];
+                lasSize.maxx = (double)jsonSizeTok["maxx"];
+                lasSize.miny = (double)jsonSizeTok["miny"];
+                lasSize.maxy = (double)jsonSizeTok["maxy"];
+
+                // Create the .dat file in the specified directory
+                string datFilePath = Path.Combine(dirPath, $"{fileName}.dat");
+                string sizeText = "";
+                Type type = typeof(LasSize);
+                FieldInfo[] lasProp = type.GetFields();
+
+                foreach (FieldInfo fi in lasProp)
+                {
+                    sizeText += $"{fi.Name},{fi.GetValue(lasSize)}\n";
+                }
+                File.WriteAllText(datFilePath, sizeText);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{fileName}.dat 파일 생성 오류.");
+                return;
+            }
+        }
+
+        private void readInfo(string filePath, string dirPath)
+        {
+            string datPath = Path.Combine(dirPath, Path.GetFileNameWithoutExtension(filePath) + ".dat");
+            try
+            {
+                string sizeLine = "";
+                string[] sizeTok;
+                using (StreamReader reader = new StreamReader(datPath))
+                {
+                    while ((sizeLine = reader.ReadLine()) != null)
+                    {
+                        sizeTok = sizeLine.Split(',');
+                        switch (sizeTok[0])
+                        {
+                            case "maxx":
+                                lasSize.maxx = double.Parse(sizeTok[1]);
+                                break;
+                            case "minx":
+                                lasSize.minx = double.Parse(sizeTok[1]);
+                                break;
+                            case "maxy":
+                                lasSize.maxy = double.Parse(sizeTok[1]);
+                                break;
+                            case "miny":
+                                lasSize.miny = double.Parse(sizeTok[1]);
+                                break;
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show($"Las파일 사이즈 읽기 실패\n{e}", "사이즈 파일 읽기 오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
         }
     }
 }

@@ -44,7 +44,7 @@
             lbPlotRecXmin = new Label();
             tbPlotPolySet = new TextBox();
             lbPlotPolySet = new Label();
-            c_btnPlotPolySet = new CustomBtn();
+            btnPlotPolySet = new CustomBtn();
             btnPlotOK = new Button();
             btnPlotCancel = new Button();
             tcPlot = new CustomTabControl();
@@ -58,7 +58,7 @@
             lbPlotSelection = new Label();
             cbPlotShape = new ComboBox();
             pnPlotData = new CustomPanel();
-            c_btnPlotData = new CustomBtn();
+            btnPlotData = new CustomBtn();
             tbPlotData = new TextBox();
             lbPlotData = new Label();
             tcPlot.SuspendLayout();
@@ -204,24 +204,24 @@
             lbPlotPolySet.TabIndex = 4;
             lbPlotPolySet.Text = "Polygon Set";
             // 
-            // c_btnPlotPolySet
+            // btnPlotPolySet
             // 
-            c_btnPlotPolySet.BackColor = Color.Green;
-            c_btnPlotPolySet.BackgroundColor = Color.Green;
-            c_btnPlotPolySet.BackgroundImageLayout = ImageLayout.None;
-            c_btnPlotPolySet.BorderColor = Color.PaleVioletRed;
-            c_btnPlotPolySet.BorderRadius = 8;
-            c_btnPlotPolySet.BorderSize = 0;
-            c_btnPlotPolySet.FlatStyle = FlatStyle.Flat;
-            c_btnPlotPolySet.ForeColor = Color.White;
-            c_btnPlotPolySet.Location = new Point(376, 46);
-            c_btnPlotPolySet.Name = "c_btnPlotPolySet";
-            c_btnPlotPolySet.Size = new Size(97, 27);
-            c_btnPlotPolySet.TabIndex = 10;
-            c_btnPlotPolySet.Text = "File Search";
-            c_btnPlotPolySet.TextColor = Color.White;
-            c_btnPlotPolySet.UseVisualStyleBackColor = false;
-            c_btnPlotPolySet.Click += c_btnPlotPolySet_Click;
+            btnPlotPolySet.BackColor = Color.Green;
+            btnPlotPolySet.BackgroundColor = Color.Green;
+            btnPlotPolySet.BackgroundImageLayout = ImageLayout.None;
+            btnPlotPolySet.BorderColor = Color.PaleVioletRed;
+            btnPlotPolySet.BorderRadius = 8;
+            btnPlotPolySet.BorderSize = 0;
+            btnPlotPolySet.FlatStyle = FlatStyle.Flat;
+            btnPlotPolySet.ForeColor = Color.White;
+            btnPlotPolySet.Location = new Point(376, 46);
+            btnPlotPolySet.Name = "btnPlotPolySet";
+            btnPlotPolySet.Size = new Size(97, 27);
+            btnPlotPolySet.TabIndex = 10;
+            btnPlotPolySet.Text = "File Search";
+            btnPlotPolySet.TextColor = Color.White;
+            btnPlotPolySet.UseVisualStyleBackColor = false;
+            btnPlotPolySet.Click += btnPlotPolySet_Click;
             // 
             // btnPlotOK
             // 
@@ -323,7 +323,7 @@
             tpPlotPoly.BackColor = Color.YellowGreen;
             tpPlotPoly.Controls.Add(lbPlotPoly);
             tpPlotPoly.Controls.Add(tbPlotPolySet);
-            tpPlotPoly.Controls.Add(c_btnPlotPolySet);
+            tpPlotPoly.Controls.Add(btnPlotPolySet);
             tpPlotPoly.Controls.Add(lbPlotPolySet);
             tpPlotPoly.Location = new Point(4, 9);
             tpPlotPoly.Name = "tpPlotPoly";
@@ -374,7 +374,7 @@
             // pnPlotData
             // 
             pnPlotData.BackColor = Color.Transparent;
-            pnPlotData.Controls.Add(c_btnPlotData);
+            pnPlotData.Controls.Add(btnPlotData);
             pnPlotData.Controls.Add(tbPlotData);
             pnPlotData.Controls.Add(lbPlotData);
             pnPlotData.Location = new Point(13, 16);
@@ -382,29 +382,31 @@
             pnPlotData.Size = new Size(494, 60);
             pnPlotData.TabIndex = 11;
             // 
-            // c_btnPlotData
+            // btnPlotData
             // 
-            c_btnPlotData.BackColor = Color.Green;
-            c_btnPlotData.BackgroundColor = Color.Green;
-            c_btnPlotData.BackgroundImageLayout = ImageLayout.None;
-            c_btnPlotData.BorderColor = Color.PaleVioletRed;
-            c_btnPlotData.BorderRadius = 8;
-            c_btnPlotData.BorderSize = 0;
-            c_btnPlotData.FlatStyle = FlatStyle.Flat;
-            c_btnPlotData.ForeColor = Color.White;
-            c_btnPlotData.Location = new Point(380, 17);
-            c_btnPlotData.Name = "c_btnPlotData";
-            c_btnPlotData.Size = new Size(97, 27);
-            c_btnPlotData.TabIndex = 12;
-            c_btnPlotData.Text = "File Search";
-            c_btnPlotData.TextColor = Color.White;
-            c_btnPlotData.UseVisualStyleBackColor = false;
-            c_btnPlotData.Click += c_btnPlotData_Click;
+            btnPlotData.BackColor = Color.Green;
+            btnPlotData.BackgroundColor = Color.Green;
+            btnPlotData.BackgroundImageLayout = ImageLayout.None;
+            btnPlotData.BorderColor = Color.PaleVioletRed;
+            btnPlotData.BorderRadius = 8;
+            btnPlotData.BorderSize = 0;
+            btnPlotData.FlatStyle = FlatStyle.Flat;
+            btnPlotData.ForeColor = Color.White;
+            btnPlotData.Location = new Point(380, 17);
+            btnPlotData.Name = "btnPlotData";
+            btnPlotData.Size = new Size(97, 27);
+            btnPlotData.TabIndex = 12;
+            btnPlotData.Text = "File Search";
+            btnPlotData.TextColor = Color.White;
+            btnPlotData.UseVisualStyleBackColor = false;
+            btnPlotData.Click += btnPlotData_Click;
             // 
             // tbPlotData
             // 
+            tbPlotData.Enabled = false;
             tbPlotData.Location = new Point(89, 19);
             tbPlotData.Name = "tbPlotData";
+            tbPlotData.ReadOnly = true;
             tbPlotData.Size = new Size(285, 23);
             tbPlotData.TabIndex = 9;
             tbPlotData.TextChanged += tbPlotData_TextChanged;
@@ -467,7 +469,7 @@
         private Label lbPlotRecXmax;
         private TextBox tbPlotPolySet;
         private Label lbPlotPolySet;
-        private CustomBtn c_btnPlotPolySet;
+        private CustomBtn btnPlotPolySet;
         private Button btnPlotOK;
         private Button btnPlotCancel;
         private CustomTabControl tcPlot;
@@ -481,7 +483,7 @@
         private Label lbPlotSelection;
         private ComboBox cbPlotShape;
         private CustomPanel pnPlotData;
-        private CustomBtn c_btnPlotData;
+        private CustomBtn btnPlotData;
         private TextBox tbPlotData;
         private Label lbPlotData;
     }

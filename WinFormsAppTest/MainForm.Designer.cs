@@ -29,6 +29,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             pnSideMenu = new Panel();
             btnPresetManage = new Button();
@@ -39,6 +40,7 @@
             tcMainHome = new CustomTabControl();
             tpMainHome = new TabPage();
             pnReviewMain = new Panel();
+            btnRecentInfo = new CustomBtn();
             pnReview = new Panel();
             lbReview = new Label();
             pnMain = new CustomPanel();
@@ -95,6 +97,7 @@
             tbSubCellSize = new TextBox();
             lbSubCellSize = new Label();
             btnHide = new Button();
+            ttMainInfo = new ToolTip(components);
             pnSideMenu.SuspendLayout();
             tcMainHome.SuspendLayout();
             tpMainHome.SuspendLayout();
@@ -136,14 +139,14 @@
             // btnPresetManage
             // 
             btnPresetManage.BackColor = Color.Transparent;
-            btnPresetManage.BackgroundImageLayout = ImageLayout.None;
+            btnPresetManage.BackgroundImage = (Image)resources.GetObject("btnPresetManage.BackgroundImage");
+            btnPresetManage.BackgroundImageLayout = ImageLayout.Center;
             btnPresetManage.CausesValidation = false;
             btnPresetManage.FlatAppearance.BorderColor = Color.SeaGreen;
             btnPresetManage.FlatAppearance.BorderSize = 0;
             btnPresetManage.FlatAppearance.MouseDownBackColor = Color.MediumAquamarine;
             btnPresetManage.FlatAppearance.MouseOverBackColor = Color.MediumSeaGreen;
             btnPresetManage.FlatStyle = FlatStyle.Flat;
-            btnPresetManage.Image = (Image)resources.GetObject("btnPresetManage.Image");
             btnPresetManage.Location = new Point(12, 94);
             btnPresetManage.Margin = new Padding(3, 4, 3, 4);
             btnPresetManage.Name = "btnPresetManage";
@@ -151,6 +154,7 @@
             btnPresetManage.TabIndex = 9;
             btnPresetManage.UseVisualStyleBackColor = false;
             btnPresetManage.Click += btnPresetManage_Click;
+            btnPresetManage.MouseHover += btnPresetManage_MouseHover;
             // 
             // btnHome
             // 
@@ -254,6 +258,7 @@
             // pnReviewMain
             // 
             pnReviewMain.BackColor = Color.Beige;
+            pnReviewMain.Controls.Add(btnRecentInfo);
             pnReviewMain.Controls.Add(pnReview);
             pnReviewMain.Controls.Add(lbReview);
             pnReviewMain.Dock = DockStyle.Bottom;
@@ -262,6 +267,26 @@
             pnReviewMain.Name = "pnReviewMain";
             pnReviewMain.Size = new Size(897, 319);
             pnReviewMain.TabIndex = 9;
+            // 
+            // btnRecentInfo
+            // 
+            btnRecentInfo.BackColor = Color.Transparent;
+            btnRecentInfo.BackgroundColor = Color.Transparent;
+            btnRecentInfo.BackgroundImage = (Image)resources.GetObject("btnRecentInfo.BackgroundImage");
+            btnRecentInfo.BackgroundImageLayout = ImageLayout.Zoom;
+            btnRecentInfo.BorderColor = Color.Transparent;
+            btnRecentInfo.BorderRadius = 10;
+            btnRecentInfo.BorderSize = 0;
+            btnRecentInfo.FlatAppearance.BorderSize = 0;
+            btnRecentInfo.FlatStyle = FlatStyle.Flat;
+            btnRecentInfo.ForeColor = Color.White;
+            btnRecentInfo.Location = new Point(219, 24);
+            btnRecentInfo.Name = "btnRecentInfo";
+            btnRecentInfo.Size = new Size(20, 20);
+            btnRecentInfo.TabIndex = 2;
+            btnRecentInfo.TextColor = Color.White;
+            btnRecentInfo.UseVisualStyleBackColor = false;
+            btnRecentInfo.MouseHover += btnRecentInfo_MouseHover;
             // 
             // pnReview
             // 
@@ -534,7 +559,7 @@
             lbSettingPreset.Name = "lbSettingPreset";
             lbSettingPreset.Size = new Size(122, 17);
             lbSettingPreset.TabIndex = 89;
-            lbSettingPreset.Text = "설정값 프리셋 저장";
+            lbSettingPreset.Text = "사용자 설정값 저장";
             // 
             // lbSettingPresetInfo
             // 
@@ -559,11 +584,11 @@
             btnPresetSave.FlatStyle = FlatStyle.Flat;
             btnPresetSave.Font = new Font("맑은 고딕", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
             btnPresetSave.ForeColor = Color.White;
-            btnPresetSave.Location = new Point(724, 18);
+            btnPresetSave.Location = new Point(694, 18);
             btnPresetSave.Name = "btnPresetSave";
-            btnPresetSave.Size = new Size(110, 36);
+            btnPresetSave.Size = new Size(140, 36);
             btnPresetSave.TabIndex = 88;
-            btnPresetSave.Text = "프리셋 저장";
+            btnPresetSave.Text = "사용자 설정 저장";
             btnPresetSave.TextColor = Color.White;
             btnPresetSave.UseVisualStyleBackColor = false;
             btnPresetSave.Click += btnPresetSave_Click;
@@ -1080,5 +1105,7 @@
         private CustomBtn btnSettingApply;
         private CustomBtn btnSettingCancel;
         private CustomBtn btn_factory_reset;
+        private CustomBtn btnRecentInfo;
+        private ToolTip ttMainInfo;
     }
 }
