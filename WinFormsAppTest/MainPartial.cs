@@ -56,7 +56,6 @@ namespace WinFormsAppTest
                             foreach (var v in values)
                             {
                                 string_data.Add(v);
-                                //MessageBox.Show(v);
                             }
                             
                             csv_data.Add(string_data);
@@ -405,6 +404,8 @@ namespace WinFormsAppTest
             csvContent.AppendLine("filters.range.crown,public,minheight,3,수관(crown)으로 조사하는 영역의 높이의 최솟값을 지정한다. ");
             csvContent.AppendLine("filters.range.crown,public,maxheight,100,수관(crown)으로 조사하는 영역의 높이의 최댓값을 지정한다. ");
             csvContent.AppendLine("csp_segmentcrown,private,num_nn_samples,16,최근접 이웃 점들의 개수를 지정하는 값이다. 지정된 최근접 이웃 점들까지 거리를 계산하여 거리의 평균과 표준편차를 결정한다.");
+            csvContent.AppendLine("csp_segmentcrown,private,trunk_files,aaa,csp_segmentstem 단계에서 생성된 수간부(trunk) 파일들을 저장한다.");
+            csvContent.AppendLine("csp_segmentcrown,private,crown_slice_file,aaa,수관부(crown) 슬라이스에 해당하는 점들을 저장하는 파일 이름이다.");
             csvContent.AppendLine("csp_segmentstem,private,smoothness,10,smoothness (degrees)는 ??이다. 영역성장(regiongrowing) 알고리즘의 smoothness를 설정하는 값이다. 영역성장 알고리즘 파악이 우선이다. ");
             csvContent.AppendLine("csp_segmentstem,private,mindbh,0.01,수간(trunk)에서 흉고직경의 최솟값이다. 기본적으로 0.01m를 사용한다. ");
             csvContent.AppendLine("csp_segmentstem,private,maxdbh,1,수간(trunk)에서 흉고직경의 최댓값이다. 기본적으로 1m를 사용한다. ");
@@ -412,6 +413,8 @@ namespace WinFormsAppTest
             csvContent.AppendLine("csp_segmentstem,private,nmin,50,유클리디어 군집화에서 클러스터를 이루는 점들의 최소 개수이다. 시스템 인자이다. 사용자가 알 필요가 없다.");
             csvContent.AppendLine("csp_segmentstem,private,num_neighbours,50,영역성장(regiongrowing) 알고리즘의 최근접 이웃 점들의 개수를 설정하는 값이다. 영역성장 알고리즘 파악이 우선이다. ");
             csvContent.AppendLine("csp_segmentstem,private,anglemax,20,주성분 분석에서 수간부의 실린더가 기울기를 설정하는 값이다. 예를 들면, 20 일 때, 수간부(trunk)의 기울기는 70도와 110도 사이에 존재한다.");
+            csvContent.AppendLine("csp_segmentstem,private,coordfile,aaa,plot 영역의 정보를 저장하는 파일 이름이다.");
+            csvContent.AppendLine("csp_segmentstem,private,trunk_slice_file,aaa,수간부(trunk) 슬라이스에 해당하는 점들을 저장하는 파일 이름이다.");
             csvContent.AppendLine("measure,private,nnearest,16,DBH(흉고직경) 측정할 때 stem에서 원형 모델을 찾을 경우, 이웃한 점들의 거리의 표준편차를 사용하는데, 표준편차를 구할때 사용되는 이웃 점들의 개수를 의미한다");
             csvContent.AppendLine("measure,private,minrad,0.03,찾는 원형모델의 최소 반지름이다");
             csvContent.AppendLine("measure,private,maxrad,0.5,찾는 원형모델의 최대 반지름이다");

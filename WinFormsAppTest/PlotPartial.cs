@@ -557,14 +557,13 @@ namespace WinFormsAppTest
                 }
             }
 
-            string coord_file = "csp_segmentstem,private,coordfile," + coordfile + ",plot 영역의 정보를 저장하는 파일 이름이다. ";
-            string trunk_slice_file = "csp_segmentstem,private,trunk_slice_file," + trunkslicefile + ",수간부(trunk) 슬라이스에 해당하는 점들을 저장하는 파일 이름이다. ";
+            paramForm.setParam("csp_segmentstem", "coordfile", coordfile);
+            paramForm.setParam("csp_segmentstem", "trunk_slice_file", trunkslicefile);
 
             StringBuilder csvContent = new StringBuilder();
             try
             {
-                File.AppendAllText(csvFilePath, Environment.NewLine + coord_file, Encoding.UTF8);
-                File.AppendAllText(csvFilePath, Environment.NewLine + trunk_slice_file, Encoding.UTF8);
+                paramForm.write_csv(configpath);
             }
             catch (Exception ex)
             {
@@ -595,14 +594,14 @@ namespace WinFormsAppTest
                     crownslicefile = File.FullName;
                 }
             }
-            string trunk_files = "csp_segmentcrown,private,trunk_files," + string.Join(" ", filenames_pcd) + ",csp_segmentstem 단계에서 생성된 수간부(trunk) 파일들을 저장한다. ";
-            string crown_slice_file = "csp_segmentcrown,private,crown_slice_file," + crownslicefile + ",수관부(crown) 슬라이스에 해당하는 점들을 저장하는 파일 이름이다. ";
+
+            paramForm.setParam("csp_segmentcrown", "trunk_files", string.Join(" ", filenames_pcd));
+            paramForm.setParam("csp_segmentcrown", "crown_slice_file", crownslicefile);
 
             // CSV 파일에 내용 추가
             try
             {
-                File.AppendAllText(csvFilePath, Environment.NewLine + trunk_files, Encoding.UTF8);
-                File.AppendAllText(csvFilePath, Environment.NewLine + crown_slice_file, Encoding.UTF8);
+                paramForm.write_csv(configpath);
             }
             catch (Exception ex)
             {
