@@ -63,8 +63,6 @@ namespace WinFormsAppTest
                             MessageBox.Show("config.csv 형식에 문제가 있습니다.");
                         }
                     }
-                    ExtractCircleValues(csv_data[0][3]);
-                    ExtractRectangleValues(csv_data[1][3]);
                 }
             }
             catch (Exception ex)
@@ -191,6 +189,8 @@ namespace WinFormsAppTest
         //List 테이블 -> textbox 대입
         private void FillTextboxes()
         {
+            ExtractCircleValues(csv_data[0][3]);
+            ExtractRectangleValues(csv_data[1][3]);
             //subsamplng_textboxes
             tbSubCellSize.Text = getParam("filters.sample","cell");
 

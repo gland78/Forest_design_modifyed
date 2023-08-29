@@ -166,6 +166,12 @@ namespace WinFormsAppTest
 
         private void btnManageInfo_Click(object sender, EventArgs e)
         {
+            if (lvPresetConf.SelectedItems.Count < 1)
+            {
+                MessageBox.Show("수정할 사용자 설정을 선택해주세요");
+                return;
+            }
+
             string fileName = lvPresetConf.SelectedItems[0].Name;
             string oldInfo = lvPresetConf.SelectedItems[0].SubItems[2].Text;
             string fileDi = Path.Combine(basePath, reqDi[(int)configFileType.Preset]);

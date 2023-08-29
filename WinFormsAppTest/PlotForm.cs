@@ -177,20 +177,6 @@ namespace WinFormsAppTest
         /// 전체 과정 실행 버튼
         private void btnPlotOK_Click(object sender, EventArgs e)
         {
-            ///////////////////////////////////////////////////////////////////////
-            attachProgressBar(true);
-            //최근 작업 config 생성
-            string fileDi = Path.Combine(basePath, reqDi[(int)configFileType.Recent]);
-
-            if (!Directory.Exists(fileDi))
-            {
-                Directory.CreateDirectory(fileDi);
-            }
-            string[] confCheck = Directory.GetFiles(fileDi, "recentConfig*");
-            configTouch(configFileType.Recent);
-            mainPaint();
-
-
             //무결성 검사
             bool isEmptyVal_cir = tbPlotCircleX.Text == "" && tbPlotCircleY.Text == "" && tbPlotCircleR.Text == "";//원형 표준지에 필요한 값들이 비어있는경우
             bool isRadiusZero = (Double.Parse(tbPlotCircleR.Text) <= 0);//radius값이 0인지 확인
@@ -233,6 +219,29 @@ namespace WinFormsAppTest
                 shape = "_polygon";
             }
 
+            //구조체 변수 업데이트
+            paramForm.gui.centerX = double.Parse(tbPlotCircleX.Text);
+            paramForm.gui.centerY = double.Parse(tbPlotCircleY.Text);
+            paramForm.gui.radius = double.Parse(tbPlotCircleR.Text);
+            paramForm.gui.xMin = double.Parse(tbPlotRecXmin.Text);
+            paramForm.gui.xMax = double.Parse(tbPlotRecXmax.Text);
+            paramForm.gui.yMin = double.Parse(tbPlotRecYmin.Text);
+            paramForm.gui.yMax = double.Parse(tbPlotRecYmax.Text);
+
+
+            MessageBox.Show($"cx={paramForm.gui.centerX} cy={paramForm.gui.centerY} radius={paramForm.gui.radius}");
+            ///////////////////////////////////////////////////////////////////////
+            attachProgressBar(true);
+            //최근 작업 config 생성
+            string fileDi = Path.Combine(basePath, reqDi[(int)configFileType.Recent]);
+
+            if (!Directory.Exists(fileDi))
+            {
+                Directory.CreateDirectory(fileDi);
+            }
+            string[] confCheck = Directory.GetFiles(fileDi, "recentConfig*");
+            configTouch(configFileType.Recent);
+            mainPaint();
 
             //MessageBox.Show(resultPath);
             resultSavedDirectory = resultPath + @"\" + DateTime.Now.ToString("yyyyMMdd_HH_mm_") + originLasName;
@@ -242,10 +251,9 @@ namespace WinFormsAppTest
             mainProgressSet(progress);
             attachProgressBar(true);
 
-            //csv 초기화
-
             preProAndExcuteStep();
 
+            //csv 초기화
             if (paramForm.fileType == "")
                 paramForm.write_csv(paramForm.csv_path);
 

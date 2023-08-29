@@ -398,7 +398,7 @@ namespace WinFormsAppTest
                         }
                         else if (line.Contains("Lasfilename"))
                         {
-                            btnText += "   " + line.Split(',')[3] + Environment.NewLine;
+                            btnText += ("   " + Path.GetFileNameWithoutExtension(line.Split(',')[3]) + Environment.NewLine);
                         }
                         else if (line.Contains("selection"))
                         {
@@ -644,6 +644,9 @@ namespace WinFormsAppTest
                 pFrm = new PlotForm(this);
                 pFrm.configTouch += new configHandler(MakeConfig);
                 pFrm.mainPaint += new customEventHandler(recentConfBtnLoad);
+                pFrm.mainProgressSet += new setIntEventHandler(progressSetter);
+                pFrm.attachProgressBar += new switchEventHandler(progressAttach);
+                pFrm.attachStartBtn += new switchEventHandler(startBtnAttach);
             }
 
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
