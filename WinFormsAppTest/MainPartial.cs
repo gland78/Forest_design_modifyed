@@ -17,6 +17,9 @@ namespace WinFormsAppTest
         //변수 구조체   --> public 제외 나머지는 삭제예정
         public GUI gui = new GUI();
 
+        //plotForm 열기 전 임시 변수
+        public GUI guiTemp = new GUI();
+
         /// <summary>
         ///  csv 관련 변수
         /// </summary>
@@ -70,7 +73,7 @@ namespace WinFormsAppTest
                 Console.WriteLine("CSV파일 읽는 중 오류 발생: " + ex.Message);
             }
         }
-        void ExtractCircleValues(string circleString)
+        void ExtractCircleValues(ref GUI guiStruct, string circleString)
         {
             string[] parts = circleString.Split(' ');
 
@@ -85,19 +88,19 @@ namespace WinFormsAppTest
                     switch (key)
                     {
                         case "cx":
-                            gui.centerX = double.Parse(value);
+                            guiStruct.centerX = double.Parse(value);
                             break;
                         case "cy":
-                            gui.centerY = double.Parse(value);
+                            guiStruct.centerY = double.Parse(value);
                             break;
                         case "radius":
-                            gui.radius = double.Parse(value);
+                            guiStruct.radius = double.Parse(value);
                             break;
                     }
                 }
             }
         }
-        void ExtractRectangleValues(string rectangleString)
+        void ExtractRectangleValues(ref GUI guiStruct,string rectangleString)
         {
             string[] parts = rectangleString.Split(' ');
 
@@ -112,16 +115,16 @@ namespace WinFormsAppTest
                     switch (key)
                     {
                         case "xmin":
-                            gui.xMin = double.Parse(value);
+                            guiStruct.xMin = double.Parse(value);
                             break;
                         case "ymin":
-                            gui.xMax = double.Parse(value);
+                            guiStruct.xMax = double.Parse(value);
                             break;
                         case "xmax":
-                            gui.yMin = double.Parse(value);
+                            guiStruct.yMin = double.Parse(value);
                             break;
                         case "ymax":
-                            gui.yMax = double.Parse(value);
+                            guiStruct.yMax = double.Parse(value);
                             break;
                     }
                 }
@@ -189,8 +192,8 @@ namespace WinFormsAppTest
         //List 테이블 -> textbox 대입
         private void FillTextboxes()
         {
-            ExtractCircleValues(csv_data[0][3]);
-            ExtractRectangleValues(csv_data[1][3]);
+            ExtractCircleValues(ref gui, csv_data[0][3]);
+            ExtractRectangleValues(ref gui, csv_data[1][3]);
             //subsamplng_textboxes
             tbSubCellSize.Text = getParam("filters.sample","cell");
 

@@ -716,7 +716,13 @@ namespace WinFormsAppTest
         private void btnSettingApply_Click(object sender, EventArgs e)
         {
             UpdateParams();
-            if (fileType == "")
+            
+            
+            if (fileType != "")
+            {
+                apply_temp();
+            }
+            else
             {
                 gui.loadPath = "";
             }
@@ -765,13 +771,20 @@ namespace WinFormsAppTest
                     }
                     if (csvLines.Contains("FileInfo") && csvLines.Contains("Lasfilename"))
                     {
-                        gui.loadPath = csvLines.Split(',')[3];
+                        guiTemp.loadPath = csvLines.Split(',')[3];
+                    }
+                    if (csvLines.Contains("gui") && csvLines.Contains("circle"))
+                    {
+                        ExtractCircleValues(ref guiTemp, csvLines.Split(",")[3]);
+                    }
+                    if (csvLines.Contains("gui") && csvLines.Contains("rectangle"))
+                    {
+                        ExtractRectangleValues(ref guiTemp, csvLines.Split(",")[3]);
                     }
                     if (csvLines.Contains("sample") && csvLines.Contains("cell"))
                     {
                         tbSubCellSize.Text = csvLines.Split(',')[3];
                     }
-
                     else if (csvLines.Contains("smrf") && csvLines.Contains("cell"))
                     {
                         tbNorCellSize.Text = csvLines.Split(",")[3];
@@ -824,6 +837,18 @@ namespace WinFormsAppTest
                 }
             }
             tcMainHome.SelectedIndex = 1;
+        }
+
+        private void apply_temp()
+        {
+            gui.loadPath = guiTemp.loadPath;
+            gui.centerX = guiTemp.centerX;
+            gui.centerY = guiTemp.centerY;
+            gui.radius = guiTemp.radius;
+            gui.xMin = guiTemp.xMin;
+            gui.xMax = guiTemp.xMax;
+            gui.yMin = guiTemp.yMin;
+            gui.yMax = guiTemp.yMax;
         }
     }
 }

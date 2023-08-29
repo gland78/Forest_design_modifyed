@@ -228,8 +228,6 @@ namespace WinFormsAppTest
             paramForm.gui.yMin = double.Parse(tbPlotRecYmin.Text);
             paramForm.gui.yMax = double.Parse(tbPlotRecYmax.Text);
 
-
-            MessageBox.Show($"cx={paramForm.gui.centerX} cy={paramForm.gui.centerY} radius={paramForm.gui.radius}");
             ///////////////////////////////////////////////////////////////////////
             attachProgressBar(true);
             //최근 작업 config 생성
@@ -243,9 +241,7 @@ namespace WinFormsAppTest
             configTouch(configFileType.Recent);
             mainPaint();
 
-            //MessageBox.Show(resultPath);
             resultSavedDirectory = resultPath + @"\" + DateTime.Now.ToString("yyyyMMdd_HH_mm_") + originLasName;
-            //MessageBox.Show(resultSavedDirectory);
 
             progress = 0;
             mainProgressSet(progress);
