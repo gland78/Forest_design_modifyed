@@ -149,6 +149,7 @@ namespace WinFormsAppTest
                     FileInfo fileInfo1 = new FileInfo(strFile1);//파일 있는지 확인 있을때(true), 없으면(false)
                     if (fileInfo1.Exists)
                     {
+                        string dat_str = "";
                         try
                         {
                             string JsonText1 = System.IO.File.ReadAllText(resultSavedDirectory + @"\intermediate\" + one + originLasName + "_B.json");
@@ -158,13 +159,14 @@ namespace WinFormsAppTest
                             JToken miny = JsonData1["stats"]["bbox"]["native"]["bbox"]["miny"];
                             JToken maxy = JsonData1["stats"]["bbox"]["native"]["bbox"]["maxy"];
                             //str을 만들었으니 이제 그 데이터를 dat 파일에 넣는다.
-                            File.WriteAllText(resultSavedDirectory + @"\intermediate\" + one + originLasName + "_B.dat", minx + " " + maxx + " " + miny + " " + maxy);
+
+                            dat_str = $"xmin={minx} xmax={maxx} ymin={miny} ymax={maxy}";
+                            paramForm.setParam("filters.crop", "bufferd_dat", dat_str);
+                            paramForm.write_csv(configpath);
                         }
                         catch (Exception ex)
                         {
-                            //MessageBox.Show(ex.ToString());
                             LogWrite(resultSavedDirectory + @"\intermediate\" + one + originLasName + "_B.dat 파일을 생성 오류.");
-                            //LogWrite(ex.ToString());
                             return;
                         }
                         LogWrite(resultSavedDirectory + @"\intermediate\" + one + originLasName + "_B.dat 파일을 생성했습니다.");
@@ -534,30 +536,28 @@ namespace WinFormsAppTest
         }
         private void AppendSeventhCSVFile()
         {
-            //string csvFilePath = "config.csv";
-            string csvFilePath = Path.Combine(Environment.CurrentDirectory.ToString(), "config.csv");
-            //MessageBox.Show(csvFilePath);
             string coordfile = "";
             string trunkslicefile = "";
 
             String FolderName = resultSavedDirectory + shape + @"\intermediate";
             System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(FolderName);
-            foreach (System.IO.FileInfo File in di.GetFiles())
+            foreach (System.IO.FileInfo fi in di.GetFiles())
             {
-                if (File.Extension.ToLower().CompareTo(".dat") == 0 && File.Name.Contains(originLasName) == true && File.Name.Contains("_B") == true)
+                if (fi.Extension.ToLower().CompareTo(".dat") == 0 && fi.Name.Contains(originLasName) == true && fi.Name.Contains("_B.dat") == true)
                 {
-                    coordfile = File.FullName;
+                    coordfile = fi.FullName;
+                    break;
                 }
             }
-            foreach (System.IO.FileInfo File in di.GetFiles())
+            foreach (System.IO.FileInfo fi in di.GetFiles())
             {
-                if (File.Extension.ToLower().CompareTo(".pcd") == 0 && File.Name.Contains(originLasName) == true && File.Name.Contains("TSlice") == true)
+                if (fi.Extension.ToLower().CompareTo(".pcd") == 0 && fi.Name.Contains(originLasName) == true && fi.Name.ToLower().Contains("tslice") == true)
                 {
-                    trunkslicefile = File.FullName;
+                    trunkslicefile = fi.FullName;
                 }
             }
 
-            paramForm.setParam("csp_segmentstem", "coordfile", coordfile);
+            //paramForm.setParam("csp_segmentstem", "coordfile", coordfile);
             paramForm.setParam("csp_segmentstem", "trunk_slice_file", trunkslicefile);
 
             StringBuilder csvContent = new StringBuilder();
@@ -572,26 +572,23 @@ namespace WinFormsAppTest
         }
         private void AppendEighthCSVFile()
         {
-            string csvFilePath = configpath;
-            //StringBuilder csvContent = new StringBuilder();
-
             List<String> filenames_pcd = new List<String>();
 
             string crownslicefile = "";
             String FolderName = resultSavedDirectory + shape + @"\intermediate";
             System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(FolderName);
-            foreach (System.IO.FileInfo File in di.GetFiles())
+            foreach (System.IO.FileInfo fi in di.GetFiles())
             {
-                if (File.Extension.ToLower().CompareTo(".pcd") == 0 && File.Name.Contains(originLasName) == true && File.Name.Contains("trunk") == true)
+                if (fi.Extension.ToLower().CompareTo(".pcd") == 0 && fi.Name.Contains(originLasName) == true && fi.Name.Contains("trunk") == true)
                 {
-                    filenames_pcd.Add(File.FullName);
+                    filenames_pcd.Add(fi.FullName);
                 }
             }
-            foreach (System.IO.FileInfo File in di.GetFiles())
+            foreach (System.IO.FileInfo fi in di.GetFiles())
             {
-                if (File.Extension.ToLower().CompareTo(".pcd") == 0 && File.Name.Contains(originLasName) == true && File.Name.Contains("CSlice") == true)
+                if (fi.Extension.ToLower().CompareTo(".pcd") == 0 && fi.Name.Contains(originLasName) == true && fi.Name.ToLower().Contains("cslice") == true)
                 {
-                    crownslicefile = File.FullName;
+                    crownslicefile = fi.FullName;
                 }
             }
 
@@ -753,6 +750,7 @@ namespace WinFormsAppTest
                 }
                 ProcessBatch(fourtwo);
                 //process batch file to make dat file
+                string dat_str = "";
                 string strFile1 = resultSavedDirectory + shape + @"\intermediate\" + fourtwo + originLasName + "_O.las";
                 FileInfo fileInfo1 = new FileInfo(strFile1);//파일 있는지 확인 있을때(true), 없으면(false)
                 if (fileInfo1.Exists)
@@ -768,20 +766,17 @@ namespace WinFormsAppTest
 
                             JArray coordinatesArray = (JArray)JsonData1["stats"]["bbox"]["native"]["boundary"]["coordinates"][0];
 
-                            //double[] xCoordinates = new double[coordinatesArray.Count];
-                            //double[] yCoordinates = new double[coordinatesArray.Count];
-
                             string points = "";
                             for (int i = 0; i < coordinatesArray.Count; i++)
                             {
                                 JArray vertex = (JArray)coordinatesArray[i];
                                 points += vertex[0] + " ";
                                 points += vertex[1] + " ";
-                                //xCoordinates[i] = (double)vertex[0];
-                                //yCoordinates[i] = (double)vertex[1];
                             }
 
-
+                            dat_str = points;
+                            paramForm.setParam("filters.crop", "origin_dat", dat_str);
+                            paramForm.write_csv(configpath);
 
                             File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + fourtwo + originLasName + "_O.dat", points);
 
@@ -813,10 +808,18 @@ namespace WinFormsAppTest
 
                                 File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + fourtwo + originLasName + "_O.dat",
                                     minx + " " + maxx + " " + miny + " " + maxy + " " + centerX + " " + centerY + " " + radius);
+
+                                dat_str = $"xmin={minx} xmax={maxx} ymin={miny} ymax={maxy} cx={centerX} cy={centerY} radius={radius}";
+                                paramForm.setParam("filters.crop", "origin_dat", dat_str);
+                                paramForm.write_csv(configpath);
                             }
                             else
                             {
                                 File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + fourtwo + originLasName + "_O.dat", minx + " " + maxx + " " + miny + " " + maxy);
+
+                                dat_str = $"xmin={minx} xmax={maxx} ymin={miny} ymax={maxy}";
+                                paramForm.setParam("filters.crop", "origin_dat", dat_str);
+                                paramForm.write_csv(configpath);
                             }
                         }
                         catch (Exception ex)
@@ -1223,15 +1226,15 @@ namespace WinFormsAppTest
             string find;
             if (level == 7)
             {
-                find = "trunk";
+                find = "_trunk";
             }
             else if (level == 8)
             {
-                find = "tree";
+                find = "_tree";
             }
             else
             {
-                find = "DBH";
+                find = "_dbh";
             }
             try
             {
@@ -1239,7 +1242,7 @@ namespace WinFormsAppTest
                 string[] fileNames = Directory.GetFiles(path);
                 foreach (var file in fileNames)
                 {
-                    if (file.Contains(find))
+                    if (file.ToLower().Contains(find))
                     {
                         isError = false;
                         break;

@@ -117,10 +117,10 @@ namespace WinFormsAppTest
                             guiStruct.xMin = double.Parse(value);
                             break;
                         case "ymin":
-                            guiStruct.xMax = double.Parse(value);
+                            guiStruct.yMin = double.Parse(value);
                             break;
                         case "xmax":
-                            guiStruct.yMin = double.Parse(value);
+                            guiStruct.xMax = double.Parse(value);
                             break;
                         case "ymax":
                             guiStruct.yMax = double.Parse(value);
@@ -287,7 +287,7 @@ namespace WinFormsAppTest
             //해당 폴더 내 config파일 갯수 확인
             string[] confCheck = Directory.GetFiles(Path.Combine(basePath, reqDi[(int)confType]), "*config*");
 
-            string temp1 = csv_data[0][3], temp2 = csv_data[0][3];
+            string temp1 = csv_data[0][3], temp2 = csv_data[1][3];
 
             // CSV 내용 생성
             StringBuilder csvContent = new StringBuilder();
