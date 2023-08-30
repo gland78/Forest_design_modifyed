@@ -557,10 +557,8 @@ namespace WinFormsAppTest
                 }
             }
 
-            //paramForm.setParam("csp_segmentstem", "coordfile", coordfile);
             paramForm.setParam("csp_segmentstem", "trunk_slice_file", trunkslicefile);
 
-            StringBuilder csvContent = new StringBuilder();
             try
             {
                 paramForm.write_csv(configpath);
@@ -579,7 +577,7 @@ namespace WinFormsAppTest
             System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(FolderName);
             foreach (System.IO.FileInfo fi in di.GetFiles())
             {
-                if (fi.Extension.ToLower().CompareTo(".pcd") == 0 && fi.Name.Contains(originLasName) == true && fi.Name.Contains("trunk") == true)
+                if (fi.Extension.ToLower().CompareTo(".pcd") == 0 && fi.Name.Contains(originLasName) == true && fi.Name.ToLower().Contains("_trunk") == true)
                 {
                     filenames_pcd.Add(fi.FullName);
                 }
@@ -964,15 +962,20 @@ namespace WinFormsAppTest
                         fs.Close();
                     }
                 }
-                String FolderName = ".\\";
-                String FolderName2 = "..\\tree";
+                String referenceDirectory ="./";
+                string siblingDirectoryName = "../tree";
+
+                string treeDirectoryPath = Path.Combine(
+                    Path.GetDirectoryName(referenceDirectory),
+                    siblingDirectoryName
+                );
                 using (StreamWriter sw = new StreamWriter(new FileStream(batFilePath, FileMode.OpenOrCreate), Encoding.Default))
                 {
                     sw.WriteLine("chcp 65001");
                     sw.WriteLine("cls");
                     sw.WriteLine("@ECHO OFF");
                     sw.WriteLine("echo 산림 속성 정보 계산중...  ");
-                    sw.WriteLine("measure " + FolderName + " " + FolderName2 + " " + paramForm.csv_path);
+                    sw.WriteLine("measure " + referenceDirectory + " " + siblingDirectoryName + " " + paramForm.csv_path);
                 }
                 ProcessBatch(nine);
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + nine + originLasName + ".bat 파일을 생성했습니다.");
@@ -1262,7 +1265,7 @@ namespace WinFormsAppTest
             paramForm.gui.loadPath = tbPlotData.Text;
 
             originLasPath = tbPlotData.Text;
-            originLasName = Path.GetFileNameWithoutExtension(originLasPath);
+            originLasName = Path.GetFileNameWithoutExtension(originLasPath).ToLower();
             originLasDirectory = Path.GetDirectoryName(originLasPath);
         }
 

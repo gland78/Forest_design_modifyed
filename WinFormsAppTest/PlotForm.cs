@@ -198,11 +198,6 @@ namespace WinFormsAppTest
                 MessageBox.Show("Rectangle Shape 필수 입력 값 오류.");
                 return;
             }
-            else if (cbPlotShape.SelectedIndex >= 3)
-            {
-                MessageBox.Show("표준지 모양을 선택해주세요.");
-                return;
-            }
 
 
             //콤보 박스의 선택된 인덱스에 따라 표준지 모양 전역변수 초기화
