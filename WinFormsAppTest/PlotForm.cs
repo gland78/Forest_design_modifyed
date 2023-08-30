@@ -492,23 +492,30 @@ namespace WinFormsAppTest
                 string dat_filePath = Path.Combine(infoDir, fileName + ".dat");
                 if (!File.Exists(dat_filePath))
                 {
-                    string str = "Extracting information from the first run target file...";
+                    string str = "Extracting information\nfrom the first run target file...";
 
                     var progressDialog = new Form
                     {
-                        Width = 200,
-                        Height = 100,
+                        Width = 250,
+                        Height = 200,
                         FormBorderStyle = FormBorderStyle.None,
-                        Text = "Progress",
-                        StartPosition = FormStartPosition.CenterScreen
+                        StartPosition = FormStartPosition.CenterScreen,
+                        Owner = this
                     };
 
-                    var label = new Label { Left = 50, Top = 20, Text = str };
+                    //var label = new Label { Left = 20, Top = 33, AutoSize = true, Text = str };
+                    PictureBox gifBox = new PictureBox
+                    {
+                        Dock = DockStyle.Fill,
+                        Image = Image.FromFile(Environment.CurrentDirectory.ToString() + @"\sand_glass.gif"),
+                        SizeMode = PictureBoxSizeMode.StretchImage,
+                    };
+                    
 
-                    progressDialog.Controls.Add(label);
+                    progressDialog.Controls.Add(gifBox);
                     progressDialog.Show();
-
-                    MakeInfo(filePath, infoDir);
+                    
+                    await Task.Run(() => MakeInfo(filePath, infoDir));
 
                     progressDialog.Dispose();
                     readInfo(filePath, infoDir);
@@ -522,9 +529,9 @@ namespace WinFormsAppTest
             {
                 Console.WriteLine($"Error reorganizing folder: {ex.Message}");
             }
-
         }
-        private async void MakeInfo(string filePath, string dirPath)
+
+        private async Task MakeInfo(string filePath, string dirPath)
         {
             string fileName = Path.GetFileNameWithoutExtension(filePath);
 

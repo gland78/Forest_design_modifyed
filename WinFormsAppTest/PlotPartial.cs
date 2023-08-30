@@ -573,7 +573,7 @@ namespace WinFormsAppTest
             List<String> filenames_pcd = new List<String>();
 
             string crownslicefile = "";
-            String FolderName = resultSavedDirectory + shape + @"\intermediate";
+            string FolderName = resultSavedDirectory + shape + @"\intermediate";
             System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(FolderName);
             foreach (System.IO.FileInfo fi in di.GetFiles())
             {
