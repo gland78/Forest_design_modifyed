@@ -776,7 +776,7 @@ namespace WinFormsAppTest
                             paramForm.setParam("filters.crop", "origin_dat", dat_str);
                             paramForm.write_csv(configpath);
 
-                            File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + fourtwo + originLasName + "_O.dat", points);
+                            //File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + fourtwo + originLasName + "_O.dat", points);
 
                         }
                         catch (Exception ex)
@@ -804,8 +804,8 @@ namespace WinFormsAppTest
                             {
                                 double radius = paramForm.gui.radius;
 
-                                File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + fourtwo + originLasName + "_O.dat",
-                                    minx + " " + maxx + " " + miny + " " + maxy + " " + centerX + " " + centerY + " " + radius);
+                                //File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + fourtwo + originLasName + "_O.dat",
+                                //    minx + " " + maxx + " " + miny + " " + maxy + " " + centerX + " " + centerY + " " + radius);
 
                                 dat_str = $"xmin={minx} xmax={maxx} ymin={miny} ymax={maxy} cx={centerX} cy={centerY} radius={radius}";
                                 paramForm.setParam("filters.crop", "origin_dat", dat_str);
@@ -813,7 +813,7 @@ namespace WinFormsAppTest
                             }
                             else
                             {
-                                File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + fourtwo + originLasName + "_O.dat", minx + " " + maxx + " " + miny + " " + maxy);
+                                //File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + fourtwo + originLasName + "_O.dat", minx + " " + maxx + " " + miny + " " + maxy);
 
                                 dat_str = $"xmin={minx} xmax={maxx} ymin={miny} ymax={maxy}";
                                 paramForm.setParam("filters.crop", "origin_dat", dat_str);
@@ -951,6 +951,7 @@ namespace WinFormsAppTest
         }
         private void RunFileNinth()
         {
+            
             string nine = "level9_measure_DBH_treeHeight_";
             //9단계 산림정보 속성 계산
             {
@@ -962,20 +963,15 @@ namespace WinFormsAppTest
                         fs.Close();
                     }
                 }
-                String referenceDirectory ="./";
-                string siblingDirectoryName = "../tree";
 
-                string treeDirectoryPath = Path.Combine(
-                    Path.GetDirectoryName(referenceDirectory),
-                    siblingDirectoryName
-                );
+                //MessageBox.Show(treeDirectoryPath);
                 using (StreamWriter sw = new StreamWriter(new FileStream(batFilePath, FileMode.OpenOrCreate), Encoding.Default))
                 {
                     sw.WriteLine("chcp 65001");
                     sw.WriteLine("cls");
                     sw.WriteLine("@ECHO OFF");
                     sw.WriteLine("echo 산림 속성 정보 계산중...  ");
-                    sw.WriteLine("measure " + referenceDirectory + " " + siblingDirectoryName + " " + paramForm.csv_path);
+                    sw.WriteLine("measure " + @"../tree" + " " + paramForm.csv_path);
                 }
                 ProcessBatch(nine);
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + nine + originLasName + ".bat 파일을 생성했습니다.");
