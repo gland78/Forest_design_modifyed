@@ -30,6 +30,7 @@ namespace WinFormsAppTest
         internal static string[] reqDi = { "", "RecentConfig", "PresetConfig" };
         public string csv_path = Path.Combine(basePath, "config.csv");
 
+        //config 파일의 타입(preset recent default)
         public string fileType = "";
 
         /// <summary>

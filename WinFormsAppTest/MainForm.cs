@@ -47,12 +47,14 @@ namespace WinFormsAppTest
         const int MAX_BTN_WIDTH = 370;
 
         //사이드 메뉴에 생성될 첫 버튼의 위치 및 크기, 간격
+        //동적 버튼 추가를 위해 필요
         Point PRESET_BTN_POS = new Point(12, 170);
         const int PRESET_BTN_WIDTH = 370;
         const int PRESET_BTN_HEIGHT = 45;
         const int PRESET_BTN_GAP = 5;
 
         //최근 작업 목록 첫 추가 위치 및 크기, 간격
+        //동적 버튼 추가를 위해 필요
         Point RECENT_BTN_POS = new Point(50, 27);
         const int RECENT_BTN_WIDTH = 205;
         const int RECENT_BTN_HEIGHT = 165;
@@ -90,27 +92,21 @@ namespace WinFormsAppTest
                 Application.Exit();
             }
 
+            //기본 config.csv 파일 반영
             read_csv(csv_path);
             FillTextboxes();
             RegistTextBoxHandler();
 
+            //프로그램 창 생성 위치 지정
             Point screenSize = ((Point)Screen.PrimaryScreen.Bounds.Size);
-
             this.Location = new Point((screenSize.X - this.Width) / 2, (screenSize.Y - this.Height) / 2);
 
+            //메인폼의 각 컴포넌트 이벤트 설정
             mainForm_AddEvent();
 
+            //사용자 설정값과 최근 작업 기록 버튼 동적 생성
             preConfBtnLoad();
             recentConfBtnLoad();
-
-            foreach (Control cont in pnSideMenu.Controls)
-            {
-                if (cont.Name.Contains("presetConfig"))
-                {
-                    cont.ForeColor = Color.SeaGreen;
-                    cont.Width = MIN_BTN_WIDTH;
-                }
-            }
         }
 
         //메인 폼 로드 전 이벤트 전처리(Designer.cs에 넣으면 찾기가 힘듬)
@@ -291,9 +287,10 @@ namespace WinFormsAppTest
 
                 pnSideMenu.Controls.Add(btnPreConfs);
                 btnPreConfs.Location = relativeBtnPos;
-                btnPreConfs.Width = PRESET_BTN_WIDTH;
+                btnPreConfs.Width = MIN_BTN_WIDTH;
                 btnPreConfs.Height = PRESET_BTN_HEIGHT;
                 btnPreConfs.BackColor = Color.Transparent;
+                btnPreConfs.ForeColor = Color.SeaGreen;
                 btnPreConfs.FlatAppearance.BorderSize = 0;
                 btnPreConfs.FlatAppearance.MouseDownBackColor = Color.MediumAquamarine;
                 btnPreConfs.FlatAppearance.MouseOverBackColor = Color.MediumSeaGreen;
@@ -415,7 +412,7 @@ namespace WinFormsAppTest
                             continue;
                         }
                         string[] plotData;
-                        if (shapeStr != "" && line.Contains(shapeStr))
+                        if (shapeStr != "" && line.Split(',')[2].Equals(shapeStr))
                         {
                             plotData = line.Split(',')[3].Split(" ");
                             foreach (string str in plotData)
@@ -426,7 +423,7 @@ namespace WinFormsAppTest
                         }
                     }
                 }
-                btnRecentConfs.Text = btnText;
+                btnRecentConfs.Text = btnText.TrimEnd('\r', '\n');
                 btnRecentConfs.Name = Path.GetFileName(conf);
                 relativePos.X = relativePos.X + RECENT_BTN_WIDTH + RECENT_BTN_GAP;
             }
@@ -500,7 +497,7 @@ namespace WinFormsAppTest
         private void btnSlideMenu_Click(object sender, EventArgs e)
         {
             menuOpen = !menuOpen;
-            if (pnSideMenu.Width <= MAX_SLIDING_WIDTH && menuOpen == true)
+            if (menuOpen == true)
             {
                 pnSideMenu.Width = MAX_SLIDING_WIDTH;
                 tcMainHome.Left += SLIDING_GAP / 2;
@@ -516,8 +513,7 @@ namespace WinFormsAppTest
                 btnSettings.Width = MAX_BTN_WIDTH;
                 btnSettings.Text = "            Settings";
             }
-
-            else if (pnSideMenu.Width >= MIN_SLIDING_WIDTH && menuOpen == false)
+            else if (menuOpen == false)
             {
                 pnSideMenu.Width = MIN_SLIDING_WIDTH;
                 tcMainHome.Left -= SLIDING_GAP / 2;
@@ -611,6 +607,7 @@ namespace WinFormsAppTest
         }
 
         //저장하기 버튼 클릭 이벤트
+        //논의 필요(plot 값도 저장케 할 것인지)
         private void btnSettingSave_Click(object sender, EventArgs e)
         {
             //변수들 초기화
@@ -624,9 +621,18 @@ namespace WinFormsAppTest
             catch { };
         }
 
-        //프리셋 저장 버튼 클릭 이벤트
+        //사용자 설정값 저장 버튼 클릭 이벤트
+        //논의 필요(Data Load 칸 저장 방식에 대하여)
         private void btnPresetSave_Click(object sender, EventArgs e)
         {
+            string fileDi = Path.Combine(basePath, reqDi[(int)configFileType.Preset]);
+            string[] confCheck = Directory.GetFiles(fileDi, "presetConfig*");
+            if (confCheck.Length >= 10)
+            {
+                MessageBox.Show("사용자 설정은 10개 까지만 저장 가능합니다");
+                return;
+            }
+
             if (mFrm == null)
             {
                 mFrm = new ManageForm();
@@ -660,7 +666,7 @@ namespace WinFormsAppTest
             }
         }
 
-        //프리셋 관리 버튼 클릭 이벤트
+        //사용자 설정값 관리 버튼 클릭 이벤트
         private void btnPresetManage_Click(object sender, EventArgs e)
         {
             if (mFrm == null)
@@ -678,6 +684,7 @@ namespace WinFormsAppTest
         }
 
         //기본값 불러오기 버튼
+        //논의 중 한번은 언급 필요(최근 작업 혹은 사용자 설정값 적용 시와 경우 통일 필요성?)
         private void btnSettingLoad_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show("기본값을 적용하시겠습니까?\n저장되지 않은 설정값은 사라집니다.",
@@ -691,6 +698,7 @@ namespace WinFormsAppTest
         }
 
         //프로그램 동작시 프로그래바,start 버튼 숨김기능 관련 이벤트
+        //delegate 통하여 다른 폼에서 사용됨
         private void progressAttach(bool onOff)
         {
             pbLoadingBar.Visible = onOff;
@@ -711,8 +719,11 @@ namespace WinFormsAppTest
         private void btnSettingApply_Click(object sender, EventArgs e)
         {
             UpdateParams();
-            
-            
+
+            //기타 설정값은 메인폼 텍스트박에서 바로 반영되지만,(UpdateParams메서드)
+            //plot값들은 적용하기 누르기 전 일시적으로 반영할 곳이 없기에 
+            //따로 apply_temp메서드에서 임시로 만든 plot값 구조체에 넣은 값을
+            //프로그램에 직접 반영되는 변수들인 gui 구조체로 옮겨담는다
             if (fileType != "")
             {
                 apply_temp();
@@ -725,7 +736,9 @@ namespace WinFormsAppTest
             tcMainHome.SelectedIndex = 0;
         }
 
-        //취소버튼 
+        //취소버튼
+        //저장하지 않고 기존에 적용 되어있던 값으로 텍스트 박스 값 교체 후
+        //시작화면으로 이동
         private void btnSettingCancel_Click(object sender, EventArgs e)
         {
             FillTextboxes();
@@ -753,6 +766,7 @@ namespace WinFormsAppTest
             ttMainInfo.SetToolTip(btnPresetManage, "사용자 설정 관리창을 엽니다");
         }
 
+        //텍스트에 반영만 하고, 실제 gui 구조체나 csv_data 리스트에 저장하진 않는다
         private void reflectConfs(string fileDi, string fileName)
         {
             string? csvLines;
@@ -834,6 +848,8 @@ namespace WinFormsAppTest
             tcMainHome.SelectedIndex = 1;
         }
 
+        //임시로 저장된 plot값을 적용하기 버튼을 누를 시
+        //gui 구조체로 옮겨담는 역할
         private void apply_temp()
         {
             gui.loadPath = guiTemp.loadPath;

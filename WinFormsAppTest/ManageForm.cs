@@ -27,11 +27,13 @@ namespace WinFormsAppTest
 
         private void ManageForm_Load(object sender, EventArgs e)
         {
+            //폼 생성 위치 지정
             Point screenSize = ((Point)Screen.PrimaryScreen.Bounds.Size);
-
             this.Location = new Point((screenSize.X - this.Width) / 2, (screenSize.Y - this.Height) / 2);
 
+            //리스트 뷰에 들어갈 사용자 설정값 로드
             preConfLoad();
+            //리스트 뷰 각 열 사이즈 조절(지금은 info 열만 조정)
             lvPresetConf_SizeChanged(sender, e);
         }
         private void preConfLoad()
@@ -89,9 +91,9 @@ namespace WinFormsAppTest
             }
 
             string fileName = lvPresetConf.SelectedItems[0].Name;
-            string oldTitle = lvPresetConf.SelectedItems[0].SubItems[0].Text;
             string fileDi = Path.Combine(basePath, reqDi[(int)configFileType.Preset]);
             string[] confCheck = Directory.GetFiles(fileDi, "presetConfig*");
+            string oldTitle = lvPresetConf.SelectedItems[0].SubItems[0].Text;
             string? newTitle = Microsoft.VisualBasic.Interaction.InputBox("바꿀 제목을 입력해주세요.", "사용자 설정 제목 바꾸기");
 
             if (newTitle == null)
@@ -99,11 +101,33 @@ namespace WinFormsAppTest
                 return;
             }
 
-            string csv = File.ReadAllText(Path.Combine(fileDi, fileName));
+            //string csv = File.ReadAllText(Path.Combine(fileDi, fileName));
+            //csv = csv.Replace(oldTitle, newTitle);
+            //File.WriteAllText(Path.Combine(fileDi, fileName), csv, Encoding.UTF8);
 
-            csv = csv.Replace(oldTitle, newTitle);
+            //사용자가 설명에 title 문자를 포함시켰을 경우를 대비해 다시 코딩했음
+            string csv = "";
+            using(StreamReader sr = new StreamReader(Path.Combine(fileDi, fileName)))
+            {
+                string csvLines = "";
+                while ( (csvLines = sr.ReadLine()) != null )
+                {
+                    string[] csvParams = csvLines.Split(',');
+                    if (csvParams[2].Equals("title"))
+                    {
+                        csvParams[3] = newTitle;
+                        csvLines = "";
 
-            File.WriteAllText(Path.Combine(fileDi, fileName), csv, Encoding.UTF8);
+                        foreach (string param in csvParams)
+                        {
+                            csvLines += param + ',';
+                        }
+                        csvLines.TrimEnd(',');
+                    }
+                    csv += csvLines + Environment.NewLine;
+                }
+            }
+            File.WriteAllText(Path.Combine(fileDi, fileName), csv.TrimEnd('\r', '\n'), Encoding.UTF8);
 
             preConfLoad();
             mainPaint();
@@ -117,7 +141,7 @@ namespace WinFormsAppTest
                 return;
             }
 
-            string[] confCheck = Directory.GetFiles(Path.Combine(basePath, reqDi[(int)configFileType.Preset]), "PresetConfig*");
+            string[] confCheck = Directory.GetFiles(Path.Combine(basePath, reqDi[(int)configFileType.Preset]), "presetConfig*");
             if (MessageBox.Show("선택한 사용자 설정을 삭제하시겠습니까?",
                 "사용자 설정 삭제", MessageBoxButtons.OKCancel) == DialogResult.Cancel)
             {
@@ -126,7 +150,7 @@ namespace WinFormsAppTest
 
             foreach (string conf in confCheck)
             {
-                string fileName = Path.GetFileNameWithoutExtension(conf);
+                string fileName = Path.GetFileName(conf);
                 if (lvPresetConf.SelectedItems[0].Name == fileName)
                 {
                     lvPresetConf.SelectedItems[0].Remove();
@@ -158,12 +182,13 @@ namespace WinFormsAppTest
             this.Close();
         }
 
-        //반영할 것
+        //ManageForm 크기 조절 시 info 열 크기 자동 맞춤
         private void lvPresetConf_SizeChanged(object sender, EventArgs e)
         {
             lvPresetConf.Columns[2].Width = lvPresetConf.Width - lvPresetConf.Columns[0].Width - lvPresetConf.Columns[1].Width;
         }
 
+        //선택된 행의 config 파일 설명 수정
         private void btnManageInfo_Click(object sender, EventArgs e)
         {
             if (lvPresetConf.SelectedItems.Count < 1)
@@ -177,7 +202,7 @@ namespace WinFormsAppTest
             string fileDi = Path.Combine(basePath, reqDi[(int)configFileType.Preset]);
             string? newInfo = Microsoft.VisualBasic.Interaction.InputBox("설정값에 붙일 설명을 입력해주세요", "사용자 설정값 설명 바꾸기");
 
-            if (newInfo == null)
+            if (newInfo == "")
             {
                 return;
             }
@@ -209,10 +234,31 @@ namespace WinFormsAppTest
                 return;
             }
 
-            string fileDi = Path.Combine(basePath, reqDi[(int)configFileType.Preset]);
-            string fileName = lvPresetConf.SelectedItems[0].Name;
-            presetReflect(fileDi, fileName);
-            this.Close();
+            ListViewHitTestInfo hitTestInfo = lvPresetConf.HitTest(e.Location);
+
+            if(hitTestInfo == null)
+            {
+                MessageBox.Show("Error: Fail to load Users Setting Manage", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error) ;
+                return;
+            }
+
+            int clickedColumn = hitTestInfo.Item.SubItems.IndexOf(hitTestInfo.SubItem);
+
+            switch(clickedColumn)
+            {
+                case 0:
+                    btnManageTitle_Click(sender, e);
+                    break;
+                case 1:
+                    string fileDi = Path.Combine(basePath, reqDi[(int)configFileType.Preset]);
+                    string fileName = lvPresetConf.SelectedItems[0].Name;
+                    presetReflect(fileDi, fileName);
+                    this.Close();
+                    break;
+                case 2:
+                    btnManageInfo_Click(sender, e);
+                    break;
+            }
         }
     }
 }

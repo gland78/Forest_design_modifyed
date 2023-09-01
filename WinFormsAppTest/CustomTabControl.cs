@@ -11,6 +11,7 @@ namespace WinFormsAppTest
         public CustomTabControl()
         {
             if (!this.DesignMode) this.Multiline = true;
+            DoubleBuffered = true;
         }
 
         protected override void WndProc(ref Message m)
