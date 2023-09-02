@@ -235,17 +235,16 @@
             // 
             // tcMainHome
             // 
-            tcMainHome.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             tcMainHome.Controls.Add(tpMainHome);
             tcMainHome.Controls.Add(tpSettings);
-            tcMainHome.ItemSize = new Size(0, 5);
-            tcMainHome.Location = new Point(379, 0);
+            tcMainHome.ItemSize = new Size(0, 10);
+            tcMainHome.Location = new Point(384, 0);
             tcMainHome.Margin = new Padding(0);
             tcMainHome.Multiline = true;
             tcMainHome.Name = "tcMainHome";
             tcMainHome.Padding = new Point(0, 0);
             tcMainHome.SelectedIndex = 0;
-            tcMainHome.Size = new Size(905, 800);
+            tcMainHome.Size = new Size(896, 800);
             tcMainHome.TabIndex = 3;
             tcMainHome.TabStop = false;
             // 
@@ -253,10 +252,10 @@
             // 
             tpMainHome.Controls.Add(pnReviewMain);
             tpMainHome.Controls.Add(pnMain);
-            tpMainHome.Location = new Point(4, 9);
+            tpMainHome.Location = new Point(4, 14);
             tpMainHome.Margin = new Padding(0);
             tpMainHome.Name = "tpMainHome";
-            tpMainHome.Size = new Size(897, 787);
+            tpMainHome.Size = new Size(888, 782);
             tpMainHome.TabIndex = 0;
             tpMainHome.UseVisualStyleBackColor = true;
             // 
@@ -267,10 +266,10 @@
             pnReviewMain.Controls.Add(pnReview);
             pnReviewMain.Controls.Add(lbReview);
             pnReviewMain.Dock = DockStyle.Bottom;
-            pnReviewMain.Location = new Point(0, 468);
+            pnReviewMain.Location = new Point(0, 463);
             pnReviewMain.Margin = new Padding(3, 4, 3, 4);
             pnReviewMain.Name = "pnReviewMain";
-            pnReviewMain.Size = new Size(897, 319);
+            pnReviewMain.Size = new Size(888, 319);
             pnReviewMain.TabIndex = 1;
             // 
             // btnRecentInfo
@@ -301,7 +300,7 @@
             pnReview.Location = new Point(0, 64);
             pnReview.Margin = new Padding(3, 4, 3, 4);
             pnReview.Name = "pnReview";
-            pnReview.Size = new Size(897, 255);
+            pnReview.Size = new Size(888, 255);
             pnReview.TabIndex = 2;
             // 
             // lbReview
@@ -327,8 +326,11 @@
             pnMain.Location = new Point(0, 0);
             pnMain.Margin = new Padding(3, 4, 3, 4);
             pnMain.Name = "pnMain";
-            pnMain.Size = new Size(897, 482);
+            pnMain.Size = new Size(888, 482);
             pnMain.TabIndex = 0;
+            pnMain.MouseDown += MainForm_MouseDown;
+            pnMain.MouseMove += MainForm_MouseMove;
+            pnMain.MouseUp += MainForm_MouseUp;
             // 
             // pbLoadingBar
             // 
@@ -354,7 +356,7 @@
             // 
             btnStart.Anchor = AnchorStyles.Right;
             btnStart.Font = new Font("굴림", 20.25F, FontStyle.Regular, GraphicsUnit.Point);
-            btnStart.Location = new Point(652, 244);
+            btnStart.Location = new Point(643, 244);
             btnStart.Margin = new Padding(3, 4, 3, 4);
             btnStart.Name = "btnStart";
             btnStart.Size = new Size(179, 61);
@@ -397,11 +399,14 @@
             tpSettings.Controls.Add(pnSettingCrown1);
             tpSettings.Controls.Add(pnSettingTrunk1);
             tpSettings.Controls.Add(pnSettingSub1);
-            tpSettings.Location = new Point(4, 9);
+            tpSettings.Location = new Point(4, 14);
             tpSettings.Name = "tpSettings";
             tpSettings.Padding = new Padding(3);
-            tpSettings.Size = new Size(897, 787);
+            tpSettings.Size = new Size(888, 782);
             tpSettings.TabIndex = 1;
+            tpSettings.MouseDown += MainForm_MouseDown;
+            tpSettings.MouseMove += MainForm_MouseMove;
+            tpSettings.MouseUp += MainForm_MouseUp;
             // 
             // btnSettingCancel
             // 
@@ -1005,8 +1010,8 @@
             ClientSize = new Size(1280, 800);
             Controls.Add(btnClose);
             Controls.Add(btnHide);
-            Controls.Add(pnSideMenu);
             Controls.Add(tcMainHome);
+            Controls.Add(pnSideMenu);
             FormBorderStyle = FormBorderStyle.None;
             Margin = new Padding(3, 4, 3, 4);
             Name = "MainForm";
@@ -1054,11 +1059,11 @@
 
         #endregion
 
-        private Panel pnSideMenu;
         private Button btnHome;
         private Button btnSlideMenu;
         private Button btnClose;
         private CustomTabControl tcMainHome;
+        private Panel pnSideMenu;
         private TabPage tpMainHome;
         private Panel pnReviewMain;
         private Panel pnReview;

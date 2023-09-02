@@ -1325,5 +1325,25 @@ namespace WinFormsAppTest
                 MessageBox.Show("CSV 파일 작성 중 오류 발생: " + ex.Message);
             }
         }
+
+        private bool IsLasSizeValid()
+        {
+            if (lasSize.minx == 0 && lasSize.miny == 0 && lasSize.maxx == 0 && lasSize.maxy == 0)
+            {
+                return false;
+            }
+            else if (lasSize.miny == lasSize.maxy || lasSize.minx == lasSize.maxx)
+            {
+                MessageBox.Show("Las파일의 사이즈가 적합하지 않습니다." +
+                    $"Lasfile Size\nXmin={lasSize.minx}\nXmax={lasSize.maxx}\n" +
+                    $"Ymin={lasSize.miny}\nYmax={lasSize.maxy}",
+                    "Las File Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
     }
 }

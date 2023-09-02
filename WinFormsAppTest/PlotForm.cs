@@ -90,7 +90,8 @@ namespace WinFormsAppTest
         //원본 Las 파일 찾기 버튼
         private void btnPlotData_Click(object sender, EventArgs e)
         {
-            String filePath = string.Empty;
+            string filePath = string.Empty;
+            Point tmpLoc = this.Location;
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
                 openFileDialog.InitialDirectory = @"..\LIDAR_PROJECT";
@@ -107,6 +108,7 @@ namespace WinFormsAppTest
                     validation(filePath);
                 }
             }
+            this.Location = tmpLoc;
         }
 
         /// 다각형 꼭짓점 정보 파일 읽기 버튼
@@ -285,7 +287,7 @@ namespace WinFormsAppTest
         {
             tcPlot.SelectedIndex = cbPlotShape.SelectedIndex;
         }
-        //텍스트 박스 무결성 체크
+        //텍스트 박스 무결성 체크 및 las파일 크기 placeholder 처리
         private void tbPlotCircleX_Leave(object sender, EventArgs e)
         {
             int dummy1 = 1;
@@ -316,7 +318,6 @@ namespace WinFormsAppTest
                 this.ActiveControl = tbPlotCircleX;
                 return;
             }
-
             paramForm.gui.centerX = cx;
         }
         private void tbPlotCircleY_Leave(object sender, EventArgs e)
@@ -408,7 +409,7 @@ namespace WinFormsAppTest
                 this.ActiveControl = tbPlotRecXmax;
                 return;
             }
-            if (tbPlotData.Text != "" && double.Parse(tbPlotRecXmax.Text) < lasSize.maxx)
+            if (tbPlotData.Text != "" && double.Parse(tbPlotRecXmax.Text) > lasSize.maxx)
             {
                 MessageBox.Show($"선택하신 las 파일의 최대 x좌표값보다 큽니다.{lasSize.maxx}보다 작게 설정해주세요");
                 tbPlotRecXmax.Clear();
@@ -456,7 +457,7 @@ namespace WinFormsAppTest
                 this.ActiveControl = tbPlotRecYmax;
                 return;
             }
-            if (tbPlotData.Text != "" && double.Parse(tbPlotRecYmax.Text) < lasSize.maxy)
+            if (tbPlotData.Text != "" && double.Parse(tbPlotRecYmax.Text) > lasSize.maxy)
             {
                 MessageBox.Show($"선택하신 las 파일의 최대 y좌표값보다 큽니다.{lasSize.maxy}보다 작게 설정해주세요");
                 tbPlotRecYmax.Clear();

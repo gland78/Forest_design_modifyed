@@ -19,7 +19,11 @@ namespace WinFormsAppTest
 
         public CustomPanel()
         {
-            DoubleBuffered = true;
+            this.SetStyle(ControlStyles.DoubleBuffer |
+                      ControlStyles.UserPaint |
+                      ControlStyles.AllPaintingInWmPaint,
+                      true);
+            this.UpdateStyles();
         }
 
         protected override void OnPaint(PaintEventArgs e)

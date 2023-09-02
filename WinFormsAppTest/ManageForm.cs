@@ -96,7 +96,7 @@ namespace WinFormsAppTest
             string oldTitle = lvPresetConf.SelectedItems[0].SubItems[0].Text;
             string? newTitle = Microsoft.VisualBasic.Interaction.InputBox("바꿀 제목을 입력해주세요.", "사용자 설정 제목 바꾸기");
 
-            if (newTitle == null)
+            if (newTitle == "")
             {
                 return;
             }

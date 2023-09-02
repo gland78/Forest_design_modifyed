@@ -515,9 +515,6 @@ namespace WinFormsAppTest
             }
             else if (menuOpen == false)
             {
-                pnSideMenu.Width = MIN_SLIDING_WIDTH;
-                tcMainHome.Left -= SLIDING_GAP / 2;
-
                 foreach (Control cont in pnSideMenu.Controls)
                 {
                     if (cont.Name.Contains("presetConfig"))
@@ -528,6 +525,9 @@ namespace WinFormsAppTest
                 }
                 btnSettings.Width = MIN_BTN_WIDTH;
                 btnSettings.Text = "";
+
+                pnSideMenu.Width = MIN_SLIDING_WIDTH;
+                tcMainHome.Left -= SLIDING_GAP / 2;
             }
         }
 

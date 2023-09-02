@@ -10,8 +10,13 @@ namespace WinFormsAppTest
     {
         public CustomTabControl()
         {
+            this.SetStyle(ControlStyles.DoubleBuffer |
+                      ControlStyles.UserPaint |
+                      ControlStyles.AllPaintingInWmPaint,
+                      true);
+            this.UpdateStyles();
+
             if (!this.DesignMode) this.Multiline = true;
-            DoubleBuffered = true;
         }
 
         protected override void WndProc(ref Message m)
