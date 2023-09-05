@@ -74,7 +74,7 @@
             tbPlotCircleR.Location = new Point(135, 132);
             tbPlotCircleR.Name = "tbPlotCircleR";
             tbPlotCircleR.Size = new Size(107, 23);
-            tbPlotCircleR.TabIndex = 7;
+            tbPlotCircleR.TabIndex = 2;
             tbPlotCircleR.Leave += tbPlotCircleR_Leave;
             // 
             // lbPlotCircleR
@@ -91,7 +91,7 @@
             tbPlotCircleY.Location = new Point(135, 90);
             tbPlotCircleY.Name = "tbPlotCircleY";
             tbPlotCircleY.Size = new Size(107, 23);
-            tbPlotCircleY.TabIndex = 5;
+            tbPlotCircleY.TabIndex = 1;
             tbPlotCircleY.Leave += tbPlotCircleY_Leave;
             // 
             // lbPlotCircleY
@@ -100,7 +100,7 @@
             lbPlotCircleY.Location = new Point(67, 94);
             lbPlotCircleY.Name = "lbPlotCircleY";
             lbPlotCircleY.Size = new Size(14, 15);
-            lbPlotCircleY.TabIndex = 4;
+            lbPlotCircleY.TabIndex = 5;
             lbPlotCircleY.Text = "Y";
             // 
             // tbPlotCircleX
@@ -108,7 +108,7 @@
             tbPlotCircleX.Location = new Point(135, 48);
             tbPlotCircleX.Name = "tbPlotCircleX";
             tbPlotCircleX.Size = new Size(107, 23);
-            tbPlotCircleX.TabIndex = 3;
+            tbPlotCircleX.TabIndex = 0;
             tbPlotCircleX.Leave += tbPlotCircleX_Leave;
             // 
             // lbPlotCircleX
@@ -117,7 +117,7 @@
             lbPlotCircleX.Location = new Point(67, 52);
             lbPlotCircleX.Name = "lbPlotCircleX";
             lbPlotCircleX.Size = new Size(14, 15);
-            lbPlotCircleX.TabIndex = 2;
+            lbPlotCircleX.TabIndex = 4;
             lbPlotCircleX.Text = "X";
             // 
             // tbPlotRecYmax
@@ -125,7 +125,7 @@
             tbPlotRecYmax.Location = new Point(304, 90);
             tbPlotRecYmax.Name = "tbPlotRecYmax";
             tbPlotRecYmax.Size = new Size(107, 23);
-            tbPlotRecYmax.TabIndex = 17;
+            tbPlotRecYmax.TabIndex = 3;
             tbPlotRecYmax.Leave += tbPlotRecYmax_Leave;
             // 
             // lbPlotRecYmax
@@ -134,7 +134,7 @@
             lbPlotRecYmax.Location = new Point(261, 93);
             lbPlotRecYmax.Name = "lbPlotRecYmax";
             lbPlotRecYmax.Size = new Size(37, 15);
-            lbPlotRecYmax.TabIndex = 16;
+            lbPlotRecYmax.TabIndex = 8;
             lbPlotRecYmax.Text = "Ymax";
             // 
             // tbPlotRecXmax
@@ -142,7 +142,7 @@
             tbPlotRecXmax.Location = new Point(304, 48);
             tbPlotRecXmax.Name = "tbPlotRecXmax";
             tbPlotRecXmax.Size = new Size(107, 23);
-            tbPlotRecXmax.TabIndex = 15;
+            tbPlotRecXmax.TabIndex = 1;
             tbPlotRecXmax.Leave += tbPlotRecXmax_Leave;
             // 
             // lbPlotRecXmax
@@ -151,7 +151,7 @@
             lbPlotRecXmax.Location = new Point(261, 51);
             lbPlotRecXmax.Name = "lbPlotRecXmax";
             lbPlotRecXmax.Size = new Size(37, 15);
-            lbPlotRecXmax.TabIndex = 14;
+            lbPlotRecXmax.TabIndex = 6;
             lbPlotRecXmax.Text = "Xmax";
             // 
             // tbPlotRecYmin
@@ -159,7 +159,7 @@
             tbPlotRecYmin.Location = new Point(135, 90);
             tbPlotRecYmin.Name = "tbPlotRecYmin";
             tbPlotRecYmin.Size = new Size(107, 23);
-            tbPlotRecYmin.TabIndex = 11;
+            tbPlotRecYmin.TabIndex = 2;
             tbPlotRecYmin.Leave += tbPlotRecYmin_Leave;
             // 
             // lbPlotRecYmin
@@ -168,7 +168,7 @@
             lbPlotRecYmin.Location = new Point(67, 94);
             lbPlotRecYmin.Name = "lbPlotRecYmin";
             lbPlotRecYmin.Size = new Size(35, 15);
-            lbPlotRecYmin.TabIndex = 10;
+            lbPlotRecYmin.TabIndex = 7;
             lbPlotRecYmin.Text = "Ymin";
             // 
             // tbPlotRecXmin
@@ -176,7 +176,7 @@
             tbPlotRecXmin.Location = new Point(135, 48);
             tbPlotRecXmin.Name = "tbPlotRecXmin";
             tbPlotRecXmin.Size = new Size(107, 23);
-            tbPlotRecXmin.TabIndex = 9;
+            tbPlotRecXmin.TabIndex = 0;
             tbPlotRecXmin.Leave += tbPlotRecXmin_Leave;
             // 
             // lbPlotRecXmin
@@ -185,16 +185,18 @@
             lbPlotRecXmin.Location = new Point(67, 52);
             lbPlotRecXmin.Name = "lbPlotRecXmin";
             lbPlotRecXmin.Size = new Size(35, 15);
-            lbPlotRecXmin.TabIndex = 8;
+            lbPlotRecXmin.TabIndex = 5;
             lbPlotRecXmin.Text = "Xmin";
             // 
             // tbPlotPolySet
             // 
+            tbPlotPolySet.Enabled = false;
             tbPlotPolySet.Location = new Point(154, 48);
             tbPlotPolySet.Name = "tbPlotPolySet";
             tbPlotPolySet.ReadOnly = true;
             tbPlotPolySet.Size = new Size(216, 23);
-            tbPlotPolySet.TabIndex = 5;
+            tbPlotPolySet.TabIndex = 1;
+            tbPlotPolySet.TabStop = false;
             // 
             // lbPlotPolySet
             // 
@@ -202,7 +204,7 @@
             lbPlotPolySet.Location = new Point(67, 52);
             lbPlotPolySet.Name = "lbPlotPolySet";
             lbPlotPolySet.Size = new Size(72, 15);
-            lbPlotPolySet.TabIndex = 4;
+            lbPlotPolySet.TabIndex = 3;
             lbPlotPolySet.Text = "Polygon Set";
             // 
             // btnPlotPolySet
@@ -218,7 +220,7 @@
             btnPlotPolySet.Location = new Point(376, 46);
             btnPlotPolySet.Name = "btnPlotPolySet";
             btnPlotPolySet.Size = new Size(97, 27);
-            btnPlotPolySet.TabIndex = 10;
+            btnPlotPolySet.TabIndex = 0;
             btnPlotPolySet.Text = "File Search";
             btnPlotPolySet.TextColor = Color.White;
             btnPlotPolySet.UseVisualStyleBackColor = false;
@@ -232,7 +234,7 @@
             btnPlotOK.Location = new Point(375, 334);
             btnPlotOK.Name = "btnPlotOK";
             btnPlotOK.Size = new Size(64, 24);
-            btnPlotOK.TabIndex = 7;
+            btnPlotOK.TabIndex = 3;
             btnPlotOK.Text = "확인";
             btnPlotOK.UseVisualStyleBackColor = false;
             btnPlotOK.Click += btnPlotOK_Click;
@@ -245,7 +247,7 @@
             btnPlotCancel.Location = new Point(445, 334);
             btnPlotCancel.Name = "btnPlotCancel";
             btnPlotCancel.Size = new Size(64, 24);
-            btnPlotCancel.TabIndex = 8;
+            btnPlotCancel.TabIndex = 4;
             btnPlotCancel.Text = "취소";
             btnPlotCancel.UseVisualStyleBackColor = false;
             btnPlotCancel.Click += btnPlotCancel_Click;
@@ -261,7 +263,8 @@
             tcPlot.Name = "tcPlot";
             tcPlot.SelectedIndex = 0;
             tcPlot.Size = new Size(495, 198);
-            tcPlot.TabIndex = 9;
+            tcPlot.TabIndex = 2;
+            tcPlot.TabStop = false;
             // 
             // tpPlotCircle
             // 
@@ -288,7 +291,7 @@
             lbPlotCircle.Location = new Point(22, 13);
             lbPlotCircle.Name = "lbPlotCircle";
             lbPlotCircle.Size = new Size(87, 21);
-            lbPlotCircle.TabIndex = 8;
+            lbPlotCircle.TabIndex = 3;
             lbPlotCircle.Text = "Circle Plot";
             // 
             // tpPlotRec
@@ -316,7 +319,7 @@
             lbPlotRec.Location = new Point(22, 13);
             lbPlotRec.Name = "lbPlotRec";
             lbPlotRec.Size = new Size(121, 21);
-            lbPlotRec.TabIndex = 18;
+            lbPlotRec.TabIndex = 4;
             lbPlotRec.Text = "Rectangle Plot";
             // 
             // tpPlotPoly
@@ -339,7 +342,7 @@
             lbPlotPoly.Location = new Point(22, 13);
             lbPlotPoly.Name = "lbPlotPoly";
             lbPlotPoly.Size = new Size(109, 21);
-            lbPlotPoly.TabIndex = 11;
+            lbPlotPoly.TabIndex = 2;
             lbPlotPoly.Text = "Polygon Plot";
             // 
             // pnPlotSelection
@@ -350,7 +353,7 @@
             pnPlotSelection.Location = new Point(13, 73);
             pnPlotSelection.Name = "pnPlotSelection";
             pnPlotSelection.Size = new Size(494, 60);
-            pnPlotSelection.TabIndex = 10;
+            pnPlotSelection.TabIndex = 1;
             // 
             // lbPlotSelection
             // 
@@ -359,17 +362,19 @@
             lbPlotSelection.Location = new Point(19, 22);
             lbPlotSelection.Name = "lbPlotSelection";
             lbPlotSelection.Size = new Size(56, 15);
-            lbPlotSelection.TabIndex = 12;
+            lbPlotSelection.TabIndex = 1;
             lbPlotSelection.Text = "Selection";
             // 
             // cbPlotShape
             // 
+            cbPlotShape.DropDownStyle = ComboBoxStyle.DropDownList;
+            cbPlotShape.FlatStyle = FlatStyle.Popup;
             cbPlotShape.FormattingEnabled = true;
             cbPlotShape.Items.AddRange(new object[] { "Circle", "Rectangle", "Polygon" });
             cbPlotShape.Location = new Point(89, 18);
             cbPlotShape.Name = "cbPlotShape";
             cbPlotShape.Size = new Size(109, 23);
-            cbPlotShape.TabIndex = 11;
+            cbPlotShape.TabIndex = 0;
             cbPlotShape.SelectedIndexChanged += cbPlotShape_SelectedIndexChanged;
             // 
             // pnPlotData
@@ -381,7 +386,7 @@
             pnPlotData.Location = new Point(13, 16);
             pnPlotData.Name = "pnPlotData";
             pnPlotData.Size = new Size(494, 60);
-            pnPlotData.TabIndex = 11;
+            pnPlotData.TabIndex = 0;
             // 
             // btnPlotData
             // 
@@ -396,7 +401,7 @@
             btnPlotData.Location = new Point(380, 17);
             btnPlotData.Name = "btnPlotData";
             btnPlotData.Size = new Size(97, 27);
-            btnPlotData.TabIndex = 12;
+            btnPlotData.TabIndex = 0;
             btnPlotData.Text = "File Search";
             btnPlotData.TextColor = Color.White;
             btnPlotData.UseVisualStyleBackColor = false;
@@ -409,7 +414,8 @@
             tbPlotData.Name = "tbPlotData";
             tbPlotData.ReadOnly = true;
             tbPlotData.Size = new Size(285, 23);
-            tbPlotData.TabIndex = 9;
+            tbPlotData.TabIndex = 1;
+            tbPlotData.TabStop = false;
             tbPlotData.TextChanged += tbPlotData_TextChanged;
             // 
             // lbPlotData
@@ -419,7 +425,7 @@
             lbPlotData.Location = new Point(19, 23);
             lbPlotData.Name = "lbPlotData";
             lbPlotData.Size = new Size(62, 15);
-            lbPlotData.TabIndex = 12;
+            lbPlotData.TabIndex = 2;
             lbPlotData.Text = "Data Load";
             // 
             // PlotForm

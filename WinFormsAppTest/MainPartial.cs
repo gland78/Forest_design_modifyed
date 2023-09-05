@@ -30,7 +30,11 @@ namespace WinFormsAppTest
         internal static string[] reqDi = { "", "RecentConfig", "PresetConfig" };
         public string csv_path = Path.Combine(basePath, "config.csv");
 
+        //config 파일의 타입(preset recent default)
         public string fileType = "";
+
+        //사용자 설정값 활성화 여부 판단 변수(기능 실장 예정)
+        private bool[] IsPresetActivate;
 
         /// <summary>
         /// csv 읽는 함수 
@@ -185,7 +189,6 @@ namespace WinFormsAppTest
 
             //CrownSlice_textboxes
             setParam("filters.range.crown", "minheight", tbCrownMinHeight.Text.Trim());
-            setParam("filters.range.crown", "maxheight", tbCrownMaxHeight.Text.Trim());
         }
 
         //List 테이블 -> textbox 대입
@@ -209,7 +212,6 @@ namespace WinFormsAppTest
 
             //CrownSlice_textboxes
             tbCrownMinHeight.Text = getParam("filters.range.crown", "minheight");
-            tbCrownMaxHeight.Text = getParam("filters.range.crown", "maxheight");
         }
         /// <summary>
         /// 무결성 검사를 위한 코드
@@ -224,7 +226,6 @@ namespace WinFormsAppTest
             tbTrunkMinHeight.KeyPress += TextBox_KeyPressOnlyNumbers;
             tbTrunkMaxHeight.KeyPress += TextBox_KeyPressOnlyNumbers;
             tbCrownMinHeight.KeyPress += TextBox_KeyPressOnlyNumbers;
-            tbCrownMaxHeight.KeyPress += TextBox_KeyPressOnlyNumbers;
 
 
             //정수만 입력하도록 하는 핸들러
@@ -251,7 +252,6 @@ namespace WinFormsAppTest
                 e.Handled = true;
             }
         }
-        /// preset,recent 설정파일 저장용코드
         private void setAllparams(ref StringBuilder csvContent)
         {
             UpdateParams();

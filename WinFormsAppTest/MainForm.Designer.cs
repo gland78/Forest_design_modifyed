@@ -32,10 +32,12 @@
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             pnSideMenu = new Panel();
-            btnPresetManage = new Button();
-            btnHome = new Button();
-            btnSettings = new Button();
-            btnSlideMenu = new Button();
+            pnSidePreset = new CustomPanel();
+            lbSlidePreset = new Label();
+            btnPresetManage = new CustomBtn();
+            btnHome = new CustomBtn();
+            btnSettings = new CustomBtn();
+            btnSlideMenu = new CustomBtn();
             btnClose = new Button();
             tcMainHome = new CustomTabControl();
             tpMainHome = new TabPage();
@@ -49,6 +51,9 @@
             btnStart = new Button();
             lbTitle = new Label();
             tpSettings = new TabPage();
+            pnSettingTrunk3 = new CustomPanel();
+            lbTrunkSmooth = new Label();
+            tbTrunkSmooth = new TextBox();
             btnSettingCancel = new CustomBtn();
             btnSettingApply = new CustomBtn();
             pnSettingDefault = new CustomPanel();
@@ -78,9 +83,6 @@
             lbNorCellSize = new Label();
             lbNormalize = new Label();
             lbSettings = new Label();
-            pnSettingCrown2 = new CustomPanel();
-            lbCrownMaxH = new Label();
-            tbCrownMaxHeight = new TextBox();
             pnSettingTrunk2 = new CustomPanel();
             lbTrunkMaxH = new Label();
             tbTrunkMaxHeight = new TextBox();
@@ -104,6 +106,7 @@
             pnReviewMain.SuspendLayout();
             pnMain.SuspendLayout();
             tpSettings.SuspendLayout();
+            pnSettingTrunk3.SuspendLayout();
             pnSettingDefault.SuspendLayout();
             pnSettingPreset.SuspendLayout();
             pnSettingNor5.SuspendLayout();
@@ -111,7 +114,6 @@
             pnSettingNor3.SuspendLayout();
             pnSettingNor2.SuspendLayout();
             pnSettingNor1.SuspendLayout();
-            pnSettingCrown2.SuspendLayout();
             pnSettingTrunk2.SuspendLayout();
             pnSettingCrown1.SuspendLayout();
             pnSettingTrunk1.SuspendLayout();
@@ -122,6 +124,8 @@
             // 
             pnSideMenu.BackColor = Color.SeaGreen;
             pnSideMenu.BackgroundImageLayout = ImageLayout.Zoom;
+            pnSideMenu.Controls.Add(pnSidePreset);
+            pnSideMenu.Controls.Add(lbSlidePreset);
             pnSideMenu.Controls.Add(btnPresetManage);
             pnSideMenu.Controls.Add(btnHome);
             pnSideMenu.Controls.Add(btnSettings);
@@ -131,27 +135,52 @@
             pnSideMenu.Margin = new Padding(3, 4, 3, 4);
             pnSideMenu.Name = "pnSideMenu";
             pnSideMenu.Size = new Size(384, 800);
-            pnSideMenu.TabIndex = 0;
+            pnSideMenu.TabIndex = 2;
             pnSideMenu.MouseDown += MainForm_MouseDown;
             pnSideMenu.MouseMove += MainForm_MouseMove;
             pnSideMenu.MouseUp += MainForm_MouseUp;
             // 
+            // pnSidePreset
+            // 
+            pnSidePreset.BackColor = Color.Transparent;
+            pnSidePreset.Location = new Point(12, 156);
+            pnSidePreset.Name = "pnSidePreset";
+            pnSidePreset.Size = new Size(360, 483);
+            pnSidePreset.TabIndex = 5;
+            // 
+            // lbSlidePreset
+            // 
+            lbSlidePreset.AutoSize = true;
+            lbSlidePreset.Font = new Font("맑은 고딕", 16F, FontStyle.Bold, GraphicsUnit.Point);
+            lbSlidePreset.Location = new Point(12, 118);
+            lbSlidePreset.Name = "lbSlidePreset";
+            lbSlidePreset.Size = new Size(131, 30);
+            lbSlidePreset.TabIndex = 4;
+            lbSlidePreset.Text = "사용자 설정";
+            // 
             // btnPresetManage
             // 
             btnPresetManage.BackColor = Color.Transparent;
+            btnPresetManage.BackgroundColor = Color.Transparent;
             btnPresetManage.BackgroundImage = (Image)resources.GetObject("btnPresetManage.BackgroundImage");
-            btnPresetManage.BackgroundImageLayout = ImageLayout.Center;
+            btnPresetManage.BackgroundImageLayout = ImageLayout.Zoom;
+            btnPresetManage.BorderColor = Color.PaleVioletRed;
+            btnPresetManage.BorderRadius = 5;
+            btnPresetManage.BorderSize = 0;
             btnPresetManage.CausesValidation = false;
             btnPresetManage.FlatAppearance.BorderColor = Color.SeaGreen;
             btnPresetManage.FlatAppearance.BorderSize = 0;
             btnPresetManage.FlatAppearance.MouseDownBackColor = Color.MediumAquamarine;
             btnPresetManage.FlatAppearance.MouseOverBackColor = Color.MediumSeaGreen;
             btnPresetManage.FlatStyle = FlatStyle.Flat;
-            btnPresetManage.Location = new Point(12, 94);
+            btnPresetManage.ForeColor = Color.White;
+            btnPresetManage.Location = new Point(350, 122);
             btnPresetManage.Margin = new Padding(3, 4, 3, 4);
             btnPresetManage.Name = "btnPresetManage";
-            btnPresetManage.Size = new Size(38, 34);
-            btnPresetManage.TabIndex = 9;
+            btnPresetManage.Size = new Size(22, 22);
+            btnPresetManage.TabIndex = 2;
+            btnPresetManage.TabStop = false;
+            btnPresetManage.TextColor = Color.White;
             btnPresetManage.UseVisualStyleBackColor = false;
             btnPresetManage.Click += btnPresetManage_Click;
             btnPresetManage.MouseHover += btnPresetManage_MouseHover;
@@ -159,24 +188,35 @@
             // btnHome
             // 
             btnHome.BackColor = Color.Transparent;
+            btnHome.BackgroundColor = Color.Transparent;
             btnHome.BackgroundImageLayout = ImageLayout.None;
+            btnHome.BorderColor = Color.PaleVioletRed;
+            btnHome.BorderRadius = 5;
+            btnHome.BorderSize = 0;
             btnHome.CausesValidation = false;
             btnHome.FlatAppearance.BorderColor = Color.SeaGreen;
             btnHome.FlatAppearance.BorderSize = 0;
             btnHome.FlatAppearance.MouseDownBackColor = Color.MediumAquamarine;
             btnHome.FlatAppearance.MouseOverBackColor = Color.MediumSeaGreen;
             btnHome.FlatStyle = FlatStyle.Flat;
+            btnHome.ForeColor = Color.White;
             btnHome.Image = (Image)resources.GetObject("btnHome.Image");
             btnHome.Location = new Point(12, 12);
             btnHome.Margin = new Padding(3, 4, 3, 4);
             btnHome.Name = "btnHome";
             btnHome.Size = new Size(38, 34);
             btnHome.TabIndex = 0;
+            btnHome.TabStop = false;
+            btnHome.TextColor = Color.White;
             btnHome.UseVisualStyleBackColor = false;
             // 
             // btnSettings
             // 
             btnSettings.BackColor = Color.Transparent;
+            btnSettings.BackgroundColor = Color.Transparent;
+            btnSettings.BorderColor = Color.PaleVioletRed;
+            btnSettings.BorderRadius = 5;
+            btnSettings.BorderSize = 0;
             btnSettings.FlatAppearance.BorderSize = 0;
             btnSettings.FlatAppearance.MouseDownBackColor = Color.MediumAquamarine;
             btnSettings.FlatAppearance.MouseOverBackColor = Color.MediumSeaGreen;
@@ -189,27 +229,35 @@
             btnSettings.Margin = new Padding(3, 4, 3, 4);
             btnSettings.Name = "btnSettings";
             btnSettings.Size = new Size(370, 45);
-            btnSettings.TabIndex = 8;
+            btnSettings.TabIndex = 3;
             btnSettings.Text = "            Settings";
             btnSettings.TextAlign = ContentAlignment.MiddleLeft;
+            btnSettings.TextColor = SystemColors.ControlText;
             btnSettings.UseVisualStyleBackColor = false;
             // 
             // btnSlideMenu
             // 
             btnSlideMenu.BackColor = Color.Transparent;
+            btnSlideMenu.BackgroundColor = Color.Transparent;
             btnSlideMenu.BackgroundImageLayout = ImageLayout.None;
+            btnSlideMenu.BorderColor = Color.PaleVioletRed;
+            btnSlideMenu.BorderRadius = 5;
+            btnSlideMenu.BorderSize = 0;
             btnSlideMenu.CausesValidation = false;
             btnSlideMenu.FlatAppearance.BorderColor = Color.SeaGreen;
             btnSlideMenu.FlatAppearance.BorderSize = 0;
             btnSlideMenu.FlatAppearance.MouseDownBackColor = Color.MediumAquamarine;
             btnSlideMenu.FlatAppearance.MouseOverBackColor = Color.MediumSeaGreen;
             btnSlideMenu.FlatStyle = FlatStyle.Flat;
+            btnSlideMenu.ForeColor = Color.White;
             btnSlideMenu.Image = (Image)resources.GetObject("btnSlideMenu.Image");
             btnSlideMenu.Location = new Point(12, 52);
             btnSlideMenu.Margin = new Padding(3, 4, 3, 4);
             btnSlideMenu.Name = "btnSlideMenu";
             btnSlideMenu.Size = new Size(38, 34);
             btnSlideMenu.TabIndex = 1;
+            btnSlideMenu.TabStop = false;
+            btnSlideMenu.TextColor = Color.White;
             btnSlideMenu.UseVisualStyleBackColor = false;
             // 
             // btnClose
@@ -226,32 +274,36 @@
             btnClose.Margin = new Padding(3, 4, 3, 4);
             btnClose.Name = "btnClose";
             btnClose.Size = new Size(43, 30);
-            btnClose.TabIndex = 1;
+            btnClose.TabIndex = 0;
+            btnClose.TabStop = false;
             btnClose.UseVisualStyleBackColor = false;
             // 
             // tcMainHome
             // 
-            tcMainHome.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             tcMainHome.Controls.Add(tpMainHome);
             tcMainHome.Controls.Add(tpSettings);
-            tcMainHome.ItemSize = new Size(0, 5);
-            tcMainHome.Location = new Point(379, 30);
+            tcMainHome.ItemSize = new Size(0, 10);
+            tcMainHome.Location = new Point(384, 0);
             tcMainHome.Margin = new Padding(0);
             tcMainHome.Multiline = true;
             tcMainHome.Name = "tcMainHome";
             tcMainHome.Padding = new Point(0, 0);
             tcMainHome.SelectedIndex = 0;
-            tcMainHome.Size = new Size(905, 770);
-            tcMainHome.TabIndex = 4;
+            tcMainHome.Size = new Size(896, 800);
+            tcMainHome.TabIndex = 3;
+            tcMainHome.TabStop = false;
+            tcMainHome.MouseDown += MainForm_MouseDown;
+            tcMainHome.MouseMove += MainForm_MouseMove;
+            tcMainHome.MouseUp += MainForm_MouseUp;
             // 
             // tpMainHome
             // 
             tpMainHome.Controls.Add(pnReviewMain);
             tpMainHome.Controls.Add(pnMain);
-            tpMainHome.Location = new Point(4, 9);
+            tpMainHome.Location = new Point(4, 14);
             tpMainHome.Margin = new Padding(0);
             tpMainHome.Name = "tpMainHome";
-            tpMainHome.Size = new Size(897, 757);
+            tpMainHome.Size = new Size(888, 782);
             tpMainHome.TabIndex = 0;
             tpMainHome.UseVisualStyleBackColor = true;
             // 
@@ -262,11 +314,11 @@
             pnReviewMain.Controls.Add(pnReview);
             pnReviewMain.Controls.Add(lbReview);
             pnReviewMain.Dock = DockStyle.Bottom;
-            pnReviewMain.Location = new Point(0, 438);
+            pnReviewMain.Location = new Point(0, 463);
             pnReviewMain.Margin = new Padding(3, 4, 3, 4);
             pnReviewMain.Name = "pnReviewMain";
-            pnReviewMain.Size = new Size(897, 319);
-            pnReviewMain.TabIndex = 9;
+            pnReviewMain.Size = new Size(888, 319);
+            pnReviewMain.TabIndex = 1;
             // 
             // btnRecentInfo
             // 
@@ -283,7 +335,8 @@
             btnRecentInfo.Location = new Point(219, 24);
             btnRecentInfo.Name = "btnRecentInfo";
             btnRecentInfo.Size = new Size(20, 20);
-            btnRecentInfo.TabIndex = 2;
+            btnRecentInfo.TabIndex = 1;
+            btnRecentInfo.TabStop = false;
             btnRecentInfo.TextColor = Color.White;
             btnRecentInfo.UseVisualStyleBackColor = false;
             btnRecentInfo.MouseHover += btnRecentInfo_MouseHover;
@@ -295,8 +348,8 @@
             pnReview.Location = new Point(0, 64);
             pnReview.Margin = new Padding(3, 4, 3, 4);
             pnReview.Name = "pnReview";
-            pnReview.Size = new Size(897, 255);
-            pnReview.TabIndex = 1;
+            pnReview.Size = new Size(888, 255);
+            pnReview.TabIndex = 2;
             // 
             // lbReview
             // 
@@ -321,8 +374,11 @@
             pnMain.Location = new Point(0, 0);
             pnMain.Margin = new Padding(3, 4, 3, 4);
             pnMain.Name = "pnMain";
-            pnMain.Size = new Size(897, 452);
-            pnMain.TabIndex = 10;
+            pnMain.Size = new Size(888, 482);
+            pnMain.TabIndex = 0;
+            pnMain.MouseDown += MainForm_MouseDown;
+            pnMain.MouseMove += MainForm_MouseMove;
+            pnMain.MouseUp += MainForm_MouseUp;
             // 
             // pbLoadingBar
             // 
@@ -331,28 +387,28 @@
             pbLoadingBar.Maximum = 10;
             pbLoadingBar.Name = "pbLoadingBar";
             pbLoadingBar.Size = new Size(825, 42);
-            pbLoadingBar.TabIndex = 8;
+            pbLoadingBar.TabIndex = 3;
             pbLoadingBar.Visible = false;
             // 
             // lbSubTitle
             // 
             lbSubTitle.AutoSize = true;
             lbSubTitle.Font = new Font("굴림", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            lbSubTitle.Location = new Point(25, 114);
+            lbSubTitle.Location = new Point(25, 119);
             lbSubTitle.Name = "lbSubTitle";
             lbSubTitle.Size = new Size(209, 16);
-            lbSubTitle.TabIndex = 5;
+            lbSubTitle.TabIndex = 1;
             lbSubTitle.Text = "Forest ICT Research Center";
             // 
             // btnStart
             // 
             btnStart.Anchor = AnchorStyles.Right;
             btnStart.Font = new Font("굴림", 20.25F, FontStyle.Regular, GraphicsUnit.Point);
-            btnStart.Location = new Point(652, 229);
+            btnStart.Location = new Point(643, 244);
             btnStart.Margin = new Padding(3, 4, 3, 4);
             btnStart.Name = "btnStart";
             btnStart.Size = new Size(179, 61);
-            btnStart.TabIndex = 7;
+            btnStart.TabIndex = 2;
             btnStart.Text = "Start";
             btnStart.UseVisualStyleBackColor = true;
             // 
@@ -360,11 +416,14 @@
             // 
             lbTitle.AutoSize = true;
             lbTitle.Font = new Font("Microsoft Sans Serif", 63.75F, FontStyle.Regular, GraphicsUnit.Point);
-            lbTitle.Location = new Point(4, 15);
+            lbTitle.Location = new Point(6, 20);
             lbTitle.Name = "lbTitle";
             lbTitle.Size = new Size(348, 96);
-            lbTitle.TabIndex = 4;
+            lbTitle.TabIndex = 0;
             lbTitle.Text = "ForestLi\n";
+            lbTitle.MouseDown += lbTitle_MouseDown;
+            lbTitle.MouseMove += lbTitle_MouseMove;
+            lbTitle.MouseUp += lbTitle_MouseUp;
             // 
             // tpSettings
             // 
@@ -372,6 +431,7 @@
             tpSettings.AutoScrollMargin = new Size(0, 20);
             tpSettings.AutoScrollMinSize = new Size(0, 5);
             tpSettings.BackColor = Color.DimGray;
+            tpSettings.Controls.Add(pnSettingTrunk3);
             tpSettings.Controls.Add(btnSettingCancel);
             tpSettings.Controls.Add(btnSettingApply);
             tpSettings.Controls.Add(pnSettingDefault);
@@ -383,7 +443,6 @@
             tpSettings.Controls.Add(pnSettingNor1);
             tpSettings.Controls.Add(lbNormalize);
             tpSettings.Controls.Add(lbSettings);
-            tpSettings.Controls.Add(pnSettingCrown2);
             tpSettings.Controls.Add(pnSettingTrunk2);
             tpSettings.Controls.Add(lbCrownSlice);
             tpSettings.Controls.Add(lbTrunkSlice);
@@ -391,11 +450,46 @@
             tpSettings.Controls.Add(pnSettingCrown1);
             tpSettings.Controls.Add(pnSettingTrunk1);
             tpSettings.Controls.Add(pnSettingSub1);
-            tpSettings.Location = new Point(4, 9);
+            tpSettings.Location = new Point(4, 14);
             tpSettings.Name = "tpSettings";
             tpSettings.Padding = new Padding(3);
-            tpSettings.Size = new Size(897, 757);
+            tpSettings.Size = new Size(888, 782);
             tpSettings.TabIndex = 1;
+            tpSettings.MouseDown += MainForm_MouseDown;
+            tpSettings.MouseMove += MainForm_MouseMove;
+            tpSettings.MouseUp += MainForm_MouseUp;
+            // 
+            // pnSettingTrunk3
+            // 
+            pnSettingTrunk3.BackColor = Color.Gray;
+            pnSettingTrunk3.Controls.Add(lbTrunkSmooth);
+            pnSettingTrunk3.Controls.Add(tbTrunkSmooth);
+            pnSettingTrunk3.Location = new Point(24, 963);
+            pnSettingTrunk3.Margin = new Padding(3, 4, 3, 4);
+            pnSettingTrunk3.Name = "pnSettingTrunk3";
+            pnSettingTrunk3.Size = new Size(850, 58);
+            pnSettingTrunk3.TabIndex = 12;
+            // 
+            // lbTrunkSmooth
+            // 
+            lbTrunkSmooth.AutoSize = true;
+            lbTrunkSmooth.Font = new Font("맑은 고딕", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
+            lbTrunkSmooth.ForeColor = Color.White;
+            lbTrunkSmooth.Location = new Point(21, 21);
+            lbTrunkSmooth.Name = "lbTrunkSmooth";
+            lbTrunkSmooth.Size = new Size(83, 17);
+            lbTrunkSmooth.TabIndex = 1;
+            lbTrunkSmooth.Text = "Smoothness";
+            // 
+            // tbTrunkSmooth
+            // 
+            tbTrunkSmooth.BorderStyle = BorderStyle.FixedSingle;
+            tbTrunkSmooth.Font = new Font("맑은 고딕", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            tbTrunkSmooth.Location = new Point(725, 15);
+            tbTrunkSmooth.Margin = new Padding(3, 4, 3, 4);
+            tbTrunkSmooth.Name = "tbTrunkSmooth";
+            tbTrunkSmooth.Size = new Size(109, 29);
+            tbTrunkSmooth.TabIndex = 0;
             // 
             // btnSettingCancel
             // 
@@ -412,7 +506,8 @@
             btnSettingCancel.Location = new Point(743, 38);
             btnSettingCancel.Name = "btnSettingCancel";
             btnSettingCancel.Size = new Size(115, 40);
-            btnSettingCancel.TabIndex = 91;
+            btnSettingCancel.TabIndex = 1;
+            btnSettingCancel.TabStop = false;
             btnSettingCancel.Text = "취소";
             btnSettingCancel.TextColor = Color.White;
             btnSettingCancel.UseVisualStyleBackColor = false;
@@ -433,7 +528,8 @@
             btnSettingApply.Location = new Point(622, 38);
             btnSettingApply.Name = "btnSettingApply";
             btnSettingApply.Size = new Size(115, 40);
-            btnSettingApply.TabIndex = 90;
+            btnSettingApply.TabIndex = 0;
+            btnSettingApply.TabStop = false;
             btnSettingApply.Text = "설정 적용";
             btnSettingApply.TextColor = Color.White;
             btnSettingApply.UseVisualStyleBackColor = false;
@@ -451,7 +547,7 @@
             pnSettingDefault.Margin = new Padding(3, 4, 3, 4);
             pnSettingDefault.Name = "pnSettingDefault";
             pnSettingDefault.Size = new Size(850, 72);
-            pnSettingDefault.TabIndex = 90;
+            pnSettingDefault.TabIndex = 2;
             // 
             // btn_factory_reset
             // 
@@ -468,7 +564,8 @@
             btn_factory_reset.Location = new Point(470, 18);
             btn_factory_reset.Name = "btn_factory_reset";
             btn_factory_reset.Size = new Size(104, 36);
-            btn_factory_reset.TabIndex = 91;
+            btn_factory_reset.TabIndex = 0;
+            btn_factory_reset.TabStop = false;
             btn_factory_reset.Text = "공장초기화";
             btn_factory_reset.TextColor = Color.White;
             btn_factory_reset.UseVisualStyleBackColor = false;
@@ -483,7 +580,7 @@
             lbSettingDefault.Location = new Point(21, 21);
             lbSettingDefault.Name = "lbSettingDefault";
             lbSettingDefault.Size = new Size(78, 17);
-            lbSettingDefault.TabIndex = 89;
+            lbSettingDefault.TabIndex = 3;
             lbSettingDefault.Text = "기본값 관리";
             // 
             // lbSettingDefaultInfo
@@ -494,7 +591,7 @@
             lbSettingDefaultInfo.Location = new Point(21, 40);
             lbSettingDefaultInfo.Name = "lbSettingDefaultInfo";
             lbSettingDefaultInfo.Size = new Size(367, 13);
-            lbSettingDefaultInfo.TabIndex = 23;
+            lbSettingDefaultInfo.TabIndex = 4;
             lbSettingDefaultInfo.Text = "현재 설정 상태를 기본값으로 저장하거나, 저장된 기본값으로 변경합니다";
             // 
             // btnSettingLoad
@@ -512,7 +609,8 @@
             btnSettingLoad.Location = new Point(580, 18);
             btnSettingLoad.Name = "btnSettingLoad";
             btnSettingLoad.Size = new Size(138, 36);
-            btnSettingLoad.TabIndex = 90;
+            btnSettingLoad.TabIndex = 1;
+            btnSettingLoad.TabStop = false;
             btnSettingLoad.Text = "기본값 불러오기";
             btnSettingLoad.TextColor = Color.White;
             btnSettingLoad.UseVisualStyleBackColor = false;
@@ -533,7 +631,8 @@
             btnSettingSave.Location = new Point(724, 18);
             btnSettingSave.Name = "btnSettingSave";
             btnSettingSave.Size = new Size(110, 36);
-            btnSettingSave.TabIndex = 86;
+            btnSettingSave.TabIndex = 2;
+            btnSettingSave.TabStop = false;
             btnSettingSave.Text = "기본값 저장";
             btnSettingSave.TextColor = Color.White;
             btnSettingSave.UseVisualStyleBackColor = false;
@@ -549,7 +648,7 @@
             pnSettingPreset.Margin = new Padding(3, 4, 3, 4);
             pnSettingPreset.Name = "pnSettingPreset";
             pnSettingPreset.Size = new Size(850, 72);
-            pnSettingPreset.TabIndex = 26;
+            pnSettingPreset.TabIndex = 3;
             // 
             // lbSettingPreset
             // 
@@ -559,7 +658,7 @@
             lbSettingPreset.Location = new Point(21, 21);
             lbSettingPreset.Name = "lbSettingPreset";
             lbSettingPreset.Size = new Size(122, 17);
-            lbSettingPreset.TabIndex = 89;
+            lbSettingPreset.TabIndex = 1;
             lbSettingPreset.Text = "사용자 설정값 저장";
             // 
             // lbSettingPresetInfo
@@ -570,7 +669,7 @@
             lbSettingPresetInfo.Location = new Point(21, 40);
             lbSettingPresetInfo.Name = "lbSettingPresetInfo";
             lbSettingPresetInfo.Size = new Size(273, 13);
-            lbSettingPresetInfo.TabIndex = 23;
+            lbSettingPresetInfo.TabIndex = 2;
             lbSettingPresetInfo.Text = "현재 설정 상태를 사이드의 사용자 메뉴로 저장합니다";
             // 
             // btnPresetSave
@@ -588,7 +687,8 @@
             btnPresetSave.Location = new Point(694, 18);
             btnPresetSave.Name = "btnPresetSave";
             btnPresetSave.Size = new Size(140, 36);
-            btnPresetSave.TabIndex = 88;
+            btnPresetSave.TabIndex = 0;
+            btnPresetSave.TabStop = false;
             btnPresetSave.Text = "사용자 설정 저장";
             btnPresetSave.TextColor = Color.White;
             btnPresetSave.UseVisualStyleBackColor = false;
@@ -603,7 +703,7 @@
             pnSettingNor5.Margin = new Padding(3, 4, 3, 4);
             pnSettingNor5.Name = "pnSettingNor5";
             pnSettingNor5.Size = new Size(850, 58);
-            pnSettingNor5.TabIndex = 28;
+            pnSettingNor5.TabIndex = 9;
             // 
             // tbNorThres
             // 
@@ -613,7 +713,7 @@
             tbNorThres.Margin = new Padding(3, 4, 3, 4);
             tbNorThres.Name = "tbNorThres";
             tbNorThres.Size = new Size(109, 29);
-            tbNorThres.TabIndex = 24;
+            tbNorThres.TabIndex = 0;
             // 
             // lbNorThres
             // 
@@ -623,7 +723,7 @@
             lbNorThres.Location = new Point(21, 21);
             lbNorThres.Name = "lbNorThres";
             lbNorThres.Size = new Size(70, 17);
-            lbNorThres.TabIndex = 23;
+            lbNorThres.TabIndex = 1;
             lbNorThres.Text = "Threshold";
             // 
             // pnSettingNor4
@@ -635,7 +735,7 @@
             pnSettingNor4.Margin = new Padding(3, 4, 3, 4);
             pnSettingNor4.Name = "pnSettingNor4";
             pnSettingNor4.Size = new Size(850, 58);
-            pnSettingNor4.TabIndex = 28;
+            pnSettingNor4.TabIndex = 8;
             // 
             // tbNorScalar
             // 
@@ -645,7 +745,7 @@
             tbNorScalar.Margin = new Padding(3, 4, 3, 4);
             tbNorScalar.Name = "tbNorScalar";
             tbNorScalar.Size = new Size(109, 29);
-            tbNorScalar.TabIndex = 24;
+            tbNorScalar.TabIndex = 0;
             // 
             // lbNorScalar
             // 
@@ -655,7 +755,7 @@
             lbNorScalar.Location = new Point(21, 21);
             lbNorScalar.Name = "lbNorScalar";
             lbNorScalar.Size = new Size(44, 17);
-            lbNorScalar.TabIndex = 23;
+            lbNorScalar.TabIndex = 1;
             lbNorScalar.Text = "Scalar";
             // 
             // pnSettingNor3
@@ -667,7 +767,7 @@
             pnSettingNor3.Margin = new Padding(3, 4, 3, 4);
             pnSettingNor3.Name = "pnSettingNor3";
             pnSettingNor3.Size = new Size(850, 58);
-            pnSettingNor3.TabIndex = 27;
+            pnSettingNor3.TabIndex = 7;
             // 
             // tbNorSlope
             // 
@@ -677,7 +777,7 @@
             tbNorSlope.Margin = new Padding(3, 4, 3, 4);
             tbNorSlope.Name = "tbNorSlope";
             tbNorSlope.Size = new Size(109, 29);
-            tbNorSlope.TabIndex = 24;
+            tbNorSlope.TabIndex = 0;
             // 
             // lbNorSlope
             // 
@@ -687,7 +787,7 @@
             lbNorSlope.Location = new Point(21, 21);
             lbNorSlope.Name = "lbNorSlope";
             lbNorSlope.Size = new Size(42, 17);
-            lbNorSlope.TabIndex = 23;
+            lbNorSlope.TabIndex = 1;
             lbNorSlope.Text = "Slope";
             // 
             // pnSettingNor2
@@ -699,7 +799,7 @@
             pnSettingNor2.Margin = new Padding(3, 4, 3, 4);
             pnSettingNor2.Name = "pnSettingNor2";
             pnSettingNor2.Size = new Size(850, 58);
-            pnSettingNor2.TabIndex = 27;
+            pnSettingNor2.TabIndex = 6;
             // 
             // tbNorWinSize
             // 
@@ -709,7 +809,7 @@
             tbNorWinSize.Margin = new Padding(3, 4, 3, 4);
             tbNorWinSize.Name = "tbNorWinSize";
             tbNorWinSize.Size = new Size(109, 29);
-            tbNorWinSize.TabIndex = 24;
+            tbNorWinSize.TabIndex = 0;
             // 
             // lbNorWinSize
             // 
@@ -719,7 +819,7 @@
             lbNorWinSize.Location = new Point(21, 21);
             lbNorWinSize.Name = "lbNorWinSize";
             lbNorWinSize.Size = new Size(88, 17);
-            lbNorWinSize.TabIndex = 23;
+            lbNorWinSize.TabIndex = 1;
             lbNorWinSize.Text = "Window Size";
             // 
             // pnSettingNor1
@@ -731,7 +831,7 @@
             pnSettingNor1.Margin = new Padding(3, 4, 3, 4);
             pnSettingNor1.Name = "pnSettingNor1";
             pnSettingNor1.Size = new Size(850, 58);
-            pnSettingNor1.TabIndex = 26;
+            pnSettingNor1.TabIndex = 5;
             // 
             // tbNorCellSize
             // 
@@ -741,7 +841,7 @@
             tbNorCellSize.Margin = new Padding(3, 4, 3, 4);
             tbNorCellSize.Name = "tbNorCellSize";
             tbNorCellSize.Size = new Size(109, 29);
-            tbNorCellSize.TabIndex = 24;
+            tbNorCellSize.TabIndex = 0;
             // 
             // lbNorCellSize
             // 
@@ -751,7 +851,7 @@
             lbNorCellSize.Location = new Point(21, 21);
             lbNorCellSize.Name = "lbNorCellSize";
             lbNorCellSize.Size = new Size(60, 17);
-            lbNorCellSize.TabIndex = 23;
+            lbNorCellSize.TabIndex = 1;
             lbNorCellSize.Text = "Cell Size";
             // 
             // lbNormalize
@@ -762,7 +862,7 @@
             lbNormalize.Location = new Point(24, 415);
             lbNormalize.Name = "lbNormalize";
             lbNormalize.Size = new Size(117, 25);
-            lbNormalize.TabIndex = 89;
+            lbNormalize.TabIndex = 16;
             lbNormalize.Text = "Normalize";
             // 
             // lbSettings
@@ -773,40 +873,8 @@
             lbSettings.Location = new Point(24, 36);
             lbSettings.Name = "lbSettings";
             lbSettings.Size = new Size(143, 45);
-            lbSettings.TabIndex = 87;
+            lbSettings.TabIndex = 14;
             lbSettings.Text = "Settings";
-            // 
-            // pnSettingCrown2
-            // 
-            pnSettingCrown2.BackColor = Color.Gray;
-            pnSettingCrown2.Controls.Add(lbCrownMaxH);
-            pnSettingCrown2.Controls.Add(tbCrownMaxHeight);
-            pnSettingCrown2.Location = new Point(24, 1083);
-            pnSettingCrown2.Margin = new Padding(3, 4, 3, 4);
-            pnSettingCrown2.Name = "pnSettingCrown2";
-            pnSettingCrown2.Size = new Size(850, 58);
-            pnSettingCrown2.TabIndex = 59;
-            // 
-            // lbCrownMaxH
-            // 
-            lbCrownMaxH.AutoSize = true;
-            lbCrownMaxH.Font = new Font("맑은 고딕", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-            lbCrownMaxH.ForeColor = Color.White;
-            lbCrownMaxH.Location = new Point(21, 21);
-            lbCrownMaxH.Name = "lbCrownMaxH";
-            lbCrownMaxH.Size = new Size(77, 17);
-            lbCrownMaxH.TabIndex = 50;
-            lbCrownMaxH.Text = "MaxHeight";
-            // 
-            // tbCrownMaxHeight
-            // 
-            tbCrownMaxHeight.BorderStyle = BorderStyle.FixedSingle;
-            tbCrownMaxHeight.Font = new Font("맑은 고딕", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            tbCrownMaxHeight.Location = new Point(725, 15);
-            tbCrownMaxHeight.Margin = new Padding(3, 4, 3, 4);
-            tbCrownMaxHeight.Name = "tbCrownMaxHeight";
-            tbCrownMaxHeight.Size = new Size(109, 29);
-            tbCrownMaxHeight.TabIndex = 53;
             // 
             // pnSettingTrunk2
             // 
@@ -817,7 +885,7 @@
             pnSettingTrunk2.Margin = new Padding(3, 4, 3, 4);
             pnSettingTrunk2.Name = "pnSettingTrunk2";
             pnSettingTrunk2.Size = new Size(850, 58);
-            pnSettingTrunk2.TabIndex = 58;
+            pnSettingTrunk2.TabIndex = 11;
             // 
             // lbTrunkMaxH
             // 
@@ -827,7 +895,7 @@
             lbTrunkMaxH.Location = new Point(21, 21);
             lbTrunkMaxH.Name = "lbTrunkMaxH";
             lbTrunkMaxH.Size = new Size(77, 17);
-            lbTrunkMaxH.TabIndex = 54;
+            lbTrunkMaxH.TabIndex = 1;
             lbTrunkMaxH.Text = "MaxHeight";
             // 
             // tbTrunkMaxHeight
@@ -838,17 +906,17 @@
             tbTrunkMaxHeight.Margin = new Padding(3, 4, 3, 4);
             tbTrunkMaxHeight.Name = "tbTrunkMaxHeight";
             tbTrunkMaxHeight.Size = new Size(109, 29);
-            tbTrunkMaxHeight.TabIndex = 55;
+            tbTrunkMaxHeight.TabIndex = 0;
             // 
             // lbCrownSlice
             // 
             lbCrownSlice.AutoSize = true;
             lbCrownSlice.Font = new Font("Microsoft Sans Serif", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
             lbCrownSlice.ForeColor = Color.White;
-            lbCrownSlice.Location = new Point(24, 985);
+            lbCrownSlice.Location = new Point(24, 1051);
             lbCrownSlice.Name = "lbCrownSlice";
             lbCrownSlice.Size = new Size(130, 25);
-            lbCrownSlice.TabIndex = 47;
+            lbCrownSlice.TabIndex = 18;
             lbCrownSlice.Text = "CrownSlice";
             // 
             // lbTrunkSlice
@@ -859,7 +927,7 @@
             lbTrunkSlice.Location = new Point(24, 799);
             lbTrunkSlice.Name = "lbTrunkSlice";
             lbTrunkSlice.Size = new Size(124, 25);
-            lbTrunkSlice.TabIndex = 46;
+            lbTrunkSlice.TabIndex = 17;
             lbTrunkSlice.Text = "TrunkSlice";
             // 
             // lbSubsampling
@@ -870,7 +938,7 @@
             lbSubsampling.Location = new Point(24, 295);
             lbSubsampling.Name = "lbSubsampling";
             lbSubsampling.Size = new Size(150, 25);
-            lbSubsampling.TabIndex = 22;
+            lbSubsampling.TabIndex = 15;
             lbSubsampling.Text = "SubSampling";
             // 
             // pnSettingCrown1
@@ -878,11 +946,11 @@
             pnSettingCrown1.BackColor = Color.Gray;
             pnSettingCrown1.Controls.Add(lbCrownMinH);
             pnSettingCrown1.Controls.Add(tbCrownMinHeight);
-            pnSettingCrown1.Location = new Point(24, 1017);
+            pnSettingCrown1.Location = new Point(24, 1083);
             pnSettingCrown1.Margin = new Padding(3, 4, 3, 4);
             pnSettingCrown1.Name = "pnSettingCrown1";
             pnSettingCrown1.Size = new Size(850, 58);
-            pnSettingCrown1.TabIndex = 58;
+            pnSettingCrown1.TabIndex = 12;
             // 
             // lbCrownMinH
             // 
@@ -892,7 +960,7 @@
             lbCrownMinH.Location = new Point(21, 21);
             lbCrownMinH.Name = "lbCrownMinH";
             lbCrownMinH.Size = new Size(75, 17);
-            lbCrownMinH.TabIndex = 49;
+            lbCrownMinH.TabIndex = 1;
             lbCrownMinH.Text = "MinHeight";
             // 
             // tbCrownMinHeight
@@ -903,7 +971,7 @@
             tbCrownMinHeight.Margin = new Padding(3, 4, 3, 4);
             tbCrownMinHeight.Name = "tbCrownMinHeight";
             tbCrownMinHeight.Size = new Size(109, 29);
-            tbCrownMinHeight.TabIndex = 52;
+            tbCrownMinHeight.TabIndex = 0;
             // 
             // pnSettingTrunk1
             // 
@@ -914,17 +982,18 @@
             pnSettingTrunk1.Margin = new Padding(3, 4, 3, 4);
             pnSettingTrunk1.Name = "pnSettingTrunk1";
             pnSettingTrunk1.Size = new Size(850, 58);
-            pnSettingTrunk1.TabIndex = 57;
+            pnSettingTrunk1.TabIndex = 10;
             // 
             // tbTrunkMinHeight
             // 
             tbTrunkMinHeight.BorderStyle = BorderStyle.FixedSingle;
+            tbTrunkMinHeight.Enabled = false;
             tbTrunkMinHeight.Font = new Font("맑은 고딕", 12F, FontStyle.Regular, GraphicsUnit.Point);
             tbTrunkMinHeight.Location = new Point(725, 15);
             tbTrunkMinHeight.Margin = new Padding(3, 4, 3, 4);
             tbTrunkMinHeight.Name = "tbTrunkMinHeight";
             tbTrunkMinHeight.Size = new Size(109, 29);
-            tbTrunkMinHeight.TabIndex = 51;
+            tbTrunkMinHeight.TabIndex = 0;
             // 
             // lbTrunkMinH
             // 
@@ -934,7 +1003,7 @@
             lbTrunkMinH.Location = new Point(21, 21);
             lbTrunkMinH.Name = "lbTrunkMinH";
             lbTrunkMinH.Size = new Size(75, 17);
-            lbTrunkMinH.TabIndex = 48;
+            lbTrunkMinH.TabIndex = 1;
             lbTrunkMinH.Text = "MinHeight";
             // 
             // pnSettingSub1
@@ -946,7 +1015,7 @@
             pnSettingSub1.Margin = new Padding(3, 4, 3, 4);
             pnSettingSub1.Name = "pnSettingSub1";
             pnSettingSub1.Size = new Size(850, 58);
-            pnSettingSub1.TabIndex = 25;
+            pnSettingSub1.TabIndex = 4;
             // 
             // tbSubCellSize
             // 
@@ -956,7 +1025,7 @@
             tbSubCellSize.Margin = new Padding(3, 4, 3, 4);
             tbSubCellSize.Name = "tbSubCellSize";
             tbSubCellSize.Size = new Size(109, 29);
-            tbSubCellSize.TabIndex = 24;
+            tbSubCellSize.TabIndex = 0;
             // 
             // lbSubCellSize
             // 
@@ -966,7 +1035,7 @@
             lbSubCellSize.Location = new Point(21, 21);
             lbSubCellSize.Name = "lbSubCellSize";
             lbSubCellSize.Size = new Size(60, 17);
-            lbSubCellSize.TabIndex = 23;
+            lbSubCellSize.TabIndex = 1;
             lbSubCellSize.Text = "Cell Size";
             // 
             // btnHide
@@ -980,7 +1049,8 @@
             btnHide.Location = new Point(1194, 0);
             btnHide.Name = "btnHide";
             btnHide.Size = new Size(43, 30);
-            btnHide.TabIndex = 7;
+            btnHide.TabIndex = 1;
+            btnHide.TabStop = false;
             btnHide.UseVisualStyleBackColor = false;
             btnHide.Click += btnHide_Click;
             // 
@@ -990,10 +1060,10 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.DarkSeaGreen;
             ClientSize = new Size(1280, 800);
-            Controls.Add(btnHide);
-            Controls.Add(pnSideMenu);
             Controls.Add(btnClose);
+            Controls.Add(btnHide);
             Controls.Add(tcMainHome);
+            Controls.Add(pnSideMenu);
             FormBorderStyle = FormBorderStyle.None;
             Margin = new Padding(3, 4, 3, 4);
             Name = "MainForm";
@@ -1004,6 +1074,7 @@
             MouseMove += MainForm_MouseMove;
             MouseUp += MainForm_MouseUp;
             pnSideMenu.ResumeLayout(false);
+            pnSideMenu.PerformLayout();
             tcMainHome.ResumeLayout(false);
             tpMainHome.ResumeLayout(false);
             pnReviewMain.ResumeLayout(false);
@@ -1012,6 +1083,8 @@
             pnMain.PerformLayout();
             tpSettings.ResumeLayout(false);
             tpSettings.PerformLayout();
+            pnSettingTrunk3.ResumeLayout(false);
+            pnSettingTrunk3.PerformLayout();
             pnSettingDefault.ResumeLayout(false);
             pnSettingDefault.PerformLayout();
             pnSettingPreset.ResumeLayout(false);
@@ -1026,8 +1099,6 @@
             pnSettingNor2.PerformLayout();
             pnSettingNor1.ResumeLayout(false);
             pnSettingNor1.PerformLayout();
-            pnSettingCrown2.ResumeLayout(false);
-            pnSettingCrown2.PerformLayout();
             pnSettingTrunk2.ResumeLayout(false);
             pnSettingTrunk2.PerformLayout();
             pnSettingCrown1.ResumeLayout(false);
@@ -1041,11 +1112,11 @@
 
         #endregion
 
-        private Panel pnSideMenu;
-        private Button btnHome;
-        private Button btnSlideMenu;
+        private CustomBtn btnHome;
+        private CustomBtn btnSlideMenu;
         private Button btnClose;
         private CustomTabControl tcMainHome;
+        private Panel pnSideMenu;
         private TabPage tpMainHome;
         private Panel pnReviewMain;
         private Panel pnReview;
@@ -1058,13 +1129,11 @@
         private TextBox tbSubCellSize;
         private Label lbSubsampling;
         private Label lbSubCellSize;
-        private Button btnSettings;
+        private CustomBtn btnSettings;
         private CustomPanel pnSettingSub1;
         private CustomPanel pnSettingCrown1;
-        private TextBox tbCrownMaxHeight;
         private TextBox tbCrownMinHeight;
         private Label lbCrownSlice;
-        private Label lbCrownMaxH;
         private Label lbCrownMinH;
         private CustomPanel pnSettingTrunk1;
         private TextBox tbTrunkMaxHeight;
@@ -1073,7 +1142,6 @@
         private Label lbTrunkMaxH;
         private TextBox tbTrunkMinHeight;
         private CustomPanel pnSettingTrunk2;
-        private CustomPanel pnSettingCrown2;
         private CustomBtn btnSettingSave;
         private Label lbSettings;
         private CustomBtn btnPresetSave;
@@ -1093,7 +1161,7 @@
         private TextBox tbNorCellSize;
         private Label lbNorCellSize;
         private Label lbNormalize;
-        private Button btnPresetManage;
+        private CustomBtn btnPresetManage;
         private Button btnHide;
         private CustomBtn btnSettingLoad;
         private ProgressBar pbLoadingBar;
@@ -1108,5 +1176,10 @@
         private CustomBtn btn_factory_reset;
         private CustomBtn btnRecentInfo;
         private ToolTip ttMainInfo;
+        private Label lbTrunkSmooth;
+        private Label lbSlidePreset;
+        private CustomPanel pnSidePreset;
+        private CustomPanel pnSettingTrunk3;
+        private TextBox tbTrunkSmooth;
     }
 }

@@ -33,6 +33,8 @@ namespace WinFormsAppTest
         public PlotForm(MainForm paramForm)
         {
             InitializeComponent();
+
+            //아래 plotForm 컴포넌트들 세팅
             pnPlotSelection.isFill = true;
             pnPlotSelection.isBorder = false;
             pnPlotSelection.borderColor = Color.Honeydew;
@@ -69,11 +71,10 @@ namespace WinFormsAppTest
             initTextBox();
             resultPath = paramForm.getParam("gui", "result_path");
 
-            ////////////////////////////////////////////////////////////////
+            //메인폼의 start 버튼 감추기(중복 실행 방지)
             attachStartBtn(false);
 
             Point screenSize = ((Point)Screen.PrimaryScreen.Bounds.Size);
-
             this.Location = new Point((screenSize.X - this.Width) / 2, (screenSize.Y - this.Height) / 2);
 
             cbPlotShape.SelectedIndex = 0;
@@ -89,7 +90,7 @@ namespace WinFormsAppTest
         //원본 Las 파일 찾기 버튼
         private void btnPlotData_Click(object sender, EventArgs e)
         {
-            String filePath = string.Empty;
+            string filePath = string.Empty;
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
                 openFileDialog.InitialDirectory = @"..\LIDAR_PROJECT";
@@ -223,8 +224,6 @@ namespace WinFormsAppTest
             paramForm.gui.yMin = double.Parse(tbPlotRecYmin.Text);
             paramForm.gui.yMax = double.Parse(tbPlotRecYmax.Text);
 
-            ///////////////////////////////////////////////////////////////////////
-            attachProgressBar(true);
             //최근 작업 config 생성
             string fileDi = Path.Combine(basePath, reqDi[(int)configFileType.Recent]);
 
@@ -234,14 +233,18 @@ namespace WinFormsAppTest
             }
             string[] confCheck = Directory.GetFiles(fileDi, "recentConfig*");
             configTouch(configFileType.Recent);
+            //MainForm invalidate
             mainPaint();
 
             resultSavedDirectory = resultPath + @"\" + DateTime.Now.ToString("yyyyMMdd_HH_mm_") + originLasName;
 
+            //progressBar 진행도 세팅
             progress = 0;
             mainProgressSet(progress);
+            //progressBar visible
             attachProgressBar(true);
 
+            //각 단계 실행
             preProAndExcuteStep();
 
             //csv 초기화
@@ -251,6 +254,7 @@ namespace WinFormsAppTest
             if (progress == 10)
             {
                 MessageBox.Show("실행 완료");
+                attachProgressBar(false);
             }
             else
             {
@@ -281,7 +285,7 @@ namespace WinFormsAppTest
         {
             tcPlot.SelectedIndex = cbPlotShape.SelectedIndex;
         }
-        //텍스트 박스 무결성 체크
+        //텍스트 박스 무결성 체크 및 las파일 크기 placeholder 처리
         private void tbPlotCircleX_Leave(object sender, EventArgs e)
         {
             int dummy1 = 1;
@@ -312,7 +316,6 @@ namespace WinFormsAppTest
                 this.ActiveControl = tbPlotCircleX;
                 return;
             }
-
             paramForm.gui.centerX = cx;
         }
         private void tbPlotCircleY_Leave(object sender, EventArgs e)
@@ -404,7 +407,7 @@ namespace WinFormsAppTest
                 this.ActiveControl = tbPlotRecXmax;
                 return;
             }
-            if (tbPlotData.Text != "" && double.Parse(tbPlotRecXmax.Text) < lasSize.maxx)
+            if (tbPlotData.Text != "" && double.Parse(tbPlotRecXmax.Text) > lasSize.maxx)
             {
                 MessageBox.Show($"선택하신 las 파일의 최대 x좌표값보다 큽니다.{lasSize.maxx}보다 작게 설정해주세요");
                 tbPlotRecXmax.Clear();
@@ -452,7 +455,7 @@ namespace WinFormsAppTest
                 this.ActiveControl = tbPlotRecYmax;
                 return;
             }
-            if (tbPlotData.Text != "" && double.Parse(tbPlotRecYmax.Text) < lasSize.maxy)
+            if (tbPlotData.Text != "" && double.Parse(tbPlotRecYmax.Text) > lasSize.maxy)
             {
                 MessageBox.Show($"선택하신 las 파일의 최대 y좌표값보다 큽니다.{lasSize.maxy}보다 작게 설정해주세요");
                 tbPlotRecYmax.Clear();
@@ -473,9 +476,7 @@ namespace WinFormsAppTest
             tbPlotRecYmin.Text = paramForm.gui.yMin.ToString();
             tbPlotRecYmax.Text = paramForm.gui.yMax.ToString();
 
-
             tbPlotData.Text = paramForm.gui.loadPath;
-
         }
 
         //사용자가 입력한 좌표값이 올바른지 체크하기 위한 함수들
@@ -489,11 +490,12 @@ namespace WinFormsAppTest
             }
             try
             {
+                //Las파일에서 이미 뽑아놓은 Las파일 크기 정보가 있는 지 체크 후
+                //정보를 읽거나, MakeInfo로 정보 만들고 읽기(만들어진 정보는 .dat파일)
                 string dat_filePath = Path.Combine(infoDir, fileName + ".dat");
                 if (!File.Exists(dat_filePath))
                 {
-                    string str = "Extracting information\nfrom the first run target file...";
-
+                    //progressDialog -> 사용자를 위한 로딩창
                     var progressDialog = new Form
                     {
                         Width = 250,
@@ -503,27 +505,23 @@ namespace WinFormsAppTest
                         Owner = this
                     };
 
-                    //var label = new Label { Left = 20, Top = 33, AutoSize = true, Text = str };
                     PictureBox gifBox = new PictureBox
                     {
                         Dock = DockStyle.Fill,
                         Image = Image.FromFile(Environment.CurrentDirectory.ToString() + @"\sand_glass.gif"),
                         SizeMode = PictureBoxSizeMode.StretchImage,
                     };
-                    
 
                     progressDialog.Controls.Add(gifBox);
                     progressDialog.Show();
-                    
+                    //Task를 이용한 이유 : MakeInfo와 progressDialog의 pictureBox gif가
+                    //동시에 동작하게 하기 위함.(안쓰면 쓰레드 우선순위 문제로 gif 애니메이션이 안움직임)
                     await Task.Run(() => MakeInfo(filePath, infoDir));
 
                     progressDialog.Dispose();
-                    readInfo(filePath, infoDir);
                 }
-                else
-                {
-                    readInfo(filePath, infoDir);
-                }
+                //Las파일 크기 정보 읽기
+                readInfo(filePath, infoDir);
             }
             catch (Exception ex)
             {
@@ -531,6 +529,7 @@ namespace WinFormsAppTest
             }
         }
 
+        //PDAL로 Las파일에서 정보를 뽑은 json을 만들고, 거기서 크기 정보만 빼서 .dat파일로 생성
         private async Task MakeInfo(string filePath, string dirPath)
         {
             string fileName = Path.GetFileNameWithoutExtension(filePath);
@@ -564,24 +563,26 @@ namespace WinFormsAppTest
 
             try
             {
+                //LasSize 구조체의 객체인 lasSize에 각 크기 정보 담기
                 string jsonText = File.ReadAllText(fileInfo1.FullName);
-                //JObject JsonData1 = JObject.Parse(JsonText1);
                 JToken jsonSizeTok = JObject.Parse(jsonText)["stats"]["bbox"]["native"]["bbox"];
                 lasSize.minx = (double)jsonSizeTok["minx"];
                 lasSize.maxx = (double)jsonSizeTok["maxx"];
                 lasSize.miny = (double)jsonSizeTok["miny"];
                 lasSize.maxy = (double)jsonSizeTok["maxy"];
 
-                // Create the .dat file in the specified directory
+                //lasSize에 담긴 정보로.dat파일 만들기
                 string datFilePath = Path.Combine(dirPath, $"{fileName}.dat");
                 string sizeText = "";
-                Type type = typeof(LasSize);
-                FieldInfo[] lasProp = type.GetFields();
+                //FieldInfo[] 배열에 구조체의 정보 중 필드에 관한 정보만 담고
+                FieldInfo[] lasProp = typeof(LasSize).GetFields();
 
+                //해당 필드의 이름과 맞는 lasSize에 담긴 정보를 "이름,정보" 형태로 한줄 씩 sizeText에 담아서
                 foreach (FieldInfo fi in lasProp)
                 {
                     sizeText += $"{fi.Name},{fi.GetValue(lasSize)}\n";
                 }
+                //datFilePath에 담긴 파일 경로명으로 저장한다.
                 File.WriteAllText(datFilePath, sizeText);
             }
             catch (Exception ex)

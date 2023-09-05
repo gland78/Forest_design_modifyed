@@ -37,7 +37,6 @@
             btnManageInfo = new Button();
             btnManageDelete = new Button();
             btnManageCancel = new Button();
-            btnManageInfo = new Button();
             tableLayoutPanel1.SuspendLayout();
             SuspendLayout();
             // 
@@ -54,7 +53,7 @@
             tableLayoutPanel1.SetRowSpan(lvPresetConf, 5);
             lvPresetConf.Scrollable = false;
             lvPresetConf.Size = new Size(564, 278);
-            lvPresetConf.TabIndex = 0;
+            lvPresetConf.TabIndex = 4;
             lvPresetConf.UseCompatibleStateImageBehavior = false;
             lvPresetConf.View = View.Details;
             lvPresetConf.SizeChanged += lvPresetConf_SizeChanged;
@@ -117,7 +116,7 @@
             btnManageInfo.Location = new Point(582, 90);
             btnManageInfo.Name = "btnManageInfo";
             btnManageInfo.Size = new Size(92, 32);
-            btnManageInfo.TabIndex = 7;
+            btnManageInfo.TabIndex = 2;
             btnManageInfo.Text = "설명 수정";
             btnManageInfo.UseVisualStyleBackColor = true;
             btnManageInfo.Click += btnManageInfo_Click;
@@ -128,7 +127,7 @@
             btnManageDelete.Location = new Point(582, 10);
             btnManageDelete.Name = "btnManageDelete";
             btnManageDelete.Size = new Size(92, 32);
-            btnManageDelete.TabIndex = 3;
+            btnManageDelete.TabIndex = 0;
             btnManageDelete.Text = "설정 삭제";
             btnManageDelete.UseVisualStyleBackColor = true;
             btnManageDelete.Click += btnManageDelete_Click;
@@ -139,7 +138,7 @@
             btnManageCancel.Location = new Point(582, 254);
             btnManageCancel.Name = "btnManageCancel";
             btnManageCancel.Size = new Size(92, 32);
-            btnManageCancel.TabIndex = 4;
+            btnManageCancel.TabIndex = 3;
             btnManageCancel.Text = "닫기";
             btnManageCancel.UseVisualStyleBackColor = true;
             btnManageCancel.Click += btnManageCancel_Click;
