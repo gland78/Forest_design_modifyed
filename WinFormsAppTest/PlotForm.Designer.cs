@@ -190,6 +190,7 @@
             // 
             // tbPlotPolySet
             // 
+            tbPlotPolySet.Enabled = false;
             tbPlotPolySet.Location = new Point(154, 48);
             tbPlotPolySet.Name = "tbPlotPolySet";
             tbPlotPolySet.ReadOnly = true;
@@ -263,6 +264,7 @@
             tcPlot.SelectedIndex = 0;
             tcPlot.Size = new Size(495, 198);
             tcPlot.TabIndex = 2;
+            tcPlot.TabStop = false;
             // 
             // tpPlotCircle
             // 
@@ -365,6 +367,8 @@
             // 
             // cbPlotShape
             // 
+            cbPlotShape.DropDownStyle = ComboBoxStyle.DropDownList;
+            cbPlotShape.FlatStyle = FlatStyle.Popup;
             cbPlotShape.FormattingEnabled = true;
             cbPlotShape.Items.AddRange(new object[] { "Circle", "Rectangle", "Polygon" });
             cbPlotShape.Location = new Point(89, 18);

@@ -91,7 +91,6 @@ namespace WinFormsAppTest
         private void btnPlotData_Click(object sender, EventArgs e)
         {
             string filePath = string.Empty;
-            Point tmpLoc = this.Location;
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
                 openFileDialog.InitialDirectory = @"..\LIDAR_PROJECT";
@@ -108,7 +107,6 @@ namespace WinFormsAppTest
                     validation(filePath);
                 }
             }
-            this.Location = tmpLoc;
         }
 
         /// 다각형 꼭짓점 정보 파일 읽기 버튼

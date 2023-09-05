@@ -5,6 +5,7 @@ using System.Dynamic;
 using System.Text.RegularExpressions;
 using static WinFormsAppTest.MainForm;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
+using System.Text;
 
 namespace WinFormsAppTest
 {
@@ -32,8 +33,10 @@ namespace WinFormsAppTest
             Preset
         }
 
+        //plot값을 PlotForm으로부터 받기 위한 delegate
         internal plotDataHandler plotSender;
 
+        //다른 폼들을 띄우고 delegate를 통해 메서드 전달을 위한 form 변수
         private PlotForm? pFrm;
         private ManageForm? mFrm;
 
@@ -44,14 +47,13 @@ namespace WinFormsAppTest
 
         //사이드 메뉴에 확장, 축소에 따른 메뉴 버튼 크기
         const int MIN_BTN_WIDTH = 42;
-        const int MAX_BTN_WIDTH = 370;
+        const int MAX_BTN_WIDTH = 345;
 
         //사이드 메뉴에 생성될 첫 버튼의 위치 및 크기, 간격
         //동적 버튼 추가를 위해 필요
-        Point PRESET_BTN_POS = new Point(12, 170);
-        const int PRESET_BTN_WIDTH = 370;
+        Point PRESET_BTN_POS = new Point(8, 8);
         const int PRESET_BTN_HEIGHT = 45;
-        const int PRESET_BTN_GAP = 5;
+        const int PRESET_BTN_GAP = 2;
 
         //최근 작업 목록 첫 추가 위치 및 크기, 간격
         //동적 버튼 추가를 위해 필요
@@ -75,12 +77,23 @@ namespace WinFormsAppTest
 
             pnMain.isBorder = false;
 
+            //바뀐 곳
+            pnSidePreset.isBorder = true;
+            pnSidePreset.borderColor = Color.DarkSeaGreen;
+            pnSidePreset.isFill = true;
+            pnSidePreset.fillColor = Color.DarkSeaGreen;
+            pnSidePreset.Visible = false;
+
+            lbSlidePreset.Visible = false;
+            btnPresetManage.Location = new Point(12, 118);
+            btnPresetManage.Size = new Size(38, 34);
+            //
+
             pnSideMenu.Width = MIN_SLIDING_WIDTH;
             tcMainHome.Left -= SLIDING_GAP / 2;
 
             btnSettings.Width = MIN_BTN_WIDTH;
             btnSettings.Text = "";
-
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -174,15 +187,15 @@ namespace WinFormsAppTest
             pnSettingTrunk2.MouseLeave += pnSettingAll_MouseLeave;
             pnSettingTrunk2.MouseUp += pnSettingAll_MouseUp;
 
+            pnSettingTrunk3.MouseDown += pnSettingAll_MouseDown;
+            pnSettingTrunk3.MouseEnter += pnSettingAll_MouseEnter;
+            pnSettingTrunk3.MouseLeave += pnSettingAll_MouseLeave;
+            pnSettingTrunk3.MouseUp += pnSettingAll_MouseUp;
+
             pnSettingCrown1.MouseDown += pnSettingAll_MouseDown;
             pnSettingCrown1.MouseEnter += pnSettingAll_MouseEnter;
             pnSettingCrown1.MouseLeave += pnSettingAll_MouseLeave;
             pnSettingCrown1.MouseUp += pnSettingAll_MouseUp;
-
-            pnSettingCrown2.MouseDown += pnSettingAll_MouseDown;
-            pnSettingCrown2.MouseEnter += pnSettingAll_MouseEnter;
-            pnSettingCrown2.MouseLeave += pnSettingAll_MouseLeave;
-            pnSettingCrown2.MouseUp += pnSettingAll_MouseUp;
         }
 
         //CustomPanel 색 및 테두리 지정(Designer.cs에서 지정하면 컴파일 시 없어짐)
@@ -238,18 +251,19 @@ namespace WinFormsAppTest
             pnSettingTrunk2.isBorder = false;
             pnSettingTrunk2.fillColor = Color.Gray;
 
+            pnSettingTrunk3.BackColor = Color.Transparent;
+            pnSettingTrunk3.isFill = true;
+            pnSettingTrunk3.isBorder = false;
+            pnSettingTrunk3.fillColor = Color.Gray;
+
             pnSettingCrown1.BackColor = Color.Transparent;
             pnSettingCrown1.isFill = true;
             pnSettingCrown1.isBorder = false;
             pnSettingCrown1.fillColor = Color.Gray;
-
-            pnSettingCrown2.BackColor = Color.Transparent;
-            pnSettingCrown2.isFill = true;
-            pnSettingCrown2.isBorder = false;
-            pnSettingCrown2.fillColor = Color.Gray;
         }
 
         //프리셋 콘피그 파일 갯수만큼 버튼 로드
+        //로직 수정 필요...?(현 로직은 새로 고침 시 매번 새 버튼 객체를 만들어 붙이는 식)
         private void preConfBtnLoad()
         {
             string filePath = Path.Combine(basePath, reqDi[(int)configFileType.Preset]);
@@ -259,13 +273,6 @@ namespace WinFormsAppTest
                 Directory.CreateDirectory(filePath);
             }
 
-            pnSideMenu.Controls.Clear();
-
-            pnSideMenu.Controls.Add(btnHome);
-            pnSideMenu.Controls.Add(btnSettings);
-            pnSideMenu.Controls.Add(btnSlideMenu);
-            pnSideMenu.Controls.Add(btnPresetManage);
-
             //프리셋 콘피그 저장 장소
             string[] confCheck = Directory.GetFiles(filePath, "presetConfig*");
 
@@ -274,31 +281,33 @@ namespace WinFormsAppTest
                 return;
             }
 
+            pnSidePreset.Controls.Clear();
+
             Array.Sort(confCheck);
 
             Point relativeBtnPos = PRESET_BTN_POS;
-            int btnNum = 0;
 
-            pnSideMenu.SuspendLayout();
-            foreach (string conf in confCheck)
+            for (int i = 0; i < confCheck.Length; i++)
             {
-                Button btnPreConfs = new Button();
+                string conf = confCheck[i];
+                CustomBtn btnPreConfs = new CustomBtn();
                 btnPreConfs.MouseClick += btnPreConf_Click;
 
-                pnSideMenu.Controls.Add(btnPreConfs);
                 btnPreConfs.Location = relativeBtnPos;
-                btnPreConfs.Width = MIN_BTN_WIDTH;
+                btnPreConfs.Width = MAX_BTN_WIDTH;
                 btnPreConfs.Height = PRESET_BTN_HEIGHT;
+                btnPreConfs.BorderRadius = 5;
                 btnPreConfs.BackColor = Color.Transparent;
-                btnPreConfs.ForeColor = Color.SeaGreen;
+                btnPreConfs.ForeColor = Color.Black;
                 btnPreConfs.FlatAppearance.BorderSize = 0;
                 btnPreConfs.FlatAppearance.MouseDownBackColor = Color.MediumAquamarine;
                 btnPreConfs.FlatAppearance.MouseOverBackColor = Color.MediumSeaGreen;
                 btnPreConfs.FlatStyle = FlatStyle.Flat;
                 btnPreConfs.ImageAlign = ContentAlignment.MiddleLeft;
                 btnPreConfs.TextAlign = ContentAlignment.MiddleLeft;
-                btnPreConfs.Font = new Font("맑은 고딕", 18F, FontStyle.Bold, GraphicsUnit.Point);
+                btnPreConfs.Font = new Font("나눔 고딕", 18F, FontStyle.Bold, GraphicsUnit.Point);
                 btnPreConfs.Image = Image.FromFile(Environment.CurrentDirectory.ToString() + @"\btnPreConf.Image.png");
+                pnSidePreset.Controls.Add(btnPreConfs);
 
                 using (StreamReader sr = new StreamReader(conf))
                 {
@@ -314,14 +323,7 @@ namespace WinFormsAppTest
                 }
                 btnPreConfs.Name = Path.GetFileName(conf);
                 relativeBtnPos.Y = relativeBtnPos.Y + PRESET_BTN_HEIGHT + PRESET_BTN_GAP;
-                if (menuOpen == false)
-                {
-                    btnPreConfs.ForeColor = Color.SeaGreen;
-                    btnPreConfs.Width = MIN_BTN_WIDTH;
-                }
             }
-            pnSideMenu.ResumeLayout(false);
-            pnSideMenu.PerformLayout();
         }
 
         //최근 작업 콘피그 파일 갯수만큼 버튼 로드
@@ -463,8 +465,14 @@ namespace WinFormsAppTest
         {
             string fileDi = Path.Combine(basePath, reqDi[(int)configFileType.Preset]);
             string fileName = ((Button)sender).Name;
+            string fileNum;
 
             reflectConfs(fileDi, fileName);
+
+            /*
+            fileNum = Regex.Replace( ((Button)sender).Name, @"\D", "");
+            IsPresetActivate[int.Parse(fileNum)] = true;
+            */
         }
 
         //사이드메뉴 버튼 관련 이벤트 처리 코드
@@ -502,6 +510,11 @@ namespace WinFormsAppTest
                 pnSideMenu.Width = MAX_SLIDING_WIDTH;
                 tcMainHome.Left += SLIDING_GAP / 2;
 
+                lbSlidePreset.Visible = true;
+                btnPresetManage.Location = new Point(350, 122);
+                btnPresetManage.Size = new Size(22, 22);
+
+                /*
                 foreach (Control cont in pnSideMenu.Controls)
                 {
                     if (cont.Name.Contains("presetConfig"))
@@ -510,11 +523,15 @@ namespace WinFormsAppTest
                         cont.Width = MAX_BTN_WIDTH;
                     }
                 }
-                btnSettings.Width = MAX_BTN_WIDTH;
+                */
+                pnSidePreset.Visible = true;
+
+                btnSettings.Width = MAX_BTN_WIDTH + 13;
                 btnSettings.Text = "            Settings";
             }
             else if (menuOpen == false)
             {
+                /*
                 foreach (Control cont in pnSideMenu.Controls)
                 {
                     if (cont.Name.Contains("presetConfig"))
@@ -523,11 +540,18 @@ namespace WinFormsAppTest
                         cont.Width = MIN_BTN_WIDTH;
                     }
                 }
+                */
+                pnSidePreset.Visible = false;
+
                 btnSettings.Width = MIN_BTN_WIDTH;
                 btnSettings.Text = "";
 
                 pnSideMenu.Width = MIN_SLIDING_WIDTH;
                 tcMainHome.Left -= SLIDING_GAP / 2;
+
+                btnPresetManage.Location = new Point(12, 118);
+                btnPresetManage.Size = new Size(38, 34);
+                lbSlidePreset.Visible = false;
             }
         }
 
@@ -585,7 +609,7 @@ namespace WinFormsAppTest
         //아래 메서드 3개 커스텀 제목표시줄로 인한 창 이동 이벤트 임의 생성
         private void MainForm_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left && e.Location.Y <= 30)
+            if (e.Button == MouseButtons.Left && e.Location.Y <= 40)
             {
                 relativeMformPos = e.Location;
                 isMformDrag = true;
@@ -650,20 +674,9 @@ namespace WinFormsAppTest
                 pFrm.attachStartBtn += new switchEventHandler(startBtnAttach);
             }
 
-            using (OpenFileDialog openFileDialog = new OpenFileDialog())
-            {
-                openFileDialog.Filter = "las files (*.las)|*.las";
-                openFileDialog.FilterIndex = 2;
-                openFileDialog.RestoreDirectory = true;
-
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    gui.loadPath = openFileDialog.FileName;
-                    MakeConfig(configFileType.Preset);
-                    mFrm.ShowDialog();
-                    preConfBtnLoad();
-                }
-            }
+            MakeConfig(configFileType.Preset);
+            mFrm.ShowDialog();
+            preConfBtnLoad();
         }
 
         //사용자 설정값 관리 버튼 클릭 이벤트
@@ -838,11 +851,6 @@ namespace WinFormsAppTest
                     {
                         tbCrownMinHeight.Text = csvLines.Split(",")[3];
                     }
-
-                    else if (csvLines.Contains("range") && csvLines.Contains("crown") && csvLines.Contains("maxheight"))
-                    {
-                        tbCrownMaxHeight.Text = csvLines.Split(",")[3];
-                    }
                 }
             }
             tcMainHome.SelectedIndex = 1;
@@ -860,6 +868,29 @@ namespace WinFormsAppTest
             gui.xMax = guiTemp.xMax;
             gui.yMin = guiTemp.yMin;
             gui.yMax = guiTemp.yMax;
+        }
+
+        private void lbTitle_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left && e.Location.Y <= 20)
+            {
+                relativeMformPos = e.Location;
+                isMformDrag = true;
+            }
+        }
+
+        private void lbTitle_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left && isMformDrag)
+            {
+                this.Location = new Point(this.Location.X + (e.X - relativeMformPos.X),
+                    this.Location.Y + (e.Y - relativeMformPos.Y));
+            }
+        }
+
+        private void lbTitle_MouseUp(object sender, MouseEventArgs e)
+        {
+            isMformDrag = false;
         }
     }
 }
