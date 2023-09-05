@@ -28,6 +28,9 @@ namespace WinFormsAppTest
 
         string configpath = "";
 
+        //csv 작성용 Original data poiygon_points
+        string poly_points="";
+
         //버퍼 계산 시 사용되는 좌표 구조체
         Coords bufferedPolycords = new Coords();
 
@@ -475,6 +478,7 @@ namespace WinFormsAppTest
                 else
                 {
                     string points = paramForm.gui.pointList;
+                    poly_points = points.Replace(',', ' ');
                     {
                         JObject Readers = new JObject(
                           new JProperty("type", "readers.las"),
@@ -758,7 +762,7 @@ namespace WinFormsAppTest
                         try
                         {
                             //MessageBox.Show(strFile1);
-                            string JsonText1 = System.IO.File.ReadAllText(resultSavedDirectory + shape + @"\intermediate\" + fourtwo + originLasName + "_O.json");
+                            /*string JsonText1 = System.IO.File.ReadAllText(resultSavedDirectory + shape + @"\intermediate\" + fourtwo + originLasName + "_O.json");
 
                             JObject JsonData1 = JObject.Parse(JsonText1);
 
@@ -772,8 +776,8 @@ namespace WinFormsAppTest
                                 points += vertex[1] + " ";
                             }
 
-                            dat_str = points;
-                            paramForm.setParam("filters.crop", "origin_dat", dat_str);
+                            dat_str = points;*/
+                            paramForm.setParam("filters.crop", "origin_dat", poly_points);
                             paramForm.write_csv(configpath);
 
                             //File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + fourtwo + originLasName + "_O.dat", points);
