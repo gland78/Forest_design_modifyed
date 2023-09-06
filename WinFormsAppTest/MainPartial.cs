@@ -17,12 +17,10 @@ namespace WinFormsAppTest
         //변수 구조체   --> public 제외 나머지는 삭제예정
         public GUI gui = new GUI();
 
-        //plotForm 열기 전 임시 변수
+        //plotForm 열기 전 plot값을 저장할 임시 변수
         public GUI guiTemp = new GUI();
 
-        /// <summary>
-        ///  csv 관련 변수
-        /// </summary>
+        //csv의 파라메터를 저장하기 위한 변수
         public List<List<string>> csv_data = new List<List<string>>();
 
         //exe파일이 위치한 기본 폴더와 그 내부 config 폴더들
@@ -33,17 +31,18 @@ namespace WinFormsAppTest
         //config 파일의 타입(preset recent default)
         public string fileType = "";
 
-        //사용자 설정값 활성화 여부 판단 변수(기능 실장 예정)
-        private bool[] IsPresetActivate;
+        //사용자 설정값 활성화 여부 판단 변수
+        public int activatePreset = -1;
 
-        /// <summary>
-        /// csv 읽는 함수 
-        /// </summary>
-        private void read_csv(string filepath)
+        //최근 작업 목록 활성화 여부 판단 변수
+        public int activateRecent = -1;
+
+        //config.csv 읽는 함수(기본 config용)
+        private void read_csv(string filePath)
         {
             csv_data.Clear();
             //csv 읽기
-            string csvFilePath = filepath;
+            string csvFilePath = filePath;
 
             try
             {
@@ -76,6 +75,44 @@ namespace WinFormsAppTest
                 Console.WriteLine("CSV파일 읽는 중 오류 발생: " + ex.Message);
             }
         }
+        //plot값 리스트에 담긴 값으로 config.csv 쓰는 함수(기본 config용)
+        public void write_csv(string filepath)
+        {
+            // CSV 파일 경로
+            string filePath = filepath;
+
+            // CSV 내용 생성
+            StringBuilder csvContent = new StringBuilder();
+
+            for (int i = 0; i < csv_data.Count; i++)
+            {
+                string str = "";
+                for (int j = 0; j < csv_data[i].Count; j++)
+                {
+                    if (j == csv_data[i].Count - 1)
+                    {
+                        str += csv_data[i][j];
+                        break;
+                    }
+                    str += csv_data[i][j] + ",";
+
+                }
+                //MessageBox.Show(str);
+                csvContent.AppendLine(str);
+            }
+
+            // CSV 파일 생성 및 내용 기록
+            try
+            {
+                File.WriteAllText(filePath, csvContent.ToString(), Encoding.UTF8);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("CSV 파일 작성 중 오류 발생: " + ex.Message);
+            }
+        }
+
+        //Circle형 plot값 csv->구조체로 뽑아내는 메서드
         void ExtractCircleValues(ref GUI guiStruct, string circleString)
         {
             string[] parts = circleString.Split(' ');
@@ -103,6 +140,7 @@ namespace WinFormsAppTest
                 }
             }
         }
+        //Rect형 plot값 csv->구조체로 뽑아내는 메서드
         void ExtractRectangleValues(ref GUI guiStruct,string rectangleString)
         {
             string[] parts = rectangleString.Split(' ');
@@ -133,43 +171,7 @@ namespace WinFormsAppTest
                 }
             }
         }
-        //csv 쓰는 함수
-        public void write_csv(string filepath)
-        {
-            // CSV 파일 경로
-            string filePath = filepath;
-
-            // CSV 내용 생성
-            StringBuilder csvContent = new StringBuilder();
-
-            for (int i = 0; i < csv_data.Count; i++)
-            {
-                string str = "";
-                for (int j = 0; j < csv_data[i].Count; j++)
-                {
-                    if(j== csv_data[i].Count - 1)
-                    {
-                        str += csv_data[i][j];
-                        break;
-                    }
-                    str += csv_data[i][j] + ",";
-
-                }
-                //MessageBox.Show(str);
-                csvContent.AppendLine(str);
-            }
-
-            // CSV 파일 생성 및 내용 기록
-            try
-            {
-                File.WriteAllText(filePath, csvContent.ToString(), Encoding.UTF8);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("CSV 파일 작성 중 오류 발생: " + ex.Message);
-            }
-        }
-
+        
         //textbox 값 -> List 테이블로 대입 
         private void UpdateParams()
         {
@@ -190,7 +192,6 @@ namespace WinFormsAppTest
             //CrownSlice_textboxes
             setParam("filters.range.crown", "minheight", tbCrownMinHeight.Text.Trim());
         }
-
         //List 테이블 -> textbox 대입
         private void FillTextboxes()
         {
@@ -213,9 +214,8 @@ namespace WinFormsAppTest
             //CrownSlice_textboxes
             tbCrownMinHeight.Text = getParam("filters.range.crown", "minheight");
         }
-        /// <summary>
-        /// 무결성 검사를 위한 코드
-        /// </summary>
+
+        // 무결성 검사를 위한 코드
         private void RegistTextBoxHandler()
         {
             //double형만 입력가능하도록 키 등록
@@ -231,8 +231,6 @@ namespace WinFormsAppTest
             //정수만 입력하도록 하는 핸들러
             tbNorCellSize.KeyPress += TextBox_KeyPress_OnlyInt;
             tbNorWinSize.KeyPress += TextBox_KeyPress_OnlyInt;
-
-
         }
         private void TextBox_KeyPressOnlyNumbers(object sender, KeyPressEventArgs e)
         {
@@ -252,6 +250,9 @@ namespace WinFormsAppTest
                 e.Handled = true;
             }
         }
+
+        //기본 config.csv 제외 나머지 config 파일을 만들기 위한 메서드
+        //gui구조체의 plot값과 plot 리스트 값을 모두 모아 stringbuilder로 전달
         private void setAllparams(ref StringBuilder csvContent)
         {
             UpdateParams();
@@ -273,6 +274,7 @@ namespace WinFormsAppTest
                 csvContent.AppendLine(str);
             }
         }
+        //기본 config.csv 제외 나머지 config 파일을 만드는 메서드(추후 default 부분 삭제 요망)
         private void MakeConfig(configFileType confType)
         {
             read_csv(csv_path);
@@ -480,6 +482,96 @@ namespace WinFormsAppTest
                     return;
                 }
             }
+        }
+
+        //텍스트에 반영만 하고, 실제 gui 구조체나 csv_data 리스트에 저장하진 않는다
+        private void reflectConfs(string fileDi, string fileName)
+        {
+            string? csvLines;
+            using (StreamReader sr = new StreamReader(Path.Combine(fileDi, fileName)))
+            {
+                while ((csvLines = sr.ReadLine()) != null)
+                {
+                    if (csvLines.Contains("FileInfo") && csvLines.Contains("fileType"))
+                    {
+                        fileType = csvLines.Split(',')[3];
+                    }
+                    if (csvLines.Contains("FileInfo") && csvLines.Contains("Lasfilename"))
+                    {
+                        guiTemp.loadPath = csvLines.Split(',')[3];
+                    }
+                    if (csvLines.Contains("gui") && csvLines.Contains("circle"))
+                    {
+                        ExtractCircleValues(ref guiTemp, csvLines.Split(",")[3]);
+                    }
+                    if (csvLines.Contains("gui") && csvLines.Contains("rectangle"))
+                    {
+                        ExtractRectangleValues(ref guiTemp, csvLines.Split(",")[3]);
+                    }
+                    if (csvLines.Contains("sample") && csvLines.Contains("cell"))
+                    {
+                        tbSubCellSize.Text = csvLines.Split(',')[3];
+                    }
+                    else if (csvLines.Contains("smrf") && csvLines.Contains("cell"))
+                    {
+                        tbNorCellSize.Text = csvLines.Split(",")[3];
+                    }
+
+                    else if (csvLines.Contains("smrf") && csvLines.Contains("window"))
+                    {
+                        tbNorWinSize.Text = csvLines.Split(",")[3];
+                    }
+
+                    else if (csvLines.Contains("smrf") && csvLines.Contains("slope"))
+                    {
+                        tbNorSlope.Text = csvLines.Split(",")[3];
+                    }
+
+                    else if (csvLines.Contains("smrf") && csvLines.Contains("scalar"))
+                    {
+                        tbNorScalar.Text = csvLines.Split(",")[3];
+                    }
+
+                    else if (csvLines.Contains("smrf") && csvLines.Contains("scalar"))
+                    {
+                        tbNorScalar.Text = csvLines.Split(",")[3];
+                    }
+
+                    else if (csvLines.Contains("smrf") && csvLines.Contains("threshold"))
+                    {
+                        tbNorThres.Text = csvLines.Split(",")[3];
+                    }
+
+                    else if (csvLines.Contains("range") && csvLines.Contains("trunk") && csvLines.Contains("minheight"))
+                    {
+                        tbTrunkMinHeight.Text = csvLines.Split(",")[3];
+                    }
+
+                    else if (csvLines.Contains("range") && csvLines.Contains("trunk") && csvLines.Contains("maxheight"))
+                    {
+                        tbTrunkMaxHeight.Text = csvLines.Split(",")[3];
+                    }
+
+                    else if (csvLines.Contains("range") && csvLines.Contains("crown") && csvLines.Contains("minheight"))
+                    {
+                        tbCrownMinHeight.Text = csvLines.Split(",")[3];
+                    }
+                }
+            }
+            tcMainHome.SelectedIndex = 1;
+        }
+        //임시로 저장된 plot값을 적용하기 버튼을 누를 시
+        //gui 구조체로 옮겨담는 역할
+        private void apply_temp()
+        {
+            gui.loadPath = guiTemp.loadPath;
+            gui.centerX = guiTemp.centerX;
+            gui.centerY = guiTemp.centerY;
+            gui.radius = guiTemp.radius;
+            gui.xMin = guiTemp.xMin;
+            gui.xMax = guiTemp.xMax;
+            gui.yMin = guiTemp.yMin;
+            gui.yMax = guiTemp.yMax;
         }
     }
 }

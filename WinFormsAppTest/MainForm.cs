@@ -263,18 +263,17 @@ namespace WinFormsAppTest
         }
 
         //프리셋 콘피그 파일 갯수만큼 버튼 로드
-        //로직 수정 필요...?(현 로직은 새로 고침 시 매번 새 버튼 객체를 만들어 붙이는 식)
         private void preConfBtnLoad()
         {
-            string filePath = Path.Combine(basePath, reqDi[(int)configFileType.Preset]);
+            string fileDi = Path.Combine(basePath, reqDi[(int)configFileType.Preset]);
 
-            if (!Directory.Exists(filePath))
+            if (!Directory.Exists(fileDi))
             {
-                Directory.CreateDirectory(filePath);
+                Directory.CreateDirectory(fileDi);
             }
 
             //프리셋 콘피그 저장 장소
-            string[] confCheck = Directory.GetFiles(filePath, "presetConfig*");
+            string[] confCheck = Directory.GetFiles(fileDi, "presetConfig*");
 
             if (confCheck.Length < 1)
             {
@@ -289,15 +288,24 @@ namespace WinFormsAppTest
 
             for (int i = 0; i < confCheck.Length; i++)
             {
-                string conf = confCheck[i];
+                string filePath = confCheck[i];
+                int fileNum = int.Parse(Regex.Replace(Path.GetFileName(filePath), @"\D", ""));
                 CustomBtn btnPreConfs = new CustomBtn();
                 btnPreConfs.MouseClick += btnPreConf_Click;
 
+                btnPreConfs.Name = Path.GetFileName(filePath);
                 btnPreConfs.Location = relativeBtnPos;
                 btnPreConfs.Width = MAX_BTN_WIDTH;
                 btnPreConfs.Height = PRESET_BTN_HEIGHT;
                 btnPreConfs.BorderRadius = 5;
-                btnPreConfs.BackColor = Color.Transparent;
+                if (fileNum == activatePreset)
+                {
+                    btnPreConfs.BackColor = Color.MediumSeaGreen;
+                }
+                else
+                {
+                    btnPreConfs.BackColor = Color.Transparent;
+                }
                 btnPreConfs.ForeColor = Color.Black;
                 btnPreConfs.FlatAppearance.BorderSize = 0;
                 btnPreConfs.FlatAppearance.MouseDownBackColor = Color.MediumAquamarine;
@@ -309,7 +317,7 @@ namespace WinFormsAppTest
                 btnPreConfs.Image = Image.FromFile(Environment.CurrentDirectory.ToString() + @"\btnPreConf.Image.png");
                 pnSidePreset.Controls.Add(btnPreConfs);
 
-                using (StreamReader sr = new StreamReader(conf))
+                using (StreamReader sr = new StreamReader(filePath))
                 {
                     string line;
                     while ((line = sr.ReadLine()) != null)
@@ -321,7 +329,6 @@ namespace WinFormsAppTest
                         }
                     }
                 }
-                btnPreConfs.Name = Path.GetFileName(conf);
                 relativeBtnPos.Y = relativeBtnPos.Y + PRESET_BTN_HEIGHT + PRESET_BTN_GAP;
             }
         }
@@ -353,31 +360,38 @@ namespace WinFormsAppTest
 
             pnReview.SuspendLayout();
 
-            foreach (string conf in confCheck)
+            for(int i = 0; i < confCheck.Length; i++)
             {
+                string filePath = confCheck[i];
+                int fileNum = int.Parse(Regex.Replace(Path.GetFileName(filePath), @"\D", ""));
                 btnText = "";
 
                 CustomBtn btnRecentConfs = new CustomBtn();
                 btnRecentConfs.MouseClick += btnRecentConf_Click;
-                btnRecentConfs.MouseDown += btnRecentConf_Down;
-                btnRecentConfs.MouseUp += btnRecentConf_Up;
 
                 pnReview.Controls.Add(btnRecentConfs);
                 btnRecentConfs.Location = relativePos;
                 btnRecentConfs.Width = RECENT_BTN_WIDTH;
                 btnRecentConfs.Height = RECENT_BTN_HEIGHT;
                 btnRecentConfs.Margin = new Padding(4, 8, 4, 4);
-                btnRecentConfs.BackgroundColor = Color.MintCream;
+                if (fileNum == activateRecent)
+                {
+                    btnRecentConfs.BackColor = Color.DarkKhaki;
+                }
+                else
+                {
+                    btnRecentConfs.BackColor = Color.Khaki;
+                }
                 btnRecentConfs.BorderRadius = 20;
                 btnRecentConfs.BorderSize = 0;
                 btnRecentConfs.FlatAppearance.BorderSize = 0;
-                btnRecentConfs.FlatAppearance.MouseDownBackColor = Color.FromArgb(255, 255, 255);
-                btnRecentConfs.FlatAppearance.MouseOverBackColor = Color.FromArgb(250, 255, 250);
+                btnRecentConfs.FlatAppearance.MouseDownBackColor = Color.LemonChiffon;
+                btnRecentConfs.FlatAppearance.MouseOverBackColor = Color.PaleGoldenrod;
                 btnRecentConfs.FlatStyle = FlatStyle.Flat;
                 btnRecentConfs.TextAlign = ContentAlignment.MiddleLeft;
                 btnRecentConfs.Font = new Font("맑은 고딕", 12F, FontStyle.Regular, GraphicsUnit.Point);
                 btnRecentConfs.ForeColor = SystemColors.ControlText;
-                using (StreamReader sr = new StreamReader(conf))
+                using (StreamReader sr = new StreamReader(filePath))
                 {
                     string line;
                     string shapeStr = "";
@@ -426,7 +440,7 @@ namespace WinFormsAppTest
                     }
                 }
                 btnRecentConfs.Text = btnText.TrimEnd('\r', '\n');
-                btnRecentConfs.Name = Path.GetFileName(conf);
+                btnRecentConfs.Name = Path.GetFileName(filePath);
                 relativePos.X = relativePos.X + RECENT_BTN_WIDTH + RECENT_BTN_GAP;
             }
             if (pnReview.HorizontalScroll.Enabled == true)
@@ -438,41 +452,34 @@ namespace WinFormsAppTest
             pnReview.PerformLayout();
         }
 
-        //recetnConfig 버튼 관련 이벤트 처리 코드
-        private void btnRecentConf_Click(object sender, EventArgs e)
-        {
-            string fileDi = Path.Combine(basePath, reqDi[(int)configFileType.Recent]);
-            string fileName = ((Button)sender).Name;
-
-            reflectConfs(fileDi, fileName);
-        }
-
-        private void btnRecentConf_Down(object sender, EventArgs e)
-        {
-            Button btn = (Button)sender;
-            btn.FlatStyle = FlatStyle.Popup;
-            btn.Invalidate();
-        }
-
-        private void btnRecentConf_Up(object sender, EventArgs e)
-        {
-            Button btn = (Button)sender;
-            btn.FlatStyle = FlatStyle.Flat;
-            btn.Invalidate();
-        }
         //preConfig 버튼 클릭 이벤트 처리 코드
         private void btnPreConf_Click(object sender, EventArgs e)
         {
             string fileDi = Path.Combine(basePath, reqDi[(int)configFileType.Preset]);
             string fileName = ((Button)sender).Name;
-            string fileNum;
+            string fileNum = Regex.Replace(((Button)sender).Name, @"\D", "");
 
             reflectConfs(fileDi, fileName);
 
-            /*
-            fileNum = Regex.Replace( ((Button)sender).Name, @"\D", "");
-            IsPresetActivate[int.Parse(fileNum)] = true;
-            */
+            activateRecent = -1;
+            activatePreset = int.Parse(fileNum);
+
+            preConfBtnLoad();
+        }
+
+        //recetnConfig 버튼 관련 이벤트 처리 코드
+        private void btnRecentConf_Click(object sender, EventArgs e)
+        {
+            string fileDi = Path.Combine(basePath, reqDi[(int)configFileType.Recent]);
+            string fileName = ((Button)sender).Name;
+            string fileNum = Regex.Replace(((Button)sender).Name, @"\D", "");
+
+            reflectConfs(fileDi, fileName);
+
+            activatePreset = -1;
+            activateRecent = int.Parse(fileNum);
+
+            recentConfBtnLoad();
         }
 
         //사이드메뉴 버튼 관련 이벤트 처리 코드
@@ -487,18 +494,54 @@ namespace WinFormsAppTest
                 pFrm.attachProgressBar += new switchEventHandler(progressAttach);
                 pFrm.attachStartBtn += new switchEventHandler(startBtnAttach);
             }
+
+            bool[] applyChecker = new bool[9];
+            bool result = true;
+            DialogResult dialogResult = DialogResult.No;
+
+            //subsamplng_textboxes
+            applyChecker[0] = tbSubCellSize.Text == getParam("filters.sample", "cell");
+
+            //normalize_textboxes
+            applyChecker[1] = tbNorCellSize.Text == getParam("filters.smrf", "cell");
+            applyChecker[2] = tbNorScalar.Text == getParam("filters.smrf", "scalar");
+            applyChecker[3] = tbNorSlope.Text == getParam("filters.smrf", "slope");
+            applyChecker[4] = tbNorThres.Text == getParam("filters.smrf", "threshold");
+            applyChecker[5] = tbNorWinSize.Text == getParam("filters.smrf", "window");
+
+            //trunkSlice_textboxes
+            applyChecker[6] = tbTrunkMinHeight.Text == getParam("filters.range.trunk", "minheight");
+            applyChecker[7] = tbTrunkMaxHeight.Text == getParam("filters.range.trunk", "maxheight");
+
+            //CrownSlice_textboxes
+            applyChecker[8] = tbCrownMinHeight.Text == getParam("filters.range.crown", "minheight");
+
+            foreach (bool checker in applyChecker)
+            {
+                result = result == checker;
+            }
+
+            if(result == false)
+            {
+                dialogResult = MessageBox.Show("현재 설정이 적용되지 않았습니다.\n적용하시겠습니까?", "", MessageBoxButtons.YesNoCancel);
+            }
+
             fileType = getParam("FileInfo", "fileType");
+
+            if (dialogResult == DialogResult.Yes)
+            {
+                btnSettingApply_Click(sender, e);
+            }
+            else if (dialogResult == DialogResult.Cancel)
+            {
+                return;
+            }
+            
             pFrm.ShowDialog();
         }
-
         private void btnHome_Click(object sender, EventArgs e)
         {
             tcMainHome.SelectedIndex = 0;
-        }
-
-        private void btnClose_Click(object sender, EventArgs e)
-        {
-            this.Close();
         }
 
         //사이드 메뉴 여닫기
@@ -554,10 +597,15 @@ namespace WinFormsAppTest
                 lbSlidePreset.Visible = false;
             }
         }
-
         private void btnSettings_Click(object sender, EventArgs e)
         {
             tcMainHome.SelectedIndex = 1;
+        }
+
+        //사용자 설정이나 최근 작업 선택 상태로 설정값 바꿀 시 선택 해제 이벤트
+        private void tbSettingsAll_TextChanged(object sender, EventArgs e)
+        {
+            //구현 예정
         }
 
         //이 아래 4개 메서드 설정창 파라메터 판넬 마우스 이벤트
@@ -571,7 +619,6 @@ namespace WinFormsAppTest
                 cPanel.Invalidate();
             }
         }
-
         private void pnSettingAll_MouseLeave(object sender, EventArgs e)
         {
             if (sender is CustomPanel)
@@ -582,7 +629,6 @@ namespace WinFormsAppTest
                 cPanel.Invalidate();
             }
         }
-
         private void pnSettingAll_MouseDown(object sender, MouseEventArgs e)
         {
             if (sender is CustomPanel)
@@ -593,7 +639,6 @@ namespace WinFormsAppTest
                 cPanel.Invalidate();
             }
         }
-
         private void pnSettingAll_MouseUp(object sender, MouseEventArgs e)
         {
             if (sender is CustomPanel)
@@ -605,8 +650,7 @@ namespace WinFormsAppTest
             }
         }
 
-
-        //아래 메서드 3개 커스텀 제목표시줄로 인한 창 이동 이벤트 임의 생성
+        //아래 메서드 4개 커스텀 제목표시줄로 인한 창 이동 이벤트 임의 생성
         private void MainForm_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left && e.Location.Y <= 40)
@@ -615,7 +659,15 @@ namespace WinFormsAppTest
                 isMformDrag = true;
             }
         }
-
+        //프로그램 제목을 나타내는 라벨이 윈폼을 가려서 따로 만든 이벤트
+        private void lbTitle_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left && e.Location.Y <= 20)
+            {
+                relativeMformPos = e.Location;
+                isMformDrag = true;
+            }
+        }
         private void MainForm_MouseMove(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left && isMformDrag)
@@ -624,14 +676,47 @@ namespace WinFormsAppTest
                     this.Location.Y + (e.Y - relativeMformPos.Y));
             }
         }
-
         private void MainForm_MouseUp(object sender, MouseEventArgs e)
         {
             isMformDrag = false;
         }
 
+        //적용하기 버튼 이벤트
+        private void btnSettingApply_Click(object sender, EventArgs e)
+        {
+            UpdateParams();
+
+            //기타 설정값은 메인폼 텍스트박에서 바로 반영되지만,(UpdateParams메서드)
+            //plot값들은 적용하기 누르기 전 일시적으로 반영할 곳이 없기에 
+            //따로 apply_temp메서드에서 임시로 만든 plot값 구조체에 넣은 값을
+            //프로그램에 직접 반영되는 변수들인 gui 구조체로 옮겨담는다
+            if (fileType != "")
+            {
+                apply_temp();
+            }
+            else
+            {
+                gui.loadPath = "";
+            }
+            MessageBox.Show("적용되었습니다.");
+            tcMainHome.SelectedIndex = 0;
+        }
+
+        //취소버튼
+        //저장하지 않고 기존에 적용 되어있던 값으로 텍스트 박스 값 교체 후
+        //시작화면으로 이동
+        private void btnSettingCancel_Click(object sender, EventArgs e)
+        {
+            FillTextboxes();
+            activatePreset = -1;
+            activateRecent = -1;
+            preConfBtnLoad();
+            recentConfBtnLoad();
+
+            tcMainHome.SelectedIndex = 0;
+        }
+
         //저장하기 버튼 클릭 이벤트
-        //논의 필요(plot 값도 저장케 할 것인지)
         private void btnSettingSave_Click(object sender, EventArgs e)
         {
             //변수들 초기화
@@ -684,20 +769,25 @@ namespace WinFormsAppTest
         {
             if (mFrm == null)
             {
-                mFrm = new ManageForm();
+                mFrm = new ManageForm(this);
                 mFrm.mainPaint += new customEventHandler(this.preConfBtnLoad);
                 mFrm.presetReflect += new presetReflectHandler(this.reflectConfs);
             }
             mFrm.ShowDialog();
         }
 
+        //창 최소화 버튼
         private void btnHide_Click(object sender, EventArgs e)
         {
             this.WindowState = FormWindowState.Minimized;
         }
+        //창 닫기 버튼
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
 
         //기본값 불러오기 버튼
-        //논의 중 한번은 언급 필요(최근 작업 혹은 사용자 설정값 적용 시와 경우 통일 필요성?)
         private void btnSettingLoad_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show("기본값을 적용하시겠습니까?\n저장되지 않은 설정값은 사라집니다.",
@@ -705,9 +795,36 @@ namespace WinFormsAppTest
             {
                 return;
             }
+            activatePreset = -1;
+            activateRecent = -1;
+            preConfBtnLoad();
+            recentConfBtnLoad();
+
             read_csv(csv_path);
             FillTextboxes();
             fileType = "";
+        }
+
+        //공장초기화 버튼
+        private void btn_factory_reset_Click(object sender, EventArgs e)
+        {
+            FactoryReset(csv_path);
+        }
+        private void btn_factory_reset_MouseHover(object sender, EventArgs e)
+        {
+            ttMainInfo.SetToolTip(btn_factory_reset, "기본 설정값을 초기로 되돌립니다\n기존의 기본값은 따로 저장되지 않습니다");
+        }
+
+        //메인 화면의 Recent Task 도움말
+        private void btnRecentInfo_MouseHover(object sender, EventArgs e)
+        {
+            ttMainInfo.SetToolTip(btnRecentInfo, "최근 작업한 설정값을 보존합니다.\n기록을 클릭할 시 설정창에 반영됩니다.(설정 적용 필요)");
+        }
+
+        //메인 사이드 메뉴의 사용자 설정값 관리 버튼 도움말
+        private void btnPresetManage_MouseHover(object sender, EventArgs e)
+        {
+            ttMainInfo.SetToolTip(btnPresetManage, "사용자 설정 관리창을 엽니다");
         }
 
         //프로그램 동작시 프로그래바,start 버튼 숨김기능 관련 이벤트
@@ -726,171 +843,6 @@ namespace WinFormsAppTest
         private void startBtnAttach(bool onOff)
         {
             btnStart.Visible = onOff;
-        }
-
-        //적용하기 버튼 이벤트
-        private void btnSettingApply_Click(object sender, EventArgs e)
-        {
-            UpdateParams();
-
-            //기타 설정값은 메인폼 텍스트박에서 바로 반영되지만,(UpdateParams메서드)
-            //plot값들은 적용하기 누르기 전 일시적으로 반영할 곳이 없기에 
-            //따로 apply_temp메서드에서 임시로 만든 plot값 구조체에 넣은 값을
-            //프로그램에 직접 반영되는 변수들인 gui 구조체로 옮겨담는다
-            if (fileType != "")
-            {
-                apply_temp();
-            }
-            else
-            {
-                gui.loadPath = "";
-            }
-            MessageBox.Show("적용되었습니다.");
-            tcMainHome.SelectedIndex = 0;
-        }
-
-        //취소버튼
-        //저장하지 않고 기존에 적용 되어있던 값으로 텍스트 박스 값 교체 후
-        //시작화면으로 이동
-        private void btnSettingCancel_Click(object sender, EventArgs e)
-        {
-            FillTextboxes();
-            tcMainHome.SelectedIndex = 0;
-        }
-
-        //공장초기화 버튼
-        private void btn_factory_reset_Click(object sender, EventArgs e)
-        {
-            FactoryReset(csv_path);
-        }
-
-        private void btn_factory_reset_MouseHover(object sender, EventArgs e)
-        {
-            ttMainInfo.SetToolTip(btn_factory_reset, "기본 설정값을 초기로 되돌립니다\n기존의 기본값은 따로 저장되지 않습니다");
-        }
-
-        private void btnRecentInfo_MouseHover(object sender, EventArgs e)
-        {
-            ttMainInfo.SetToolTip(btnRecentInfo, "최근 작업한 설정값을 보존합니다.\n기록을 클릭할 시 설정창에 반영됩니다.(설정 적용 필요)");
-        }
-
-        private void btnPresetManage_MouseHover(object sender, EventArgs e)
-        {
-            ttMainInfo.SetToolTip(btnPresetManage, "사용자 설정 관리창을 엽니다");
-        }
-
-        //텍스트에 반영만 하고, 실제 gui 구조체나 csv_data 리스트에 저장하진 않는다
-        private void reflectConfs(string fileDi, string fileName)
-        {
-            string? csvLines;
-            using (StreamReader sr = new StreamReader(Path.Combine(fileDi, fileName)))
-            {
-                while ((csvLines = sr.ReadLine()) != null)
-                {
-                    if (csvLines.Contains("FileInfo") && csvLines.Contains("fileType"))
-                    {
-                        fileType = csvLines.Split(',')[3];
-                    }
-                    if (csvLines.Contains("FileInfo") && csvLines.Contains("Lasfilename"))
-                    {
-                        guiTemp.loadPath = csvLines.Split(',')[3];
-                    }
-                    if (csvLines.Contains("gui") && csvLines.Contains("circle"))
-                    {
-                        ExtractCircleValues(ref guiTemp, csvLines.Split(",")[3]);
-                    }
-                    if (csvLines.Contains("gui") && csvLines.Contains("rectangle"))
-                    {
-                        ExtractRectangleValues(ref guiTemp, csvLines.Split(",")[3]);
-                    }
-                    if (csvLines.Contains("sample") && csvLines.Contains("cell"))
-                    {
-                        tbSubCellSize.Text = csvLines.Split(',')[3];
-                    }
-                    else if (csvLines.Contains("smrf") && csvLines.Contains("cell"))
-                    {
-                        tbNorCellSize.Text = csvLines.Split(",")[3];
-                    }
-
-                    else if (csvLines.Contains("smrf") && csvLines.Contains("window"))
-                    {
-                        tbNorWinSize.Text = csvLines.Split(",")[3];
-                    }
-
-                    else if (csvLines.Contains("smrf") && csvLines.Contains("slope"))
-                    {
-                        tbNorSlope.Text = csvLines.Split(",")[3];
-                    }
-
-                    else if (csvLines.Contains("smrf") && csvLines.Contains("scalar"))
-                    {
-                        tbNorScalar.Text = csvLines.Split(",")[3];
-                    }
-
-                    else if (csvLines.Contains("smrf") && csvLines.Contains("scalar"))
-                    {
-                        tbNorScalar.Text = csvLines.Split(",")[3];
-                    }
-
-                    else if (csvLines.Contains("smrf") && csvLines.Contains("threshold"))
-                    {
-                        tbNorThres.Text = csvLines.Split(",")[3];
-                    }
-
-                    else if (csvLines.Contains("range") && csvLines.Contains("trunk") && csvLines.Contains("minheight"))
-                    {
-                        tbTrunkMinHeight.Text = csvLines.Split(",")[3];
-                    }
-
-                    else if (csvLines.Contains("range") && csvLines.Contains("trunk") && csvLines.Contains("maxheight"))
-                    {
-                        tbTrunkMaxHeight.Text = csvLines.Split(",")[3];
-                    }
-
-                    else if (csvLines.Contains("range") && csvLines.Contains("crown") && csvLines.Contains("minheight"))
-                    {
-                        tbCrownMinHeight.Text = csvLines.Split(",")[3];
-                    }
-                }
-            }
-            tcMainHome.SelectedIndex = 1;
-        }
-
-        //임시로 저장된 plot값을 적용하기 버튼을 누를 시
-        //gui 구조체로 옮겨담는 역할
-        private void apply_temp()
-        {
-            gui.loadPath = guiTemp.loadPath;
-            gui.centerX = guiTemp.centerX;
-            gui.centerY = guiTemp.centerY;
-            gui.radius = guiTemp.radius;
-            gui.xMin = guiTemp.xMin;
-            gui.xMax = guiTemp.xMax;
-            gui.yMin = guiTemp.yMin;
-            gui.yMax = guiTemp.yMax;
-        }
-
-        private void lbTitle_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left && e.Location.Y <= 20)
-            {
-                relativeMformPos = e.Location;
-                isMformDrag = true;
-            }
-        }
-
-        private void lbTitle_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left && isMformDrag)
-            {
-                this.Location = new Point(this.Location.X + (e.X - relativeMformPos.X),
-                    this.Location.Y + (e.Y - relativeMformPos.Y));
-            }
-        }
-
-        private void lbTitle_MouseUp(object sender, MouseEventArgs e)
-        {
-            isMformDrag = false;
         }
     }
 }

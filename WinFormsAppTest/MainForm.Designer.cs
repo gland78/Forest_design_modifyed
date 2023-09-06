@@ -422,8 +422,8 @@
             lbTitle.TabIndex = 0;
             lbTitle.Text = "ForestLi\n";
             lbTitle.MouseDown += lbTitle_MouseDown;
-            lbTitle.MouseMove += lbTitle_MouseMove;
-            lbTitle.MouseUp += lbTitle_MouseUp;
+            lbTitle.MouseMove += MainForm_MouseMove;
+            lbTitle.MouseUp += MainForm_MouseUp;
             // 
             // tpSettings
             // 

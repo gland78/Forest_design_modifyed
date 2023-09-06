@@ -25,6 +25,12 @@ namespace WinFormsAppTest
             InitializeComponent();
         }
 
+        public ManageForm(MainForm mainForm)
+        {
+            this.mainForm = mainForm;
+            InitializeComponent();
+        }
+
         private void ManageForm_Load(object sender, EventArgs e)
         {
             //폼 생성 위치 지정
@@ -158,6 +164,15 @@ namespace WinFormsAppTest
 
                     //int oldIndex = int.Parse(fileName.Substring(12));
                     int oldIndex = int.Parse(Regex.Replace(fileName, @"\D", ""));
+
+                    if (oldIndex == mainForm.activatePreset)
+                    {
+                        mainForm.activatePreset = -1;
+                    }
+                    else if (oldIndex < mainForm.activatePreset)
+                    {
+                        mainForm.activatePreset -= 1;
+                    }
 
                     for (int i = oldIndex + 1; i < confCheck.Length; i++)
                     {
