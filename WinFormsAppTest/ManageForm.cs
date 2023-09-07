@@ -33,6 +33,9 @@ namespace WinFormsAppTest
 
         private void ManageForm_Load(object sender, EventArgs e)
         {
+            //esc 창 닫기를 위하여 키입력을 항상 폼이 먼저 받음
+            this.KeyPreview = true;
+
             //폼 생성 위치 지정
             Point screenSize = ((Point)Screen.PrimaryScreen.Bounds.Size);
             this.Location = new Point((screenSize.X - this.Width) / 2, (screenSize.Y - this.Height) / 2);
@@ -113,10 +116,10 @@ namespace WinFormsAppTest
 
             //사용자가 설명에 title 문자를 포함시켰을 경우를 대비해 다시 코딩했음
             string csv = "";
-            using(StreamReader sr = new StreamReader(Path.Combine(fileDi, fileName)))
+            using (StreamReader sr = new StreamReader(Path.Combine(fileDi, fileName)))
             {
                 string csvLines = "";
-                while ( (csvLines = sr.ReadLine()) != null )
+                while ((csvLines = sr.ReadLine()) != null)
                 {
                     string[] csvParams = csvLines.Split(',');
                     if (csvParams[2].Equals("title"))
@@ -251,15 +254,15 @@ namespace WinFormsAppTest
 
             ListViewHitTestInfo hitTestInfo = lvPresetConf.HitTest(e.Location);
 
-            if(hitTestInfo == null)
+            if (hitTestInfo == null)
             {
-                MessageBox.Show("Error: Fail to load Users Setting Manage", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error) ;
+                MessageBox.Show("Error: Fail to load Users Setting Manage", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
             int clickedColumn = hitTestInfo.Item.SubItems.IndexOf(hitTestInfo.SubItem);
 
-            switch(clickedColumn)
+            switch (clickedColumn)
             {
                 case 0:
                     btnManageTitle_Click(sender, e);
@@ -273,6 +276,14 @@ namespace WinFormsAppTest
                 case 2:
                     btnManageInfo_Click(sender, e);
                     break;
+            }
+        }
+
+        private void ManageForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)
+            {
+                this.Close();
             }
         }
     }

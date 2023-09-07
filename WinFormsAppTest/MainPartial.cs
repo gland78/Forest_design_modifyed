@@ -188,6 +188,7 @@ namespace WinFormsAppTest
             //trunkSlice_textboxes
             setParam("filters.range.trunk", "minheight", tbTrunkMinHeight.Text.Trim());
             setParam("filters.range.trunk", "maxheight", tbTrunkMaxHeight.Text.Trim());
+            setParam("csp_segmentstem", "smoothness", tbTrunkSmooth.Text.Trim());
 
             //CrownSlice_textboxes
             setParam("filters.range.crown", "minheight", tbCrownMinHeight.Text.Trim());
@@ -210,6 +211,7 @@ namespace WinFormsAppTest
             //trunkSlice_textboxes
             tbTrunkMinHeight.Text = getParam("filters.range.trunk","minheight");
             tbTrunkMaxHeight.Text = getParam("filters.range.trunk", "maxheight");
+            tbTrunkSmooth.Text = getParam("csp_segmentstem", "smoothness");
 
             //CrownSlice_textboxes
             tbCrownMinHeight.Text = getParam("filters.range.crown", "minheight");
@@ -225,6 +227,7 @@ namespace WinFormsAppTest
             tbNorThres.KeyPress += TextBox_KeyPressOnlyNumbers;
             tbTrunkMinHeight.KeyPress += TextBox_KeyPressOnlyNumbers;
             tbTrunkMaxHeight.KeyPress += TextBox_KeyPressOnlyNumbers;
+            tbTrunkSmooth.KeyPress += TextBox_KeyPressOnlyNumbers;
             tbCrownMinHeight.KeyPress += TextBox_KeyPressOnlyNumbers;
 
 
@@ -232,6 +235,12 @@ namespace WinFormsAppTest
             tbNorCellSize.KeyPress += TextBox_KeyPress_OnlyInt;
             tbNorWinSize.KeyPress += TextBox_KeyPress_OnlyInt;
         }
+
+        private void TbTrunkSmooth_KeyPress(object? sender, KeyPressEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
         private void TextBox_KeyPressOnlyNumbers(object sender, KeyPressEventArgs e)
         {
             // 입력된 키가 숫자가 아니면서 Backspace(백스페이스)도 아닌 경우
@@ -488,71 +497,68 @@ namespace WinFormsAppTest
         private void reflectConfs(string fileDi, string fileName)
         {
             string? csvLines;
-            using (StreamReader sr = new StreamReader(Path.Combine(fileDi, fileName)))
+            using (StreamReader sr = new StreamReader(Path.Combine(fileDi, fileName + ".csv")))
             {
                 while ((csvLines = sr.ReadLine()) != null)
                 {
-                    if (csvLines.Contains("FileInfo") && csvLines.Contains("fileType"))
+                    if (csvLines.Contains("FileInfo,public,fileType"))
                     {
                         fileType = csvLines.Split(',')[3];
                     }
-                    if (csvLines.Contains("FileInfo") && csvLines.Contains("Lasfilename"))
+                    if (csvLines.Contains("FileInfo,public,Lasfilename"))
                     {
                         guiTemp.loadPath = csvLines.Split(',')[3];
                     }
-                    if (csvLines.Contains("gui") && csvLines.Contains("circle"))
+                    if (csvLines.Contains("gui,private,circle"))
                     {
                         ExtractCircleValues(ref guiTemp, csvLines.Split(",")[3]);
                     }
-                    if (csvLines.Contains("gui") && csvLines.Contains("rectangle"))
+                    if (csvLines.Contains("gui,private,rectangle"))
                     {
                         ExtractRectangleValues(ref guiTemp, csvLines.Split(",")[3]);
                     }
-                    if (csvLines.Contains("sample") && csvLines.Contains("cell"))
+                    if (csvLines.Contains("filters.sample,public,cell"))
                     {
                         tbSubCellSize.Text = csvLines.Split(',')[3];
                     }
-                    else if (csvLines.Contains("smrf") && csvLines.Contains("cell"))
+                    else if (csvLines.Contains("filters.smrf,public,cell"))
                     {
                         tbNorCellSize.Text = csvLines.Split(",")[3];
                     }
-
-                    else if (csvLines.Contains("smrf") && csvLines.Contains("window"))
+                    else if (csvLines.Contains("filters.smrf,public,window"))
                     {
                         tbNorWinSize.Text = csvLines.Split(",")[3];
                     }
 
-                    else if (csvLines.Contains("smrf") && csvLines.Contains("slope"))
+                    else if (csvLines.Contains("filters.smrf,public,slope"))
                     {
                         tbNorSlope.Text = csvLines.Split(",")[3];
                     }
 
-                    else if (csvLines.Contains("smrf") && csvLines.Contains("scalar"))
+                    else if (csvLines.Contains("filters.smrf,public,scalar"))
                     {
                         tbNorScalar.Text = csvLines.Split(",")[3];
                     }
 
-                    else if (csvLines.Contains("smrf") && csvLines.Contains("scalar"))
-                    {
-                        tbNorScalar.Text = csvLines.Split(",")[3];
-                    }
-
-                    else if (csvLines.Contains("smrf") && csvLines.Contains("threshold"))
+                    else if (csvLines.Contains("filters.smrf,public,threshold"))
                     {
                         tbNorThres.Text = csvLines.Split(",")[3];
                     }
 
-                    else if (csvLines.Contains("range") && csvLines.Contains("trunk") && csvLines.Contains("minheight"))
+                    else if (csvLines.Contains("filters.range.trunk,public,minheight"))
                     {
                         tbTrunkMinHeight.Text = csvLines.Split(",")[3];
                     }
 
-                    else if (csvLines.Contains("range") && csvLines.Contains("trunk") && csvLines.Contains("maxheight"))
+                    else if (csvLines.Contains("filters.range.trunk,public,maxheight"))
                     {
                         tbTrunkMaxHeight.Text = csvLines.Split(",")[3];
                     }
-
-                    else if (csvLines.Contains("range") && csvLines.Contains("crown") && csvLines.Contains("minheight"))
+                    else if (csvLines.Contains("csp_segmentstem,public,smoothness"))
+                    {
+                        tbTrunkSmooth.Text = csvLines.Split(",")[3];
+                    }
+                    else if (csvLines.Contains("filters.range.crown,public,minheight"))
                     {
                         tbCrownMinHeight.Text = csvLines.Split(",")[3];
                     }

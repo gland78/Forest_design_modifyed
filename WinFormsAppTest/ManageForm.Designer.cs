@@ -152,6 +152,7 @@
             Name = "ManageForm";
             Text = "ManageForm";
             Load += ManageForm_Load;
+            KeyDown += ManageForm_KeyDown;
             tableLayoutPanel1.ResumeLayout(false);
             ResumeLayout(false);
         }

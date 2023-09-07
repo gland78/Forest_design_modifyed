@@ -136,7 +136,7 @@ namespace WinFormsAppTest
             //프로그램 실행 버튼 이벤트
             btnStart.Click += btnStart_Click;
 
-            //이 아래로 전부 설정창의 CustomPanel 객체들 이벤트
+            //이 아래로 설정창의 CustomPanel 객체들 이벤트
             pnSettingDefault.MouseDown += pnSettingAll_MouseDown;
             pnSettingDefault.MouseEnter += pnSettingAll_MouseEnter;
             pnSettingDefault.MouseLeave += pnSettingAll_MouseLeave;
@@ -196,6 +196,21 @@ namespace WinFormsAppTest
             pnSettingCrown1.MouseEnter += pnSettingAll_MouseEnter;
             pnSettingCrown1.MouseLeave += pnSettingAll_MouseLeave;
             pnSettingCrown1.MouseUp += pnSettingAll_MouseUp;
+
+            //이 밑으로 설정창 setting textBox 이벤트
+            tbSubCellSize.TextChanged += tbSettingsAll_TextChanged;
+
+            tbNorCellSize.TextChanged += tbSettingsAll_TextChanged;
+            tbNorWinSize.TextChanged += tbSettingsAll_TextChanged;
+            tbNorSlope.TextChanged += tbSettingsAll_TextChanged;
+            tbNorScalar.TextChanged += tbSettingsAll_TextChanged;
+            tbNorThres.TextChanged += tbSettingsAll_TextChanged;
+
+            tbTrunkMinHeight.TextChanged += tbSettingsAll_TextChanged;
+            tbTrunkMaxHeight.TextChanged += tbSettingsAll_TextChanged;
+            tbTrunkSmooth.TextChanged += tbSettingsAll_TextChanged;
+
+            tbCrownMinHeight.TextChanged += tbSettingsAll_TextChanged;
         }
 
         //CustomPanel 색 및 테두리 지정(Designer.cs에서 지정하면 컴파일 시 없어짐)
@@ -293,7 +308,7 @@ namespace WinFormsAppTest
                 CustomBtn btnPreConfs = new CustomBtn();
                 btnPreConfs.MouseClick += btnPreConf_Click;
 
-                btnPreConfs.Name = Path.GetFileName(filePath);
+                btnPreConfs.Name = Path.GetFileNameWithoutExtension(filePath);
                 btnPreConfs.Location = relativeBtnPos;
                 btnPreConfs.Width = MAX_BTN_WIDTH;
                 btnPreConfs.Height = PRESET_BTN_HEIGHT;
@@ -360,7 +375,7 @@ namespace WinFormsAppTest
 
             pnReview.SuspendLayout();
 
-            for(int i = 0; i < confCheck.Length; i++)
+            for (int i = 0; i < confCheck.Length; i++)
             {
                 string filePath = confCheck[i];
                 int fileNum = int.Parse(Regex.Replace(Path.GetFileName(filePath), @"\D", ""));
@@ -440,7 +455,7 @@ namespace WinFormsAppTest
                     }
                 }
                 btnRecentConfs.Text = btnText.TrimEnd('\r', '\n');
-                btnRecentConfs.Name = Path.GetFileName(filePath);
+                btnRecentConfs.Name = Path.GetFileNameWithoutExtension(filePath);
                 relativePos.X = relativePos.X + RECENT_BTN_WIDTH + RECENT_BTN_GAP;
             }
             if (pnReview.HorizontalScroll.Enabled == true)
@@ -465,6 +480,7 @@ namespace WinFormsAppTest
             activatePreset = int.Parse(fileNum);
 
             preConfBtnLoad();
+            recentConfBtnLoad();
         }
 
         //recetnConfig 버튼 관련 이벤트 처리 코드
@@ -479,6 +495,7 @@ namespace WinFormsAppTest
             activatePreset = -1;
             activateRecent = int.Parse(fileNum);
 
+            preConfBtnLoad();
             recentConfBtnLoad();
         }
 
@@ -495,7 +512,7 @@ namespace WinFormsAppTest
                 pFrm.attachStartBtn += new switchEventHandler(startBtnAttach);
             }
 
-            bool[] applyChecker = new bool[9];
+            bool[] applyChecker = new bool[10];
             bool result = true;
             DialogResult dialogResult = DialogResult.No;
 
@@ -512,16 +529,17 @@ namespace WinFormsAppTest
             //trunkSlice_textboxes
             applyChecker[6] = tbTrunkMinHeight.Text == getParam("filters.range.trunk", "minheight");
             applyChecker[7] = tbTrunkMaxHeight.Text == getParam("filters.range.trunk", "maxheight");
+            applyChecker[8] = tbTrunkSmooth.Text == getParam("csp_segmentstem", "smoothness");
 
             //CrownSlice_textboxes
-            applyChecker[8] = tbCrownMinHeight.Text == getParam("filters.range.crown", "minheight");
+            applyChecker[9] = tbCrownMinHeight.Text == getParam("filters.range.crown", "minheight");
 
             foreach (bool checker in applyChecker)
             {
                 result = result == checker;
             }
 
-            if(result == false)
+            if (result == false)
             {
                 dialogResult = MessageBox.Show("현재 설정이 적용되지 않았습니다.\n적용하시겠습니까?", "", MessageBoxButtons.YesNoCancel);
             }
@@ -536,7 +554,7 @@ namespace WinFormsAppTest
             {
                 return;
             }
-            
+
             pFrm.ShowDialog();
         }
         private void btnHome_Click(object sender, EventArgs e)
@@ -605,7 +623,31 @@ namespace WinFormsAppTest
         //사용자 설정이나 최근 작업 선택 상태로 설정값 바꿀 시 선택 해제 이벤트
         private void tbSettingsAll_TextChanged(object sender, EventArgs e)
         {
-            //구현 예정
+            if (activatePreset != -1)
+            {
+                foreach (Control c in pnSidePreset.Controls)
+                {
+                    if (c.Name == ("presetConfig" + activatePreset.ToString()))
+                    {
+                        c.BackColor = Color.Transparent;
+                        c.Invalidate();
+                        activatePreset = -1;
+                    }
+                }
+                activatePreset = -1;
+            }
+            else if (activateRecent != -1)
+            {
+                foreach (Control c in pnReview.Controls)
+                {
+                    if (c.Name == ("recentConfig" + activateRecent.ToString()))
+                    {
+                        c.BackColor = Color.Khaki;
+                        c.Invalidate();
+                        activateRecent = -1;
+                    }
+                }
+            }
         }
 
         //이 아래 4개 메서드 설정창 파라메터 판넬 마우스 이벤트
@@ -686,7 +728,7 @@ namespace WinFormsAppTest
         {
             UpdateParams();
 
-            //기타 설정값은 메인폼 텍스트박에서 바로 반영되지만,(UpdateParams메서드)
+            //기타 설정값은 메인폼 텍스트 박스에서 바로 반영되지만,(UpdateParams메서드)
             //plot값들은 적용하기 누르기 전 일시적으로 반영할 곳이 없기에 
             //따로 apply_temp메서드에서 임시로 만든 plot값 구조체에 넣은 값을
             //프로그램에 직접 반영되는 변수들인 gui 구조체로 옮겨담는다

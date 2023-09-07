@@ -1330,6 +1330,7 @@ namespace WinFormsAppTest
             }
         }
 
+        //일단 대기
         private bool IsLasSizeValid()
         {
             if (lasSize.minx == 0 && lasSize.miny == 0 && lasSize.maxx == 0 && lasSize.maxy == 0)

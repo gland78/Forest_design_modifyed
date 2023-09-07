@@ -71,6 +71,8 @@ namespace WinFormsAppTest
             initTextBox();
             resultPath = paramForm.getParam("gui", "result_path");
 
+            this.KeyPreview = true;
+
             //메인폼의 start 버튼 감추기(중복 실행 방지)
             attachStartBtn(false);
 
@@ -284,6 +286,7 @@ namespace WinFormsAppTest
         private void cbPlotShape_SelectedIndexChanged(object sender, EventArgs e)
         {
             tcPlot.SelectedIndex = cbPlotShape.SelectedIndex;
+            cbPlotShape.Focus();
         }
         //텍스트 박스 무결성 체크 및 las파일 크기 placeholder 처리
         private void tbPlotCircleX_Leave(object sender, EventArgs e)
@@ -626,6 +629,15 @@ namespace WinFormsAppTest
             {
                 MessageBox.Show($"Las파일 사이즈 읽기 실패\n{e}", "사이즈 파일 읽기 오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
+            }
+        }
+
+        //esc키로 창 닫기
+        private void PlotForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)
+            {
+                btnPlotCancel_Click(sender, e);
             }
         }
     }

@@ -443,6 +443,7 @@
             Name = "PlotForm";
             Text = "Form2";
             Load += PlotForm_Load;
+            KeyDown += PlotForm_KeyDown;
             MouseDown += PlotForm_MouseDown;
             MouseMove += PlotForm_MouseMove;
             tcPlot.ResumeLayout(false);
