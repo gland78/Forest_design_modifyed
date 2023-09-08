@@ -37,7 +37,7 @@ namespace WinFormsAppTest
         //최근 작업 목록 활성화 여부 판단 변수
         public int activateRecent = -1;
 
-        //config.csv 읽는 함수(기본 config용)
+        //config.csv 읽는 함수
         private void read_csv(string filePath)
         {
             csv_data.Clear();
@@ -235,12 +235,6 @@ namespace WinFormsAppTest
             tbNorCellSize.KeyPress += TextBox_KeyPress_OnlyInt;
             tbNorWinSize.KeyPress += TextBox_KeyPress_OnlyInt;
         }
-
-        private void TbTrunkSmooth_KeyPress(object? sender, KeyPressEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
         private void TextBox_KeyPressOnlyNumbers(object sender, KeyPressEventArgs e)
         {
             // 입력된 키가 숫자가 아니면서 Backspace(백스페이스)도 아닌 경우

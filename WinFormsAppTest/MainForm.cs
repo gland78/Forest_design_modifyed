@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using static WinFormsAppTest.MainForm;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 using System.Text;
+using System.Collections.Generic;
 
 namespace WinFormsAppTest
 {
@@ -198,6 +199,7 @@ namespace WinFormsAppTest
             pnSettingCrown1.MouseUp += pnSettingAll_MouseUp;
 
             //이 밑으로 설정창 setting textBox 이벤트
+            /*
             tbSubCellSize.TextChanged += tbSettingsAll_TextChanged;
 
             tbNorCellSize.TextChanged += tbSettingsAll_TextChanged;
@@ -211,6 +213,7 @@ namespace WinFormsAppTest
             tbTrunkSmooth.TextChanged += tbSettingsAll_TextChanged;
 
             tbCrownMinHeight.TextChanged += tbSettingsAll_TextChanged;
+            */
         }
 
         //CustomPanel 색 및 테두리 지정(Designer.cs에서 지정하면 컴파일 시 없어짐)
@@ -383,6 +386,7 @@ namespace WinFormsAppTest
 
                 CustomBtn btnRecentConfs = new CustomBtn();
                 btnRecentConfs.MouseClick += btnRecentConf_Click;
+                btnRecentConfs.MouseHover += btnRecentConf_MouseHover;
 
                 pnReview.Controls.Add(btnRecentConfs);
                 btnRecentConfs.Location = relativePos;
@@ -421,7 +425,14 @@ namespace WinFormsAppTest
                         }
                         else if (line.Contains("Lasfilename"))
                         {
-                            btnText += ("   " + Path.GetFileNameWithoutExtension(line.Split(',')[3]) + Environment.NewLine);
+                            string lasName = Path.GetFileName(line.Split(',')[3]);
+                            //las파일 이름이 너무 길면 텍스트가 이상해지므로
+                            //일정 이상 길이면 자르고 ...으로 생략
+                            if (lasName.Length > 17)
+                            {
+                                lasName = lasName.Substring(0, 17) + "...";
+                            }
+                            btnText += ("   " + lasName + Environment.NewLine);
                         }
                         else if (line.Contains("selection"))
                         {
@@ -497,6 +508,28 @@ namespace WinFormsAppTest
 
             preConfBtnLoad();
             recentConfBtnLoad();
+        }
+
+        //최근 기록 버튼의 생략된 las파일 이름 툴팁 표시
+        private void btnRecentConf_MouseHover(object sender, EventArgs e)
+        {
+            if (((CustomBtn)sender).Text.Contains("..."))
+            {
+                string fileDi = Path.Combine(basePath, reqDi[(int)configFileType.Recent]);
+                string fileName = ((Button)sender).Name + ".csv";
+                string csvLine;
+
+                using (StreamReader sr = new StreamReader(Path.Combine(fileDi, fileName)))
+                {
+                    while ((csvLine = sr.ReadLine()) != null)
+                    {
+                        if (csvLine.Contains("FileInfo,public,Lasfilename"))
+                        {
+                            ttMainInfo.SetToolTip((CustomBtn)sender, Path.GetFileName(csvLine.Split(',')[3]));
+                        }
+                    }
+                }
+            }
         }
 
         //사이드메뉴 버튼 관련 이벤트 처리 코드
@@ -724,9 +757,94 @@ namespace WinFormsAppTest
         }
 
         //적용하기 버튼 이벤트
+        //적용할 때 사용자 설정값이나 최근 기록이 활성화 되어있으면
+        //해당 config값과 적용 후의 csv_data의 값을 비교하여
+        //비활성화 여부 결정
         private void btnSettingApply_Click(object sender, EventArgs e)
         {
+            configFileType confType;
+            string fileDi = "";
+            string fileName = "";
+            string filePath;
+
+            //경우에 따른 파일 경로 설정
+            if(activatePreset > -1)
+            {
+                fileDi = Path.Combine(basePath, reqDi[(int)configFileType.Preset]);
+                fileName = "presetConfig" + activatePreset.ToString() + ".csv";
+            }
+            else if(activateRecent > -1)
+            {
+                fileDi = Path.Combine(basePath, reqDi[(int)configFileType.Recent]);
+                fileName = "presetConfig" + activateRecent.ToString() + ".csv";
+            }
+            filePath = Path.Combine(fileDi, fileName);
+
+            //csv_data 리스트에 텍스트 박스의 값 적용
             UpdateParams();
+
+            //read_csv 메서드로 해당 config파일 불러오기 전 미리 값 복사
+            List < List<string> > csvDataCopy = csv_data.ToList();
+
+            //이 시점이 클릭되어 있던 config의 csv_data
+            read_csv(filePath);
+            List<List<string>> csvDataLoaded = csv_data.ToList();
+            string tmp1 = "";
+            for (int i = 0; i < csv_data.Count; i++)
+            {
+                for (int j = 0; j < 5; j++)
+                {
+                    tmp1 += csv_data[i][j] + ',';
+                }
+                tmp1.TrimEnd(',');
+                tmp1 += Environment.NewLine;
+            }
+
+            //이 시점이 텍스트 박스 값이 반영된 csv_data
+            UpdateParams();
+            string tmp2 = "";
+            for (int i = 0; i < csv_data.Count; i++) 
+            {
+                for (int j = 0; j < 5; j++)
+                {
+                    tmp2 += csv_data[i][j] + ',';
+                }
+                tmp2.TrimEnd(',');
+                tmp2 += Environment.NewLine;
+            }
+            //두 리스트
+            //(한쪽은 설정창 텍스트 박스 값 반영한 csv_data,
+            //다른 쪽은 클릭되어 있던 config의 csv_data)를 비교하여
+            //두 리스트가 다르면 선택 해제
+            if(!tmp1.Equals(tmp2) && fileType.Equals("Preset"))
+            {
+                foreach (Control cont in pnSidePreset.Controls)
+                {
+                    //선택된 버튼 activate(Preset/Recent) 변수로 구해서 색 바꾸기 
+                    if (cont.Name.Equals("presetConfig" + activatePreset.ToString()))
+                    {
+                        cont.BackColor = Color.Transparent;
+                        cont.Invalidate();
+                        activatePreset = -1;
+                    }
+                }
+            }
+            else if (!csvDataCopy.SequenceEqual(csv_data) && fileType.Equals("Recent"))
+            {
+                foreach (Control cont in pnReview.Controls)
+                {
+                    //선택된 버튼 activate(Preset/Recent) 변수로 구해서 색 바꾸기 
+                    if (cont.Name.Equals("recentConfig" + activateRecent.ToString()))
+                    {
+                        cont.BackColor = Color.Khaki;
+                        cont.Invalidate();
+                        activateRecent = -1;
+                    }
+                }
+            }
+
+            //원상복구
+            csv_data = csvDataCopy.ToList();
 
             //기타 설정값은 메인폼 텍스트 박스에서 바로 반영되지만,(UpdateParams메서드)
             //plot값들은 적용하기 누르기 전 일시적으로 반영할 곳이 없기에 
@@ -773,16 +891,12 @@ namespace WinFormsAppTest
         }
 
         //사용자 설정값 저장 버튼 클릭 이벤트
-        //논의 필요(Data Load 칸 저장 방식에 대하여)
+        //최근 기록과 달리 사용자 설정값 저장은 plot폼 쪽 데이터를 저장하지 않음.
+        //(new!) 사용자 설정값 클릭 상태일 시 값 변경 후 저장하면 수정 가능
         private void btnPresetSave_Click(object sender, EventArgs e)
         {
             string fileDi = Path.Combine(basePath, reqDi[(int)configFileType.Preset]);
             string[] confCheck = Directory.GetFiles(fileDi, "presetConfig*");
-            if (confCheck.Length >= 10)
-            {
-                MessageBox.Show("사용자 설정은 10개 까지만 저장 가능합니다");
-                return;
-            }
 
             if (mFrm == null)
             {
@@ -801,7 +915,21 @@ namespace WinFormsAppTest
                 pFrm.attachStartBtn += new switchEventHandler(startBtnAttach);
             }
 
-            MakeConfig(configFileType.Preset);
+            if(activatePreset == -1)
+            {
+                if (confCheck.Length >= 10)
+                {
+                    MessageBox.Show("사용자 설정은 10개 까지만 저장 가능합니다");
+                    return;
+                }
+
+                MakeConfig(configFileType.Preset);
+            }
+            else
+            {
+
+            }
+
             mFrm.ShowDialog();
             preConfBtnLoad();
         }
