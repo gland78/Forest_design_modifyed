@@ -38,9 +38,9 @@ namespace WinFormsAppTest
         public int activateRecent = -1;
 
         //config.csv 읽는 함수
-        private void read_csv(string filePath)
+        private void read_csv(string filePath, List<List<string>> dataList)
         {
-            csv_data.Clear();
+            dataList.Clear();
             //csv 읽기
             string csvFilePath = filePath;
 
@@ -61,7 +61,7 @@ namespace WinFormsAppTest
                                 string_data.Add(v);
                             }
                             
-                            csv_data.Add(string_data);
+                            dataList.Add(string_data);
                         }
                         else
                         {
@@ -173,25 +173,25 @@ namespace WinFormsAppTest
         }
         
         //textbox 값 -> List 테이블로 대입 
-        private void UpdateParams()
+        private void UpdateParams(List<List<string>> dataList)
         {
             //subsamplng_textbox
-            setParam("filters.sample", "cell", tbSubCellSize.Text.Trim());
+            setParam(dataList, "filters.sample", "cell", tbSubCellSize.Text.Trim());
 
             //Normalize_textboxes
-            setParam("filters.smrf", "cell", tbNorCellSize.Text.Trim());
-            setParam("filters.smrf", "scalar", tbNorScalar.Text.Trim());
-            setParam("filters.smrf", "slope", tbNorSlope.Text.Trim());
-            setParam("filters.smrf", "window", tbNorWinSize.Text.Trim()); 
-            setParam("filters.smrf", "threshold", tbNorThres.Text.Trim());
+            setParam(dataList, "filters.smrf", "cell", tbNorCellSize.Text.Trim());
+            setParam(dataList, "filters.smrf", "scalar", tbNorScalar.Text.Trim());
+            setParam(dataList, "filters.smrf", "slope", tbNorSlope.Text.Trim());
+            setParam(dataList, "filters.smrf", "window", tbNorWinSize.Text.Trim()); 
+            setParam(dataList, "filters.smrf", "threshold", tbNorThres.Text.Trim());
 
             //trunkSlice_textboxes
-            setParam("filters.range.trunk", "minheight", tbTrunkMinHeight.Text.Trim());
-            setParam("filters.range.trunk", "maxheight", tbTrunkMaxHeight.Text.Trim());
-            setParam("csp_segmentstem", "smoothness", tbTrunkSmooth.Text.Trim());
+            setParam(dataList, "filters.range.trunk", "minheight", tbTrunkMinHeight.Text.Trim());
+            setParam(dataList, "filters.range.trunk", "maxheight", tbTrunkMaxHeight.Text.Trim());
+            setParam(dataList, "csp_segmentstem", "smoothness", tbTrunkSmooth.Text.Trim());
 
             //CrownSlice_textboxes
-            setParam("filters.range.crown", "minheight", tbCrownMinHeight.Text.Trim());
+            setParam(dataList, "filters.range.crown", "minheight", tbCrownMinHeight.Text.Trim());
         }
         //List 테이블 -> textbox 대입
         private void FillTextboxes()
@@ -199,22 +199,22 @@ namespace WinFormsAppTest
             ExtractCircleValues(ref gui, csv_data[0][3]);
             ExtractRectangleValues(ref gui, csv_data[1][3]);
             //subsamplng_textboxes
-            tbSubCellSize.Text = getParam("filters.sample","cell");
+            tbSubCellSize.Text = getParam(csv_data, "filters.sample","cell");
 
             //normalize_textboxes
-            tbNorCellSize.Text = getParam("filters.smrf","cell");
-            tbNorScalar.Text = getParam("filters.smrf", "scalar");
-            tbNorSlope.Text = getParam("filters.smrf", "slope");
-            tbNorThres.Text = getParam("filters.smrf", "threshold");
-            tbNorWinSize.Text = getParam("filters.smrf", "window");
+            tbNorCellSize.Text = getParam(csv_data, "filters.smrf","cell");
+            tbNorScalar.Text = getParam(csv_data, "filters.smrf", "scalar");
+            tbNorSlope.Text = getParam(csv_data, "filters.smrf", "slope");
+            tbNorThres.Text = getParam(csv_data, "filters.smrf", "threshold");
+            tbNorWinSize.Text = getParam(csv_data, "filters.smrf", "window");
 
             //trunkSlice_textboxes
-            tbTrunkMinHeight.Text = getParam("filters.range.trunk","minheight");
-            tbTrunkMaxHeight.Text = getParam("filters.range.trunk", "maxheight");
-            tbTrunkSmooth.Text = getParam("csp_segmentstem", "smoothness");
+            tbTrunkMinHeight.Text = getParam(csv_data, "filters.range.trunk","minheight");
+            tbTrunkMaxHeight.Text = getParam(csv_data, "filters.range.trunk", "maxheight");
+            tbTrunkSmooth.Text = getParam(csv_data, "csp_segmentstem", "smoothness");
 
             //CrownSlice_textboxes
-            tbCrownMinHeight.Text = getParam("filters.range.crown", "minheight");
+            tbCrownMinHeight.Text = getParam(csv_data, "filters.range.crown", "minheight");
         }
 
         // 무결성 검사를 위한 코드
@@ -258,7 +258,7 @@ namespace WinFormsAppTest
         //gui구조체의 plot값과 plot 리스트 값을 모두 모아 stringbuilder로 전달
         private void setAllparams(ref StringBuilder csvContent)
         {
-            UpdateParams();
+            UpdateParams(csv_data);
             csv_data[0][3] = $"cx={gui.centerX} cy={gui.centerY} radius={gui.radius}";
             csv_data[1][3] = $"xmin={gui.xMin} ymin={gui.yMin} xmax={gui.xMax} ymax={gui.yMax}";
             for (int i = 0; i < csv_data.Count; i++)
@@ -280,7 +280,7 @@ namespace WinFormsAppTest
         //기본 config.csv 제외 나머지 config 파일을 만드는 메서드(추후 default 부분 삭제 요망)
         private void MakeConfig(configFileType confType)
         {
-            read_csv(csv_path);
+            read_csv(csv_path, csv_data);
             string filePath = Path.Combine(basePath, reqDi[(int)confType]);
 
             //해당 폴더 없을 시 만들기
@@ -342,18 +342,31 @@ namespace WinFormsAppTest
                     break;
                 case configFileType.Preset:
                     setAllparams(ref csvContent);
+                    string title = "config" + confCheck.Length.ToString();
+                    string info = "";
+                    string lasPath = gui.loadPath;
+                    int fileNum = confCheck.Length;
+                    if (activatePreset != -1)
+                    {
+                        List<List<string>> csvLoad = new List<List<string>>();
+                        read_csv(Path.Combine(filePath, $"presetConfig{activatePreset}.csv"), csvLoad);
+                        title = getParam(csvLoad, "FileInfo", "title");
+                        info = getParam(csvLoad, "FileInfo", "info");
+                        lasPath = getParam(csvLoad, "FileInfo", "Lasfilename");
+                        fileNum = activatePreset;
+                    }
                     infoRecent = new string[] {
                         $"FileInfo,public,fileType,{confType},파일의 타입을 구분 (preset default recent).",
-                        $"FileInfo,public,title,{"config" + confCheck.Length.ToString()},gui에 표시될 파일의 제목",
+                        $"FileInfo,public,title,{title},gui에 표시될 파일의 제목",
                         $"FileInfo,public,date,{DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")},해당 파일이 만들어진 날짜 및 시간",
-                        $"FileInfo,public,info, ,사용자가 입력할 해당 설정값의 설명",
-                        $"FileInfo,public,Lasfilename,{gui.loadPath},설정을 저장할 LAS파일 경로"
+                        $"FileInfo,public,info,{info},사용자가 입력할 해당 설정값의 설명",
+                        $"FileInfo,public,Lasfilename,{lasPath},설정을 저장할 LAS파일 경로"
                     };
                     for (int i = infoRecent.Length - 1; i >= 0; i--)
                     {
                         csvContent.Insert(0, infoRecent[i] + Environment.NewLine);
                     }
-                    filePath = Path.Combine(filePath, $"presetConfig{confCheck.Length.ToString()}.csv");
+                    filePath = Path.Combine(filePath, $"presetConfig{fileNum}.csv");
                     csv_data[0][3] = temp1;
                     csv_data[1][3] = temp2;
                     break;
@@ -437,28 +450,28 @@ namespace WinFormsAppTest
                 MessageBox.Show("CSV 파일 작성 중 오류 발생: " + ex.Message);
             }
 
-            read_csv(filePath);
+            read_csv(filePath, csv_data);
             FillTextboxes();
             MessageBox.Show("설정 파일이 초기화 되었습니다.");
         }
 
         //csv_data를 저장해놓은 List에서 값을 가져오는 함수
-        public string getParam(string Type,string Key)
+        public string getParam(List<List<string>> dataList, string Type, string Key)
         {
             string ret = "";
-            for (int i = 0; i < csv_data.Count; i++)
+            for (int i = 0; i < dataList.Count; i++)
             {
-                if (csv_data[i][0] != Type)
+                if (dataList[i][0] != Type)
                 {
                     continue;
                 }
-                else if (csv_data[i][2] != Key)
+                else if (dataList[i][2] != Key)
                 {
                     continue;
                 }
                 else
                 {
-                    ret = csv_data[i][3];
+                    ret = dataList[i][3];
                     break;
                 }
             }
@@ -466,21 +479,21 @@ namespace WinFormsAppTest
             return ret;
         }
         //csv_data를 저장해놓은 List에 값을 설정하는 함수
-        public void setParam(string Type, string Key, string Value)
+        public void setParam(List<List<string>> dataList, string Type, string Key, string Value)
         {
-            for (int i = 0; i < csv_data.Count; i++)
+            for (int i = 0; i < dataList.Count; i++)
             {
-                if (csv_data[i][0] != Type)
+                if (dataList[i][0] != Type)
                 {
                     continue;
                 }
-                else if (csv_data[i][2] != Key)
+                else if (dataList[i][2] != Key)
                 {
                     continue;
                 }
                 else
                 {
-                    csv_data[i][3] = Value;
+                    dataList[i][3] = Value;
                    //MessageBox.Show(csv_data[i][3]); 
                     return;
                 }

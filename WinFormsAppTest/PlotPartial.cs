@@ -54,7 +54,7 @@ namespace WinFormsAppTest
 
             shape = "_circle";
 
-            resultPath = paramForm.getParam("gui", "result_path");
+            resultPath = paramForm.getParam(paramForm.csv_data, "gui", "result_path");
         }
         //PLOT
         private void MakeResultDirectory_PLOT()
@@ -164,7 +164,7 @@ namespace WinFormsAppTest
                             //str을 만들었으니 이제 그 데이터를 dat 파일에 넣는다.
 
                             dat_str = $"xmin={minx} xmax={maxx} ymin={miny} ymax={maxy}";
-                            paramForm.setParam("filters.crop", "bufferd_dat", dat_str);
+                            paramForm.setParam(paramForm.csv_data, "filters.crop", "bufferd_dat", dat_str);
                             paramForm.write_csv(configpath);
                         }
                         catch (Exception ex)
@@ -185,7 +185,7 @@ namespace WinFormsAppTest
             double centerX = double.Parse(tbPlotCircleX.Text);
             double centerY = double.Parse(tbPlotCircleY.Text);
             double radius = double.Parse(tbPlotCircleR.Text);
-            double buffer = double.Parse(paramForm.getParam("filters.crop", "buffer"));
+            double buffer = double.Parse(paramForm.getParam(paramForm.csv_data, "filters.crop", "buffer"));
             {
                 JObject Readers = new JObject(
                   new JProperty("type", "readers.las"),
@@ -216,7 +216,7 @@ namespace WinFormsAppTest
             double ymin = double.Parse(tbPlotRecYmin.Text);
             double xmax = double.Parse(tbPlotRecXmax.Text);
             double ymax = double.Parse(tbPlotRecYmax.Text);
-            double buffer = double.Parse(paramForm.getParam("filters.crop","buffer"));
+            double buffer = double.Parse(paramForm.getParam(paramForm.csv_data, "filters.crop","buffer"));
 
             double width = Math.Abs(xmax - xmin);
             double height = Math.Abs(ymax - ymin);
@@ -256,7 +256,7 @@ namespace WinFormsAppTest
         /// Cropping step, 사용자가 입력한 좌표를(다각형의 꼭짓점) 읽어온 후 표준지를 다각형으로 자릅니다.
         private void MakePolygonPlot()
         {
-            double buffer = double.Parse(paramForm.getParam("filters.crop","buffer"));
+            double buffer = double.Parse(paramForm.getParam(paramForm.csv_data, "filters.crop","buffer"));
             string one = "level1_cropped_";
             string resultSavedDirectory = this.resultSavedDirectory + shape;
 
@@ -310,7 +310,7 @@ namespace WinFormsAppTest
               );
                 JObject sonSpec = new JObject(
                    new JProperty("type", "filters.sample"),
-                   new JProperty("cell", paramForm.getParam("filters.sample","cell"))
+                   new JProperty("cell", paramForm.getParam(paramForm.csv_data, "filters.sample","cell"))
                );
                 JObject Writers = new JObject(
                    new JProperty("type", "writers.las"),
@@ -353,8 +353,8 @@ namespace WinFormsAppTest
                 JObject Outlier = new JObject(
                   new JProperty("type", "filters.outlier"),
                   new JProperty("method", "statistical"),
-                  new JProperty("mean_k", paramForm.getParam("filters.outlier","mean_k")),
-                  new JProperty("multiplier", paramForm.getParam("filters.outlier", "multiplier"))
+                  new JProperty("mean_k", paramForm.getParam(paramForm.csv_data, "filters.outlier","mean_k")),
+                  new JProperty("multiplier", paramForm.getParam(paramForm.csv_data, "filters.outlier", "multiplier"))
               );
                 JObject secondout = new JObject(
                    new JProperty("type", "writers.las"),
@@ -385,11 +385,11 @@ namespace WinFormsAppTest
               );
                 JObject smrf = new JObject(
                    new JProperty("type", "filters.smrf"),
-                   new JProperty("cell", paramForm.getParam("filters.smrf", "cell")),
-                   new JProperty("window", paramForm.getParam("filters.smrf", "window")),
-                   new JProperty("slope", paramForm.getParam("filters.smrf", "slope")),
-                   new JProperty("threshold", paramForm.getParam("filters.smrf", "threshold")),
-                   new JProperty("scalar", paramForm.getParam("filters.smrf", "scalar"))
+                   new JProperty("cell", paramForm.getParam(paramForm.csv_data, "filters.smrf", "cell")),
+                   new JProperty("window", paramForm.getParam(paramForm.csv_data, "filters.smrf", "window")),
+                   new JProperty("slope", paramForm.getParam(paramForm.csv_data, "filters.smrf", "slope")),
+                   new JProperty("threshold", paramForm.getParam(paramForm.csv_data, "filters.smrf", "threshold")),
+                   new JProperty("scalar", paramForm.getParam(paramForm.csv_data, "filters.smrf", "scalar"))
                );
                 JObject hagnn = new JObject(
                   new JProperty("type", "filters.hag_nn")
@@ -511,7 +511,8 @@ namespace WinFormsAppTest
               );
                 JObject sonSpec = new JObject(
                    new JProperty("type", "filters.range"),
-                   new JProperty("limits", @"Z[" + paramForm.getParam("filters.range.trunk","minheight") + ":" + paramForm.getParam("filters.range.trunk", "maxheight") + "]")
+                   new JProperty("limits", @"Z[" + paramForm.getParam(paramForm.csv_data, "filters.range.trunk","minheight") + ":"
+                   + paramForm.getParam(paramForm.csv_data, "filters.range.trunk", "maxheight") + "]")
                );
                 JObject Writers = new JObject(
                    new JProperty("type", "writers.pcd"),
@@ -528,7 +529,8 @@ namespace WinFormsAppTest
               );
                 JObject sonSpec = new JObject(
                    new JProperty("type", "filters.range"),
-                   new JProperty("limits", @"Z[" + paramForm.getParam("filters.range.crown","minheight") + ":" + paramForm.getParam("filters.range.crown", "maxheight") + "]")
+                   new JProperty("limits", @"Z[" + paramForm.getParam(paramForm.csv_data, "filters.range.crown","minheight") + ":" 
+                   + paramForm.getParam(paramForm.csv_data, "filters.range.crown", "maxheight") + "]")
                );
                 JObject Writers = new JObject(
                    new JProperty("type", "writers.pcd"),
@@ -561,7 +563,7 @@ namespace WinFormsAppTest
                 }
             }
 
-            paramForm.setParam("csp_segmentstem", "trunk_slice_file", trunkslicefile);
+            paramForm.setParam(paramForm.csv_data, "csp_segmentstem", "trunk_slice_file", trunkslicefile);
 
             try
             {
@@ -594,8 +596,8 @@ namespace WinFormsAppTest
                 }
             }
 
-            paramForm.setParam("csp_segmentcrown", "trunk_files", string.Join(" ", filenames_pcd));
-            paramForm.setParam("csp_segmentcrown", "crown_slice_file", crownslicefile);
+            paramForm.setParam(paramForm.csv_data, "csp_segmentcrown", "trunk_files", string.Join(" ", filenames_pcd));
+            paramForm.setParam(paramForm.csv_data, "csp_segmentcrown", "crown_slice_file", crownslicefile);
 
             // CSV 파일에 내용 추가
             try
@@ -777,7 +779,7 @@ namespace WinFormsAppTest
                             }
 
                             dat_str = points;*/
-                            paramForm.setParam("filters.crop", "origin_dat", poly_points);
+                            paramForm.setParam(paramForm.csv_data, "filters.crop", "origin_dat", poly_points);
                             paramForm.write_csv(configpath);
 
                             //File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + fourtwo + originLasName + "_O.dat", points);
@@ -812,7 +814,7 @@ namespace WinFormsAppTest
                                 //    minx + " " + maxx + " " + miny + " " + maxy + " " + centerX + " " + centerY + " " + radius);
 
                                 dat_str = $"xmin={minx} xmax={maxx} ymin={miny} ymax={maxy} cx={centerX} cy={centerY} radius={radius}";
-                                paramForm.setParam("filters.crop", "origin_dat", dat_str);
+                                paramForm.setParam(paramForm.csv_data, "filters.crop", "origin_dat", dat_str);
                                 paramForm.write_csv(configpath);
                             }
                             else
@@ -820,7 +822,7 @@ namespace WinFormsAppTest
                                 //File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + fourtwo + originLasName + "_O.dat", minx + " " + maxx + " " + miny + " " + maxy);
 
                                 dat_str = $"xmin={minx} xmax={maxx} ymin={miny} ymax={maxy}";
-                                paramForm.setParam("filters.crop", "origin_dat", dat_str);
+                                paramForm.setParam(paramForm.csv_data, "filters.crop", "origin_dat", dat_str);
                                 paramForm.write_csv(configpath);
                             }
                         }

@@ -107,7 +107,7 @@ namespace WinFormsAppTest
             }
 
             //기본 config.csv 파일 반영
-            read_csv(csv_path);
+            read_csv(csv_path, csv_data);
             FillTextboxes();
             RegistTextBoxHandler();
 
@@ -550,22 +550,22 @@ namespace WinFormsAppTest
             DialogResult dialogResult = DialogResult.No;
 
             //subsamplng_textboxes
-            applyChecker[0] = tbSubCellSize.Text == getParam("filters.sample", "cell");
+            applyChecker[0] = tbSubCellSize.Text == getParam(csv_data, "filters.sample", "cell");
 
             //normalize_textboxes
-            applyChecker[1] = tbNorCellSize.Text == getParam("filters.smrf", "cell");
-            applyChecker[2] = tbNorScalar.Text == getParam("filters.smrf", "scalar");
-            applyChecker[3] = tbNorSlope.Text == getParam("filters.smrf", "slope");
-            applyChecker[4] = tbNorThres.Text == getParam("filters.smrf", "threshold");
-            applyChecker[5] = tbNorWinSize.Text == getParam("filters.smrf", "window");
+            applyChecker[1] = tbNorCellSize.Text == getParam(csv_data, "filters.smrf", "cell");
+            applyChecker[2] = tbNorScalar.Text == getParam(csv_data, "filters.smrf", "scalar");
+            applyChecker[3] = tbNorSlope.Text == getParam(csv_data, "filters.smrf", "slope");
+            applyChecker[4] = tbNorThres.Text == getParam(csv_data, "filters.smrf", "threshold");
+            applyChecker[5] = tbNorWinSize.Text == getParam(csv_data, "filters.smrf", "window");
 
             //trunkSlice_textboxes
-            applyChecker[6] = tbTrunkMinHeight.Text == getParam("filters.range.trunk", "minheight");
-            applyChecker[7] = tbTrunkMaxHeight.Text == getParam("filters.range.trunk", "maxheight");
-            applyChecker[8] = tbTrunkSmooth.Text == getParam("csp_segmentstem", "smoothness");
+            applyChecker[6] = tbTrunkMinHeight.Text == getParam(csv_data, "filters.range.trunk", "minheight");
+            applyChecker[7] = tbTrunkMaxHeight.Text == getParam(csv_data, "filters.range.trunk", "maxheight");
+            applyChecker[8] = tbTrunkSmooth.Text == getParam(csv_data, "csp_segmentstem", "smoothness");
 
             //CrownSlice_textboxes
-            applyChecker[9] = tbCrownMinHeight.Text == getParam("filters.range.crown", "minheight");
+            applyChecker[9] = tbCrownMinHeight.Text == getParam(csv_data, "filters.range.crown", "minheight");
 
             foreach (bool checker in applyChecker)
             {
@@ -577,7 +577,7 @@ namespace WinFormsAppTest
                 dialogResult = MessageBox.Show("현재 설정이 적용되지 않았습니다.\n적용하시겠습니까?", "", MessageBoxButtons.YesNoCancel);
             }
 
-            fileType = getParam("FileInfo", "fileType");
+            fileType = getParam(csv_data, "FileInfo", "fileType");
 
             if (dialogResult == DialogResult.Yes)
             {
@@ -776,38 +776,40 @@ namespace WinFormsAppTest
             else if(activateRecent > -1)
             {
                 fileDi = Path.Combine(basePath, reqDi[(int)configFileType.Recent]);
-                fileName = "presetConfig" + activateRecent.ToString() + ".csv";
+                fileName = "recentConfig" + activateRecent.ToString() + ".csv";
             }
             filePath = Path.Combine(fileDi, fileName);
 
             //csv_data 리스트에 텍스트 박스의 값 적용
-            UpdateParams();
+            UpdateParams(csv_data);
 
-            //read_csv 메서드로 해당 config파일 불러오기 전 미리 값 복사
-            List < List<string> > csvDataCopy = csv_data.ToList();
+            //최근 기록 혹은 사용자 설정값 csv 불러올 리스트
+            List < List<string> > SelectedCsvData = new List<List<string>>();
 
-            //이 시점이 클릭되어 있던 config의 csv_data
-            read_csv(filePath);
-            List<List<string>> csvDataLoaded = csv_data.ToList();
+            //최근 기록 혹은 사용자 설정값 csv 불러오기
+            read_csv(filePath, SelectedCsvData);
+
+            //SelectedCsvData 리스트를 반복문 돌려서 string으로 추출
             string tmp1 = "";
-            for (int i = 0; i < csv_data.Count; i++)
+            for (int i = 0; i < SelectedCsvData.Count; i++)
             {
-                for (int j = 0; j < 5; j++)
+                for (int j = 0; j < SelectedCsvData[i].Count; j++)
                 {
-                    tmp1 += csv_data[i][j] + ',';
+                    tmp1 += SelectedCsvData[i][j] + ',';
                 }
                 tmp1.TrimEnd(',');
                 tmp1 += Environment.NewLine;
             }
 
-            //이 시점이 텍스트 박스 값이 반영된 csv_data
-            UpdateParams();
+            //이 시점이 텍스트 박스 값이 반영된 리스트
+            UpdateParams(SelectedCsvData);
+            //SelectedCsvData 리스트를 반복문 돌려서 string으로 추출
             string tmp2 = "";
-            for (int i = 0; i < csv_data.Count; i++) 
+            for (int i = 0; i < SelectedCsvData.Count; i++) 
             {
-                for (int j = 0; j < 5; j++)
+                for (int j = 0; j < SelectedCsvData[i].Count; j++)
                 {
-                    tmp2 += csv_data[i][j] + ',';
+                    tmp2 += SelectedCsvData[i][j] + ',';
                 }
                 tmp2.TrimEnd(',');
                 tmp2 += Environment.NewLine;
@@ -829,7 +831,7 @@ namespace WinFormsAppTest
                     }
                 }
             }
-            else if (!csvDataCopy.SequenceEqual(csv_data) && fileType.Equals("Recent"))
+            else if (!tmp1.Equals(tmp2) && fileType.Equals("Recent"))
             {
                 foreach (Control cont in pnReview.Controls)
                 {
@@ -842,9 +844,6 @@ namespace WinFormsAppTest
                     }
                 }
             }
-
-            //원상복구
-            csv_data = csvDataCopy.ToList();
 
             //기타 설정값은 메인폼 텍스트 박스에서 바로 반영되지만,(UpdateParams메서드)
             //plot값들은 적용하기 누르기 전 일시적으로 반영할 곳이 없기에 
@@ -880,7 +879,7 @@ namespace WinFormsAppTest
         private void btnSettingSave_Click(object sender, EventArgs e)
         {
             //변수들 초기화
-            UpdateParams();
+            UpdateParams(csv_data);
             // csv 작성
             try
             {
@@ -892,7 +891,7 @@ namespace WinFormsAppTest
 
         //사용자 설정값 저장 버튼 클릭 이벤트
         //최근 기록과 달리 사용자 설정값 저장은 plot폼 쪽 데이터를 저장하지 않음.
-        //(new!) 사용자 설정값 클릭 상태일 시 값 변경 후 저장하면 수정 가능
+        //(new!) 사용자 설정값 클릭 상태일 시 값 변경 후 저장하면 수정 가능(예정)
         private void btnPresetSave_Click(object sender, EventArgs e)
         {
             string fileDi = Path.Combine(basePath, reqDi[(int)configFileType.Preset]);
@@ -915,21 +914,12 @@ namespace WinFormsAppTest
                 pFrm.attachStartBtn += new switchEventHandler(startBtnAttach);
             }
 
-            if(activatePreset == -1)
+            if (activatePreset == -1 && confCheck.Length >= 10)
             {
-                if (confCheck.Length >= 10)
-                {
-                    MessageBox.Show("사용자 설정은 10개 까지만 저장 가능합니다");
-                    return;
-                }
-
-                MakeConfig(configFileType.Preset);
+                MessageBox.Show("사용자 설정은 10개 까지만 저장 가능합니다");
+                return;
             }
-            else
-            {
-
-            }
-
+            MakeConfig(configFileType.Preset);
             mFrm.ShowDialog();
             preConfBtnLoad();
         }
@@ -970,7 +960,7 @@ namespace WinFormsAppTest
             preConfBtnLoad();
             recentConfBtnLoad();
 
-            read_csv(csv_path);
+            read_csv(csv_path, csv_data);
             FillTextboxes();
             fileType = "";
         }
