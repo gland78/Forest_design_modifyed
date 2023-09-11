@@ -28,21 +28,28 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ManageForm));
             lvPresetConf = new ListView();
             titleHeader = new ColumnHeader();
             dateHeader = new ColumnHeader();
             infoHeader = new ColumnHeader();
+            cmsManage = new ContextMenuStrip(components);
+            tsmiPresetUp = new ToolStripMenuItem();
+            tsmiPresetDown = new ToolStripMenuItem();
             btnManageTitle = new Button();
             tableLayoutPanel1 = new TableLayoutPanel();
             btnManageInfo = new Button();
             btnManageDelete = new Button();
             btnManageCancel = new Button();
+            cmsManage.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             SuspendLayout();
             // 
             // lvPresetConf
             // 
             lvPresetConf.Columns.AddRange(new ColumnHeader[] { titleHeader, dateHeader, infoHeader });
+            lvPresetConf.ContextMenuStrip = cmsManage;
             lvPresetConf.Dock = DockStyle.Fill;
             lvPresetConf.Font = new Font("맑은 고딕", 12F, FontStyle.Regular, GraphicsUnit.Point);
             lvPresetConf.FullRowSelect = true;
@@ -57,6 +64,7 @@
             lvPresetConf.UseCompatibleStateImageBehavior = false;
             lvPresetConf.View = View.Details;
             lvPresetConf.SizeChanged += lvPresetConf_SizeChanged;
+            lvPresetConf.KeyDown += lvPresetConf_KeyDown;
             lvPresetConf.MouseDoubleClick += lvPresetConf_MouseDoubleClick;
             // 
             // titleHeader
@@ -73,6 +81,26 @@
             // 
             infoHeader.Text = "Info";
             infoHeader.Width = 180;
+            // 
+            // cmsManage
+            // 
+            cmsManage.Items.AddRange(new ToolStripItem[] { tsmiPresetUp, tsmiPresetDown });
+            cmsManage.Name = "cmsManage";
+            cmsManage.Size = new Size(181, 70);
+            // 
+            // tsmiPresetUp
+            // 
+            tsmiPresetUp.Name = "tsmiPresetUp";
+            tsmiPresetUp.Size = new Size(180, 22);
+            tsmiPresetUp.Text = "위로 올리기";
+            tsmiPresetUp.Click += tsmiPresetUp_Click;
+            // 
+            // tsmiPresetDown
+            // 
+            tsmiPresetDown.Name = "tsmiPresetDown";
+            tsmiPresetDown.Size = new Size(180, 22);
+            tsmiPresetDown.Text = "아래로 내리기";
+            tsmiPresetDown.Click += tsmiPresetDown_Click;
             // 
             // btnManageTitle
             // 
@@ -149,10 +177,12 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(684, 298);
             Controls.Add(tableLayoutPanel1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "ManageForm";
             Text = "ManageForm";
             Load += ManageForm_Load;
             KeyDown += ManageForm_KeyDown;
+            cmsManage.ResumeLayout(false);
             tableLayoutPanel1.ResumeLayout(false);
             ResumeLayout(false);
         }
@@ -168,5 +198,8 @@
         private Button btnManageCancel;
         private ColumnHeader dateHeader;
         private Button btnManageInfo;
+        private ContextMenuStrip cmsManage;
+        private ToolStripMenuItem tsmiPresetUp;
+        private ToolStripMenuItem tsmiPresetDown;
     }
 }

@@ -33,6 +33,8 @@ namespace WinFormsAppTest
 
         private void ManageForm_Load(object sender, EventArgs e)
         {
+            this.Text = "사용자 설정 관리";
+
             //esc 창 닫기를 위하여 키입력을 항상 폼이 먼저 받음
             this.KeyPreview = true;
 
@@ -68,7 +70,7 @@ namespace WinFormsAppTest
                     //MessageBox.Show(csvLines);
                     if (csvLines.Contains("title"))
                     {
-                        title = csvLines.Split(',')[3];
+                        title = csvLines.Split(",")[3].Replace('，', ',');
                     }
                     else if (csvLines.Contains("date"))
                     {
@@ -76,7 +78,7 @@ namespace WinFormsAppTest
                     }
                     else if (csvLines.Contains("info"))
                     {
-                        workInfo = csvLines.Split(",")[3];
+                        workInfo = csvLines.Split(",")[3].Replace('，', ',');
                     }
                 }
 
@@ -110,11 +112,10 @@ namespace WinFormsAppTest
                 return;
             }
 
-            //string csv = File.ReadAllText(Path.Combine(fileDi, fileName));
-            //csv = csv.Replace(oldTitle, newTitle);
-            //File.WriteAllText(Path.Combine(fileDi, fileName), csv, Encoding.UTF8);
+            //사용자가 제목에 쉼표를 넣었을 때의 대비
+            newTitle = newTitle.Replace(',', '，');
 
-            //사용자가 설명에 title 문자를 포함시켰을 경우를 대비해 다시 코딩했음
+            //사용자가 제목에 title 문자를 포함시켰을 경우를 대비해 코딩했음
             string csv = "";
             using (StreamReader sr = new StreamReader(Path.Combine(fileDi, fileName)))
             {
@@ -165,7 +166,6 @@ namespace WinFormsAppTest
                     lvPresetConf.SelectedItems[0].Remove();
                     File.Delete(conf);
 
-                    //int oldIndex = int.Parse(fileName.Substring(12));
                     int oldIndex = int.Parse(Regex.Replace(fileName, @"\D", ""));
 
                     if (oldIndex == mainForm.activatePreset)
@@ -225,6 +225,13 @@ namespace WinFormsAppTest
                 return;
             }
 
+            if (oldInfo.Contains(','))
+            {
+                oldInfo = oldInfo.Replace(",", "，");
+            }
+
+            newInfo = newInfo.Replace(',', '，');
+
             string? csvLines;
             StringBuilder sb = new StringBuilder();
 
@@ -247,7 +254,7 @@ namespace WinFormsAppTest
 
         private void lvPresetConf_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            if (lvPresetConf.SelectedItems.Count < 1)
+            if (lvPresetConf.SelectedItems.Count < 1 || e.Button != MouseButtons.Left)
             {
                 return;
             }
@@ -269,8 +276,9 @@ namespace WinFormsAppTest
                     break;
                 case 1:
                     string fileDi = Path.Combine(basePath, reqDi[(int)configFileType.Preset]);
-                    string fileName = lvPresetConf.SelectedItems[0].Name;
+                    string fileName = Path.GetFileNameWithoutExtension(lvPresetConf.SelectedItems[0].Name);
                     presetReflect(fileDi, fileName);
+                    mainForm.activatePreset = lvPresetConf.SelectedItems[0].Index;
                     this.Close();
                     break;
                 case 2:
@@ -285,6 +293,60 @@ namespace WinFormsAppTest
             {
                 this.Close();
             }
+        }
+
+        private void lvPresetConf_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete)
+            {
+                btnManageDelete_Click(sender, e);
+            }
+        }
+
+        private void tsmiPresetUp_Click(object sender, EventArgs e)
+        {
+            ListViewItem clickedItem = lvPresetConf.SelectedItems[0];
+            if (clickedItem.Index == 0)
+            {
+                return;
+            }
+
+            string clickedItemName = clickedItem.Name;
+            int upperItemIndex = clickedItem.Index - 1;
+            string upperItemName = lvPresetConf.Items[upperItemIndex].Name;
+
+            string upperItemPath = Path.Combine(Path.Combine(basePath, reqDi[(int)configFileType.Preset]), upperItemName);
+            string clickedItemPath = Path.Combine(Path.Combine(basePath, reqDi[(int)configFileType.Preset]), clickedItemName);
+
+            File.Move(upperItemPath, upperItemPath + "_1");
+            File.Move(clickedItemPath, upperItemPath);
+            File.Move(upperItemPath + "_1", clickedItemPath);
+
+            preConfLoad();
+            mainPaint();
+        }
+
+        private void tsmiPresetDown_Click(object sender, EventArgs e)
+        {
+            ListViewItem clickedItem = lvPresetConf.SelectedItems[0];
+            if (clickedItem.Index == lvPresetConf.Items.Count - 1)
+            {
+                return;
+            }
+
+            string clickedItemName = clickedItem.Name;
+            int lowerItemIndex = clickedItem.Index + 1;
+            string lowerItemName = lvPresetConf.Items[lowerItemIndex].Name;
+
+            string lowerItemPath = Path.Combine(Path.Combine(basePath, reqDi[(int)configFileType.Preset]), lowerItemName);
+            string clickedItemPath = Path.Combine(Path.Combine(basePath, reqDi[(int)configFileType.Preset]), clickedItemName);
+
+            File.Move(lowerItemPath, lowerItemPath + "_1");
+            File.Move(clickedItemPath, lowerItemPath);
+            File.Move(lowerItemPath + "_1", clickedItemPath);
+
+            preConfLoad();
+            mainPaint();
         }
     }
 }

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using WK.Libraries.BetterFolderBrowserNS;
 using System.Security;
 using System.Threading.Tasks.Dataflow;
+using System.Text.RegularExpressions;
 
 namespace WinFormsAppTest
 {
@@ -342,10 +343,38 @@ namespace WinFormsAppTest
                     break;
                 case configFileType.Preset:
                     setAllparams(ref csvContent);
-                    string title = "config" + confCheck.Length.ToString();
+                    string title = "config";
                     string info = "";
                     string lasPath = gui.loadPath;
                     int fileNum = confCheck.Length;
+
+                    //default 파일명 정하기(config + 존재하지 않는 config번호 파일 중 가장 작은 수)
+                    string titleNum = "0";
+                    bool[] fileNumCheck = Enumerable.Repeat(false, 10).ToArray();
+                    for (int i = confCheck.Length - 1; i >= 0; i--)
+                    {
+                        if (Regex.IsMatch(pnSidePreset.Controls[i].Text, @"config\d"))
+                        {
+                            int numCheck = int.Parse(Regex.Replace(pnSidePreset.Controls[i].Text, @"\D", ""));
+                            fileNumCheck[numCheck] = true;
+                        }
+                    }
+                    bool foundTrue = false;
+                    for (int i = 0; i < fileNumCheck.Length; i++)
+                    {
+                        if (fileNumCheck[i])
+                        {
+                            foundTrue = true;
+                        }
+                        else if (foundTrue)
+                        {
+                            titleNum = i.ToString();
+                            break;
+                        }
+                    }
+                    title += titleNum;
+
+                    //사용자 설정값 선택 상태일 시 해당 파일 fileInfo 읽어오기
                     if (activatePreset != -1)
                     {
                         List<List<string>> csvLoad = new List<List<string>>();

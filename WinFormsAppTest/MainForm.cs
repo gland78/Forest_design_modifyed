@@ -342,7 +342,8 @@ namespace WinFormsAppTest
                     {
                         if (line.Contains("title"))
                         {
-                            btnPreConfs.Text = "            " + line.Split(',')[3];
+                            string lineData = line.Split(',')[3].Replace('，', ',');
+                            btnPreConfs.Text = "            " + lineData;
                             break;
                         }
                     }
@@ -871,8 +872,6 @@ namespace WinFormsAppTest
             activateRecent = -1;
             preConfBtnLoad();
             recentConfBtnLoad();
-
-            tcMainHome.SelectedIndex = 0;
         }
 
         //저장하기 버튼 클릭 이벤트
@@ -899,7 +898,7 @@ namespace WinFormsAppTest
 
             if (mFrm == null)
             {
-                mFrm = new ManageForm();
+                mFrm = new ManageForm(this);
                 mFrm.mainPaint += new customEventHandler(this.preConfBtnLoad);
                 mFrm.presetReflect += new presetReflectHandler(this.reflectConfs);
             }
@@ -920,8 +919,15 @@ namespace WinFormsAppTest
                 return;
             }
             MakeConfig(configFileType.Preset);
-            mFrm.ShowDialog();
             preConfBtnLoad();
+            if(activatePreset == -1)
+            {
+                mFrm.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("적용되었습니다");
+            }
         }
 
         //사용자 설정값 관리 버튼 클릭 이벤트
