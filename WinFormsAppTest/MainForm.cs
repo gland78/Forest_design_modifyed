@@ -58,9 +58,9 @@ namespace WinFormsAppTest
 
         //최근 작업 목록 첫 추가 위치 및 크기, 간격
         //동적 버튼 추가를 위해 필요
-        Point RECENT_BTN_POS = new Point(50, 27);
-        const int RECENT_BTN_WIDTH = 205;
-        const int RECENT_BTN_HEIGHT = 165;
+        Point RECENT_BTN_POS = new Point(22, 0);
+        const int RECENT_BTN_WIDTH = 265;
+        const int RECENT_BTN_HEIGHT = 225;
         const int RECENT_BTN_GAP = 30;
 
         bool menuOpen = false;
@@ -78,17 +78,24 @@ namespace WinFormsAppTest
 
             pnMain.isBorder = false;
 
-            //바뀐 곳
             pnSidePreset.isBorder = true;
-            pnSidePreset.borderColor = Color.DarkSeaGreen;
+            pnSidePreset.borderColor = Color.FromArgb(64, 96, 96);
             pnSidePreset.isFill = true;
-            pnSidePreset.fillColor = Color.DarkSeaGreen;
+            pnSidePreset.fillColor = Color.FromArgb(64, 96, 96);
             pnSidePreset.Visible = false;
 
             lbSlidePreset.Visible = false;
-            btnPresetManage.Location = new Point(12, 118);
+            btnPresetManage.Location = new Point(14, 130);
             btnPresetManage.Size = new Size(38, 34);
-            //
+
+            lbPresetManage = new Label();
+            lbPresetManage.Name = "lbPresetManage";
+            lbPresetManage.ForeColor = Color.White;
+            lbPresetManage.Location = new Point(-2, 165);
+            lbPresetManage.TabIndex = 6;
+            lbPresetManage.Text = "사용자 설정";
+            pnSideMenu.Controls.Add(lbPresetManage);
+
 
             pnSideMenu.Width = MIN_SLIDING_WIDTH;
             tcMainHome.Left -= SLIDING_GAP / 2;
@@ -131,7 +138,7 @@ namespace WinFormsAppTest
             //설정버튼 이벤트
             btnSettings.Click += btnSettings_Click;
             //사이드 메뉴 접기/열기 버튼 이벤트
-            btnSlideMenu.Click += btnSlideMenu_Click;
+            btnSideMenu.Click += btnSlideMenu_Click;
             //창 닫기 버튼 이벤트
             btnClose.Click += btnClose_Click;
             //프로그램 실행 버튼 이벤트
@@ -318,16 +325,16 @@ namespace WinFormsAppTest
                 btnPreConfs.BorderRadius = 5;
                 if (fileNum == activatePreset)
                 {
-                    btnPreConfs.BackColor = Color.MediumSeaGreen;
+                    btnPreConfs.BackColor = Color.FromArgb(40, 72, 72);
                 }
                 else
                 {
                     btnPreConfs.BackColor = Color.Transparent;
                 }
-                btnPreConfs.ForeColor = Color.Black;
+                btnPreConfs.ForeColor = Color.White;
                 btnPreConfs.FlatAppearance.BorderSize = 0;
-                btnPreConfs.FlatAppearance.MouseDownBackColor = Color.MediumAquamarine;
-                btnPreConfs.FlatAppearance.MouseOverBackColor = Color.MediumSeaGreen;
+                btnPreConfs.FlatAppearance.MouseDownBackColor = Color.FromArgb(112, 144, 144);
+                btnPreConfs.FlatAppearance.MouseOverBackColor = Color.FromArgb(96, 128, 128);
                 btnPreConfs.FlatStyle = FlatStyle.Flat;
                 btnPreConfs.ImageAlign = ContentAlignment.MiddleLeft;
                 btnPreConfs.TextAlign = ContentAlignment.MiddleLeft;
@@ -396,21 +403,23 @@ namespace WinFormsAppTest
                 btnRecentConfs.Margin = new Padding(4, 8, 4, 4);
                 if (fileNum == activateRecent)
                 {
-                    btnRecentConfs.BackColor = Color.DarkKhaki;
+                    btnRecentConfs.BackColor = Color.FromArgb(106, 126, 145);
+                    btnRecentConfs.ForeColor = Color.White;
                 }
                 else
                 {
-                    btnRecentConfs.BackColor = Color.Khaki;
+                    btnRecentConfs.BackColor = Color.LightSteelBlue;
+                    btnRecentConfs.ForeColor = SystemColors.ControlText;
                 }
                 btnRecentConfs.BorderRadius = 20;
                 btnRecentConfs.BorderSize = 0;
                 btnRecentConfs.FlatAppearance.BorderSize = 0;
-                btnRecentConfs.FlatAppearance.MouseDownBackColor = Color.LemonChiffon;
-                btnRecentConfs.FlatAppearance.MouseOverBackColor = Color.PaleGoldenrod;
+                btnRecentConfs.FlatAppearance.MouseDownBackColor = Color.FromArgb(228, 238, 255);
+                btnRecentConfs.FlatAppearance.MouseOverBackColor = Color.FromArgb(206, 226, 255);
                 btnRecentConfs.FlatStyle = FlatStyle.Flat;
                 btnRecentConfs.TextAlign = ContentAlignment.MiddleLeft;
                 btnRecentConfs.Font = new Font("맑은 고딕", 12F, FontStyle.Regular, GraphicsUnit.Point);
-                btnRecentConfs.ForeColor = SystemColors.ControlText;
+
                 using (StreamReader sr = new StreamReader(filePath))
                 {
                     string line;
@@ -421,7 +430,7 @@ namespace WinFormsAppTest
                         //MessageBox.Show(line);
                         if (line.Contains("title"))
                         {
-                            btnText += "   " + line.Split(',')[3] + Environment.NewLine;
+                            btnText += "  날짜:      " + line.Split(',')[3] + Environment.NewLine;
                             continue;
                         }
                         else if (line.Contains("Lasfilename"))
@@ -429,11 +438,11 @@ namespace WinFormsAppTest
                             string lasName = Path.GetFileName(line.Split(',')[3]);
                             //las파일 이름이 너무 길면 텍스트가 이상해지므로
                             //일정 이상 길이면 자르고 ...으로 생략
-                            if (lasName.Length > 17)
+                            if (lasName.Length > 16)
                             {
-                                lasName = lasName.Substring(0, 17) + "...";
+                                lasName = lasName.Substring(0, 16) + "...";
                             }
-                            btnText += ("   " + lasName + Environment.NewLine);
+                            btnText += ("  Las파일:  " + lasName + Environment.NewLine);
                         }
                         else if (line.Contains("selection"))
                         {
@@ -451,16 +460,17 @@ namespace WinFormsAppTest
                                     shapeStr = "polygon";
                                     break;
                             }
-                            btnText += ("   " + shapeStr + Environment.NewLine);
+                            btnText += ("  모양:      " + shapeStr + Environment.NewLine);
                             continue;
                         }
                         string[] plotData;
                         if (shapeStr != "" && line.Split(',')[2].Equals(shapeStr))
                         {
+                            btnText += "\n  Plot 데이터\n";
                             plotData = line.Split(',')[3].Split(" ");
                             foreach (string str in plotData)
                             {
-                                btnText += "   " + str + Environment.NewLine;
+                                btnText += "  " + str + Environment.NewLine;
                             }
                             continue;
                         }
@@ -605,10 +615,12 @@ namespace WinFormsAppTest
                 pnSideMenu.Width = MAX_SLIDING_WIDTH;
                 tcMainHome.Left += SLIDING_GAP / 2;
 
-                lbSlidePreset.Visible = true;
-                btnPresetManage.Location = new Point(350, 122);
-                btnPresetManage.Size = new Size(22, 22);
+                btnClose.BackColor = Color.LightGray;
+                btnHide.BackColor = Color.LightGray;
 
+                lbSlidePreset.Visible = true;
+                btnPresetManage.Location = new Point(350, 135);
+                btnPresetManage.Size = new Size(22, 22);
                 /*
                 foreach (Control cont in pnSideMenu.Controls)
                 {
@@ -619,6 +631,7 @@ namespace WinFormsAppTest
                     }
                 }
                 */
+                lbPresetManage.Visible = false;
                 pnSidePreset.Visible = true;
 
                 btnSettings.Width = MAX_BTN_WIDTH + 13;
@@ -637,6 +650,7 @@ namespace WinFormsAppTest
                 }
                 */
                 pnSidePreset.Visible = false;
+                lbPresetManage.Visible = true;
 
                 btnSettings.Width = MIN_BTN_WIDTH;
                 btnSettings.Text = "";
@@ -644,7 +658,7 @@ namespace WinFormsAppTest
                 pnSideMenu.Width = MIN_SLIDING_WIDTH;
                 tcMainHome.Left -= SLIDING_GAP / 2;
 
-                btnPresetManage.Location = new Point(12, 118);
+                btnPresetManage.Location = new Point(14, 130);
                 btnPresetManage.Size = new Size(38, 34);
                 lbSlidePreset.Visible = false;
             }
@@ -769,12 +783,12 @@ namespace WinFormsAppTest
             string filePath;
 
             //경우에 따른 파일 경로 설정
-            if(activatePreset > -1)
+            if (activatePreset > -1)
             {
                 fileDi = Path.Combine(basePath, reqDi[(int)configFileType.Preset]);
                 fileName = "presetConfig" + activatePreset.ToString() + ".csv";
             }
-            else if(activateRecent > -1)
+            else if (activateRecent > -1)
             {
                 fileDi = Path.Combine(basePath, reqDi[(int)configFileType.Recent]);
                 fileName = "recentConfig" + activateRecent.ToString() + ".csv";
@@ -785,7 +799,7 @@ namespace WinFormsAppTest
             UpdateParams(csv_data);
 
             //최근 기록 혹은 사용자 설정값 csv 불러올 리스트
-            List < List<string> > SelectedCsvData = new List<List<string>>();
+            List<List<string>> SelectedCsvData = new List<List<string>>();
 
             //최근 기록 혹은 사용자 설정값 csv 불러오기
             read_csv(filePath, SelectedCsvData);
@@ -806,7 +820,7 @@ namespace WinFormsAppTest
             UpdateParams(SelectedCsvData);
             //SelectedCsvData 리스트를 반복문 돌려서 string으로 추출
             string tmp2 = "";
-            for (int i = 0; i < SelectedCsvData.Count; i++) 
+            for (int i = 0; i < SelectedCsvData.Count; i++)
             {
                 for (int j = 0; j < SelectedCsvData[i].Count; j++)
                 {
@@ -819,7 +833,7 @@ namespace WinFormsAppTest
             //(한쪽은 설정창 텍스트 박스 값 반영한 csv_data,
             //다른 쪽은 클릭되어 있던 config의 csv_data)를 비교하여
             //두 리스트가 다르면 선택 해제
-            if(!tmp1.Equals(tmp2) && fileType.Equals("Preset"))
+            if (!tmp1.Equals(tmp2) && fileType.Equals("Preset"))
             {
                 foreach (Control cont in pnSidePreset.Controls)
                 {
@@ -920,7 +934,7 @@ namespace WinFormsAppTest
             }
             MakeConfig(configFileType.Preset);
             preConfBtnLoad();
-            if(activatePreset == -1)
+            if (activatePreset == -1)
             {
                 mFrm.ShowDialog();
             }
