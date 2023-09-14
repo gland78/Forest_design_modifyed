@@ -1,4 +1,5 @@
 ﻿using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
+using Timer = System.Windows.Forms.Timer;
 
 namespace WinFormsAppTest
 {
@@ -38,6 +39,8 @@ namespace WinFormsAppTest
             lbSlideMenu = new Label();
             lbHome = new Label();
             pnSidePreset = new CustomPanel();
+            lbSidePresetTitle = new Label();
+            lbSidePresetDate = new Label();
             lbSlidePreset = new Label();
             btnPresetManage = new CustomBtn();
             btnHome = new CustomBtn();
@@ -53,7 +56,7 @@ namespace WinFormsAppTest
             pnMain = new CustomPanel();
             pbLoadingBar = new ProgressBar();
             lbSubTitle = new Label();
-            btnStart = new Button();
+            btnStart = new CustomBtn();
             lbTitle = new Label();
             tpSettings = new TabPage();
             pnSettingTrunk3 = new CustomPanel();
@@ -105,7 +108,10 @@ namespace WinFormsAppTest
             lbSubCellSize = new Label();
             btnHide = new Button();
             ttMainInfo = new ToolTip(components);
+            timerFlashPanel = new Timer(components);
+            timerFlashBtn = new Timer(components);
             pnSideMenu.SuspendLayout();
+            pnSidePreset.SuspendLayout();
             tcMainHome.SuspendLayout();
             tpMainHome.SuspendLayout();
             pnReviewMain.SuspendLayout();
@@ -196,10 +202,32 @@ namespace WinFormsAppTest
             // pnSidePreset
             // 
             pnSidePreset.BackColor = Color.Transparent;
+            pnSidePreset.Controls.Add(lbSidePresetTitle);
+            pnSidePreset.Controls.Add(lbSidePresetDate);
             pnSidePreset.Location = new Point(12, 169);
             pnSidePreset.Name = "pnSidePreset";
             pnSidePreset.Size = new Size(360, 483);
             pnSidePreset.TabIndex = 5;
+            // 
+            // lbSidePresetTitle
+            // 
+            lbSidePresetTitle.AutoSize = true;
+            lbSidePresetTitle.ForeColor = Color.White;
+            lbSidePresetTitle.Location = new Point(221, 11);
+            lbSidePresetTitle.Name = "lbSidePresetTitle";
+            lbSidePresetTitle.Size = new Size(43, 15);
+            lbSidePresetTitle.TabIndex = 2;
+            lbSidePresetTitle.Text = "설정명";
+            // 
+            // lbSidePresetDate
+            // 
+            lbSidePresetDate.AutoSize = true;
+            lbSidePresetDate.ForeColor = Color.White;
+            lbSidePresetDate.Location = new Point(49, 11);
+            lbSidePresetDate.Name = "lbSidePresetDate";
+            lbSidePresetDate.Size = new Size(31, 15);
+            lbSidePresetDate.TabIndex = 0;
+            lbSidePresetDate.Text = "날짜";
             // 
             // lbSlidePreset
             // 
@@ -460,14 +488,22 @@ namespace WinFormsAppTest
             // btnStart
             // 
             btnStart.Anchor = AnchorStyles.Right;
+            btnStart.BackColor = Color.DimGray;
+            btnStart.BackgroundColor = Color.DimGray;
+            btnStart.BorderColor = Color.Transparent;
+            btnStart.BorderRadius = 5;
+            btnStart.BorderSize = 0;
+            btnStart.FlatStyle = FlatStyle.Flat;
             btnStart.Font = new Font("굴림", 20.25F, FontStyle.Regular, GraphicsUnit.Point);
+            btnStart.ForeColor = Color.White;
             btnStart.Location = new Point(643, 244);
             btnStart.Margin = new Padding(3, 4, 3, 4);
             btnStart.Name = "btnStart";
             btnStart.Size = new Size(179, 61);
             btnStart.TabIndex = 2;
             btnStart.Text = "Start";
-            btnStart.UseVisualStyleBackColor = true;
+            btnStart.TextColor = Color.White;
+            btnStart.UseVisualStyleBackColor = false;
             // 
             // lbTitle
             // 
@@ -1112,6 +1148,16 @@ namespace WinFormsAppTest
             btnHide.UseVisualStyleBackColor = false;
             btnHide.Click += btnHide_Click;
             // 
+            // timerFlashPanel
+            // 
+            timerFlashPanel.Interval = 50;
+            timerFlashPanel.Tick += timerFlashPanel_Tick;
+            // 
+            // timerFlashBtn
+            // 
+            timerFlashBtn.Interval = 150;
+            timerFlashBtn.Tick += timerFlashBtn_Tick;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1122,6 +1168,7 @@ namespace WinFormsAppTest
             Controls.Add(btnHide);
             Controls.Add(tcMainHome);
             Controls.Add(pnSideMenu);
+            DoubleBuffered = true;
             FormBorderStyle = FormBorderStyle.None;
             Margin = new Padding(3, 4, 3, 4);
             Name = "MainForm";
@@ -1133,6 +1180,8 @@ namespace WinFormsAppTest
             MouseUp += MainForm_MouseUp;
             pnSideMenu.ResumeLayout(false);
             pnSideMenu.PerformLayout();
+            pnSidePreset.ResumeLayout(false);
+            pnSidePreset.PerformLayout();
             tcMainHome.ResumeLayout(false);
             tpMainHome.ResumeLayout(false);
             pnReviewMain.ResumeLayout(false);
@@ -1180,7 +1229,7 @@ namespace WinFormsAppTest
         private Label lbReview;
         private CustomPanel pnMain;
         private Label lbSubTitle;
-        private Button btnStart;
+        private CustomBtn btnStart;
         private Label lbTitle;
         private TabPage tpSettings;
         private TextBox tbSubCellSize;
@@ -1244,5 +1293,10 @@ namespace WinFormsAppTest
         private CustomBtn customBtn1;
         private CustomBtn btnSideClose;
         private CustomBtn btnSideMenu;
+        private Label label2;
+        private Label lbSidePresetDate;
+        private Label lbSidePresetTitle;
+        private Timer timerFlashPanel;
+        private Timer timerFlashBtn;
     }
 }

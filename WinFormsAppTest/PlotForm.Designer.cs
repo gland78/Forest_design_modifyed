@@ -80,6 +80,7 @@
             // lbPlotCircleR
             // 
             lbPlotCircleR.AutoSize = true;
+            lbPlotCircleR.ForeColor = Color.White;
             lbPlotCircleR.Location = new Point(67, 136);
             lbPlotCircleR.Name = "lbPlotCircleR";
             lbPlotCircleR.Size = new Size(61, 15);
@@ -97,6 +98,7 @@
             // lbPlotCircleY
             // 
             lbPlotCircleY.AutoSize = true;
+            lbPlotCircleY.ForeColor = Color.White;
             lbPlotCircleY.Location = new Point(67, 94);
             lbPlotCircleY.Name = "lbPlotCircleY";
             lbPlotCircleY.Size = new Size(14, 15);
@@ -114,6 +116,7 @@
             // lbPlotCircleX
             // 
             lbPlotCircleX.AutoSize = true;
+            lbPlotCircleX.ForeColor = Color.White;
             lbPlotCircleX.Location = new Point(67, 52);
             lbPlotCircleX.Name = "lbPlotCircleX";
             lbPlotCircleX.Size = new Size(14, 15);
@@ -131,6 +134,7 @@
             // lbPlotRecYmax
             // 
             lbPlotRecYmax.AutoSize = true;
+            lbPlotRecYmax.ForeColor = Color.White;
             lbPlotRecYmax.Location = new Point(261, 93);
             lbPlotRecYmax.Name = "lbPlotRecYmax";
             lbPlotRecYmax.Size = new Size(37, 15);
@@ -148,6 +152,7 @@
             // lbPlotRecXmax
             // 
             lbPlotRecXmax.AutoSize = true;
+            lbPlotRecXmax.ForeColor = Color.White;
             lbPlotRecXmax.Location = new Point(261, 51);
             lbPlotRecXmax.Name = "lbPlotRecXmax";
             lbPlotRecXmax.Size = new Size(37, 15);
@@ -165,6 +170,7 @@
             // lbPlotRecYmin
             // 
             lbPlotRecYmin.AutoSize = true;
+            lbPlotRecYmin.ForeColor = Color.White;
             lbPlotRecYmin.Location = new Point(67, 94);
             lbPlotRecYmin.Name = "lbPlotRecYmin";
             lbPlotRecYmin.Size = new Size(35, 15);
@@ -182,6 +188,7 @@
             // lbPlotRecXmin
             // 
             lbPlotRecXmin.AutoSize = true;
+            lbPlotRecXmin.ForeColor = Color.White;
             lbPlotRecXmin.Location = new Point(67, 52);
             lbPlotRecXmin.Name = "lbPlotRecXmin";
             lbPlotRecXmin.Size = new Size(35, 15);
@@ -201,6 +208,7 @@
             // lbPlotPolySet
             // 
             lbPlotPolySet.AutoSize = true;
+            lbPlotPolySet.ForeColor = Color.White;
             lbPlotPolySet.Location = new Point(67, 52);
             lbPlotPolySet.Name = "lbPlotPolySet";
             lbPlotPolySet.Size = new Size(72, 15);
@@ -209,10 +217,10 @@
             // 
             // btnPlotPolySet
             // 
-            btnPlotPolySet.BackColor = Color.Green;
-            btnPlotPolySet.BackgroundColor = Color.Green;
+            btnPlotPolySet.BackColor = Color.FromArgb(80, 112, 112);
+            btnPlotPolySet.BackgroundColor = Color.FromArgb(80, 112, 112);
             btnPlotPolySet.BackgroundImageLayout = ImageLayout.None;
-            btnPlotPolySet.BorderColor = Color.PaleVioletRed;
+            btnPlotPolySet.BorderColor = Color.Transparent;
             btnPlotPolySet.BorderRadius = 8;
             btnPlotPolySet.BorderSize = 0;
             btnPlotPolySet.FlatStyle = FlatStyle.Flat;
@@ -268,7 +276,7 @@
             // 
             // tpPlotCircle
             // 
-            tpPlotCircle.BackColor = Color.YellowGreen;
+            tpPlotCircle.BackColor = Color.DarkSlateGray;
             tpPlotCircle.Controls.Add(lbPlotCircle);
             tpPlotCircle.Controls.Add(tbPlotCircleR);
             tpPlotCircle.Controls.Add(tbPlotCircleY);
@@ -288,6 +296,7 @@
             // 
             lbPlotCircle.AutoSize = true;
             lbPlotCircle.Font = new Font("맑은 고딕", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            lbPlotCircle.ForeColor = Color.White;
             lbPlotCircle.Location = new Point(22, 13);
             lbPlotCircle.Name = "lbPlotCircle";
             lbPlotCircle.Size = new Size(87, 21);
@@ -296,7 +305,7 @@
             // 
             // tpPlotRec
             // 
-            tpPlotRec.BackColor = Color.YellowGreen;
+            tpPlotRec.BackColor = Color.DarkSlateGray;
             tpPlotRec.Controls.Add(lbPlotRec);
             tpPlotRec.Controls.Add(tbPlotRecYmax);
             tpPlotRec.Controls.Add(lbPlotRecYmax);
@@ -316,6 +325,7 @@
             // 
             lbPlotRec.AutoSize = true;
             lbPlotRec.Font = new Font("맑은 고딕", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            lbPlotRec.ForeColor = Color.White;
             lbPlotRec.Location = new Point(22, 13);
             lbPlotRec.Name = "lbPlotRec";
             lbPlotRec.Size = new Size(121, 21);
@@ -324,7 +334,7 @@
             // 
             // tpPlotPoly
             // 
-            tpPlotPoly.BackColor = Color.YellowGreen;
+            tpPlotPoly.BackColor = Color.DarkSlateGray;
             tpPlotPoly.Controls.Add(lbPlotPoly);
             tpPlotPoly.Controls.Add(tbPlotPolySet);
             tpPlotPoly.Controls.Add(btnPlotPolySet);
@@ -339,6 +349,7 @@
             // 
             lbPlotPoly.AutoSize = true;
             lbPlotPoly.Font = new Font("맑은 고딕", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            lbPlotPoly.ForeColor = Color.White;
             lbPlotPoly.Location = new Point(22, 13);
             lbPlotPoly.Name = "lbPlotPoly";
             lbPlotPoly.Size = new Size(109, 21);
@@ -390,12 +401,14 @@
             // 
             // btnPlotData
             // 
-            btnPlotData.BackColor = Color.Green;
-            btnPlotData.BackgroundColor = Color.Green;
+            btnPlotData.BackColor = Color.FromArgb(80, 112, 112);
+            btnPlotData.BackgroundColor = Color.FromArgb(80, 112, 112);
             btnPlotData.BackgroundImageLayout = ImageLayout.None;
-            btnPlotData.BorderColor = Color.PaleVioletRed;
+            btnPlotData.BorderColor = Color.Transparent;
             btnPlotData.BorderRadius = 8;
             btnPlotData.BorderSize = 0;
+            btnPlotData.FlatAppearance.MouseDownBackColor = Color.FromArgb(120, 152, 152);
+            btnPlotData.FlatAppearance.MouseOverBackColor = Color.FromArgb(104, 136, 136);
             btnPlotData.FlatStyle = FlatStyle.Flat;
             btnPlotData.ForeColor = Color.White;
             btnPlotData.Location = new Point(380, 17);
@@ -432,10 +445,10 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.YellowGreen;
+            BackColor = Color.DarkSlateGray;
             ClientSize = new Size(521, 370);
-            Controls.Add(pnPlotSelection);
             Controls.Add(tcPlot);
+            Controls.Add(pnPlotSelection);
             Controls.Add(pnPlotData);
             Controls.Add(btnPlotCancel);
             Controls.Add(btnPlotOK);

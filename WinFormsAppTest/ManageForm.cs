@@ -107,8 +107,17 @@ namespace WinFormsAppTest
             string oldTitle = lvPresetConf.SelectedItems[0].SubItems[0].Text;
             string? newTitle = Microsoft.VisualBasic.Interaction.InputBox("바꿀 제목을 입력해주세요.", "사용자 설정 제목 바꾸기");
 
+            //Microsoft.VisualBasic.Interaction.InputBox로는 취소버튼과 확인버튼 중 뭘 눌렀는지 알 수 없음
+            //추후 임시 Form 추가 예정
             if (newTitle == "")
             {
+                return;
+            }
+
+            else if (newTitle.Length > 15 || newTitle.Length < 4)
+            {
+                MessageBox.Show("사용자 설정 제목은 4~15자까지 입력할 수 있습니다.");
+                btnManageTitle_Click(sender, e);
                 return;
             }
 

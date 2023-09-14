@@ -37,10 +37,13 @@ namespace WinFormsAppTest
             //아래 plotForm 컴포넌트들 세팅
             pnPlotSelection.isFill = true;
             pnPlotSelection.isBorder = false;
-            pnPlotSelection.borderColor = Color.Honeydew;
+            pnPlotSelection.borderColor = Color.FromArgb(64, 96, 96);
             pnPlotData.isFill = true;
             pnPlotData.isBorder = false;
-            pnPlotData.borderColor = Color.Honeydew;
+            pnPlotData.borderColor = Color.FromArgb(64, 96, 96);
+            tpPlotCircle.BackColor = this.BackColor;
+            tpPlotPoly.BackColor = this.BackColor;
+            tpPlotRec.BackColor = this.BackColor;
 
             cbPlotShape.SelectedIndex = 0;
             this.paramForm = paramForm;

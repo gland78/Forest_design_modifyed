@@ -121,7 +121,7 @@
   <data name="btnSideClose.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
-        EgAACxIB0t1+/AAAAJ1JREFUOE+dk1EOglAMBDmK978UR3kyMCu+FLQ6CaFuZ2v8cBljrD6PpQluejkA
+        DAAACwwBP0AiyAAAAJ1JREFUOE+dk1EOglAMBDmK978UR3kyMCu+FLQ6CaFuZ2v8cBljrD6PpQluejkA
         rSM4urAfmILtuT3CTgdOl8EALo+QuYPqELiASWA2g1oOLBRgF32+lwOCIvDulwOihdAvA7Kl8Pe3836f
         f/79fC6Z+gwLBZhEZjOoRwhcQBU2yNzB6TAYwGU5sNOBw3WAj+WAowuvf2OrHHCPzlifDS/soLDatj4A
         AAAASUVORK5CYII=
@@ -226,5 +226,11 @@
   </data>
   <metadata name="ttMainInfo.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
+  </metadata>
+  <metadata name="timerFlashPanel.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>127, 17</value>
+  </metadata>
+  <metadata name="timerFlashBtn.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>266, 17</value>
   </metadata>
 </root>

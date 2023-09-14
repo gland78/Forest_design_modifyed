@@ -52,7 +52,7 @@ namespace WinFormsAppTest
 
         //사이드 메뉴에 생성될 첫 버튼의 위치 및 크기, 간격
         //동적 버튼 추가를 위해 필요
-        Point PRESET_BTN_POS = new Point(8, 8);
+        Point PRESET_BTN_POS = new Point(8, 30);
         const int PRESET_BTN_HEIGHT = 45;
         const int PRESET_BTN_GAP = 2;
 
@@ -68,6 +68,8 @@ namespace WinFormsAppTest
         Point relativeMformPos = new Point();
 
         bool isMformDrag = false;
+
+        int flashCount = 0;
 
         public MainForm()
         {
@@ -226,65 +228,67 @@ namespace WinFormsAppTest
         //CustomPanel 색 및 테두리 지정(Designer.cs에서 지정하면 컴파일 시 없어짐)
         private void customPanels_Load()
         {
+            Color customPanelColor = Color.Gray;
+
             pnSettingDefault.BackColor = Color.Transparent;
             pnSettingDefault.isFill = true;
             pnSettingDefault.isBorder = false;
-            pnSettingDefault.fillColor = Color.Gray;
+            pnSettingDefault.fillColor = customPanelColor;
 
             pnSettingPreset.BackColor = Color.Transparent;
             pnSettingPreset.isFill = true;
             pnSettingPreset.isBorder = false;
-            pnSettingPreset.fillColor = Color.Gray;
+            pnSettingPreset.fillColor = customPanelColor;
 
             pnSettingSub1.BackColor = Color.Transparent;
             pnSettingSub1.isFill = true;
             pnSettingSub1.isBorder = false;
-            pnSettingSub1.fillColor = Color.Gray;
+            pnSettingSub1.fillColor = customPanelColor;
 
             pnSettingNor1.BackColor = Color.Transparent;
             pnSettingNor1.isFill = true;
             pnSettingNor1.isBorder = false;
-            pnSettingNor1.fillColor = Color.Gray;
+            pnSettingNor1.fillColor = customPanelColor;
 
             pnSettingNor2.BackColor = Color.Transparent;
             pnSettingNor2.isFill = true;
             pnSettingNor2.isBorder = false;
-            pnSettingNor2.fillColor = Color.Gray;
+            pnSettingNor2.fillColor = customPanelColor;
 
             pnSettingNor3.BackColor = Color.Transparent;
             pnSettingNor3.isFill = true;
             pnSettingNor3.isBorder = false;
-            pnSettingNor3.fillColor = Color.Gray;
+            pnSettingNor3.fillColor = customPanelColor;
 
             pnSettingNor4.BackColor = Color.Transparent;
             pnSettingNor4.isFill = true;
             pnSettingNor4.isBorder = false;
-            pnSettingNor4.fillColor = Color.Gray;
+            pnSettingNor4.fillColor = customPanelColor;
 
             pnSettingNor5.BackColor = Color.Transparent;
             pnSettingNor5.isFill = true;
             pnSettingNor5.isBorder = false;
-            pnSettingNor5.fillColor = Color.Gray;
+            pnSettingNor5.fillColor = customPanelColor;
 
             pnSettingTrunk1.BackColor = Color.Transparent;
             pnSettingTrunk1.isFill = true;
             pnSettingTrunk1.isBorder = false;
-            pnSettingTrunk1.fillColor = Color.Gray;
+            pnSettingTrunk1.fillColor = customPanelColor;
 
             pnSettingTrunk2.BackColor = Color.Transparent;
             pnSettingTrunk2.isFill = true;
             pnSettingTrunk2.isBorder = false;
-            pnSettingTrunk2.fillColor = Color.Gray;
+            pnSettingTrunk2.fillColor = customPanelColor;
 
             pnSettingTrunk3.BackColor = Color.Transparent;
             pnSettingTrunk3.isFill = true;
             pnSettingTrunk3.isBorder = false;
-            pnSettingTrunk3.fillColor = Color.Gray;
+            pnSettingTrunk3.fillColor = customPanelColor;
 
             pnSettingCrown1.BackColor = Color.Transparent;
             pnSettingCrown1.isFill = true;
             pnSettingCrown1.isBorder = false;
-            pnSettingCrown1.fillColor = Color.Gray;
+            pnSettingCrown1.fillColor = customPanelColor;
         }
 
         //프리셋 콘피그 파일 갯수만큼 버튼 로드
@@ -300,16 +304,47 @@ namespace WinFormsAppTest
             //프리셋 콘피그 저장 장소
             string[] confCheck = Directory.GetFiles(fileDi, "presetConfig*");
 
+            //삽입될 버튼 위치
+            Point relativeBtnPos = PRESET_BTN_POS;
+
             if (confCheck.Length < 1)
             {
+                CustomBtn btnPreConfs = new CustomBtn();
+                btnPreConfs.Name = "btnPreDefault";
+                btnPreConfs.Location = relativeBtnPos;
+                btnPreConfs.Width = MAX_BTN_WIDTH;
+                btnPreConfs.Height = PRESET_BTN_HEIGHT;
+
+                btnPreConfs.FlatStyle = FlatStyle.Flat;
+                btnPreConfs.FlatAppearance.BorderSize = 0;
+                btnPreConfs.FlatAppearance.MouseDownBackColor = Color.FromArgb(112, 144, 144);
+                btnPreConfs.FlatAppearance.MouseOverBackColor = Color.FromArgb(96, 128, 128);
+
+                btnPreConfs.BorderRadius = 5;
+                btnPreConfs.BorderColor = Color.FromArgb(128, 160, 160);
+                btnPreConfs.BorderSize = 4;
+                btnPreConfs.BackColor = Color.Transparent;
+
+                btnPreConfs.ForeColor = Color.FromArgb(160, 192, 192);
+                btnPreConfs.Font = new Font("나눔 고딕", 16F, FontStyle.Bold, GraphicsUnit.Point);
+
+                btnPreConfs.TextAlign = ContentAlignment.MiddleLeft;
+
+
+                btnPreConfs.Text = "00/00/00               설정명";
+
+                btnPreConfs.Click += btnPreDefault_Click;
+
+                pnSidePreset.Controls.Add(btnPreConfs);
                 return;
             }
 
             pnSidePreset.Controls.Clear();
 
-            Array.Sort(confCheck);
+            pnSidePreset.Controls.Add(lbSidePresetDate);
+            pnSidePreset.Controls.Add(lbSidePresetTitle);
 
-            Point relativeBtnPos = PRESET_BTN_POS;
+            Array.Sort(confCheck);
 
             for (int i = 0; i < confCheck.Length; i++)
             {
@@ -336,24 +371,30 @@ namespace WinFormsAppTest
                 btnPreConfs.FlatAppearance.MouseDownBackColor = Color.FromArgb(112, 144, 144);
                 btnPreConfs.FlatAppearance.MouseOverBackColor = Color.FromArgb(96, 128, 128);
                 btnPreConfs.FlatStyle = FlatStyle.Flat;
-                btnPreConfs.ImageAlign = ContentAlignment.MiddleLeft;
                 btnPreConfs.TextAlign = ContentAlignment.MiddleLeft;
-                btnPreConfs.Font = new Font("나눔 고딕", 18F, FontStyle.Bold, GraphicsUnit.Point);
-                btnPreConfs.Image = Image.FromFile(Environment.CurrentDirectory.ToString() + @"\btnPreConf.Image.png");
+                btnPreConfs.Font = new Font("나눔 고딕", 16F, FontStyle.Bold, GraphicsUnit.Point);
                 pnSidePreset.Controls.Add(btnPreConfs);
 
                 using (StreamReader sr = new StreamReader(filePath))
                 {
-                    string line;
+                    string line, title = "", date = "";
                     while ((line = sr.ReadLine()) != null)
                     {
+                        if (line.Contains("date"))
+                        {
+                            string lineData = line.Split(',')[3];
+                            DateTime dt = Convert.ToDateTime(lineData);
+                            lineData = dt.ToString("yy/MM/dd");
+                            date = lineData;
+                        }
+
                         if (line.Contains("title"))
                         {
                             string lineData = line.Split(',')[3].Replace('，', ',');
-                            btnPreConfs.Text = "            " + lineData;
-                            break;
+                            title = "       " + lineData;
                         }
                     }
+                    btnPreConfs.Text = date + title;
                 }
                 relativeBtnPos.Y = relativeBtnPos.Y + PRESET_BTN_HEIGHT + PRESET_BTN_GAP;
             }
@@ -372,15 +413,43 @@ namespace WinFormsAppTest
             pnReview.Controls.Clear();
 
             string[] confCheck = Directory.GetFiles(fileDi, "recentConfig*");
+            Point relativePos = RECENT_BTN_POS;
 
             if (confCheck.Length < 1)
             {
+                CustomBtn btnRecentConfs = new CustomBtn();
+                btnRecentConfs.Name = "btnRecentDefault";
+                btnRecentConfs.Location = relativePos;
+                btnRecentConfs.Width = RECENT_BTN_WIDTH;
+                btnRecentConfs.Height = RECENT_BTN_HEIGHT;
+                btnRecentConfs.Margin = new Padding(4, 8, 4, 4);
+
+                btnRecentConfs.FlatStyle = FlatStyle.Flat;
+                btnRecentConfs.FlatAppearance.BorderSize = 0;
+                btnRecentConfs.FlatAppearance.MouseDownBackColor = Color.FromArgb(233, 233, 238);
+                btnRecentConfs.FlatAppearance.MouseOverBackColor = Color.FromArgb(217, 217, 223);
+
+                btnRecentConfs.BorderRadius = 20;
+                btnRecentConfs.BorderColor = Color.FromArgb(185, 185, 191);
+                btnRecentConfs.BorderSize = 4;
+                btnRecentConfs.BackColor = Color.Transparent;
+
+                btnRecentConfs.ForeColor = Color.FromArgb(185, 185, 191);
+                btnRecentConfs.Font = new Font("맑은 고딕", 12F, FontStyle.Bold, GraphicsUnit.Point);
+
+                btnRecentConfs.TextAlign = ContentAlignment.MiddleLeft;
+
+                btnRecentConfs.Text = "  최근 작업한 기록을 표시합니다\n  날짜,\n  추출한 Las파일명,\n  잘라낸 모양,\n  모양에 따른 Plot값\n  순으로 나열됩니다.";
+
+                btnRecentConfs.Click += btnRecentDefault_Click;
+
+                pnReview.Controls.Add(btnRecentConfs);
                 return;
             }
 
             Array.Sort(confCheck);
 
-            Point relativePos = RECENT_BTN_POS;
+
             int btnNum = 0;
             string btnText = "";
 
@@ -505,6 +574,39 @@ namespace WinFormsAppTest
             recentConfBtnLoad();
         }
 
+        //preConfig 버튼이 아예 없을 시의 디폴트 가이드 버튼 이벤트
+        private void btnPreDefault_Click(object sender, EventArgs e)
+        {
+            tcMainHome.SelectedIndex = 1;
+
+            flashCount = 0;
+            pnSettingPreset.fillColor = Color.FromArgb(189, 189, 189);
+            timerFlashPanel.Start();
+        }
+
+        //디폴트 가이드 버튼의 상세 이벤트
+        private void timerFlashPanel_Tick(object sender, EventArgs e)
+        {
+            if (pnSettingPreset.fillColor == Color.Gray)
+            {
+                pnSettingPreset.fillColor = Color.FromArgb(189, 189, 189);
+                pnSettingPreset.Invalidate();
+            }
+            else
+            {
+                pnSettingPreset.fillColor = Color.Gray;
+                pnSettingPreset.Invalidate();
+            }
+            flashCount++;
+
+            if (flashCount == 10)
+            {
+                timerFlashPanel.Stop();
+                flashCount = 0;
+                pnSettingPreset.fillColor = Color.Gray;
+            }
+        }
+
         //recetnConfig 버튼 관련 이벤트 처리 코드
         private void btnRecentConf_Click(object sender, EventArgs e)
         {
@@ -519,6 +621,36 @@ namespace WinFormsAppTest
 
             preConfBtnLoad();
             recentConfBtnLoad();
+        }
+
+        private void btnRecentDefault_Click(object sender, EventArgs e)
+        {
+            tcMainHome.SelectedIndex = 0;
+
+            flashCount = 0;
+            btnStart.BackColor = Color.FromArgb(168, 168, 168);
+            timerFlashBtn.Start();
+        }
+
+        private void timerFlashBtn_Tick(object sender, EventArgs e)
+        {
+            if (btnStart.BackColor == Color.FromArgb(168, 168, 168))
+            {
+                btnStart.BackColor = Color.DimGray;
+            }
+            else
+            {
+                btnStart.BackColor = Color.FromArgb(168, 168, 168);
+            }
+
+            flashCount++;
+
+            if (flashCount == 6)
+            {
+                flashCount = 0;
+                timerFlashBtn.Stop();
+                btnStart.BackColor = Color.DimGray;
+            }
         }
 
         //최근 기록 버튼의 생략된 las파일 이름 툴팁 표시
@@ -654,6 +786,9 @@ namespace WinFormsAppTest
 
                 btnSettings.Width = MIN_BTN_WIDTH;
                 btnSettings.Text = "";
+
+                btnClose.BackColor = Color.Transparent;
+                btnHide.BackColor = Color.Transparent;
 
                 pnSideMenu.Width = MIN_SLIDING_WIDTH;
                 tcMainHome.Left -= SLIDING_GAP / 2;
