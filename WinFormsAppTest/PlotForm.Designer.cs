@@ -45,8 +45,8 @@
             tbPlotPolySet = new TextBox();
             lbPlotPolySet = new Label();
             btnPlotPolySet = new CustomBtn();
-            btnPlotOK = new Button();
-            btnPlotCancel = new Button();
+            btnPlotOK = new CustomBtn();
+            btnPlotCancel = new CustomBtn();
             tcPlot = new CustomTabControl();
             tpPlotCircle = new TabPage();
             lbPlotCircle = new Label();
@@ -80,7 +80,7 @@
             // lbPlotCircleR
             // 
             lbPlotCircleR.AutoSize = true;
-            lbPlotCircleR.ForeColor = Color.White;
+            lbPlotCircleR.ForeColor = Color.Black;
             lbPlotCircleR.Location = new Point(67, 136);
             lbPlotCircleR.Name = "lbPlotCircleR";
             lbPlotCircleR.Size = new Size(61, 15);
@@ -98,7 +98,7 @@
             // lbPlotCircleY
             // 
             lbPlotCircleY.AutoSize = true;
-            lbPlotCircleY.ForeColor = Color.White;
+            lbPlotCircleY.ForeColor = Color.Black;
             lbPlotCircleY.Location = new Point(67, 94);
             lbPlotCircleY.Name = "lbPlotCircleY";
             lbPlotCircleY.Size = new Size(14, 15);
@@ -116,7 +116,7 @@
             // lbPlotCircleX
             // 
             lbPlotCircleX.AutoSize = true;
-            lbPlotCircleX.ForeColor = Color.White;
+            lbPlotCircleX.ForeColor = Color.Black;
             lbPlotCircleX.Location = new Point(67, 52);
             lbPlotCircleX.Name = "lbPlotCircleX";
             lbPlotCircleX.Size = new Size(14, 15);
@@ -134,7 +134,7 @@
             // lbPlotRecYmax
             // 
             lbPlotRecYmax.AutoSize = true;
-            lbPlotRecYmax.ForeColor = Color.White;
+            lbPlotRecYmax.ForeColor = Color.Black;
             lbPlotRecYmax.Location = new Point(261, 93);
             lbPlotRecYmax.Name = "lbPlotRecYmax";
             lbPlotRecYmax.Size = new Size(37, 15);
@@ -152,7 +152,7 @@
             // lbPlotRecXmax
             // 
             lbPlotRecXmax.AutoSize = true;
-            lbPlotRecXmax.ForeColor = Color.White;
+            lbPlotRecXmax.ForeColor = Color.Black;
             lbPlotRecXmax.Location = new Point(261, 51);
             lbPlotRecXmax.Name = "lbPlotRecXmax";
             lbPlotRecXmax.Size = new Size(37, 15);
@@ -170,7 +170,7 @@
             // lbPlotRecYmin
             // 
             lbPlotRecYmin.AutoSize = true;
-            lbPlotRecYmin.ForeColor = Color.White;
+            lbPlotRecYmin.ForeColor = Color.Black;
             lbPlotRecYmin.Location = new Point(67, 94);
             lbPlotRecYmin.Name = "lbPlotRecYmin";
             lbPlotRecYmin.Size = new Size(35, 15);
@@ -188,7 +188,7 @@
             // lbPlotRecXmin
             // 
             lbPlotRecXmin.AutoSize = true;
-            lbPlotRecXmin.ForeColor = Color.White;
+            lbPlotRecXmin.ForeColor = Color.Black;
             lbPlotRecXmin.Location = new Point(67, 52);
             lbPlotRecXmin.Name = "lbPlotRecXmin";
             lbPlotRecXmin.Size = new Size(35, 15);
@@ -197,6 +197,7 @@
             // 
             // tbPlotPolySet
             // 
+            tbPlotPolySet.BackColor = Color.White;
             tbPlotPolySet.Enabled = false;
             tbPlotPolySet.Location = new Point(154, 48);
             tbPlotPolySet.Name = "tbPlotPolySet";
@@ -208,7 +209,7 @@
             // lbPlotPolySet
             // 
             lbPlotPolySet.AutoSize = true;
-            lbPlotPolySet.ForeColor = Color.White;
+            lbPlotPolySet.ForeColor = Color.Black;
             lbPlotPolySet.Location = new Point(67, 52);
             lbPlotPolySet.Name = "lbPlotPolySet";
             lbPlotPolySet.Size = new Size(72, 15);
@@ -217,46 +218,56 @@
             // 
             // btnPlotPolySet
             // 
-            btnPlotPolySet.BackColor = Color.FromArgb(80, 112, 112);
-            btnPlotPolySet.BackgroundColor = Color.FromArgb(80, 112, 112);
+            btnPlotPolySet.BackColor = Color.White;
+            btnPlotPolySet.BackgroundColor = Color.White;
             btnPlotPolySet.BackgroundImageLayout = ImageLayout.None;
-            btnPlotPolySet.BorderColor = Color.Transparent;
+            btnPlotPolySet.BorderColor = Color.LightGray;
             btnPlotPolySet.BorderRadius = 8;
-            btnPlotPolySet.BorderSize = 0;
+            btnPlotPolySet.BorderSize = 1;
             btnPlotPolySet.FlatStyle = FlatStyle.Flat;
-            btnPlotPolySet.ForeColor = Color.White;
+            btnPlotPolySet.ForeColor = Color.Black;
             btnPlotPolySet.Location = new Point(376, 46);
             btnPlotPolySet.Name = "btnPlotPolySet";
             btnPlotPolySet.Size = new Size(97, 27);
             btnPlotPolySet.TabIndex = 0;
             btnPlotPolySet.Text = "File Search";
-            btnPlotPolySet.TextColor = Color.White;
+            btnPlotPolySet.TextColor = Color.Black;
             btnPlotPolySet.UseVisualStyleBackColor = false;
             btnPlotPolySet.Click += btnPlotPolySet_Click;
             // 
             // btnPlotOK
             // 
-            btnPlotOK.BackColor = Color.Honeydew;
-            btnPlotOK.FlatAppearance.BorderSize = 0;
+            btnPlotOK.BackColor = Color.White;
+            btnPlotOK.BackgroundColor = Color.White;
+            btnPlotOK.BorderColor = Color.LightGray;
+            btnPlotOK.BorderRadius = 0;
+            btnPlotOK.BorderSize = 1;
             btnPlotOK.FlatStyle = FlatStyle.Flat;
+            btnPlotOK.ForeColor = Color.Black;
             btnPlotOK.Location = new Point(375, 334);
             btnPlotOK.Name = "btnPlotOK";
             btnPlotOK.Size = new Size(64, 24);
             btnPlotOK.TabIndex = 3;
             btnPlotOK.Text = "확인";
+            btnPlotOK.TextColor = Color.Black;
             btnPlotOK.UseVisualStyleBackColor = false;
             btnPlotOK.Click += btnPlotOK_Click;
             // 
             // btnPlotCancel
             // 
-            btnPlotCancel.BackColor = Color.Honeydew;
-            btnPlotCancel.FlatAppearance.BorderSize = 0;
+            btnPlotCancel.BackColor = Color.White;
+            btnPlotCancel.BackgroundColor = Color.White;
+            btnPlotCancel.BorderColor = Color.LightGray;
+            btnPlotCancel.BorderRadius = 0;
+            btnPlotCancel.BorderSize = 1;
             btnPlotCancel.FlatStyle = FlatStyle.Flat;
+            btnPlotCancel.ForeColor = Color.Black;
             btnPlotCancel.Location = new Point(445, 334);
             btnPlotCancel.Name = "btnPlotCancel";
             btnPlotCancel.Size = new Size(64, 24);
             btnPlotCancel.TabIndex = 4;
             btnPlotCancel.Text = "취소";
+            btnPlotCancel.TextColor = Color.Black;
             btnPlotCancel.UseVisualStyleBackColor = false;
             btnPlotCancel.Click += btnPlotCancel_Click;
             // 
@@ -266,7 +277,7 @@
             tcPlot.Controls.Add(tpPlotRec);
             tcPlot.Controls.Add(tpPlotPoly);
             tcPlot.ItemSize = new Size(0, 5);
-            tcPlot.Location = new Point(13, 129);
+            tcPlot.Location = new Point(13, 132);
             tcPlot.Multiline = true;
             tcPlot.Name = "tcPlot";
             tcPlot.SelectedIndex = 0;
@@ -276,7 +287,8 @@
             // 
             // tpPlotCircle
             // 
-            tpPlotCircle.BackColor = Color.DarkSlateGray;
+            tpPlotCircle.BackColor = SystemColors.Control;
+            tpPlotCircle.BorderStyle = BorderStyle.FixedSingle;
             tpPlotCircle.Controls.Add(lbPlotCircle);
             tpPlotCircle.Controls.Add(tbPlotCircleR);
             tpPlotCircle.Controls.Add(tbPlotCircleY);
@@ -296,7 +308,7 @@
             // 
             lbPlotCircle.AutoSize = true;
             lbPlotCircle.Font = new Font("맑은 고딕", 12F, FontStyle.Bold, GraphicsUnit.Point);
-            lbPlotCircle.ForeColor = Color.White;
+            lbPlotCircle.ForeColor = Color.Black;
             lbPlotCircle.Location = new Point(22, 13);
             lbPlotCircle.Name = "lbPlotCircle";
             lbPlotCircle.Size = new Size(87, 21);
@@ -305,7 +317,8 @@
             // 
             // tpPlotRec
             // 
-            tpPlotRec.BackColor = Color.DarkSlateGray;
+            tpPlotRec.BackColor = SystemColors.Control;
+            tpPlotRec.BorderStyle = BorderStyle.FixedSingle;
             tpPlotRec.Controls.Add(lbPlotRec);
             tpPlotRec.Controls.Add(tbPlotRecYmax);
             tpPlotRec.Controls.Add(lbPlotRecYmax);
@@ -325,7 +338,7 @@
             // 
             lbPlotRec.AutoSize = true;
             lbPlotRec.Font = new Font("맑은 고딕", 12F, FontStyle.Bold, GraphicsUnit.Point);
-            lbPlotRec.ForeColor = Color.White;
+            lbPlotRec.ForeColor = Color.Black;
             lbPlotRec.Location = new Point(22, 13);
             lbPlotRec.Name = "lbPlotRec";
             lbPlotRec.Size = new Size(121, 21);
@@ -334,7 +347,8 @@
             // 
             // tpPlotPoly
             // 
-            tpPlotPoly.BackColor = Color.DarkSlateGray;
+            tpPlotPoly.BackColor = SystemColors.Control;
+            tpPlotPoly.BorderStyle = BorderStyle.FixedSingle;
             tpPlotPoly.Controls.Add(lbPlotPoly);
             tpPlotPoly.Controls.Add(tbPlotPolySet);
             tpPlotPoly.Controls.Add(btnPlotPolySet);
@@ -349,7 +363,7 @@
             // 
             lbPlotPoly.AutoSize = true;
             lbPlotPoly.Font = new Font("맑은 고딕", 12F, FontStyle.Bold, GraphicsUnit.Point);
-            lbPlotPoly.ForeColor = Color.White;
+            lbPlotPoly.ForeColor = Color.Black;
             lbPlotPoly.Location = new Point(22, 13);
             lbPlotPoly.Name = "lbPlotPoly";
             lbPlotPoly.Size = new Size(109, 21);
@@ -358,10 +372,11 @@
             // 
             // pnPlotSelection
             // 
-            pnPlotSelection.BackColor = Color.Transparent;
+            pnPlotSelection.BackColor = SystemColors.Control;
+            pnPlotSelection.BorderStyle = BorderStyle.FixedSingle;
             pnPlotSelection.Controls.Add(lbPlotSelection);
             pnPlotSelection.Controls.Add(cbPlotShape);
-            pnPlotSelection.Location = new Point(13, 73);
+            pnPlotSelection.Location = new Point(13, 75);
             pnPlotSelection.Name = "pnPlotSelection";
             pnPlotSelection.Size = new Size(494, 60);
             pnPlotSelection.TabIndex = 1;
@@ -390,7 +405,8 @@
             // 
             // pnPlotData
             // 
-            pnPlotData.BackColor = Color.Transparent;
+            pnPlotData.BackColor = SystemColors.Control;
+            pnPlotData.BorderStyle = BorderStyle.FixedSingle;
             pnPlotData.Controls.Add(btnPlotData);
             pnPlotData.Controls.Add(tbPlotData);
             pnPlotData.Controls.Add(lbPlotData);
@@ -401,27 +417,26 @@
             // 
             // btnPlotData
             // 
-            btnPlotData.BackColor = Color.FromArgb(80, 112, 112);
-            btnPlotData.BackgroundColor = Color.FromArgb(80, 112, 112);
+            btnPlotData.BackColor = Color.White;
+            btnPlotData.BackgroundColor = Color.White;
             btnPlotData.BackgroundImageLayout = ImageLayout.None;
-            btnPlotData.BorderColor = Color.Transparent;
+            btnPlotData.BorderColor = Color.LightGray;
             btnPlotData.BorderRadius = 8;
-            btnPlotData.BorderSize = 0;
-            btnPlotData.FlatAppearance.MouseDownBackColor = Color.FromArgb(120, 152, 152);
-            btnPlotData.FlatAppearance.MouseOverBackColor = Color.FromArgb(104, 136, 136);
+            btnPlotData.BorderSize = 1;
             btnPlotData.FlatStyle = FlatStyle.Flat;
-            btnPlotData.ForeColor = Color.White;
+            btnPlotData.ForeColor = Color.Black;
             btnPlotData.Location = new Point(380, 17);
             btnPlotData.Name = "btnPlotData";
             btnPlotData.Size = new Size(97, 27);
             btnPlotData.TabIndex = 0;
             btnPlotData.Text = "File Search";
-            btnPlotData.TextColor = Color.White;
+            btnPlotData.TextColor = Color.Black;
             btnPlotData.UseVisualStyleBackColor = false;
             btnPlotData.Click += btnPlotData_Click;
             // 
             // tbPlotData
             // 
+            tbPlotData.BackColor = Color.White;
             tbPlotData.Enabled = false;
             tbPlotData.Location = new Point(89, 19);
             tbPlotData.Name = "tbPlotData";
@@ -445,16 +460,19 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.DarkSlateGray;
+            BackColor = SystemColors.Control;
             ClientSize = new Size(521, 370);
             Controls.Add(tcPlot);
             Controls.Add(pnPlotSelection);
             Controls.Add(pnPlotData);
             Controls.Add(btnPlotCancel);
             Controls.Add(btnPlotOK);
-            FormBorderStyle = FormBorderStyle.None;
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            MaximizeBox = false;
             Name = "PlotForm";
-            Text = "Form2";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "추출 구역 설정";
+            FormClosing += PlotForm_FormClosing;
             Load += PlotForm_Load;
             KeyDown += PlotForm_KeyDown;
             MouseDown += PlotForm_MouseDown;
@@ -491,8 +509,8 @@
         private TextBox tbPlotPolySet;
         private Label lbPlotPolySet;
         private CustomBtn btnPlotPolySet;
-        private Button btnPlotOK;
-        private Button btnPlotCancel;
+        private CustomBtn btnPlotOK;
+        private CustomBtn btnPlotCancel;
         private CustomTabControl tcPlot;
         private TabPage tpPlotCircle;
         private TabPage tpPlotRec;

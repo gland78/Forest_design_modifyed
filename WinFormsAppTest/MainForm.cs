@@ -7,6 +7,7 @@ using static WinFormsAppTest.MainForm;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 using System.Text;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace WinFormsAppTest
 {
@@ -27,6 +28,23 @@ namespace WinFormsAppTest
 
     public partial class MainForm : Form
     {
+        //아래 enum 전까지 윈도우폼 최대화 제거 작업
+        [DllImport("user32.dll")]
+        private static extern bool DeleteMenu(IntPtr hMenu, uint uPosition, uint uFlags);
+        [DllImport("user32.dll")]
+        private static extern IntPtr GetSystemMenu(IntPtr hWnd, bool bRevert);
+
+        private const uint MF_BYCOMMAND = 0x00000000;
+        private const uint SC_MAXIMIZE = 0xF030;
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+
+            IntPtr systemMenu = GetSystemMenu(this.Handle, false);
+            DeleteMenu(systemMenu, SC_MAXIMIZE, MF_BYCOMMAND);
+        }
+
         public enum configFileType
         {
             Default,
@@ -81,19 +99,19 @@ namespace WinFormsAppTest
             pnMain.isBorder = false;
 
             pnSidePreset.isBorder = true;
-            pnSidePreset.borderColor = Color.FromArgb(64, 96, 96);
+            pnSidePreset.borderColor = Color.FromArgb(73, 109, 109);
             pnSidePreset.isFill = true;
-            pnSidePreset.fillColor = Color.FromArgb(64, 96, 96);
+            pnSidePreset.fillColor = Color.FromArgb(73, 109, 109);
             pnSidePreset.Visible = false;
 
             lbSlidePreset.Visible = false;
-            btnPresetManage.Location = new Point(14, 130);
+            btnPresetManage.Location = new Point(14, 183);
             btnPresetManage.Size = new Size(38, 34);
 
             lbPresetManage = new Label();
             lbPresetManage.Name = "lbPresetManage";
             lbPresetManage.ForeColor = Color.White;
-            lbPresetManage.Location = new Point(-2, 165);
+            lbPresetManage.Location = new Point(-2, 218);
             lbPresetManage.TabIndex = 6;
             lbPresetManage.Text = "사용자 설정";
             pnSideMenu.Controls.Add(lbPresetManage);
@@ -101,9 +119,6 @@ namespace WinFormsAppTest
 
             pnSideMenu.Width = MIN_SLIDING_WIDTH;
             tcMainHome.Left -= SLIDING_GAP / 2;
-
-            btnSettings.Width = MIN_BTN_WIDTH;
-            btnSettings.Text = "";
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -141,8 +156,6 @@ namespace WinFormsAppTest
             btnSettings.Click += btnSettings_Click;
             //사이드 메뉴 접기/열기 버튼 이벤트
             btnSideMenu.Click += btnSlideMenu_Click;
-            //창 닫기 버튼 이벤트
-            btnClose.Click += btnClose_Click;
             //프로그램 실행 버튼 이벤트
             btnStart.Click += btnStart_Click;
 
@@ -307,6 +320,10 @@ namespace WinFormsAppTest
             //삽입될 버튼 위치
             Point relativeBtnPos = PRESET_BTN_POS;
 
+            pnSidePreset.Controls.Clear();
+            pnSidePreset.Controls.Add(lbSidePresetDate);
+            pnSidePreset.Controls.Add(lbSidePresetTitle);
+
             if (confCheck.Length < 1)
             {
                 CustomBtn btnPreConfs = new CustomBtn();
@@ -339,11 +356,6 @@ namespace WinFormsAppTest
                 return;
             }
 
-            pnSidePreset.Controls.Clear();
-
-            pnSidePreset.Controls.Add(lbSidePresetDate);
-            pnSidePreset.Controls.Add(lbSidePresetTitle);
-
             Array.Sort(confCheck);
 
             for (int i = 0; i < confCheck.Length; i++)
@@ -364,7 +376,7 @@ namespace WinFormsAppTest
                 }
                 else
                 {
-                    btnPreConfs.BackColor = Color.Transparent;
+                    btnPreConfs.BackColor = Color.FromArgb(86, 123, 123);
                 }
                 btnPreConfs.ForeColor = Color.White;
                 btnPreConfs.FlatAppearance.BorderSize = 0;
@@ -394,6 +406,11 @@ namespace WinFormsAppTest
                             title = "       " + lineData;
                         }
                     }
+                    if(date == "")
+                    {
+                        date = "yy/MM/dd";
+                    }
+
                     btnPreConfs.Text = date + title;
                 }
                 relativeBtnPos.Y = relativeBtnPos.Y + PRESET_BTN_HEIGHT + PRESET_BTN_GAP;
@@ -499,7 +516,7 @@ namespace WinFormsAppTest
                         //MessageBox.Show(line);
                         if (line.Contains("title"))
                         {
-                            btnText += "  날짜:      " + line.Split(',')[3] + Environment.NewLine;
+                            btnText += "  날    짜:  " + line.Split(',')[3] + Environment.NewLine;
                             continue;
                         }
                         else if (line.Contains("Lasfilename"))
@@ -529,7 +546,7 @@ namespace WinFormsAppTest
                                     shapeStr = "polygon";
                                     break;
                             }
-                            btnText += ("  모양:      " + shapeStr + Environment.NewLine);
+                            btnText += ("  모    양:  " + shapeStr + Environment.NewLine);
                             continue;
                         }
                         string[] plotData;
@@ -678,15 +695,13 @@ namespace WinFormsAppTest
         //사이드메뉴 버튼 관련 이벤트 처리 코드
         private void btnStart_Click(object sender, EventArgs e)
         {
-            if (pFrm == null)
-            {
-                pFrm = new PlotForm(this);
-                pFrm.configTouch += new configHandler(MakeConfig);
-                pFrm.mainPaint += new customEventHandler(recentConfBtnLoad);
-                pFrm.mainProgressSet += new setIntEventHandler(progressSetter);
-                pFrm.attachProgressBar += new switchEventHandler(progressAttach);
-                pFrm.attachStartBtn += new switchEventHandler(startBtnAttach);
-            }
+            pFrm = new PlotForm(this);
+            pFrm.configTouch += new configHandler(MakeConfig);
+            pFrm.mainPaint += new customEventHandler(recentConfBtnLoad);
+            pFrm.enableMainFormBtns += new switchEventHandler(switchCoreBtns);
+            pFrm.mainProgressSet += new setIntEventHandler(progressSetter);
+            pFrm.attachProgressBar += new switchEventHandler(progressAttach);
+            pFrm.attachStartBtn += new switchEventHandler(startBtnAttach);
 
             bool[] applyChecker = new bool[10];
             bool result = true;
@@ -731,8 +746,30 @@ namespace WinFormsAppTest
                 return;
             }
 
-            pFrm.ShowDialog();
+            pFrm.Show();
+
+            //plot창을 모달리스로 띄우는 대신 실행 및 설정 적용 관련 기능 버튼 비활성화
+            switchCoreBtns(false);
         }
+
+        private void switchCoreBtns(bool onOff)
+        {
+            switchBtns(pnReview, onOff);
+            switchBtns(tpSettings, onOff);
+        }
+
+        private void switchBtns(Control control, bool onOff)
+        {
+            foreach (Control btns in control.Controls)
+            {
+                if (btns.GetType() == typeof(CustomBtn))
+                {
+                    btns.Enabled = onOff;
+                }
+                switchBtns(btns, onOff);
+            }
+        }
+
         private void btnHome_Click(object sender, EventArgs e)
         {
             tcMainHome.SelectedIndex = 0;
@@ -747,53 +784,22 @@ namespace WinFormsAppTest
                 pnSideMenu.Width = MAX_SLIDING_WIDTH;
                 tcMainHome.Left += SLIDING_GAP / 2;
 
-                btnClose.BackColor = Color.LightGray;
-                btnHide.BackColor = Color.LightGray;
-
                 lbSlidePreset.Visible = true;
-                btnPresetManage.Location = new Point(350, 135);
+                btnPresetManage.Location = new Point(350, 188);
                 btnPresetManage.Size = new Size(22, 22);
-                /*
-                foreach (Control cont in pnSideMenu.Controls)
-                {
-                    if (cont.Name.Contains("presetConfig"))
-                    {
-                        cont.ForeColor = SystemColors.ControlText;
-                        cont.Width = MAX_BTN_WIDTH;
-                    }
-                }
-                */
+
                 lbPresetManage.Visible = false;
                 pnSidePreset.Visible = true;
-
-                btnSettings.Width = MAX_BTN_WIDTH + 13;
-                btnSettings.Text = "            Settings";
             }
             else if (menuOpen == false)
             {
-                /*
-                foreach (Control cont in pnSideMenu.Controls)
-                {
-                    if (cont.Name.Contains("presetConfig"))
-                    {
-                        cont.ForeColor = Color.SeaGreen;
-                        cont.Width = MIN_BTN_WIDTH;
-                    }
-                }
-                */
                 pnSidePreset.Visible = false;
                 lbPresetManage.Visible = true;
-
-                btnSettings.Width = MIN_BTN_WIDTH;
-                btnSettings.Text = "";
-
-                btnClose.BackColor = Color.Transparent;
-                btnHide.BackColor = Color.Transparent;
 
                 pnSideMenu.Width = MIN_SLIDING_WIDTH;
                 tcMainHome.Left -= SLIDING_GAP / 2;
 
-                btnPresetManage.Location = new Point(14, 130);
+                btnPresetManage.Location = new Point(14, 183);
                 btnPresetManage.Size = new Size(38, 34);
                 lbSlidePreset.Visible = false;
             }
@@ -801,36 +807,6 @@ namespace WinFormsAppTest
         private void btnSettings_Click(object sender, EventArgs e)
         {
             tcMainHome.SelectedIndex = 1;
-        }
-
-        //사용자 설정이나 최근 작업 선택 상태로 설정값 바꿀 시 선택 해제 이벤트
-        private void tbSettingsAll_TextChanged(object sender, EventArgs e)
-        {
-            if (activatePreset != -1)
-            {
-                foreach (Control c in pnSidePreset.Controls)
-                {
-                    if (c.Name == ("presetConfig" + activatePreset.ToString()))
-                    {
-                        c.BackColor = Color.Transparent;
-                        c.Invalidate();
-                        activatePreset = -1;
-                    }
-                }
-                activatePreset = -1;
-            }
-            else if (activateRecent != -1)
-            {
-                foreach (Control c in pnReview.Controls)
-                {
-                    if (c.Name == ("recentConfig" + activateRecent.ToString()))
-                    {
-                        c.BackColor = Color.Khaki;
-                        c.Invalidate();
-                        activateRecent = -1;
-                    }
-                }
-            }
         }
 
         //이 아래 4개 메서드 설정창 파라메터 판넬 마우스 이벤트
@@ -1052,15 +1028,18 @@ namespace WinFormsAppTest
                 mFrm.presetReflect += new presetReflectHandler(this.reflectConfs);
             }
 
+            /*
             if (pFrm == null)
             {
                 pFrm = new PlotForm(this);
                 pFrm.configTouch += new configHandler(MakeConfig);
                 pFrm.mainPaint += new customEventHandler(recentConfBtnLoad);
+                pFrm.enableMainFormBtns += new switchEventHandler(switchCoreBtns);
                 pFrm.mainProgressSet += new setIntEventHandler(progressSetter);
                 pFrm.attachProgressBar += new switchEventHandler(progressAttach);
                 pFrm.attachStartBtn += new switchEventHandler(startBtnAttach);
             }
+            */
 
             if (activatePreset == -1 && confCheck.Length >= 10)
             {
@@ -1091,17 +1070,6 @@ namespace WinFormsAppTest
             mFrm.ShowDialog();
         }
 
-        //창 최소화 버튼
-        private void btnHide_Click(object sender, EventArgs e)
-        {
-            this.WindowState = FormWindowState.Minimized;
-        }
-        //창 닫기 버튼
-        private void btnClose_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
         //기본값 불러오기 버튼
         private void btnSettingLoad_Click(object sender, EventArgs e)
         {
@@ -1127,7 +1095,7 @@ namespace WinFormsAppTest
         }
         private void btn_factory_reset_MouseHover(object sender, EventArgs e)
         {
-            ttMainInfo.SetToolTip(btn_factory_reset, "기본 설정값을 초기로 되돌립니다\n기존의 기본값은 따로 저장되지 않습니다");
+            ttMainInfo.SetToolTip(btnFactoryReset, "기본 설정값을 초기로 되돌립니다\n기존의 기본값은 따로 저장되지 않습니다");
         }
 
         //메인 화면의 Recent Task 도움말

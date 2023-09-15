@@ -22,28 +22,25 @@ namespace WinFormsAppTest
         MainForm paramForm;
 
         internal configHandler configTouch;
-
         internal customEventHandler mainPaint;
-
         internal setIntEventHandler mainProgressSet;
+        internal switchEventHandler enableMainFormBtns;
         internal switchEventHandler attachProgressBar;
-
         internal switchEventHandler attachStartBtn;
 
         public PlotForm(MainForm paramForm)
         {
             InitializeComponent();
 
+
             //아래 plotForm 컴포넌트들 세팅
-            pnPlotSelection.isFill = true;
             pnPlotSelection.isBorder = false;
-            pnPlotSelection.borderColor = Color.FromArgb(64, 96, 96);
-            pnPlotData.isFill = true;
+            pnPlotSelection.borderColor = Color.White;
             pnPlotData.isBorder = false;
-            pnPlotData.borderColor = Color.FromArgb(64, 96, 96);
-            tpPlotCircle.BackColor = this.BackColor;
-            tpPlotPoly.BackColor = this.BackColor;
-            tpPlotRec.BackColor = this.BackColor;
+            pnPlotData.borderColor = Color.White;
+            //tpPlotCircle.BackColor = this.BackColor;
+            //tpPlotPoly.BackColor = this.BackColor;
+            //tpPlotRec.BackColor = this.BackColor;
 
             cbPlotShape.SelectedIndex = 0;
             this.paramForm = paramForm;
@@ -79,16 +76,11 @@ namespace WinFormsAppTest
             //메인폼의 start 버튼 감추기(중복 실행 방지)
             attachStartBtn(false);
 
-            Point screenSize = ((Point)Screen.PrimaryScreen.Bounds.Size);
-            this.Location = new Point((screenSize.X - this.Width) / 2, (screenSize.Y - this.Height) / 2);
-
             cbPlotShape.SelectedIndex = 0;
         }
 
         private void btnPlotCancel_Click(object sender, EventArgs e)
         {
-            attachProgressBar(false);
-            attachStartBtn(true);
             this.Close();
         }
 
@@ -640,8 +632,15 @@ namespace WinFormsAppTest
         {
             if (e.KeyCode == Keys.Escape)
             {
-                btnPlotCancel_Click(sender, e);
+                this.Close();
             }
+        }
+
+        private void PlotForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            attachProgressBar(false);
+            attachStartBtn(true);
+            enableMainFormBtns(true);
         }
     }
 }

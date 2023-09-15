@@ -46,7 +46,6 @@ namespace WinFormsAppTest
             btnHome = new CustomBtn();
             btnSettings = new CustomBtn();
             btnSideMenu = new CustomBtn();
-            btnClose = new Button();
             tcMainHome = new CustomTabControl();
             tpMainHome = new TabPage();
             pnReviewMain = new Panel();
@@ -65,7 +64,7 @@ namespace WinFormsAppTest
             btnSettingCancel = new CustomBtn();
             btnSettingApply = new CustomBtn();
             pnSettingDefault = new CustomPanel();
-            btn_factory_reset = new CustomBtn();
+            btnFactoryReset = new CustomBtn();
             lbSettingDefault = new Label();
             lbSettingDefaultInfo = new Label();
             btnSettingLoad = new CustomBtn();
@@ -106,10 +105,10 @@ namespace WinFormsAppTest
             pnSettingSub1 = new CustomPanel();
             tbSubCellSize = new TextBox();
             lbSubCellSize = new Label();
-            btnHide = new Button();
             ttMainInfo = new ToolTip(components);
             timerFlashPanel = new Timer(components);
             timerFlashBtn = new Timer(components);
+            lbSetting = new Label();
             pnSideMenu.SuspendLayout();
             pnSidePreset.SuspendLayout();
             tcMainHome.SuspendLayout();
@@ -133,8 +132,9 @@ namespace WinFormsAppTest
             // 
             // pnSideMenu
             // 
-            pnSideMenu.BackColor = Color.DarkSlateGray;
+            pnSideMenu.BackColor = Color.FromArgb(60, 94, 94);
             pnSideMenu.BackgroundImageLayout = ImageLayout.Zoom;
+            pnSideMenu.Controls.Add(lbSetting);
             pnSideMenu.Controls.Add(btnSideClose);
             pnSideMenu.Controls.Add(lbSlideMenu);
             pnSideMenu.Controls.Add(lbHome);
@@ -183,17 +183,17 @@ namespace WinFormsAppTest
             // 
             lbSlideMenu.AutoSize = true;
             lbSlideMenu.ForeColor = Color.White;
-            lbSlideMenu.Location = new Point(-2, 102);
+            lbSlideMenu.Location = new Point(4, 155);
             lbSlideMenu.Name = "lbSlideMenu";
-            lbSlideMenu.Size = new Size(71, 15);
+            lbSlideMenu.Size = new Size(59, 15);
             lbSlideMenu.TabIndex = 5;
-            lbSlideMenu.Text = "사용자 목록";
+            lbSlideMenu.Text = "설정 목록";
             // 
             // lbHome
             // 
             lbHome.AutoSize = true;
             lbHome.ForeColor = Color.White;
-            lbHome.Location = new Point(25, 48);
+            lbHome.Location = new Point(24, 48);
             lbHome.Name = "lbHome";
             lbHome.Size = new Size(19, 15);
             lbHome.TabIndex = 4;
@@ -204,7 +204,7 @@ namespace WinFormsAppTest
             pnSidePreset.BackColor = Color.Transparent;
             pnSidePreset.Controls.Add(lbSidePresetTitle);
             pnSidePreset.Controls.Add(lbSidePresetDate);
-            pnSidePreset.Location = new Point(12, 169);
+            pnSidePreset.Location = new Point(12, 222);
             pnSidePreset.Name = "pnSidePreset";
             pnSidePreset.Size = new Size(360, 483);
             pnSidePreset.TabIndex = 5;
@@ -234,7 +234,7 @@ namespace WinFormsAppTest
             lbSlidePreset.AutoSize = true;
             lbSlidePreset.Font = new Font("맑은 고딕", 16F, FontStyle.Bold, GraphicsUnit.Point);
             lbSlidePreset.ForeColor = SystemColors.ControlLightLight;
-            lbSlidePreset.Location = new Point(12, 131);
+            lbSlidePreset.Location = new Point(12, 184);
             lbSlidePreset.Name = "lbSlidePreset";
             lbSlidePreset.Size = new Size(131, 30);
             lbSlidePreset.TabIndex = 7;
@@ -256,7 +256,7 @@ namespace WinFormsAppTest
             btnPresetManage.FlatAppearance.MouseOverBackColor = Color.FromArgb(96, 128, 128);
             btnPresetManage.FlatStyle = FlatStyle.Flat;
             btnPresetManage.ForeColor = Color.White;
-            btnPresetManage.Location = new Point(350, 135);
+            btnPresetManage.Location = new Point(350, 189);
             btnPresetManage.Margin = new Padding(3, 4, 3, 4);
             btnPresetManage.Name = "btnPresetManage";
             btnPresetManage.Size = new Size(22, 22);
@@ -298,6 +298,8 @@ namespace WinFormsAppTest
             // 
             btnSettings.BackColor = Color.Transparent;
             btnSettings.BackgroundColor = Color.Transparent;
+            btnSettings.BackgroundImage = (Image)resources.GetObject("btnSettings.BackgroundImage");
+            btnSettings.BackgroundImageLayout = ImageLayout.Center;
             btnSettings.BorderColor = Color.Transparent;
             btnSettings.BorderRadius = 5;
             btnSettings.BorderSize = 0;
@@ -307,14 +309,11 @@ namespace WinFormsAppTest
             btnSettings.FlatStyle = FlatStyle.Flat;
             btnSettings.Font = new Font("Microsoft Sans Serif", 14.25F, FontStyle.Bold, GraphicsUnit.Point);
             btnSettings.ForeColor = SystemColors.ControlLightLight;
-            btnSettings.Image = (Image)resources.GetObject("btnSettings.Image");
-            btnSettings.ImageAlign = ContentAlignment.MiddleLeft;
-            btnSettings.Location = new Point(12, 754);
+            btnSettings.Location = new Point(14, 67);
             btnSettings.Margin = new Padding(3, 4, 3, 4);
             btnSettings.Name = "btnSettings";
-            btnSettings.Size = new Size(370, 45);
+            btnSettings.Size = new Size(38, 34);
             btnSettings.TabIndex = 3;
-            btnSettings.Text = "            Settings";
             btnSettings.TextAlign = ContentAlignment.MiddleLeft;
             btnSettings.TextColor = SystemColors.ControlLightLight;
             btnSettings.UseVisualStyleBackColor = false;
@@ -335,7 +334,7 @@ namespace WinFormsAppTest
             btnSideMenu.FlatStyle = FlatStyle.Flat;
             btnSideMenu.ForeColor = Color.White;
             btnSideMenu.Image = (Image)resources.GetObject("btnSideMenu.Image");
-            btnSideMenu.Location = new Point(14, 67);
+            btnSideMenu.Location = new Point(14, 120);
             btnSideMenu.Margin = new Padding(3, 4, 3, 4);
             btnSideMenu.Name = "btnSideMenu";
             btnSideMenu.Size = new Size(38, 34);
@@ -343,24 +342,6 @@ namespace WinFormsAppTest
             btnSideMenu.TabStop = false;
             btnSideMenu.TextColor = Color.White;
             btnSideMenu.UseVisualStyleBackColor = false;
-            // 
-            // btnClose
-            // 
-            btnClose.BackColor = Color.Transparent;
-            btnClose.BackgroundImageLayout = ImageLayout.Center;
-            btnClose.FlatAppearance.BorderColor = SystemColors.AppWorkspace;
-            btnClose.FlatAppearance.BorderSize = 0;
-            btnClose.FlatAppearance.MouseDownBackColor = Color.FromArgb(255, 128, 128);
-            btnClose.FlatAppearance.MouseOverBackColor = Color.Red;
-            btnClose.FlatStyle = FlatStyle.Flat;
-            btnClose.Image = (Image)resources.GetObject("btnClose.Image");
-            btnClose.Location = new Point(1237, 0);
-            btnClose.Margin = new Padding(3, 4, 3, 4);
-            btnClose.Name = "btnClose";
-            btnClose.Size = new Size(43, 30);
-            btnClose.TabIndex = 0;
-            btnClose.TabStop = false;
-            btnClose.UseVisualStyleBackColor = false;
             // 
             // tcMainHome
             // 
@@ -631,7 +612,7 @@ namespace WinFormsAppTest
             // pnSettingDefault
             // 
             pnSettingDefault.BackColor = Color.Gray;
-            pnSettingDefault.Controls.Add(btn_factory_reset);
+            pnSettingDefault.Controls.Add(btnFactoryReset);
             pnSettingDefault.Controls.Add(lbSettingDefault);
             pnSettingDefault.Controls.Add(lbSettingDefaultInfo);
             pnSettingDefault.Controls.Add(btnSettingLoad);
@@ -642,28 +623,28 @@ namespace WinFormsAppTest
             pnSettingDefault.Size = new Size(850, 72);
             pnSettingDefault.TabIndex = 2;
             // 
-            // btn_factory_reset
+            // btnFactoryReset
             // 
-            btn_factory_reset.BackColor = Color.FromArgb(64, 64, 64);
-            btn_factory_reset.BackgroundColor = Color.FromArgb(64, 64, 64);
-            btn_factory_reset.BorderColor = Color.Transparent;
-            btn_factory_reset.BorderRadius = 10;
-            btn_factory_reset.BorderSize = 1;
-            btn_factory_reset.FlatAppearance.BorderSize = 0;
-            btn_factory_reset.FlatAppearance.MouseDownBackColor = Color.FromArgb(80, 80, 80);
-            btn_factory_reset.FlatStyle = FlatStyle.Flat;
-            btn_factory_reset.Font = new Font("맑은 고딕", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
-            btn_factory_reset.ForeColor = Color.White;
-            btn_factory_reset.Location = new Point(470, 18);
-            btn_factory_reset.Name = "btn_factory_reset";
-            btn_factory_reset.Size = new Size(104, 36);
-            btn_factory_reset.TabIndex = 0;
-            btn_factory_reset.TabStop = false;
-            btn_factory_reset.Text = "공장초기화";
-            btn_factory_reset.TextColor = Color.White;
-            btn_factory_reset.UseVisualStyleBackColor = false;
-            btn_factory_reset.Click += btn_factory_reset_Click;
-            btn_factory_reset.MouseHover += btn_factory_reset_MouseHover;
+            btnFactoryReset.BackColor = Color.FromArgb(64, 64, 64);
+            btnFactoryReset.BackgroundColor = Color.FromArgb(64, 64, 64);
+            btnFactoryReset.BorderColor = Color.Transparent;
+            btnFactoryReset.BorderRadius = 10;
+            btnFactoryReset.BorderSize = 1;
+            btnFactoryReset.FlatAppearance.BorderSize = 0;
+            btnFactoryReset.FlatAppearance.MouseDownBackColor = Color.FromArgb(80, 80, 80);
+            btnFactoryReset.FlatStyle = FlatStyle.Flat;
+            btnFactoryReset.Font = new Font("맑은 고딕", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
+            btnFactoryReset.ForeColor = Color.White;
+            btnFactoryReset.Location = new Point(470, 18);
+            btnFactoryReset.Name = "btnFactoryReset";
+            btnFactoryReset.Size = new Size(104, 36);
+            btnFactoryReset.TabIndex = 0;
+            btnFactoryReset.TabStop = false;
+            btnFactoryReset.Text = "공장초기화";
+            btnFactoryReset.TextColor = Color.White;
+            btnFactoryReset.UseVisualStyleBackColor = false;
+            btnFactoryReset.Click += btn_factory_reset_Click;
+            btnFactoryReset.MouseHover += btn_factory_reset_MouseHover;
             // 
             // lbSettingDefault
             // 
@@ -1132,22 +1113,6 @@ namespace WinFormsAppTest
             lbSubCellSize.TabIndex = 1;
             lbSubCellSize.Text = "Cell Size";
             // 
-            // btnHide
-            // 
-            btnHide.BackColor = Color.Transparent;
-            btnHide.FlatAppearance.BorderSize = 0;
-            btnHide.FlatAppearance.MouseDownBackColor = Color.WhiteSmoke;
-            btnHide.FlatAppearance.MouseOverBackColor = Color.Gainsboro;
-            btnHide.FlatStyle = FlatStyle.Flat;
-            btnHide.Image = (Image)resources.GetObject("btnHide.Image");
-            btnHide.Location = new Point(1194, 0);
-            btnHide.Name = "btnHide";
-            btnHide.Size = new Size(43, 30);
-            btnHide.TabIndex = 1;
-            btnHide.TabStop = false;
-            btnHide.UseVisualStyleBackColor = false;
-            btnHide.Click += btnHide_Click;
-            // 
             // timerFlashPanel
             // 
             timerFlashPanel.Interval = 50;
@@ -1158,19 +1123,28 @@ namespace WinFormsAppTest
             timerFlashBtn.Interval = 150;
             timerFlashBtn.Tick += timerFlashBtn_Tick;
             // 
+            // lbSetting
+            // 
+            lbSetting.AutoSize = true;
+            lbSetting.ForeColor = Color.White;
+            lbSetting.Location = new Point(18, 101);
+            lbSetting.Name = "lbSetting";
+            lbSetting.Size = new Size(31, 15);
+            lbSetting.TabIndex = 9;
+            lbSetting.Text = "설정";
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.DarkSlateGray;
             ClientSize = new Size(1280, 800);
-            Controls.Add(btnClose);
-            Controls.Add(btnHide);
             Controls.Add(tcMainHome);
             Controls.Add(pnSideMenu);
             DoubleBuffered = true;
-            FormBorderStyle = FormBorderStyle.None;
+            FormBorderStyle = FormBorderStyle.FixedDialog;
             Margin = new Padding(3, 4, 3, 4);
+            MaximizeBox = false;
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterParent;
             Text = "ForestLi";
@@ -1220,7 +1194,6 @@ namespace WinFormsAppTest
         #endregion
 
         private CustomBtn btnHome;
-        private Button btnClose;
         private CustomTabControl tcMainHome;
         private Panel pnSideMenu;
         private TabPage tpMainHome;
@@ -1268,7 +1241,6 @@ namespace WinFormsAppTest
         private Label lbNorCellSize;
         private Label lbNormalize;
         private CustomBtn btnPresetManage;
-        private Button btnHide;
         private CustomBtn btnSettingLoad;
         private ProgressBar pbLoadingBar;
         private CustomPanel pnSettingPreset;
@@ -1279,7 +1251,7 @@ namespace WinFormsAppTest
         private Label lbSettingDefaultInfo;
         private CustomBtn btnSettingApply;
         private CustomBtn btnSettingCancel;
-        private CustomBtn btn_factory_reset;
+        private CustomBtn btnFactoryReset;
         private CustomBtn btnRecentInfo;
         private ToolTip ttMainInfo;
         private Label lbTrunkSmooth;
@@ -1298,5 +1270,6 @@ namespace WinFormsAppTest
         private Label lbSidePresetTitle;
         private Timer timerFlashPanel;
         private Timer timerFlashBtn;
+        private Label lbSetting;
     }
 }

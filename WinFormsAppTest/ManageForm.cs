@@ -289,6 +289,7 @@ namespace WinFormsAppTest
                     presetReflect(fileDi, fileName);
                     mainForm.activatePreset = lvPresetConf.SelectedItems[0].Index;
                     this.Close();
+                    mainPaint();
                     break;
                 case 2:
                     btnManageInfo_Click(sender, e);
