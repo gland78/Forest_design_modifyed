@@ -8,6 +8,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 using System.Text;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 
 namespace WinFormsAppTest
 {
@@ -111,9 +112,9 @@ namespace WinFormsAppTest
             lbPresetManage = new Label();
             lbPresetManage.Name = "lbPresetManage";
             lbPresetManage.ForeColor = Color.White;
-            lbPresetManage.Location = new Point(-2, 218);
+            lbPresetManage.Location = new Point(4, 218);
             lbPresetManage.TabIndex = 6;
-            lbPresetManage.Text = "사용자 설정";
+            lbPresetManage.Text = "설정 관리";
             pnSideMenu.Controls.Add(lbPresetManage);
 
 
@@ -403,20 +404,41 @@ namespace WinFormsAppTest
                         if (line.Contains("title"))
                         {
                             string lineData = line.Split(',')[3].Replace('，', ',');
-                            title = "       " + lineData;
+                            title = lineData;
                         }
                     }
-                    if(date == "")
+                    if (date == "")
                     {
                         date = "yy/MM/dd";
                     }
-
-                    btnPreConfs.Text = date + title;
+                    btnPreConfs.Text = textLengthTrim(btnPreConfs, date + "       " + title);
                 }
                 relativeBtnPos.Y = relativeBtnPos.Y + PRESET_BTN_HEIGHT + PRESET_BTN_GAP;
             }
         }
 
+        private string textLengthTrim(CustomBtn customBtn, string text)
+        {
+            string trimedText = text;
+
+            Size size = TextRenderer.MeasureText(trimedText, customBtn.Font);
+            double diff = size.Width - customBtn.Width;
+
+            if (diff <= 0)
+            {
+                return trimedText;
+            }
+            //14는 보정값 (보정값이 없으면 의도보다 조금 더 길어져서 줄바꿈이 일어남)
+            while (diff + 14 > 0)
+            {
+                trimedText = trimedText.Substring(0, trimedText.Length - 1);
+                size = TextRenderer.MeasureText(trimedText + "...", customBtn.Font);
+                diff = size.Width - customBtn.Width;
+            }
+
+            return trimedText + "...";
+        }
+        
         //최근 작업 콘피그 파일 갯수만큼 버튼 로드
         private void recentConfBtnLoad()
         {
@@ -439,7 +461,7 @@ namespace WinFormsAppTest
                 btnRecentConfs.Location = relativePos;
                 btnRecentConfs.Width = RECENT_BTN_WIDTH;
                 btnRecentConfs.Height = RECENT_BTN_HEIGHT;
-                btnRecentConfs.Margin = new Padding(4, 8, 4, 4);
+                btnRecentConfs.Padding = new Padding(0, 0, 0, 0);
 
                 btnRecentConfs.FlatStyle = FlatStyle.Flat;
                 btnRecentConfs.FlatAppearance.BorderSize = 0;
@@ -522,13 +544,17 @@ namespace WinFormsAppTest
                         else if (line.Contains("Lasfilename"))
                         {
                             string lasName = Path.GetFileName(line.Split(',')[3]);
+
+                            lasName = textLengthTrim(btnRecentConfs, "  Las파일:  " + lasName);
+                            /*
                             //las파일 이름이 너무 길면 텍스트가 이상해지므로
                             //일정 이상 길이면 자르고 ...으로 생략
                             if (lasName.Length > 16)
                             {
                                 lasName = lasName.Substring(0, 16) + "...";
                             }
-                            btnText += ("  Las파일:  " + lasName + Environment.NewLine);
+                            */
+                            btnText += (lasName + Environment.NewLine);
                         }
                         else if (line.Contains("selection"))
                         {
@@ -640,6 +666,7 @@ namespace WinFormsAppTest
             recentConfBtnLoad();
         }
 
+        //recentConfig 버튼이 아예 없을 시의 디폴트 가이드 버튼 이벤트
         private void btnRecentDefault_Click(object sender, EventArgs e)
         {
             tcMainHome.SelectedIndex = 0;
@@ -849,37 +876,6 @@ namespace WinFormsAppTest
                 cPanel.fillColor = Color.DarkGray;
                 cPanel.Invalidate();
             }
-        }
-
-        //아래 메서드 4개 커스텀 제목표시줄로 인한 창 이동 이벤트 임의 생성
-        private void MainForm_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left && e.Location.Y <= 40)
-            {
-                relativeMformPos = e.Location;
-                isMformDrag = true;
-            }
-        }
-        //프로그램 제목을 나타내는 라벨이 윈폼을 가려서 따로 만든 이벤트
-        private void lbTitle_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left && e.Location.Y <= 20)
-            {
-                relativeMformPos = e.Location;
-                isMformDrag = true;
-            }
-        }
-        private void MainForm_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left && isMformDrag)
-            {
-                this.Location = new Point(this.Location.X + (e.X - relativeMformPos.X),
-                    this.Location.Y + (e.Y - relativeMformPos.Y));
-            }
-        }
-        private void MainForm_MouseUp(object sender, MouseEventArgs e)
-        {
-            isMformDrag = false;
         }
 
         //적용하기 버튼 이벤트

@@ -86,19 +86,19 @@
             // 
             cmsManage.Items.AddRange(new ToolStripItem[] { tsmiPresetUp, tsmiPresetDown });
             cmsManage.Name = "cmsManage";
-            cmsManage.Size = new Size(181, 70);
+            cmsManage.Size = new Size(151, 48);
             // 
             // tsmiPresetUp
             // 
             tsmiPresetUp.Name = "tsmiPresetUp";
-            tsmiPresetUp.Size = new Size(180, 22);
+            tsmiPresetUp.Size = new Size(150, 22);
             tsmiPresetUp.Text = "위로 올리기";
             tsmiPresetUp.Click += tsmiPresetUp_Click;
             // 
             // tsmiPresetDown
             // 
             tsmiPresetDown.Name = "tsmiPresetDown";
-            tsmiPresetDown.Size = new Size(180, 22);
+            tsmiPresetDown.Size = new Size(150, 22);
             tsmiPresetDown.Text = "아래로 내리기";
             tsmiPresetDown.Click += tsmiPresetDown_Click;
             // 
@@ -180,6 +180,7 @@
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "ManageForm";
             Text = "ManageForm";
+            TopMost = true;
             Load += ManageForm_Load;
             KeyDown += ManageForm_KeyDown;
             cmsManage.ResumeLayout(false);

@@ -259,24 +259,6 @@ namespace WinFormsAppTest
             }
         }
 
-
-        //아래 두 메서드 PlotForm 마우스 드래그 시 윈폼 이동 이벤트
-        private void PlotForm_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                relativePformPos = e.Location;
-            }
-        }
-        private void PlotForm_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                this.Location = new Point(this.Location.X + (e.X - relativePformPos.X),
-                    this.Location.Y + (e.Y - relativePformPos.Y));
-            }
-        }
-
         //PlotForm 콤보박스 이벤트
         private void cbPlotShape_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -511,12 +493,14 @@ namespace WinFormsAppTest
                     };
 
                     progressDialog.Controls.Add(gifBox);
+                    this.TopMost = false;
                     progressDialog.Show();
                     //Task를 이용한 이유 : MakeInfo와 progressDialog의 pictureBox gif가
                     //동시에 동작하게 하기 위함.(안쓰면 쓰레드 우선순위 문제로 gif 애니메이션이 안움직임)
                     await Task.Run(() => MakeInfo(filePath, infoDir));
 
                     progressDialog.Dispose();
+                    this.TopMost = true;
                 }
                 //Las파일 크기 정보 읽기
                 readInfo(filePath, infoDir);

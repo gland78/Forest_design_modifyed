@@ -301,8 +301,6 @@
             tpPlotCircle.Padding = new Padding(3);
             tpPlotCircle.Size = new Size(487, 185);
             tpPlotCircle.TabIndex = 0;
-            tpPlotCircle.MouseDown += PlotForm_MouseDown;
-            tpPlotCircle.MouseMove += PlotForm_MouseMove;
             // 
             // lbPlotCircle
             // 
@@ -472,11 +470,10 @@
             Name = "PlotForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "추출 구역 설정";
+            TopMost = true;
             FormClosing += PlotForm_FormClosing;
             Load += PlotForm_Load;
             KeyDown += PlotForm_KeyDown;
-            MouseDown += PlotForm_MouseDown;
-            MouseMove += PlotForm_MouseMove;
             tcPlot.ResumeLayout(false);
             tpPlotCircle.ResumeLayout(false);
             tpPlotCircle.PerformLayout();

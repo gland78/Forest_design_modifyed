@@ -35,6 +35,7 @@ namespace WinFormsAppTest
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             pnSideMenu = new Panel();
+            lbSetting = new Label();
             btnSideClose = new CustomBtn();
             lbSlideMenu = new Label();
             lbHome = new Label();
@@ -108,7 +109,6 @@ namespace WinFormsAppTest
             ttMainInfo = new ToolTip(components);
             timerFlashPanel = new Timer(components);
             timerFlashBtn = new Timer(components);
-            lbSetting = new Label();
             pnSideMenu.SuspendLayout();
             pnSidePreset.SuspendLayout();
             tcMainHome.SuspendLayout();
@@ -150,9 +150,16 @@ namespace WinFormsAppTest
             pnSideMenu.Name = "pnSideMenu";
             pnSideMenu.Size = new Size(384, 800);
             pnSideMenu.TabIndex = 2;
-            pnSideMenu.MouseDown += MainForm_MouseDown;
-            pnSideMenu.MouseMove += MainForm_MouseMove;
-            pnSideMenu.MouseUp += MainForm_MouseUp;
+            // 
+            // lbSetting
+            // 
+            lbSetting.AutoSize = true;
+            lbSetting.ForeColor = Color.White;
+            lbSetting.Location = new Point(18, 101);
+            lbSetting.Name = "lbSetting";
+            lbSetting.Size = new Size(31, 15);
+            lbSetting.TabIndex = 9;
+            lbSetting.Text = "설정";
             // 
             // btnSideClose
             // 
@@ -236,9 +243,9 @@ namespace WinFormsAppTest
             lbSlidePreset.ForeColor = SystemColors.ControlLightLight;
             lbSlidePreset.Location = new Point(12, 184);
             lbSlidePreset.Name = "lbSlidePreset";
-            lbSlidePreset.Size = new Size(131, 30);
+            lbSlidePreset.Size = new Size(109, 30);
             lbSlidePreset.TabIndex = 7;
-            lbSlidePreset.Text = "사용자 설정";
+            lbSlidePreset.Text = "설정 관리";
             // 
             // btnPresetManage
             // 
@@ -357,9 +364,6 @@ namespace WinFormsAppTest
             tcMainHome.Size = new Size(896, 800);
             tcMainHome.TabIndex = 3;
             tcMainHome.TabStop = false;
-            tcMainHome.MouseDown += MainForm_MouseDown;
-            tcMainHome.MouseMove += MainForm_MouseMove;
-            tcMainHome.MouseUp += MainForm_MouseUp;
             // 
             // tpMainHome
             // 
@@ -442,9 +446,6 @@ namespace WinFormsAppTest
             pnMain.Name = "pnMain";
             pnMain.Size = new Size(888, 482);
             pnMain.TabIndex = 0;
-            pnMain.MouseDown += MainForm_MouseDown;
-            pnMain.MouseMove += MainForm_MouseMove;
-            pnMain.MouseUp += MainForm_MouseUp;
             // 
             // pbLoadingBar
             // 
@@ -495,9 +496,6 @@ namespace WinFormsAppTest
             lbTitle.Size = new Size(348, 96);
             lbTitle.TabIndex = 0;
             lbTitle.Text = "ForestLi\n";
-            lbTitle.MouseDown += lbTitle_MouseDown;
-            lbTitle.MouseMove += MainForm_MouseMove;
-            lbTitle.MouseUp += MainForm_MouseUp;
             // 
             // tpSettings
             // 
@@ -529,9 +527,6 @@ namespace WinFormsAppTest
             tpSettings.Padding = new Padding(3);
             tpSettings.Size = new Size(888, 782);
             tpSettings.TabIndex = 1;
-            tpSettings.MouseDown += MainForm_MouseDown;
-            tpSettings.MouseMove += MainForm_MouseMove;
-            tpSettings.MouseUp += MainForm_MouseUp;
             // 
             // pnSettingTrunk3
             // 
@@ -1123,16 +1118,6 @@ namespace WinFormsAppTest
             timerFlashBtn.Interval = 150;
             timerFlashBtn.Tick += timerFlashBtn_Tick;
             // 
-            // lbSetting
-            // 
-            lbSetting.AutoSize = true;
-            lbSetting.ForeColor = Color.White;
-            lbSetting.Location = new Point(18, 101);
-            lbSetting.Name = "lbSetting";
-            lbSetting.Size = new Size(31, 15);
-            lbSetting.TabIndex = 9;
-            lbSetting.Text = "설정";
-            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1149,9 +1134,6 @@ namespace WinFormsAppTest
             StartPosition = FormStartPosition.CenterParent;
             Text = "ForestLi";
             Load += MainForm_Load;
-            MouseDown += MainForm_MouseDown;
-            MouseMove += MainForm_MouseMove;
-            MouseUp += MainForm_MouseUp;
             pnSideMenu.ResumeLayout(false);
             pnSideMenu.PerformLayout();
             pnSidePreset.ResumeLayout(false);

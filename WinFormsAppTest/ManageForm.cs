@@ -105,7 +105,9 @@ namespace WinFormsAppTest
             string fileDi = Path.Combine(basePath, reqDi[(int)configFileType.Preset]);
             string[] confCheck = Directory.GetFiles(fileDi, "presetConfig*");
             string oldTitle = lvPresetConf.SelectedItems[0].SubItems[0].Text;
+            this.TopMost = false;
             string? newTitle = Microsoft.VisualBasic.Interaction.InputBox("바꿀 제목을 입력해주세요.", "사용자 설정 제목 바꾸기");
+            this.TopMost = true;
 
             //Microsoft.VisualBasic.Interaction.InputBox로는 취소버튼과 확인버튼 중 뭘 눌렀는지 알 수 없음
             //추후 임시 Form 추가 예정
@@ -227,7 +229,9 @@ namespace WinFormsAppTest
             string fileName = lvPresetConf.SelectedItems[0].Name;
             string oldInfo = lvPresetConf.SelectedItems[0].SubItems[2].Text;
             string fileDi = Path.Combine(basePath, reqDi[(int)configFileType.Preset]);
+            this.TopMost = false;
             string? newInfo = Microsoft.VisualBasic.Interaction.InputBox("설정값에 붙일 설명을 입력해주세요", "사용자 설정값 설명 바꾸기");
+            this.TopMost = true;
 
             if (newInfo == "")
             {
