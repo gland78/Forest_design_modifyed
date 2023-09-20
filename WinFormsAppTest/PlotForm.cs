@@ -640,5 +640,7 @@ namespace WinFormsAppTest
                 btnPlotCancel_Click(sender, e);
             }
         }
+
+        
     }
 }

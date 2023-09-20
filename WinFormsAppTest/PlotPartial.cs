@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
@@ -47,15 +48,7 @@ namespace WinFormsAppTest
         }
         LasSize lasSize = new LasSize();
 
-        //현재는 사용한 곳 없음
-        private void InitializeMemberParam()
-        {
-            //파일경로 관련 파라미터 초기화
-
-            shape = "_circle";
-
-            resultPath = paramForm.getParam(paramForm.csv_data, "gui", "result_path");
-        }
+        
         //PLOT
         private void MakeResultDirectory_PLOT()
         {
@@ -80,6 +73,7 @@ namespace WinFormsAppTest
                 di3.Create();
             }
 
+            RemoveDuplicatedPoints(originLasPath);
 
             if (shape == "_circle")
             {
@@ -198,6 +192,7 @@ namespace WinFormsAppTest
                );
                 JObject Writers = new JObject(
                    new JProperty("type", "writers.las"),
+                   new JProperty ("compression","laszip"),
                    new JProperty("filename", one + originLasName + "_B.las")
                );
                 File.WriteAllText(resultSavedDirectory + @"\intermediate\" + one + originLasName + ".json",
@@ -244,6 +239,7 @@ namespace WinFormsAppTest
                     );
                 JObject Writers = new JObject(
                    new JProperty("type", "writers.las"),
+                   new JProperty("compression", "laszip"),
                     new JProperty("filename", @".\" + one + originLasName + "_B.las")
                );
                 File.WriteAllText(resultSavedDirectory + @"\intermediate\" + one + originLasName + ".json",
@@ -289,6 +285,7 @@ namespace WinFormsAppTest
                     );
                 JObject Writers = new JObject(
                    new JProperty("type", "writers.las"),
+                   new JProperty("compression", "laszip"),
                    new JProperty("filename", @".\" + one + originLasName + "_B.las")
                );
                 File.WriteAllText(resultSavedDirectory + @"\intermediate\" + one + originLasName + ".json",
@@ -318,6 +315,7 @@ namespace WinFormsAppTest
                );
                 JObject Writers = new JObject(
                    new JProperty("type", "writers.las"),
+                   new JProperty("compression", "laszip"),
                    new JProperty("filename", @".\" + originLasName + "_TSlice.las")
                );
                 File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + twoone + originLasName + ".json", "[" + Readers.ToString() + ", " + sonSpec.ToString() + ", " + Writers.ToString() + "]");
@@ -336,6 +334,7 @@ namespace WinFormsAppTest
                );
                 JObject Writers = new JObject(
                    new JProperty("type", "writers.las"),
+                   new JProperty("compression", "laszip"),
                    new JProperty("filename", @".\" + originLasName + "_CSlice.las")
                );
                 File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + twotwo + originLasName + ".json", "[" + Readers.ToString() + ", " + sonSpec.ToString() + ", " + Writers.ToString() + "]");
@@ -359,6 +358,7 @@ namespace WinFormsAppTest
                );
                 JObject Writers = new JObject(
                    new JProperty("type", "writers.las"),
+                   new JProperty("compression", "laszip"),
                    new JProperty("filename", @".\" + three + originLasName + ".las")
                );
                 File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + three + originLasName + ".json", "[" + Readers.ToString() + ", " + sonSpec.ToString() + ", " + Writers.ToString() + "]");
@@ -405,6 +405,7 @@ namespace WinFormsAppTest
                 ),
                 new JObject(
                     new JProperty("type", "writers.las"),
+                    new JProperty("compression", "laszip"),
                     new JProperty("filename", four + originLasName + ".las")
                 )))
             );
@@ -428,6 +429,7 @@ namespace WinFormsAppTest
               );
                 JObject secondout = new JObject(
                    new JProperty("type", "writers.las"),
+                   new JProperty("compression", "laszip"),
                    new JProperty("filename", @".\" + five + originLasName + ".las")
                );
                 File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + five + originLasName + ".json",
@@ -470,6 +472,7 @@ namespace WinFormsAppTest
               );
                 JObject Writers = new JObject(
                    new JProperty("type", "writers.las"),
+                   new JProperty("compression", "laszip"),
                    new JProperty("filename", @".\" + six + originLasName + ".las")
                );
                 File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + six + originLasName + ".json", "[" + thirdin.ToString() + ", " + Assign.ToString() + ", " + elm.ToString() + ", " + smrf.ToString() + ", " + hagnn.ToString() + ", " + ferry.ToString() + ", " + Writers.ToString() + "]");
@@ -499,6 +502,7 @@ namespace WinFormsAppTest
                        );
                         JObject Writers = new JObject(
                            new JProperty("type", "writers.las"),
+                           new JProperty("compression", "laszip"),
                            new JProperty("filename", @".\" + seven + originLasName + "_O.las")
                        );
                         File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + seven + originLasName + ".json", "[" + Readers.ToString() + ", " + sonSpec.ToString() + ", " + Writers.ToString() + "]");
@@ -524,6 +528,7 @@ namespace WinFormsAppTest
                         );
                         JObject Writers = new JObject(
                            new JProperty("type", "writers.las"),
+                           new JProperty("compression", "laszip"),
                            new JProperty("filename", @".\" + seven + originLasName + "_O.las")
                         );
                         File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + seven + originLasName + ".json", "[" + Readers.ToString() + ", " + sonSpec.ToString() + ", " + Writers.ToString() + "]");
@@ -546,6 +551,7 @@ namespace WinFormsAppTest
                         );
                         JObject Writers = new JObject(
                            new JProperty("type", "writers.las"),
+                           new JProperty("compression", "laszip"),
                            new JProperty("filename", @".\" + seven + originLasName + "_O.las")
                         );
                         File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + seven + originLasName + ".json", "[" + Readers.ToString() + ", " + sonSpec.ToString() + ", " + Writers.ToString() + "]");
@@ -560,14 +566,17 @@ namespace WinFormsAppTest
             string sevenonetwo = "level7-1-2_LAStoPCDforCslice_";
             //LAStoPCD
             {
+
                 JObject Readers = new JObject(
                   new JProperty("type", "readers.las"),
                 new JProperty("filename", @".\" + originLasName + "_TSlice.las")
                );
                 JObject Writers = new JObject(
                    new JProperty("type", "writers.pcd"),
-                   new JProperty("filename", @".\" + sevenoneone + originLasName + ".pcd")
-                   //new JProperty("compression", "binary") // 바이너리 PCD 출력 설정
+                   new JProperty("filename", @".\" + sevenoneone + originLasName + ".pcd"),
+                   new JProperty("precision", 6),
+                   new JProperty("order", "X,Y,Z"),
+                   new JProperty("compression", "ascii") // 바이너리 PCD 출력 설정
                );
                 File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + sevenoneone + originLasName + ".json", "[" + Readers.ToString() + ", " + Writers.ToString() + "]");
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + sevenoneone + originLasName + ".json 파일을 생성했습니다.");
@@ -575,12 +584,14 @@ namespace WinFormsAppTest
             {
                 JObject Readers = new JObject(
                   new JProperty("type", "readers.las"),
-                new JProperty("filename", @".\" + originLasName + "_CSlice.las")
+                  new JProperty("filename", @".\" + "level3_subsampled_crown_" + originLasName + ".las")
                );
                 JObject Writers = new JObject(
                    new JProperty("type", "writers.pcd"),
-                   new JProperty("filename", @".\" + sevenonetwo + originLasName + ".pcd")
-                   //new JProperty("compression", "binary") // 바이너리 PCD 출력 설정
+                   new JProperty("filename", @".\" + sevenonetwo + originLasName + ".pcd"),
+                   new JProperty("precision", 6),
+                   new JProperty("order", "X,Y,Z"),
+                   new JProperty("compression", "ascii") // 바이너리 PCD 출력 설정
                );
                 File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + sevenonetwo + originLasName + ".json", "[" + Readers.ToString() + ", " + Writers.ToString() + "]");
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + sevenonetwo + originLasName + ".json 파일을 생성했습니다.");
@@ -623,14 +634,14 @@ namespace WinFormsAppTest
             System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(FolderName);
             foreach (System.IO.FileInfo fi in di.GetFiles())
             {
-                if (fi.Extension.ToLower().CompareTo(".pcd") == 0 && fi.Name.Contains(originLasName) == true && fi.Name.ToLower().Contains("_trunk") == true)
+                if (fi.Extension.ToLower().CompareTo(".pcd") == 0 && fi.Name.ToLower().Contains(originLasName.ToLower()) == true && fi.Name.ToLower().Contains("_trunk_") == true)
                 {
                     filenames_pcd.Add(fi.FullName);
                 }
             }
             foreach (System.IO.FileInfo fi in di.GetFiles())
             {
-                if (fi.Extension.ToLower().CompareTo(".pcd") == 0 && fi.Name.Contains(originLasName) == true && fi.Name.ToLower().Contains("cslice") == true)
+                if (fi.Extension.ToLower().CompareTo(".pcd") == 0 && fi.Name.ToLower().Contains(originLasName.ToLower()) == true && fi.Name.ToLower().Contains("cslice") == true)
                 {
                     crownslicefile = fi.FullName;
                 }
@@ -666,7 +677,33 @@ namespace WinFormsAppTest
             proc.Close();
         }
         //배치파일 작성 코드
-        
+
+        private void RunFileZero(string target_path)
+        {
+            string zero = "level0_DuplicateRemove_";
+            //7단계 treeseg_findstems 
+            {
+                string batFilePath = resultSavedDirectory + shape + @"\intermediate\" + zero + originLasName + ".bat";
+                if (!File.Exists(batFilePath))
+                {
+                    using (FileStream fs = File.Create(batFilePath))
+                    {
+                        fs.Close();
+                    }
+                }
+                using (StreamWriter sw = new StreamWriter(new FileStream(batFilePath, FileMode.OpenOrCreate), Encoding.Default))
+                {
+                    sw.WriteLine("chcp 65001");
+                    sw.WriteLine("cls");
+                    sw.WriteLine("@ECHO OFF");
+                    sw.WriteLine("echo 원본 LAS 중복 점 제거중...");
+                    sw.WriteLine("Extract_XYZ_from_LAS " + target_path);
+                    sw.WriteLine();
+                }
+                ProcessBatch(zero);
+                LogWrite(resultSavedDirectory + shape + @"\intermediate\" + originLasName + zero + ".bat 파일을 생성했습니다.");
+            }
+        }
         private void RunFileSecond()
         {
             string two = "level2_makeslicefile_";
@@ -925,8 +962,9 @@ namespace WinFormsAppTest
                     sw.WriteLine("chcp 65001");
                     sw.WriteLine("cls");
                     sw.WriteLine("@ECHO OFF");
-                    sw.WriteLine("echo LAS to PCD 변환 중...");
+                    sw.WriteLine("echo TSlice LAS to PCD 변환 중...");
                     sw.WriteLine("pdal pipeline " + sevenoneone + originLasName + ".json");
+                    sw.WriteLine("Delete_duplication " + sevenoneone + originLasName + ".pcd");
                 }
                 ProcessBatch(sevenoneone);
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + sevenoneone + originLasName + ".bat 파일을 생성했습니다.");
@@ -946,8 +984,9 @@ namespace WinFormsAppTest
                     sw.WriteLine("chcp 65001");
                     sw.WriteLine("cls");
                     sw.WriteLine("@ECHO OFF");
-                    sw.WriteLine("echo Las PCD 변환 중...");
+                    sw.WriteLine("echo CSlice Las to PCD 변환 중...");
                     sw.WriteLine("pdal pipeline " + sevenonetwo + originLasName + ".json");
+                    sw.WriteLine("Delete_duplication " + sevenonetwo + originLasName + ".pcd");
                 }
                 ProcessBatch(sevenonetwo);
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + sevenonetwo + originLasName + ".bat 파일을 생성했습니다.");
@@ -1085,18 +1124,16 @@ namespace WinFormsAppTest
                 }
 
                 ProcessBatch(eleven);
-                try
+                /*try
                 {
                     ChangeLasName();
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show("10단계 오류 : " + ex.ToString());
-                }
+                }*/
 
                 MakeInfoFile();
-
-
 
                 string FilePath = resultSavedDirectory + shape + @"\Log\Log_" + DateTime.Today.ToString("yyyyMMdd") + ".log";
                 try
@@ -1423,6 +1460,27 @@ namespace WinFormsAppTest
             {
                 return true;
             }
+        }
+
+        private void RemoveDuplicatedPoints(string filename)
+        {
+            string dupRemovedfile = Path.GetFileNameWithoutExtension(filename.Insert(filename.Length-4, "_XYZ"));
+            //MessageBox.Show(filename);
+            //MessageBox.Show(dupRemovedfile);
+
+            String FolderName = originLasDirectory;
+            System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(FolderName);
+            foreach (System.IO.FileInfo fi in di.GetFiles())
+            {
+                if (Path.GetFileNameWithoutExtension(fi.Name) == dupRemovedfile)
+                {
+                    originLasName = Path.GetFileNameWithoutExtension(fi.Name);
+                    //MessageBox.Show(originLasName);
+                    return;
+                }
+            }
+            RunFileZero(filename);
+            originLasName = dupRemovedfile;
         }
     }
 }
