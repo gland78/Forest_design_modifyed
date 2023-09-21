@@ -730,6 +730,7 @@ namespace WinFormsAppTest
             pFrm.attachProgressBar += new switchEventHandler(progressAttach);
             pFrm.attachStartBtn += new switchEventHandler(startBtnAttach);
 
+            /*
             bool[] applyChecker = new bool[10];
             bool result = true;
             DialogResult dialogResult = DialogResult.No;
@@ -772,6 +773,7 @@ namespace WinFormsAppTest
             {
                 return;
             }
+            */
 
             pFrm.Show();
 
@@ -799,6 +801,53 @@ namespace WinFormsAppTest
 
         private void btnHome_Click(object sender, EventArgs e)
         {
+            if (tcMainHome.SelectedIndex == 0)
+            {
+                return;
+            }
+
+            bool[] applyChecker = new bool[10];
+            bool result = true;
+            DialogResult dialogResult = DialogResult.No;
+
+            //subsamplng_textboxes
+            applyChecker[0] = tbSubCellSize.Text == getParam(csv_data, "filters.sample", "cell");
+
+            //normalize_textboxes
+            applyChecker[1] = tbNorCellSize.Text == getParam(csv_data, "filters.smrf", "cell");
+            applyChecker[2] = tbNorScalar.Text == getParam(csv_data, "filters.smrf", "scalar");
+            applyChecker[3] = tbNorSlope.Text == getParam(csv_data, "filters.smrf", "slope");
+            applyChecker[4] = tbNorThres.Text == getParam(csv_data, "filters.smrf", "threshold");
+            applyChecker[5] = tbNorWinSize.Text == getParam(csv_data, "filters.smrf", "window");
+
+            //trunkSlice_textboxes
+            applyChecker[6] = tbTrunkMinHeight.Text == getParam(csv_data, "filters.range.trunk", "minheight");
+            applyChecker[7] = tbTrunkMaxHeight.Text == getParam(csv_data, "filters.range.trunk", "maxheight");
+            applyChecker[8] = tbTrunkSmooth.Text == getParam(csv_data, "csp_segmentstem", "smoothness");
+
+            //CrownSlice_textboxes
+            applyChecker[9] = tbCrownMinHeight.Text == getParam(csv_data, "filters.range.crown", "minheight");
+
+            foreach (bool checker in applyChecker)
+            {
+                result = result == checker;
+            }
+
+            if (result == false)
+            {
+                dialogResult = MessageBox.Show("현재 설정이 적용되지 않았습니다.\n적용하시겠습니까?", "", MessageBoxButtons.YesNo);
+            }
+
+            fileType = getParam(csv_data, "FileInfo", "fileType");
+
+            if (dialogResult == DialogResult.Yes)
+            {
+                btnSettingApply_Click(sender, e);
+            }
+            else if (dialogResult == DialogResult.No)
+            {
+                FillTextboxes();
+            }
             tcMainHome.SelectedIndex = 0;
         }
 
@@ -960,9 +1009,10 @@ namespace WinFormsAppTest
                     //선택된 버튼 activate(Preset/Recent) 변수로 구해서 색 바꾸기 
                     if (cont.Name.Equals("recentConfig" + activateRecent.ToString()))
                     {
-                        cont.BackColor = Color.Khaki;
-                        cont.Invalidate();
+                        cont.BackColor = Color.LightSteelBlue;
+                        cont.ForeColor = Color.Black;
                         activateRecent = -1;
+                        cont.Invalidate();
                     }
                 }
             }
@@ -984,14 +1034,16 @@ namespace WinFormsAppTest
         }
 
         //취소버튼
-        //저장하지 않고 기존에 적용 되어있던 값으로 텍스트 박스 값 교체 후
+        //저장하지 않고 기본 config 값으로 텍스트 박스 값 교체 후
         //시작화면으로 이동
         private void btnSettingCancel_Click(object sender, EventArgs e)
         {
+            read_csv(csv_path, csv_data);
             FillTextboxes();
             activatePreset = -1;
             activateRecent = -1;
             preConfBtnLoad();
+            tcMainHome.SelectedIndex = 0;
             recentConfBtnLoad();
         }
 

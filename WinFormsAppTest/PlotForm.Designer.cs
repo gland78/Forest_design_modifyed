@@ -470,7 +470,6 @@
             Name = "PlotForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "추출 구역 설정";
-            TopMost = true;
             FormClosing += PlotForm_FormClosing;
             Load += PlotForm_Load;
             KeyDown += PlotForm_KeyDown;
