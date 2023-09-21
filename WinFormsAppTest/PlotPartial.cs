@@ -677,7 +677,6 @@ namespace WinFormsAppTest
             proc.Close();
         }
         //배치파일 작성 코드
-
         private void RunFileZero(string target_path)
         {
             string zero = "level0_DuplicateRemove_";
