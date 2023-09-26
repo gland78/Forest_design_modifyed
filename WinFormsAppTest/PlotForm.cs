@@ -531,7 +531,7 @@ namespace WinFormsAppTest
                 process.Start();
                 //process.StandardInput.WriteLine($"echo {str}");
                 //process.StandardInput.WriteLine("echo off");
-                process.StandardInput.WriteLine($"pdal info {filePath} > {Path.Combine(dirPath, fileName)}.json");
+                process.StandardInput.WriteLine($"pdal info \"{filePath}\" > {Path.Combine(dirPath, fileName)}.json");
                 process.StandardInput.WriteLine("exit");
                 process.WaitForExit();
             }
