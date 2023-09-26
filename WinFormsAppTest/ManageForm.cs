@@ -116,9 +116,9 @@ namespace WinFormsAppTest
                 return;
             }
 
-            else if (newTitle.Length > 15 || newTitle.Length < 4)
+            else if (newTitle.Length > 15 || newTitle.Length < 1)
             {
-                MessageBox.Show("사용자 설정 제목은 4~15자까지 입력할 수 있습니다.");
+                MessageBox.Show("사용자 설정 제목은 1~15자까지 입력할 수 있습니다.");
                 btnManageTitle_Click(sender, e);
                 return;
             }

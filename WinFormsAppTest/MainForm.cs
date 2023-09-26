@@ -723,6 +723,7 @@ namespace WinFormsAppTest
         private void btnStart_Click(object sender, EventArgs e)
         {
             pFrm = new PlotForm(this);
+            pFrm.Owner = this;
             pFrm.configTouch += new configHandler(MakeConfig);
             pFrm.mainPaint += new customEventHandler(recentConfBtnLoad);
             pFrm.enableMainFormBtns += new switchEventHandler(switchCoreBtns);
@@ -838,6 +839,7 @@ namespace WinFormsAppTest
                 dialogResult = MessageBox.Show("현재 설정이 적용되지 않았습니다.\n적용하시겠습니까?", "", MessageBoxButtons.YesNo);
             }
 
+            //아래 btnSettingApply_Click에서 fileType 변수를 사용하므로 채워준 것
             fileType = getParam(csv_data, "FileInfo", "fileType");
 
             if (dialogResult == DialogResult.Yes)
@@ -1072,6 +1074,7 @@ namespace WinFormsAppTest
             if (mFrm == null)
             {
                 mFrm = new ManageForm(this);
+                mFrm.Owner = this;
                 mFrm.mainPaint += new customEventHandler(this.preConfBtnLoad);
                 mFrm.presetReflect += new presetReflectHandler(this.reflectConfs);
             }
@@ -1112,6 +1115,7 @@ namespace WinFormsAppTest
             if (mFrm == null)
             {
                 mFrm = new ManageForm(this);
+                mFrm.Owner = this;
                 mFrm.mainPaint += new customEventHandler(this.preConfBtnLoad);
                 mFrm.presetReflect += new presetReflectHandler(this.reflectConfs);
             }

@@ -256,6 +256,7 @@ namespace WinFormsAppTest
             else
             {
                 MessageBox.Show(progress + "단계 에러");
+                return;
             }
         }
 

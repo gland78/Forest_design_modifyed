@@ -661,8 +661,20 @@ namespace WinFormsAppTest
             }
         }
         //배치파일 실행 코드
-        private void ProcessBatch(string num)
+        private void ProcessBatch(string num, string command)
         {
+            using (Process proc = new Process())
+            {
+                proc.StartInfo.FileName = "cmd.exe";
+                proc.StartInfo.Arguments = "/c " + command;
+                proc.StartInfo.CreateNoWindow = true;
+                proc.StartInfo.RedirectStandardOutput = true;
+                proc.StartInfo.RedirectStandardError = true;
+
+                proc.Start();
+                proc.WaitForExit();
+            }
+            /*
             //num(ex. "level1_~";
             Process proc = null;
             string _batDir = resultSavedDirectory + shape + @"\intermediate\";
@@ -675,6 +687,7 @@ namespace WinFormsAppTest
             proc.Start();
             proc.WaitForExit();
             proc.Close();
+            */
         }
         //배치파일 작성 코드
 
@@ -691,6 +704,7 @@ namespace WinFormsAppTest
                         fs.Close();
                     }
                 }
+                /*
                 using (StreamWriter sw = new StreamWriter(new FileStream(batFilePath, FileMode.OpenOrCreate), Encoding.Default))
                 {
                     sw.WriteLine("chcp 65001");
@@ -700,7 +714,8 @@ namespace WinFormsAppTest
                     sw.WriteLine("Extract_XYZ_from_LAS " + target_path);
                     sw.WriteLine();
                 }
-                ProcessBatch(zero);
+                */
+                ProcessBatch(zero, "Extract_XYZ_from_LAS " + target_path);
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + originLasName + zero + ".bat 파일을 생성했습니다.");
             }
         }
