@@ -98,7 +98,6 @@ namespace WinFormsAppTest
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     filePath = openFileDialog.FileName;
-
                     tbPlotData.Text = filePath;
 
                     Validation(filePath);

@@ -97,7 +97,6 @@ namespace WinFormsAppTest
         {
             string one = "level1_cropped_";
             string resultSavedDirectory = this.resultSavedDirectory + shape;
-            Thread batThread = null;
             DirectoryInfo di = new DirectoryInfo(resultSavedDirectory);
             if (di.Exists == true)
             {
@@ -158,7 +157,7 @@ namespace WinFormsAppTest
                             JToken maxx = JsonData1["stats"]["bbox"]["native"]["bbox"]["maxx"];
                             JToken miny = JsonData1["stats"]["bbox"]["native"]["bbox"]["miny"];
                             JToken maxy = JsonData1["stats"]["bbox"]["native"]["bbox"]["maxy"];
-                            //str을 만들었으니 이제 그 데이터를 dat 파일(위의 명령어 넣은 dat파일 말고)에 넣는다.
+                            //str을 만들었으니 이제 그 데이터를 dat 파일에 넣는다.
 
                             dat_str = $"xmin={minx} xmax={maxx} ymin={miny} ymax={maxy}";
                             paramForm.setParam(paramForm.csv_data, "filters.crop", "bufferd_dat", dat_str);
@@ -186,7 +185,7 @@ namespace WinFormsAppTest
             {
                 JObject Readers = new JObject(
                   new JProperty("type", "readers.las"),
-                  new JProperty("filename", "\"" + originLasDirectory + @"\" + originLasName + ".las\"")
+                  new JProperty("filename", originLasDirectory + @"\" + originLasName + ".las")
               );
                 JObject sonSpec = new JObject(
                    new JProperty("type", "filters.crop"),
@@ -196,7 +195,7 @@ namespace WinFormsAppTest
                 JObject Writers = new JObject(
                    new JProperty("type", "writers.las"),
                    new JProperty ("compression","laszip"),
-                   new JProperty("filename", "\"" + one + originLasName + "_B.las\"")
+                   new JProperty("filename",  one + originLasName + "_B.las")
                );
                 File.WriteAllText(resultSavedDirectory + @"\intermediate\" + one + originLasName + ".json",
                     "[" + Readers.ToString() + ", " + sonSpec.ToString() + ", " + Writers.ToString() + "]");
@@ -234,7 +233,7 @@ namespace WinFormsAppTest
             {
                 JObject Readers = new JObject(
                   new JProperty("type", "readers.las"),
-                  new JProperty("filename", "\"" + originLasDirectory + @"\" + originLasName + ".las\"")
+                  new JProperty("filename", originLasDirectory + @"\" + originLasName + ".las")
               );
                 JObject sonSpec = new JObject(
                     new JProperty("type", "filters.crop"),
@@ -243,7 +242,7 @@ namespace WinFormsAppTest
                 JObject Writers = new JObject(
                    new JProperty("type", "writers.las"),
                    new JProperty("compression", "laszip"),
-                    new JProperty("filename", "\"" + one + originLasName + "_B.las\"")
+                    new JProperty("filename", one + originLasName + "_B.las")
                );
                 File.WriteAllText(resultSavedDirectory + @"\intermediate\" + one + originLasName + ".json",
                      "[" + Readers.ToString() + ", " + sonSpec.ToString() + ", " + Writers.ToString() + "]");
@@ -280,7 +279,7 @@ namespace WinFormsAppTest
                 //버퍼 적용
                 JObject Readers = new JObject(
                   new JProperty("type", "readers.las"),
-                  new JProperty("filename", "\"" + originLasDirectory + @"\" + originLasName + ".las\"")
+                  new JProperty("filename", originLasDirectory + @"\" + originLasName + ".las")
               );
                 JObject sonSpec = new JObject(
                     new JProperty("type", "filters.crop"),
@@ -289,7 +288,7 @@ namespace WinFormsAppTest
                 JObject Writers = new JObject(
                    new JProperty("type", "writers.las"),
                    new JProperty("compression", "laszip"),
-                   new JProperty("filename", "\"" + one + originLasName + "_B.las\"")
+                   new JProperty("filename", one + originLasName + "_B.las")
                );
                 File.WriteAllText(resultSavedDirectory + @"\intermediate\" + one + originLasName + ".json",
                     "[" + Readers.ToString() + ", " + sonSpec.ToString() + ", " + Writers.ToString() + "]");
@@ -297,132 +296,16 @@ namespace WinFormsAppTest
                 LogWrite(resultSavedDirectory + @"\intermediate\" + one + originLasName + "_B.las 파일을 생성했습니다.");
             }
         }
+
+
         //데이터 전처리 단계, 1~6단계 JSON 생성, 7~8단계 csv append line
-
-
-
-        private void MakeSliceFile()
-        {
-            string twoone = "level2-1_trunkslice_";
-            string twotwo = "level2-2_crownslice_";
-            //trunkslice
-            {
-                JObject Readers = new JObject(
-                  new JProperty("type", "readers.las"),
-                  new JProperty("filename", "\"" + "level1_cropped_" + originLasName + "_B.las\"")
-              );
-                JObject sonSpec = new JObject(
-                   new JProperty("type", "filters.range"),
-                   new JProperty("limits", @"Z[" + paramForm.getParam(paramForm.csv_data, "filters.range.trunk", "minheight") + ":"
-                   + paramForm.getParam(paramForm.csv_data, "filters.range.trunk", "maxheight") + "]")
-               );
-                JObject Writers = new JObject(
-                   new JProperty("type", "writers.las"),
-                   new JProperty("compression", "laszip"),
-                   new JProperty("filename", "\"" + originLasName + "_TSlice.las\"")
-               );
-                File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + twoone + originLasName + ".json", "[" + Readers.ToString() + ", " + sonSpec.ToString() + ", " + Writers.ToString() + "]");
-                LogWrite(resultSavedDirectory + shape + @"\intermediate\" + twoone + originLasName + ".json 파일을 생성했습니다.");
-            }
-            //crownslice
-            {
-                JObject Readers = new JObject(
-                  new JProperty("type", "readers.las"),
-                  new JProperty("filename", "\"" + "level1_cropped_" + originLasName + "_B.las\"")
-              );
-                JObject sonSpec = new JObject(
-                   new JProperty("type", "filters.range"),
-                   new JProperty("limits", @"Z[" + paramForm.getParam(paramForm.csv_data, "filters.range.trunk", "maxheight") + ":"
-                   + paramForm.getParam(paramForm.csv_data, "filters.range.crown", "maxheight") + "]")
-               );
-                JObject Writers = new JObject(
-                   new JProperty("type", "writers.las"),
-                   new JProperty("compression", "laszip"),
-                   new JProperty("filename", "\"" + originLasName + "_CSlice.las\"")
-               );
-                File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + twotwo + originLasName + ".json", "[" + Readers.ToString() + ", " + sonSpec.ToString() + ", " + Writers.ToString() + "]");
-                LogWrite(resultSavedDirectory + shape + @"\intermediate\" + twotwo + originLasName + ".json 파일을 생성했습니다.");
-            }
-        }
-        private void Subsampling()
-        {
-            string three = "level3_subsampled_crown_";
-
-            //MessageBox.Show("sun resultSD : " + resultSavedDirectory);
-            {
-                JObject Readers = new JObject(
-                  new JProperty("type", "readers.las"),
-                  new JProperty("filename", "\"" + originLasName + "_CSlice.las\"")
-              );
-                JObject sonSpec = new JObject(
-                   new JProperty("type", "filters.voxeldownsize"),
-                   new JProperty("cell", paramForm.getParam(paramForm.csv_data, "filters.sample", "cell")),
-                   new JProperty("mode", "center")
-               );
-                JObject Writers = new JObject(
-                   new JProperty("type", "writers.las"),
-                   new JProperty("compression", "laszip"),
-                   new JProperty("filename", "\"" + three + originLasName + ".las\"")
-               );
-                File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + three + originLasName + ".json", "[" + Readers.ToString() + ", " + sonSpec.ToString() + ", " + Writers.ToString() + "]");
-                LogWrite(resultSavedDirectory + shape + @"\intermediate\" + three + originLasName + ".json 파일을 생성했습니다..");
-            }
-
-            /*if (radioButton2.Checked)
-            {
-                //voxeldown
-                {
-                    JObject Readers = new JObject(
-                      new JProperty("type", "readers.las"),
-                      new JProperty("filename", "\"" + "level3_nomarlized_" + originLasName + ".las")
-                  );
-                    JObject sonSpec = new JObject(
-                       new JProperty("type", "filters.sample"),
-                       new JProperty("cell", paramForm.getParam(paramForm.csv_data, "filters.sample", "cell")),
-                   );
-                    JObject Writers = new JObject(
-                       new JProperty("type", "writers.las"),
-                       new JProperty("filename", "\"" + four + originLasName + ".las")
-                   );
-                    File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + four + originLasName + ".json", "[" + Readers.ToString() + ", " + sonSpec.ToString() + ", " + Writers.ToString() + "]");
-                    LogWrite(resultSavedDirectory + shape + @"\intermediate\" + four + originLasName + ".json 파일을 생성했습니다..");
-                }
-            }*/
-        }
-
-        private void Merge()
-        {
-            string four = "level4_merged_";
-            var json = new JObject(
-            new JProperty("pipeline", new JArray(
-                new JObject(
-                    new JProperty("type", "readers.las"),
-                    new JProperty("filename", "\"level3_subsampled_crown_" + originLasName + ".las\"")
-                ),
-                new JObject(
-                    new JProperty("type", "readers.las"),
-                    new JProperty("filename", "\"" + originLasName + "_TSlice.las\"")
-                ),
-                new JObject(
-                    new JProperty("type", "filters.merge")
-                ),
-                new JObject(
-                    new JProperty("type", "writers.las"),
-                    new JProperty("compression", "laszip"),
-                    new JProperty("filename", "\"" + four + originLasName + ".las\"")
-                )))
-            );
-            File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + four + originLasName + ".json", json.ToString());
-            LogWrite(resultSavedDirectory + shape + @"\intermediate\" + four + originLasName + ".json 파일을 생성했습니다.");
-
-        }
         private void Outlier()
         {
-            string five = "level5_outlierRemoved_";
+            string second = "level2_outlierRemoved_";
             {
                 JObject secondin = new JObject(
                new JProperty("type", "readers.las"),
-               new JProperty("filename", "\"" + "level4_merged_" + originLasName + ".las\"")
+               new JProperty("filename", "level1_cropped_" + originLasName + "_B.las")
              );
                 JObject Outlier = new JObject(
                   new JProperty("type", "filters.outlier"),
@@ -433,20 +316,20 @@ namespace WinFormsAppTest
                 JObject secondout = new JObject(
                    new JProperty("type", "writers.las"),
                    new JProperty("compression", "laszip"),
-                   new JProperty("filename", "\"" + five + originLasName + ".las\"")
+                   new JProperty("filename", second + originLasName + ".las")
                );
-                File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + five + originLasName + ".json",
+                File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + second + originLasName + ".json",
                     "[" + secondin.ToString() + ", " + Outlier.ToString() + ", " + secondout.ToString() + "]");
-                LogWrite(resultSavedDirectory + shape + @"\intermediate\" + five + originLasName + ".json 파일을 생성했습니다.");
+                LogWrite(resultSavedDirectory + shape + @"\intermediate\" + second + originLasName + ".json 파일을 생성했습니다.");
             }
         }
         private void Normalization()
         {
-            string six = "level6_nomarlized_";
+            string three = "level3_nomarlized_";
             {
                 JObject thirdin = new JObject(
               new JProperty("type", "readers.las"),
-              new JProperty("filename", "\"" + "level5_outlierRemoved_" + originLasName + ".las\"")
+              new JProperty("filename", "level2_outlierRemoved_" + originLasName + ".las")
                 );
                 JArray jarray = new JArray();
                 jarray.Add("ReturnNumber = 1 WHERE ReturnNumber < 1");
@@ -476,133 +359,372 @@ namespace WinFormsAppTest
                 JObject Writers = new JObject(
                    new JProperty("type", "writers.las"),
                    new JProperty("compression", "laszip"),
-                   new JProperty("filename", "\"" + six + originLasName + ".las\"")
+                   new JProperty("filename", three + originLasName + ".las")
                );
-                File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + six + originLasName + ".json", "[" + thirdin.ToString() + ", " + Assign.ToString() + ", " + elm.ToString() + ", " + smrf.ToString() + ", " + hagnn.ToString() + ", " + ferry.ToString() + ", " + Writers.ToString() + "]");
-                LogWrite(resultSavedDirectory + shape + @"\intermediate\" + six + originLasName + ".json 파일을 생성했습니다.");
+                File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + three + originLasName + ".json", "[" + thirdin.ToString() + ", " + Assign.ToString() + ", " + elm.ToString() + ", " + smrf.ToString() + ", " + hagnn.ToString() + ", " + ferry.ToString() + ", " + Writers.ToString() + "]");
+                LogWrite(resultSavedDirectory + shape + @"\intermediate\" + three + originLasName + ".json 파일을 생성했습니다.");
             }
         }
+        
 
-        private void MakeOriginPlot()
+        //private void Subsampling()
+        //{
+        //    string three = "level3_subsampled_crown_";
+
+        //    //MessageBox.Show("sun resultSD : " + resultSavedDirectory);
+        //    {
+        //        JObject Readers = new JObject(
+        //          new JProperty("type", "readers.las"),
+        //          new JProperty("filename", "\"" + originLasName + "_CSlice.las\"")
+        //      );
+        //        JObject sonSpec = new JObject(
+        //           new JProperty("type", "filters.voxeldownsize"),
+        //           new JProperty("cell", paramForm.getParam(paramForm.csv_data, "filters.sample", "cell")),
+        //           new JProperty("mode", "center")
+        //       );
+        //        JObject Writers = new JObject(
+        //           new JProperty("type", "writers.las"),
+        //           new JProperty("compression", "laszip"),
+        //           new JProperty("filename", "\"" + three + originLasName + ".las\"")
+        //       );
+        //        File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + three + originLasName + ".json", "[" + Readers.ToString() + ", " + sonSpec.ToString() + ", " + Writers.ToString() + "]");
+        //        LogWrite(resultSavedDirectory + shape + @"\intermediate\" + three + originLasName + ".json 파일을 생성했습니다..");
+        //    }
+
+        //    /*if (radioButton2.Checked)
+        //    {
+        //        //voxeldown
+        //        {
+        //            JObject Readers = new JObject(
+        //              new JProperty("type", "readers.las"),
+        //              new JProperty("filename", "\"" + "level3_nomarlized_" + originLasName + ".las")
+        //          );
+        //            JObject sonSpec = new JObject(
+        //               new JProperty("type", "filters.sample"),
+        //               new JProperty("cell", paramForm.getParam(paramForm.csv_data, "filters.sample", "cell")),
+        //           );
+        //            JObject Writers = new JObject(
+        //               new JProperty("type", "writers.las"),
+        //               new JProperty("filename", "\"" + four + originLasName + ".las")
+        //           );
+        //            File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + four + originLasName + ".json", "[" + Readers.ToString() + ", " + sonSpec.ToString() + ", " + Writers.ToString() + "]");
+        //            LogWrite(resultSavedDirectory + shape + @"\intermediate\" + four + originLasName + ".json 파일을 생성했습니다..");
+        //        }
+        //    }*/
+        //}
+
+        //private void Merge()
+        //{
+        //    string five = "level5_merged_";
+        //    var json = new JObject(
+        //    new JProperty("pipeline", new JArray(
+        //        new JObject(
+        //            new JProperty("type", "readers.las"),
+        //            new JProperty("filename", originLasName + "_CSlice.las")
+        //        ),
+        //        new JObject(
+        //            new JProperty("type", "readers.las"),
+        //            new JProperty("filename", originLasName + "_TSlice.las")
+        //        ),
+        //        new JObject(
+        //            new JProperty("type", "filters.merge")
+        //        ),
+        //        new JObject(
+        //            new JProperty("type", "writers.las"),
+        //            new JProperty("compression", "laszip"),
+        //            new JProperty("filename", five + originLasName + ".las")
+        //        )))
+        //    );
+        //    File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + five + originLasName + ".json", json.ToString());
+        //    LogWrite(resultSavedDirectory + shape + @"\intermediate\" + five + originLasName + ".json 파일을 생성했습니다.");
+
+        //}
+        //private void MakeOriginPlot()
+        //{
+        //    string four = "level4_croporiginPlot_";
+        //    {
+        //        double centerX = paramForm.gui.centerX;
+        //        double centerY = paramForm.gui.centerY;
+
+        //        if (shape == "_circle")
+        //        {
+        //            double radius = paramForm.gui.radius;
+        //            {
+        //                JObject Readers = new JObject(
+        //                  new JProperty("type", "readers.las"),
+        //                new JProperty("filename","level3_nomarlized_" + originLasName + ".las")
+        //               );
+        //                JObject sonSpec = new JObject(
+        //                   new JProperty("type", "filters.crop"),
+        //                   new JProperty("point", "POINT(" + centerX + " " + centerY + ")"),
+        //                new JProperty("distance", radius)
+        //               );
+        //                JObject Writers = new JObject(
+        //                   new JProperty("type", "writers.las"),
+        //                   new JProperty("compression", "laszip"),
+        //                   new JProperty("filename", four + originLasName + "_O.las")
+        //               );
+        //                File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + four + originLasName + ".json", "[" + Readers.ToString() + ", " + sonSpec.ToString() + ", " + Writers.ToString() + "]");
+        //                LogWrite(resultSavedDirectory + shape + @"\intermediate\" + four + originLasName + ".json 파일을 생성했습니다.");
+        //            }
+        //        }
+        //        //square
+        //        else if (shape == "_rectangle")
+        //        {
+        //            double xmin = paramForm.gui.xMin;
+        //            double ymin = paramForm.gui.yMin;
+        //            double xmax = paramForm.gui.xMax;
+        //            double ymax = paramForm.gui.yMax;
+        //            {
+        //                //default
+        //                JObject Readers = new JObject(
+        //                  new JProperty("type", "readers.las"),
+        //                  new JProperty("filename", "\"" + "level3_nomarlized_" + originLasName + ".las")
+        //                );
+        //                JObject sonSpec = new JObject(
+        //                    new JProperty("type", "filters.crop"),
+        //                    new JProperty("bounds", "([" + xmin + "," + xmax + "],[" + ymin + "," + ymax + "])")
+        //                );
+        //                JObject Writers = new JObject(
+        //                   new JProperty("type", "writers.las"),
+        //                   new JProperty("compression", "laszip"),
+        //                   new JProperty("filename", "\"" + four + originLasName + "_O.las")
+        //                );
+        //                File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + four + originLasName + ".json", "[" + Readers.ToString() + ", " + sonSpec.ToString() + ", " + Writers.ToString() + "]");
+        //                LogWrite(resultSavedDirectory + shape + @"\intermediate\" + four + originLasName + ".json 파일을 생성했습니다.");
+        //            }
+        //        }
+        //        //polygon
+        //        else
+        //        {
+        //            string points = paramForm.gui.pointList;
+        //            poly_points = points.Replace(',', ' ');
+        //            {
+        //                JObject Readers = new JObject(
+        //                  new JProperty("type", "readers.las"),
+        //                  new JProperty("filename", "\"" + "level3_nomarlized_" + originLasName + ".las")
+        //                );
+        //                JObject sonSpec = new JObject(
+        //                    new JProperty("type", "filters.crop"),
+        //                    new JProperty("polygon", "POLYGON((" + points + "))")
+        //                );
+        //                JObject Writers = new JObject(
+        //                   new JProperty("type", "writers.las"),
+        //                   new JProperty("compression", "laszip"),
+        //                   new JProperty("filename", "\"" + four + originLasName + "_O.las")
+        //                );
+        //                File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + four + originLasName + ".json", "[" + Readers.ToString() + ", " + sonSpec.ToString() + ", " + Writers.ToString() + "]");
+        //                LogWrite(resultSavedDirectory + shape + @"\intermediate\" + four + originLasName + ".json 파일을 생성했습니다.");
+        //            }
+        //        }
+        //    }
+        //}
+
+        private void ExtractOriginDat()
         {
-            string seven = "level7_croporiginPlot_";
+            string six = "level6_extractOriginDat_"; //crop 후 dat 파일 만들기
+            string dat_str = "";                    
             {
-                double centerX = paramForm.gui.centerX;
-                double centerY = paramForm.gui.centerY;
-
-                if (shape == "_circle")
+                if (shape == "_polygon")
                 {
-                    double radius = paramForm.gui.radius;
+                    try
                     {
-                        JObject Readers = new JObject(
-                          new JProperty("type", "readers.las"),
-                        new JProperty("filename", "\"" + "level6_nomarlized_" + originLasName + ".las\"")
-                       );
-                        JObject sonSpec = new JObject(
-                           new JProperty("type", "filters.crop"),
-                           new JProperty("point", "POINT(" + centerX + " " + centerY + ")"),
-                        new JProperty("distance", radius)
-                       );
-                        JObject Writers = new JObject(
-                           new JProperty("type", "writers.las"),
-                           new JProperty("compression", "laszip"),
-                           new JProperty("filename", "\"" + seven + originLasName + "_O.las\"")
-                       );
-                        File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + seven + originLasName + ".json", "[" + Readers.ToString() + ", " + sonSpec.ToString() + ", " + Writers.ToString() + "]");
-                        LogWrite(resultSavedDirectory + shape + @"\intermediate\" + seven + originLasName + ".json 파일을 생성했습니다.");
+                        paramForm.setParam(paramForm.csv_data, "filters.crop", "origin_dat", poly_points);
+                        paramForm.write_csv(configpath);
+                    }
+                    catch (Exception ex)
+                    {
+                        LogWrite(resultSavedDirectory + @"\intermediate\" + six + originLasName + "_O.dat 파일 생성 오류.");
+                        return;
                     }
                 }
-                //square
-                else if (shape == "_rectangle")
-                {
-                    double xmin = paramForm.gui.xMin;
-                    double ymin = paramForm.gui.yMin;
-                    double xmax = paramForm.gui.xMax;
-                    double ymax = paramForm.gui.yMax;
-                    {
-                        //default
-                        JObject Readers = new JObject(
-                          new JProperty("type", "readers.las"),
-                          new JProperty("filename", "\"" + "level6_nomarlized_" + originLasName + ".las")
-                        );
-                        JObject sonSpec = new JObject(
-                            new JProperty("type", "filters.crop"),
-                            new JProperty("bounds", "([" + xmin + "," + xmax + "],[" + ymin + "," + ymax + "])")
-                        );
-                        JObject Writers = new JObject(
-                           new JProperty("type", "writers.las"),
-                           new JProperty("compression", "laszip"),
-                           new JProperty("filename", "\"" + seven + originLasName + "_O.las")
-                        );
-                        File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + seven + originLasName + ".json", "[" + Readers.ToString() + ", " + sonSpec.ToString() + ", " + Writers.ToString() + "]");
-                        LogWrite(resultSavedDirectory + shape + @"\intermediate\" + seven + originLasName + ".json 파일을 생성했습니다.");
-                    }
-                }
-                //polygon
                 else
-                {
-                    string points = paramForm.gui.pointList;
-                    poly_points = points.Replace(',', ' ');
+                {                   
+                    try
                     {
-                        JObject Readers = new JObject(
-                          new JProperty("type", "readers.las"),
-                          new JProperty("filename", "\"" + "level6_nomarlized_" + originLasName + ".las")
-                        );
-                        JObject sonSpec = new JObject(
-                            new JProperty("type", "filters.crop"),
-                            new JProperty("polygon", "POLYGON((" + points + "))")
-                        );
-                        JObject Writers = new JObject(
-                           new JProperty("type", "writers.las"),
-                           new JProperty("compression", "laszip"),
-                           new JProperty("filename", "\"" + seven + originLasName + "_O.las")
-                        );
-                        File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + seven + originLasName + ".json", "[" + Readers.ToString() + ", " + sonSpec.ToString() + ", " + Writers.ToString() + "]");
-                        LogWrite(resultSavedDirectory + shape + @"\intermediate\" + seven + originLasName + ".json 파일을 생성했습니다.");
+                        double minx = 0, maxx = 0, miny = 0, maxy = 0;
+
+                        //passvalue centerx, centery, radius를 추가하기
+                        if (shape == "_circle")
+                        {
+                            double centerX = paramForm.gui.centerX;
+                            double centerY = paramForm.gui.centerY;
+                            double radius = paramForm.gui.radius;
+
+                            minx = lasSize.minx > (paramForm.gui.centerX - radius) ? lasSize.minx : (paramForm.gui.centerX - radius);
+                            maxx = lasSize.maxx < (paramForm.gui.centerX + radius) ? lasSize.maxx : (paramForm.gui.centerX + radius);
+                            miny = lasSize.miny > (paramForm.gui.centerX - radius) ? lasSize.miny : (paramForm.gui.centerX - radius);
+                            maxy = lasSize.maxy < (paramForm.gui.centerX + radius) ? lasSize.maxy : (paramForm.gui.centerX + radius);
+
+                            dat_str = $"xmin={minx} xmax={maxx} ymin={miny} ymax={maxy} cx={centerX} cy={centerY} radius={radius}";
+                            paramForm.setParam(paramForm.csv_data, "filters.crop", "origin_dat", dat_str);
+                            paramForm.write_csv(configpath);
+                        }
+                        else
+                        {
+                            minx = lasSize.minx > (paramForm.gui.xMin) ? lasSize.minx : (paramForm.gui.xMin);
+                            maxx = lasSize.maxx < (paramForm.gui.xMax) ? lasSize.maxx : (paramForm.gui.xMax);
+                            miny = lasSize.miny > (paramForm.gui.yMin) ? lasSize.miny : (paramForm.gui.yMin);
+                            maxy = lasSize.maxy < (paramForm.gui.yMax) ? lasSize.maxy : (paramForm.gui.yMax);
+
+                            dat_str = $"xmin={minx} xmax={maxx} ymin={miny} ymax={maxy}";
+                            paramForm.setParam(paramForm.csv_data, "filters.crop", "origin_dat", dat_str);
+                            paramForm.write_csv(configpath);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        LogWrite(resultSavedDirectory + @"\intermediate\" + six + originLasName + "_O.dat 파일을 생성 오류.");
+                        return;
                     }
                 }
             }
+            LogWrite(resultSavedDirectory + shape + @"\intermediate\" + six + originLasName + "_O.dat 파일을 생성했습니다.");
         }
         private void Turn_Las_into_PCD()
         {
-            string sevenoneone = "level7-1-1_LAStoPCDforTslice_";
-            string sevenonetwo = "level7-1-2_LAStoPCDforCslice_";
+            string four = "level4_LAStoPCD";
+            //string sevenoneone = "level7-1-1_LAStoPCDforTslice_";
+            //string sevenonetwo = "level7-1-2_LAStoPCDforCslice_";
             //LAStoPCD
             {
-
                 JObject Readers = new JObject(
                   new JProperty("type", "readers.las"),
-                new JProperty("filename", "\"" + originLasName + "_TSlice.las\"")
+                new JProperty("filename", "level3_nomarlized_" + originLasName + ".las")
                );
                 JObject Writers = new JObject(
                    new JProperty("type", "writers.pcd"),
-                   new JProperty("filename", "\"" + sevenoneone + originLasName + ".pcd\""),
-                   new JProperty("precision", 6),
-                   new JProperty("order", "X,Y,Z"),
+                   new JProperty("filename", four + originLasName + ".pcd"),
+                   //new JProperty("precision", 12),
+                   //new JProperty("order", "X=Double:12,Y=Double:12,Z=Double:12"),
                    new JProperty("compression", "ascii") // 바이너리 PCD 출력 설정
                );
-                File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + sevenoneone + originLasName + ".json", "[" + Readers.ToString() + ", " + Writers.ToString() + "]");
-                LogWrite(resultSavedDirectory + shape + @"\intermediate\" + sevenoneone + originLasName + ".json 파일을 생성했습니다.");
+                File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + four + originLasName + ".json", "[" + Readers.ToString() + ", " + Writers.ToString() + "]");
+                LogWrite(resultSavedDirectory + shape + @"\intermediate\" + four + originLasName + ".json 파일을 생성했습니다.");
             }
+            //{
+            //    JObject Readers = new JObject(
+            //      new JProperty("type", "readers.las"),
+            //    new JProperty("filename", originLasName + "_TSlice.las")
+            //   );
+            //    JObject Writers = new JObject(
+            //       new JProperty("type", "writers.pcd"),
+            //       new JProperty("filename", sevenoneone + originLasName + ".pcd"),
+            //       new JProperty("precision", 12),
+            //       new JProperty("order", "X,Y,Z"),
+            //       new JProperty("compression", "ascii") // 바이너리 PCD 출력 설정
+            //   );
+            //    File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + sevenoneone + originLasName + ".json", "[" + Readers.ToString() + ", " + Writers.ToString() + "]");
+            //    LogWrite(resultSavedDirectory + shape + @"\intermediate\" + sevenoneone + originLasName + ".json 파일을 생성했습니다.");
+            //}
+            //{
+            //    JObject Readers = new JObject(
+            //      new JProperty("type", "readers.las"),
+            //      new JProperty("filename", originLasName + "_CSlice.las")
+            //   );
+            //    JObject Writers = new JObject(
+            //       new JProperty("type", "writers.pcd"),
+            //       new JProperty("filename", sevenonetwo + originLasName + ".pcd"),
+            //       new JProperty("precision", 12),
+            //       new JProperty("order", "X,Y,Z"),
+            //       new JProperty("compression", "ascii") // 바이너리 PCD 출력 설정
+            //   );
+            //    File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + sevenonetwo + originLasName + ".json", "[" + Readers.ToString() + ", " + Writers.ToString() + "]");
+            //    LogWrite(resultSavedDirectory + shape + @"\intermediate\" + sevenonetwo + originLasName + ".json 파일을 생성했습니다.");
+            //}
+            
+        }
+
+        private void MakeSliceFile()
+        {
+            /*string fourone = "level4-1_trunkslice_";
+            string fourtwo = "level4-2_crownslice_";
+            //trunkslice
             {
                 JObject Readers = new JObject(
                   new JProperty("type", "readers.las"),
-                  new JProperty("filename", "\"" + "level3_subsampled_crown_" + originLasName + ".las\"")
+                  new JProperty("filename", "level3_nomarlized_" + originLasName + ".las")
+              );
+                JObject sonSpec = new JObject(
+                   new JProperty("type", "filters.range"),
+                   new JProperty("limits", @"Z[" + paramForm.getParam(paramForm.csv_data, "filters.range.trunk", "minheight") + ":"
+                   + paramForm.getParam(paramForm.csv_data, "filters.range.trunk", "maxheight") + "]")
+               );
+                JObject Writers = new JObject(
+                   new JProperty("type", "writers.las"),
+                   new JProperty("compression", "laszip"),
+                   new JProperty("filename", originLasName + "_TSlice.las")
+               );
+                File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + fourone + originLasName + ".json", "[" + Readers.ToString() + ", " + sonSpec.ToString() + ", " + Writers.ToString() + "]");
+                LogWrite(resultSavedDirectory + shape + @"\intermediate\" + fourone + originLasName + ".json 파일을 생성했습니다.");
+            }
+            //crownslice
+            {
+                JObject Readers = new JObject(
+                  new JProperty("type", "readers.las"),
+                  new JProperty("filename", "level3_nomarlized_" + originLasName + ".las")
+              );
+                JObject sonSpec = new JObject(
+                   new JProperty("type", "filters.range"),
+                   new JProperty("limits", @"Z[" + paramForm.getParam(paramForm.csv_data, "filters.range.trunk", "maxheight") + ":"
+                   + paramForm.getParam(paramForm.csv_data, "filters.range.crown", "maxheight") + "]")
+               );
+                JObject Writers = new JObject(
+                   new JProperty("type", "writers.las"),
+                   new JProperty("compression", "laszip"),
+                   new JProperty("filename", originLasName + "_CSlice.las")
+               );
+                File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + fourtwo + originLasName + ".json", "[" + Readers.ToString() + ", " + sonSpec.ToString() + ", " + Writers.ToString() + "]");
+                LogWrite(resultSavedDirectory + shape + @"\intermediate\" + fourtwo + originLasName + ".json 파일을 생성했습니다.");
+            }*/
+
+
+            string sevenone = "level7-1_trunkslice_";
+            string seventwo = "level7-2_crownslice_";
+            //trunkslice
+            {
+                JObject Readers = new JObject(
+                  new JProperty("type", "readers.pcd"),
+                  new JProperty("filename", "level4_LAStoPCD" + originLasName + ".pcd")
+              );
+                JObject sonSpec = new JObject(
+                   new JProperty("type", "filters.range"),
+                   new JProperty("limits", @"Z[" + paramForm.getParam(paramForm.csv_data, "filters.range.trunk", "minheight") + ":"
+                   + paramForm.getParam(paramForm.csv_data, "filters.range.trunk", "maxheight") + "]")
                );
                 JObject Writers = new JObject(
                    new JProperty("type", "writers.pcd"),
-                   new JProperty("filename", "\"" + sevenonetwo + originLasName + ".pcd\""),
-                   new JProperty("precision", 6),
-                   new JProperty("order", "X,Y,Z"),
-                   new JProperty("compression", "ascii") // 바이너리 PCD 출력 설정
+                   new JProperty("filename", sevenone + originLasName + ".pcd")
+                   //new JProperty("precision", 12),
+                   //new JProperty("order", "X=Double:12,Y=Double:12,Z=Double:12"),
+                   //new JProperty("compression", "binary")
                );
-                File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + sevenonetwo + originLasName + ".json", "[" + Readers.ToString() + ", " + Writers.ToString() + "]");
-                LogWrite(resultSavedDirectory + shape + @"\intermediate\" + sevenonetwo + originLasName + ".json 파일을 생성했습니다.");
+                File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + sevenone + originLasName + ".json", "[" + Readers.ToString() + ", " + sonSpec.ToString() + ", " + Writers.ToString() + "]");
+                LogWrite(resultSavedDirectory + shape + @"\intermediate\" + sevenone + originLasName + ".json 파일을 생성했습니다.");
             }
-            
+            //crownslice
+            {
+                JObject Readers = new JObject(
+                  new JProperty("type", "readers.pcd"),
+                  new JProperty("filename", "level4_LAStoPCD" + originLasName + ".pcd")
+              );
+                JObject sonSpec = new JObject(
+                   new JProperty("type", "filters.range"),
+                   new JProperty("limits", @"Z[" + paramForm.getParam(paramForm.csv_data, "filters.range.crown", "minheight") + ":"
+                   + paramForm.getParam(paramForm.csv_data, "filters.range.crown", "maxheight") + "]")
+               );
+                JObject Writers = new JObject(
+                   new JProperty("type", "writers.pcd"),
+                   new JProperty("filename", seventwo + originLasName + ".pcd")
+                   //new JProperty("precision", 12),
+                   //new JProperty("order", "X=Double:12,Y=Double:12,Z=Double:12"),
+                   //new JProperty("compression", "binary")
+               );
+                File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + seventwo + originLasName + ".json", "[" + Readers.ToString() + ", " + sonSpec.ToString() + ", " + Writers.ToString() + "]");
+                LogWrite(resultSavedDirectory + shape + @"\intermediate\" + seventwo + originLasName + ".json 파일을 생성했습니다.");
+            }
         }
-        
-        
+
         private void AppendSeventhCSVFile()
         {
             string trunkslicefile = "";
@@ -611,7 +733,7 @@ namespace WinFormsAppTest
             System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(FolderName);
             foreach (System.IO.FileInfo fi in di.GetFiles())
             {
-                if (fi.Extension.ToLower().CompareTo(".pcd") == 0 && fi.Name.Contains(originLasName) == true && fi.Name.ToLower().Contains("tslice") == true)
+                if (fi.Extension.ToLower().CompareTo(".pcd") == 0 && fi.Name.Contains(originLasName) == true && fi.Name.ToLower().Contains("trunkslice") == true)
                 {
                     trunkslicefile = fi.FullName;
                 }
@@ -644,7 +766,7 @@ namespace WinFormsAppTest
             }
             foreach (System.IO.FileInfo fi in di.GetFiles())
             {
-                if (fi.Extension.ToLower().CompareTo(".pcd") == 0 && fi.Name.ToLower().Contains(originLasName.ToLower()) == true && fi.Name.ToLower().Contains("cslice") == true)
+                if (fi.Extension.ToLower().CompareTo(".pcd") == 0 && fi.Name.ToLower().Contains(originLasName.ToLower()) == true && fi.Name.ToLower().Contains("crownslice") == true)
                 {
                     crownslicefile = fi.FullName;
                 }
@@ -714,7 +836,7 @@ namespace WinFormsAppTest
                     sw.WriteLine("cls");
                     sw.WriteLine("@ECHO OFF");
                     sw.WriteLine("echo 원본 LAS 중복 점 제거중...");
-                    sw.WriteLine("Extract_XYZ_from_LAS \"" + target_path + "\"");
+                    sw.WriteLine("laszip \"" + target_path + "\"");
                     sw.WriteLine();
                 }
                 
@@ -722,12 +844,11 @@ namespace WinFormsAppTest
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + originLasName + zero + ".bat 파일을 생성했습니다.");
             }
         }
+
         private void RunFileSecond()
         {
-            string two = "level2_makeslicefile_";
-            string twoone = "level2-1_trunkslice_";
-            string twotwo = "level2-2_crownslice_";
-
+            string two = "level2_outlierRemoved_";
+            //2단계
             {
                 string batFilePath = resultSavedDirectory + shape + @"\intermediate\" + two + originLasName + ".bat";
                 if (!File.Exists(batFilePath))
@@ -740,9 +861,8 @@ namespace WinFormsAppTest
                     sw.WriteLine("chcp 65001");
                     sw.WriteLine("cls");
                     sw.WriteLine("@ECHO OFF");
-                    sw.WriteLine("echo 수관 부분 수간 부분 영역 잘라내는 중...");
-                    sw.WriteLine("pdal pipeline \"" + twoone + originLasName + ".json\"");
-                    sw.WriteLine("pdal pipeline \"" + twotwo + originLasName + ".json\"");
+                    sw.WriteLine("echo 이상점 제거 중...");
+                    sw.WriteLine("pdal pipeline \"" + two + originLasName + ".json\"");
                 }
                 
                 progressLog += ProcessBatch(two + originLasName + ".bat") + Environment.NewLine;
@@ -751,7 +871,8 @@ namespace WinFormsAppTest
         }
         private void RunFileThird()
         {
-            string three = "level3_subsampled_crown_";
+            string three = "level3_nomarlized_";
+            //3단계
             {
                 string batFilePath = resultSavedDirectory + shape + @"\intermediate\" + three + originLasName + ".bat";
                 if (!File.Exists(batFilePath))
@@ -764,18 +885,19 @@ namespace WinFormsAppTest
                     sw.WriteLine("chcp 65001");
                     sw.WriteLine("cls");
                     sw.WriteLine("@ECHO OFF");
-                    sw.WriteLine("echo 수관 부분 파일 축소 중...");
+                    sw.WriteLine("echo 지면 추출 및 평탄화 중...");
                     sw.WriteLine("pdal pipeline \"" + three + originLasName + ".json\"");
                 }
                 
                 progressLog += ProcessBatch(three + originLasName + ".bat") + Environment.NewLine;
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + three + originLasName + ".bat 파일을 생성했습니다.");
             }
-            
         }
-        private void RunFileForth()
+        
+        private void RunFileFourth()
         {
-            string four = "level4_merged_";
+            string four = "level4_LAStoPCD";
+
             {
                 string batFilePath = resultSavedDirectory + shape + @"\intermediate\" + four + originLasName + ".bat";
 
@@ -787,66 +909,236 @@ namespace WinFormsAppTest
                 {
                     sw.WriteLine("chcp 65001");
                     sw.WriteLine("cls");
-                    sw.WriteLine("@echo off");
-                    sw.WriteLine("echo 수관 부분 수간 부분 영역 합치는 중...");
+                    sw.WriteLine("@ECHO OFF");
+                    sw.WriteLine("echo LAS to PCD 변환 중...");
                     sw.WriteLine("pdal pipeline \"" + four + originLasName + ".json\"");
+                    sw.WriteLine("Delete_duplication \"" + four + originLasName + ".pcd\"");
                 }
                 progressLog += ProcessBatch(four + originLasName + ".bat") + Environment.NewLine;
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + four + originLasName + ".bat 파일을 생성했습니다.");
             }
+
+            /*7-1단계
+            //{
+            //    string batFilePath = resultSavedDirectory + shape + @"\intermediate\" + sevenoneone + originLasName + ".bat";
+            //    if (!File.Exists(batFilePath))
+            //    {
+            //        using (FileStream fs = File.Create(batFilePath))
+            //        {
+            //            fs.Close();
+            //        }
+            //    }
+            //    using (StreamWriter sw = new StreamWriter(new FileStream(batFilePath, FileMode.OpenOrCreate), Encoding.Default))
+            //    {
+            //        sw.WriteLine("chcp 65001");
+            //        sw.WriteLine("cls");
+            //        sw.WriteLine("@ECHO OFF");
+            //        sw.WriteLine("echo TSlice LAS to PCD 변환 중...");
+            //        sw.WriteLine("pdal pipeline \"" + sevenoneone + originLasName + ".json\"");
+            //        sw.WriteLine("Delete_duplication \"" + sevenoneone + originLasName + ".pcd\"");
+            //    }
+            //    progressLog += ProcessBatch(sevenoneone + originLasName + ".pcd") + Environment.NewLine;
+            //    LogWrite(resultSavedDirectory + shape + @"\intermediate\" + sevenoneone + originLasName + ".bat 파일을 생성했습니다.");
+            //}
+            //7-2단계
+            //{
+            //    string batFilePath = resultSavedDirectory + shape + @"\intermediate\" + sevenonetwo + originLasName + ".bat";
+            //    if (!File.Exists(batFilePath))
+            //    {
+            //        using (FileStream fs = File.Create(batFilePath))
+            //        {
+            //            fs.Close();
+            //        }
+            //    }
+            //    using (StreamWriter sw = new StreamWriter(new FileStream(batFilePath, FileMode.OpenOrCreate), Encoding.Default))
+            //    {
+            //        sw.WriteLine("chcp 65001");
+            //        sw.WriteLine("cls");
+            //        sw.WriteLine("@ECHO OFF");
+            //        sw.WriteLine("echo CSlice Las to PCD 변환 중...");
+            //        sw.WriteLine("pdal pipeline " + sevenonetwo + originLasName + ".json");
+            //        sw.WriteLine("Delete_duplication " + sevenonetwo + originLasName + ".pcd");
+            //    }
+            //    progressLog += ProcessBatch(sevenonetwo + originLasName + ".pcd") + Environment.NewLine;
+            //    LogWrite(resultSavedDirectory + shape + @"\intermediate\" + sevenonetwo + originLasName + ".bat 파일을 생성했습니다.");
+            }*/
+
+
         }
-        private void RunFileFifth()
-        {
-            string five = "level5_outlierRemoved_";
-            //5단계
-            {
-                string batFilePath = resultSavedDirectory + shape + @"\intermediate\" + five + originLasName + ".bat";
-                if (!File.Exists(batFilePath))
-                {
-                    using FileStream fs = File.Create(batFilePath);
-                }
-                using (StreamWriter sw = new StreamWriter(new FileStream(batFilePath, FileMode.OpenOrCreate), Encoding.Default))
-                {
-                    sw.WriteLine("chcp 65001");
-                    sw.WriteLine("cls");
-                    sw.WriteLine("@ECHO OFF");
-                    sw.WriteLine("echo 이상점 제거 중...");
-                    sw.WriteLine("pdal pipeline \"" + five + originLasName + ".json\"");
-                }
-                progressLog += ProcessBatch(five + originLasName + ".bat") + Environment.NewLine;
-                LogWrite(resultSavedDirectory + shape + @"\intermediate\" + five + originLasName + ".bat 파일을 생성했습니다.");
-            }
-        }
-        private void RunFileSixth()
-        {
-            string six = "level6_nomarlized_";
-            //6단계
-            {
-                string batFilePath = resultSavedDirectory + shape + @"\intermediate\" + six + originLasName + ".bat";
-                if (!File.Exists(batFilePath))
-                {
-                    using FileStream fs = File.Create(batFilePath);
-                }
-                using (StreamWriter sw = new StreamWriter(new FileStream(batFilePath, FileMode.OpenOrCreate), Encoding.Default))
-                {
-                    sw.WriteLine("chcp 65001");
-                    sw.WriteLine("cls");
-                    sw.WriteLine("@ECHO OFF");
-                    sw.WriteLine("echo 지면 추출 및 평탄화 중...");
-                    sw.WriteLine("pdal pipeline \"" + six + originLasName + ".json\"");
-                }
-                progressLog += ProcessBatch(six + originLasName + ".bat") + Environment.NewLine;
-                LogWrite(resultSavedDirectory + shape + @"\intermediate\" + six + originLasName + ".bat 파일을 생성했습니다.");
-            }
-        }
+
+        //private void RunFileThird()
+        //{
+        //    string three = "level3_subsampled_crown_";
+        //    {
+        //        string batFilePath = resultSavedDirectory + shape + @"\intermediate\" + three + originLasName + ".bat";
+        //        if (!File.Exists(batFilePath))
+        //        {
+        //            using (FileStream fs = File.Create(batFilePath))
+        //            {
+        //                fs.Close();
+        //            }
+        //        }
+        //        using (StreamWriter sw = new StreamWriter(new FileStream(batFilePath, FileMode.OpenOrCreate), Encoding.Default))
+        //        {
+        //            sw.WriteLine("chcp 65001");
+        //            sw.WriteLine("cls");
+        //            sw.WriteLine("@ECHO OFF");
+        //            sw.WriteLine("echo 수관 부분 파일 축소 중...");
+        //            sw.WriteLine("pdal pipeline \"" + three + originLasName + ".json\"");
+        //        }
+        //        progressLog += ProcessBatch(three + originLasName + ".json") + Environment.NewLine;
+        //        LogWrite(resultSavedDirectory + shape + @"\intermediate\" + three + originLasName + ".bat 파일을 생성했습니다.");
+        //    }
+
+        //}
+        //private void RunFileFifth()
+        //{
+        //    string five = "level5_merged_";
+        //    {
+        //        string batFilePath = resultSavedDirectory + shape + @"\intermediate\" + five + originLasName + ".bat";
+
+        //        if (!File.Exists(batFilePath))
+        //        {
+        //            using (FileStream fs = File.Create(batFilePath))
+        //            {
+        //                fs.Close();
+        //            }
+        //        }
+        //        using (StreamWriter sw = new StreamWriter(new FileStream(batFilePath, FileMode.OpenOrCreate), Encoding.Default))
+        //        {
+        //            sw.WriteLine("chcp 65001");
+        //            sw.WriteLine("cls");
+        //            sw.WriteLine("@ECHO OFF");
+        //            sw.WriteLine("echo 수관 부분 수간 부분 영역 합치는 중...");
+        //            sw.WriteLine("pdal pipeline \"" + five + originLasName + ".json\"");
+        //        }
+        //        progressLog += ProcessBatch(five + originLasName + ".json") + Environment.NewLine;
+        //        LogWrite(resultSavedDirectory + shape + @"\intermediate\" + five + originLasName + ".bat 파일을 생성했습니다.");
+        //    }
+        //}
+
+        //private void RunFileSixth()
+        //{
+        //    string centerX = paramForm.gui.centerX.ToString();
+        //    string centerY = paramForm.gui.centerY.ToString();
+
+        //    string four = "level4_croporiginPlot_"; //crop 후 dat 파일 만들기
+        //    {
+        //        //crop origin plot
+        //        string batFilePath = resultSavedDirectory + shape + @"\intermediate\" + four + originLasName + ".bat";
+        //        if (!File.Exists(batFilePath))
+        //        {
+        //            using (FileStream fs = File.Create(batFilePath))
+        //            {
+        //                fs.Close();
+        //            }
+        //        }
+        //        using (StreamWriter sw = new StreamWriter(new FileStream(batFilePath, FileMode.OpenOrCreate), Encoding.Default))
+        //        {
+        //            sw.WriteLine("chcp 65001");
+        //            sw.WriteLine("cls");
+        //            sw.WriteLine("@ECHO OFF");
+        //            sw.WriteLine("echo 원본 표준지 분류 중...");
+        //            sw.WriteLine("pdal pipeline \"" + four + originLasName + ".json\"");
+        //            sw.WriteLine("echo>" + "\"" + four + originLasName + "_O.json\"");
+        //            sw.WriteLine("pdal info " + "\"" + four + originLasName + "_O.las\" > " + "\"" + four + originLasName + "_O.json\"");
+        //        }
+        //        progressLog += ProcessBatch(four + originLasName + "_O.las") + Environment.NewLine;;
+        //        //process batch file to make dat file
+        //        string dat_str = "";
+        //        string strFile1 = resultSavedDirectory + shape + @"\intermediate\" + four + originLasName + "_O.las";
+        //        FileInfo fileInfo1 = new FileInfo(strFile1);//파일 있는지 확인 있을때(true), 없으면(false)
+        //        if (fileInfo1.Exists)
+        //        {
+        //            if (shape == "_polygon")
+        //            {
+        //                try
+        //                {
+        //                    //MessageBox.Show(strFile1);
+        //                    /*string JsonText1 = System.IO.File.ReadAllText(resultSavedDirectory + shape + @"\intermediate\" + fourtwo + originLasName + "_O.json");
+
+        //                    JObject JsonData1 = JObject.Parse(JsonText1);
+
+        //                    JArray coordinatesArray = (JArray)JsonData1["stats"]["bbox"]["native"]["boundary"]["coordinates"][0];
+
+        //                    string points = "";
+        //                    for (int i = 0; i < coordinatesArray.Count; i++)
+        //                    {
+        //                        JArray vertex = (JArray)coordinatesArray[i];
+        //                        points += vertex[0] + " ";
+        //                        points += vertex[1] + " ";
+        //                    }
+
+        //                    dat_str = points;*/
+        //                    paramForm.setParam(paramForm.csv_data, "filters.crop", "origin_dat", poly_points);
+        //                    paramForm.write_csv(configpath);
+
+        //                    //File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + fourtwo + originLasName + "_O.dat", points);
+
+        //                }
+        //                catch (Exception ex)
+        //                {
+        //                    LogWrite(resultSavedDirectory + @"\intermediate\" + four + originLasName + "_O.dat 파일을 생성 오류.");
+        //                    return;
+        //                }
+        //            }
+        //            else
+        //            {
+        //                try
+        //                {
+        //                    //MessageBox.Show(strFile1);
+        //                    string JsonText1 = System.IO.File.ReadAllText(resultSavedDirectory + shape + @"\intermediate\" + six + originLasName + "_O.json");
+
+        //                    JObject JsonData1 = JObject.Parse(JsonText1);
+
+        //                    JToken minx = JsonData1["stats"]["bbox"]["native"]["bbox"]["minx"];
+        //                    JToken maxx = JsonData1["stats"]["bbox"]["native"]["bbox"]["maxx"];
+        //                    JToken miny = JsonData1["stats"]["bbox"]["native"]["bbox"]["miny"];
+        //                    JToken maxy = JsonData1["stats"]["bbox"]["native"]["bbox"]["maxy"];
+
+        //                    //passvalue centerx, centery, radius를 추가하기
+        //                    if (shape == "_circle")
+        //                    {
+        //                        double radius = paramForm.gui.radius;
+
+        //                        //File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + fourtwo + originLasName + "_O.dat",
+        //                        //    minx + " " + maxx + " " + miny + " " + maxy + " " + centerX + " " + centerY + " " + radius);
+
+        //                        dat_str = $"xmin={minx} xmax={maxx} ymin={miny} ymax={maxy} cx={centerX} cy={centerY} radius={radius}";
+        //                        paramForm.setParam(paramForm.csv_data, "filters.crop", "origin_dat", dat_str);
+        //                        paramForm.write_csv(configpath);
+        //                    }
+        //                    else
+        //                    {
+        //                        //File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + fourtwo + originLasName + "_O.dat", minx + " " + maxx + " " + miny + " " + maxy);
+
+        //                        dat_str = $"xmin={minx} xmax={maxx} ymin={miny} ymax={maxy}";
+        //                        paramForm.setParam(paramForm.csv_data, "filters.crop", "origin_dat", dat_str);
+        //                        paramForm.write_csv(configpath);
+        //                    }
+        //                }
+        //                catch (Exception ex)
+        //                {
+        //                    LogWrite(resultSavedDirectory + @"\intermediate\" + four + originLasName + "_O.dat 파일을 생성 오류.");
+        //                    return;
+        //                }
+        //            }
+        //        }
+        //        LogWrite(resultSavedDirectory + shape + @"\intermediate\" + four + originLasName + "_O.dat 파일을 생성했습니다.");
+        //    }
+        //}
+
         private void RunFileSeventh()
         {
-            string centerX = paramForm.gui.centerX.ToString();
-            string centerY = paramForm.gui.centerY.ToString();
+            //string four = "level4_makeslicefile_";
+            //string fourone = "level4-1_trunkslice_";
+            //string fourtwo = "level4-2_crownslice_";
 
-            string seven = "level7_croporiginPlot_"; //crop 후 dat 파일 만들기
+            string seven = "level7_Slicing_";
+            string sevenone = "level7-1_trunkslice_";
+            string seventwo = "level7-2_crownslice_";
+
             {
-                //crop origin plot
                 string batFilePath = resultSavedDirectory + shape + @"\intermediate\" + seven + originLasName + ".bat";
                 if (!File.Exists(batFilePath))
                 {
@@ -857,137 +1149,12 @@ namespace WinFormsAppTest
                     sw.WriteLine("chcp 65001");
                     sw.WriteLine("cls");
                     sw.WriteLine("@ECHO OFF");
-                    sw.WriteLine("echo 원본 표준지 분류 중...");
-                    sw.WriteLine("pdal pipeline \"" + seven + originLasName + ".json\"");
-                    sw.WriteLine("echo>" + "\"" + seven + originLasName + "_O.json\"");
-                    sw.WriteLine("pdal info " + "\"" + seven + originLasName + "_O.las\" > " + "\"" + seven + originLasName + "_O.json\"");
+                    sw.WriteLine("echo 수관 부분 수간 부분 영역 잘라내는 중...");
+                    sw.WriteLine("pdal pipeline \"" + sevenone + originLasName + ".json\"");
+                    sw.WriteLine("pdal pipeline \"" + seventwo + originLasName + ".json\"");
                 }
-                progressLog += ProcessBatch(seven + originLasName + ".bat") + Environment.NewLine;
-                //process batch file to make dat file
-                string dat_str = "";
-                string strFile1 = resultSavedDirectory + shape + @"\intermediate\" + seven + originLasName + "_O.las";
-                FileInfo fileInfo1 = new FileInfo(strFile1);//파일 있는지 확인 있을때(true), 없으면(false)
-                if (fileInfo1.Exists)
-                {
-                    if (shape == "_polygon")
-                    {
-                        try
-                        {
-                            //MessageBox.Show(strFile1);
-                            /*string JsonText1 = System.IO.File.ReadAllText(resultSavedDirectory + shape + @"\intermediate\" + fourtwo + originLasName + "_O.json");
-
-                            JObject JsonData1 = JObject.Parse(JsonText1);
-
-                            JArray coordinatesArray = (JArray)JsonData1["stats"]["bbox"]["native"]["boundary"]["coordinates"][0];
-
-                            string points = "";
-                            for (int i = 0; i < coordinatesArray.Count; i++)
-                            {
-                                JArray vertex = (JArray)coordinatesArray[i];
-                                points += vertex[0] + " ";
-                                points += vertex[1] + " ";
-                            }
-
-                            dat_str = points;*/
-                            paramForm.setParam(paramForm.csv_data, "filters.crop", "origin_dat", poly_points);
-                            paramForm.write_csv(configpath);
-
-                            //File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + fourtwo + originLasName + "_O.dat", points);
-
-                        }
-                        catch (Exception ex)
-                        {
-                            LogWrite(resultSavedDirectory + @"\intermediate\" + seven + originLasName + "_O.dat 파일을 생성 오류.");
-                            return;
-                        }
-                    }
-                    else
-                    {
-                        try
-                        {
-                            //MessageBox.Show(strFile1);
-                            string JsonText1 = System.IO.File.ReadAllText(resultSavedDirectory + shape + @"\intermediate\" + seven + originLasName + "_O.json");
-
-                            JObject JsonData1 = JObject.Parse(JsonText1);
-
-                            JToken minx = JsonData1["stats"]["bbox"]["native"]["bbox"]["minx"];
-                            JToken maxx = JsonData1["stats"]["bbox"]["native"]["bbox"]["maxx"];
-                            JToken miny = JsonData1["stats"]["bbox"]["native"]["bbox"]["miny"];
-                            JToken maxy = JsonData1["stats"]["bbox"]["native"]["bbox"]["maxy"];
-
-                            //passvalue centerx, centery, radius를 추가하기
-                            if (shape == "_circle")
-                            {
-                                double radius = paramForm.gui.radius;
-
-                                //File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + fourtwo + originLasName + "_O.dat",
-                                //    minx + " " + maxx + " " + miny + " " + maxy + " " + centerX + " " + centerY + " " + radius);
-
-                                dat_str = $"xmin={minx} xmax={maxx} ymin={miny} ymax={maxy} cx={centerX} cy={centerY} radius={radius}";
-                                paramForm.setParam(paramForm.csv_data, "filters.crop", "origin_dat", dat_str);
-                                paramForm.write_csv(configpath);
-                            }
-                            else
-                            {
-                                //File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + fourtwo + originLasName + "_O.dat", minx + " " + maxx + " " + miny + " " + maxy);
-
-                                dat_str = $"xmin={minx} xmax={maxx} ymin={miny} ymax={maxy}";
-                                paramForm.setParam(paramForm.csv_data, "filters.crop", "origin_dat", dat_str);
-                                paramForm.write_csv(configpath);
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            LogWrite(resultSavedDirectory + @"\intermediate\" + seven + originLasName + "_O.dat 파일을 생성 오류.");
-                            return;
-                        }
-                    }
-                }
-                LogWrite(resultSavedDirectory + shape + @"\intermediate\" + seven + originLasName + "_O.dat 파일을 생성했습니다.");
-            }
-        }
-
-        private void RunFileSeventhOne()
-        {
-            string sevenoneone = "level7-1-1_LAStoPCDforTslice_";
-            string sevenonetwo = "level7-1-2_LAStoPCDforCslice_";
-            //7-1단계
-            {
-                string batFilePath = resultSavedDirectory + shape + @"\intermediate\" + sevenoneone + originLasName + ".bat";
-                if (!File.Exists(batFilePath))
-                {
-                    using FileStream fs = File.Create(batFilePath);
-                }
-                using (StreamWriter sw = new StreamWriter(new FileStream(batFilePath, FileMode.OpenOrCreate), Encoding.Default))
-                {
-                    sw.WriteLine("chcp 65001");
-                    sw.WriteLine("cls");
-                    sw.WriteLine("@ECHO OFF");
-                    sw.WriteLine("echo TSlice LAS to PCD 변환 중...");
-                    sw.WriteLine("pdal pipeline \"" + sevenoneone + originLasName + ".json\"");
-                    sw.WriteLine("Delete_duplication \"" + sevenoneone + originLasName + ".pcd\"");
-                }
-                progressLog += ProcessBatch(sevenoneone + originLasName + ".bat") + Environment.NewLine;
-                LogWrite(resultSavedDirectory + shape + @"\intermediate\" + sevenoneone + originLasName + ".bat 파일을 생성했습니다.");
-            }
-            //7-2단계
-            {
-                string batFilePath = resultSavedDirectory + shape + @"\intermediate\" + sevenonetwo + originLasName + ".bat";
-                if (!File.Exists(batFilePath))
-                {
-                    using FileStream fs = File.Create(batFilePath);
-                }
-                using (StreamWriter sw = new StreamWriter(new FileStream(batFilePath, FileMode.OpenOrCreate), Encoding.Default))
-                {
-                    sw.WriteLine("chcp 65001");
-                    sw.WriteLine("cls");
-                    sw.WriteLine("@ECHO OFF");
-                    sw.WriteLine("echo CSlice Las to PCD 변환 중...");
-                    sw.WriteLine("pdal pipeline " + sevenonetwo + originLasName + ".json");
-                    sw.WriteLine("Delete_duplication " + sevenonetwo + originLasName + ".pcd");
-                }
-                progressLog += ProcessBatch(sevenonetwo + originLasName + ".bat") + Environment.NewLine;
-                LogWrite(resultSavedDirectory + shape + @"\intermediate\" + sevenonetwo + originLasName + ".bat 파일을 생성했습니다.");
+                progressLog += ProcessBatch(seven + originLasName + ".bat");
+                LogWrite(resultSavedDirectory + shape + @"\intermediate\" + seven + originLasName + ".bat 파일을 생성했습니다.");
             }
 
             AppendSeventhCSVFile();
@@ -1009,9 +1176,6 @@ namespace WinFormsAppTest
                     sw.WriteLine("@ECHO OFF");
                     sw.WriteLine("echo 수간 추출 및 하층식생 제거 중...");
                     sw.WriteLine("csp_segmentstem \"" + configpath + "\"");
-                    //최종에서는 명령인수 삭제
-                    /*sw.WriteLine("csp_segmentstem " + paramForm.csp_stem.smoothness + " " + paramForm.csp_stem.minDBH + " " + paramForm.csp_stem.maxDBH + " level1_cropped_" + originLasName + "_B.dat "
-                     + originLasName + "_Tslice.pcd");*/
                     sw.WriteLine();
                 }
                 progressLog += ProcessBatch(eight + originLasName + ".bat") + Environment.NewLine;
@@ -1022,7 +1186,7 @@ namespace WinFormsAppTest
         private void RunFileNinth()
         {
             string nine = "level9_segmentCrown_";
-            //8단계 개별목 추출 
+            //9단계 개별목 추출 
             {
                 string batFilePath = resultSavedDirectory + shape + @"\\intermediate\" + nine + originLasName + ".bat";
                 if (!File.Exists(batFilePath))
@@ -1054,7 +1218,7 @@ namespace WinFormsAppTest
         private void RunFileTenth()
         {
             string ten = "level10_measure_DBH_treeHeight_";
-            //9단계 산림정보 속성 계산
+            //10단계 산림정보 속성 계산
             {
                 string batFilePath = resultSavedDirectory + shape + @"\intermediate\" + ten + originLasName + ".bat";
                 if (!File.Exists(batFilePath))
@@ -1093,21 +1257,21 @@ namespace WinFormsAppTest
                     sw.WriteLine("cls");
                     sw.WriteLine("@ECHO OFF");
                     sw.WriteLine("echo pcd파일 las파일로 변환중");
-                    sw.WriteLine("PCD2LAS " + FolderName);
+                    //sw.WriteLine("PCD2LAS " + FolderName);
                     sw.WriteLine("PCD2LAS " + FolderName2);
 
-                    //pcd 지우는 코드  ---> 배포 시 삭제
-                    /*sw.WriteLine("for /r \"..\\tree\" %%i in (*.pcd) do (");
+                    //pcd 지우는 코드  ---> 배포 시 주석 풀기
+                    sw.WriteLine("for /r \"..\\tree\" %%i in (*.pcd) do (");
                     sw.WriteLine("    del \"%%i\"");
                     sw.WriteLine(")");
 
-                    sw.WriteLine("for /r \".\" %%i in (*.pcd) do (");
-                    sw.WriteLine("    del \"%%i\"");
-                    sw.WriteLine(")");*/
+                    //sw.WriteLine("for /r \".\" %%i in (*.pcd) do (");
+                    //sw.WriteLine("    del \"%%i\"");
+                    //sw.WriteLine(")");
 
 
                     //intermediate 폴더 숨김처리 코드
-                    sw.WriteLine("attrib +h ../intermediate");
+                    //sw.WriteLine("attrib +h ../intermediate");
                 }
 
                 progressLog += ProcessBatch(eleven + originLasName + ".bat") + Environment.NewLine;
@@ -1132,6 +1296,8 @@ namespace WinFormsAppTest
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + eleven + originLasName + ".bat 파일을 생성했습니다.");
             }
         }
+
+
         //LAS파일 이름 변경 코드
         private void ChangeLasName()
         {
@@ -1161,6 +1327,41 @@ namespace WinFormsAppTest
                 // 파일 이름 변경 및 이동
                 string newFilePath = Path.Combine(destinationDirectory, newFileName);
                 File.Move(lasFile, newFilePath);
+            }
+        }
+
+        //intermediate 삭제 코드
+        private void del_inter()
+        {
+            {
+                // 실행할 명령 프롬프트 명령어 설정
+                string resultSavedDirectory = this.resultSavedDirectory + shape;
+                string resultSavedDirectory3 = resultSavedDirectory + @"\" + "intermediate";
+
+                string command = @$"rmdir /s /q {resultSavedDirectory3}";
+
+                // Process 시작
+                Process process = new Process();
+                process.StartInfo.FileName = "cmd.exe"; // 명령 프롬프트 실행
+                process.StartInfo.Arguments = "/c " + command; // /c 옵션은 명령어 실행 후 프롬프트 종료
+
+                // 출력을 읽기 위한 설정
+                process.StartInfo.RedirectStandardOutput = true;
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.CreateNoWindow = true;
+
+                // 프로세스 실행
+                process.Start();
+
+                // 출력을 읽어오기
+                string output = process.StandardOutput.ReadToEnd();
+                Console.WriteLine(output);
+
+                // 프로세스가 종료될 때까지 대기
+                process.WaitForExit();
+
+                // 프로세스 종료
+                process.Close();
             }
         }
         //info파일 생성코드
@@ -1261,12 +1462,13 @@ namespace WinFormsAppTest
             if (fileInfo1.Exists)
             {
                 //전처리 
-                MakeSliceFile();
-                Subsampling();
-                Merge();
+                
+                //Subsampling();
+                //Merge();
                 Outlier();
                 Normalization();
-                MakeOriginPlot();
+                MakeSliceFile();
+                //MakeOriginPlot();
                 Turn_Las_into_PCD();                
                 progress++;
                 mainProgressSet(progress);
@@ -1280,20 +1482,20 @@ namespace WinFormsAppTest
                 progress++;
                 mainProgressSet(progress);
 
-                RunFileForth();
+                RunFileFourth();
                 progress++;
                 mainProgressSet(progress);
 
-                RunFileFifth();
+                //RunFileFifth();
                 progress++;
                 mainProgressSet(progress);
 
-                RunFileSixth();
+                //RunFileSixth();
+                ExtractOriginDat();
                 progress++;
                 mainProgressSet(progress);
 
                 RunFileSeventh();
-                RunFileSeventhOne();
                 progress++;
                 mainProgressSet(progress);
 
@@ -1309,11 +1511,14 @@ namespace WinFormsAppTest
 
                 RunFileTenth();//measure
                 
+
+
                 if (CatchError(resultP + @"\tree\", 10)) return;
 
                 RunFileEleventh();
                 progress++;
                 mainProgressSet(progress);
+                //del_inter();
             }
             else
             {
@@ -1451,7 +1656,7 @@ namespace WinFormsAppTest
 
         private void RemoveDuplicatedPoints(string filename)
         {
-            string dupRemovedfile = Path.GetFileNameWithoutExtension(filename.Insert(filename.Length-4, "_XYZ"));
+            string dupRemovedfile = Path.GetFileNameWithoutExtension(filename.Insert(filename.Length - 4, "_XYZ"));
             //MessageBox.Show(filename);
             //MessageBox.Show(dupRemovedfile);
 
@@ -1469,5 +1674,6 @@ namespace WinFormsAppTest
             RunFileZero(filename);
             originLasName = dupRemovedfile;
         }
+
     }
 }
