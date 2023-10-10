@@ -98,10 +98,9 @@ namespace WinFormsAppTest
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     filePath = openFileDialog.FileName;
-
                     tbPlotData.Text = filePath;
 
-                    validation(filePath);
+                    Validation(filePath);
                 }
             }
         }
@@ -173,7 +172,7 @@ namespace WinFormsAppTest
             }
         }
         /// 전체 과정 실행 버튼
-        private void btnPlotOK_Click(object sender, EventArgs e)
+        private async void btnPlotOK_Click(object sender, EventArgs e)
         {
             //무결성 검사
             bool isEmptyVal_cir = tbPlotCircleX.Text == "" && tbPlotCircleY.Text == "" && tbPlotCircleR.Text == "";//원형 표준지에 필요한 값들이 비어있는경우
@@ -241,23 +240,26 @@ namespace WinFormsAppTest
             //progressBar visible
             attachProgressBar(true);
 
-            //각 단계 실행
-            preProAndExcuteStep();
-
-            //csv 초기화
-            if (paramForm.fileType == "")
-                paramForm.write_csv(paramForm.csv_path);
-
-            if (progress == 10)
+            await Task.Run(() =>
             {
-                MessageBox.Show("실행 완료");
-                attachProgressBar(false);
-            }
-            else
-            {
-                MessageBox.Show(progress + "단계 에러");
-                return;
-            }
+                //각 단계 실행
+                preProAndExcuteStep();
+
+                //csv 초기화
+                if (paramForm.fileType == "")
+                    paramForm.write_csv(paramForm.csv_path);
+
+                if (progress == 10)
+                {
+                    MessageBox.Show("실행 완료");
+                    attachProgressBar(false);
+                }
+                else
+                {
+                    MessageBox.Show(progress + "단계 에러");
+                    return;
+                }
+            });
         }
 
         //PlotForm 콤보박스 이벤트
@@ -461,7 +463,7 @@ namespace WinFormsAppTest
         }
 
         //사용자가 입력한 좌표값이 올바른지 체크하기 위한 함수들
-        private async void validation(string filePath)
+        private async void Validation(string filePath)
         {
             string infoDir = Path.Combine(basePath, "LAS_info");
             string fileName = Path.GetFileNameWithoutExtension(filePath);
@@ -531,7 +533,7 @@ namespace WinFormsAppTest
                 process.Start();
                 //process.StandardInput.WriteLine($"echo {str}");
                 //process.StandardInput.WriteLine("echo off");
-                process.StandardInput.WriteLine($"pdal info \"{filePath}\" > {Path.Combine(dirPath, fileName)}.json");
+                process.StandardInput.WriteLine($"pdal info \"{filePath}\" > \"{Path.Combine(dirPath, fileName)}.json\"");
                 process.StandardInput.WriteLine("exit");
                 process.WaitForExit();
             }

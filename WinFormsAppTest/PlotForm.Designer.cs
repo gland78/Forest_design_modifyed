@@ -435,7 +435,6 @@
             // tbPlotData
             // 
             tbPlotData.BackColor = Color.White;
-            tbPlotData.Enabled = false;
             tbPlotData.Location = new Point(89, 19);
             tbPlotData.Name = "tbPlotData";
             tbPlotData.ReadOnly = true;

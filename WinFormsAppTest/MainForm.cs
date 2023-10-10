@@ -1171,8 +1171,15 @@ namespace WinFormsAppTest
 
         private void progressSetter(int setValue)
         {
-            pbLoadingBar.Value = setValue;
-            pbLoadingBar.Invalidate();
+            if (pbLoadingBar.InvokeRequired)
+            {
+                pbLoadingBar.Invoke(new setIntEventHandler(progressSetter), setValue);
+            }
+            else
+            {
+                pbLoadingBar.Value = setValue;
+                pbLoadingBar.Invalidate();
+            }
         }
 
         private void startBtnAttach(bool onOff)
