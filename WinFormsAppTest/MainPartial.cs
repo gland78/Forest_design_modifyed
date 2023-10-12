@@ -176,9 +176,6 @@ namespace WinFormsAppTest
         //textbox 값 -> List 테이블로 대입 
         private void UpdateParams(List<List<string>> dataList)
         {
-            //subsamplng_textbox
-            setParam(dataList, "filters.sample", "cell", tbSubCellSize.Text.Trim());
-
             //Normalize_textboxes
             setParam(dataList, "filters.smrf", "cell", tbNorCellSize.Text.Trim());
             setParam(dataList, "filters.smrf", "scalar", tbNorScalar.Text.Trim());
@@ -199,8 +196,6 @@ namespace WinFormsAppTest
         {
             ExtractCircleValues(ref gui, csv_data[0][3]);
             ExtractRectangleValues(ref gui, csv_data[1][3]);
-            //subsamplng_textboxes
-            tbSubCellSize.Text = getParam(csv_data, "filters.sample","cell");
 
             //normalize_textboxes
             tbNorCellSize.Text = getParam(csv_data, "filters.smrf","cell");
@@ -222,7 +217,6 @@ namespace WinFormsAppTest
         private void RegistTextBoxHandler()
         {
             //double형만 입력가능하도록 키 등록
-            tbSubCellSize.KeyPress += TextBox_KeyPressOnlyNumbers;
             tbNorScalar.KeyPress += TextBox_KeyPressOnlyNumbers;
             tbNorSlope.KeyPress += TextBox_KeyPressOnlyNumbers;
             tbNorThres.KeyPress += TextBox_KeyPressOnlyNumbers;
@@ -553,10 +547,6 @@ namespace WinFormsAppTest
                     if (csvLines.Contains("gui,private,rectangle"))
                     {
                         ExtractRectangleValues(ref guiTemp, csvLines.Split(",")[3]);
-                    }
-                    if (csvLines.Contains("filters.sample,public,cell"))
-                    {
-                        tbSubCellSize.Text = csvLines.Split(',')[3];
                     }
                     else if (csvLines.Contains("filters.smrf,public,cell"))
                     {

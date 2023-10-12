@@ -96,16 +96,12 @@ namespace WinFormsAppTest
             tbTrunkMaxHeight = new TextBox();
             lbCrownSlice = new Label();
             lbTrunkSlice = new Label();
-            lbSubsampling = new Label();
             pnSettingCrown1 = new CustomPanel();
             lbCrownMinH = new Label();
             tbCrownMinHeight = new TextBox();
             pnSettingTrunk1 = new CustomPanel();
             tbTrunkMinHeight = new TextBox();
             lbTrunkMinH = new Label();
-            pnSettingSub1 = new CustomPanel();
-            tbSubCellSize = new TextBox();
-            lbSubCellSize = new Label();
             ttMainInfo = new ToolTip(components);
             timerFlashPanel = new Timer(components);
             timerFlashBtn = new Timer(components);
@@ -127,7 +123,6 @@ namespace WinFormsAppTest
             pnSettingTrunk2.SuspendLayout();
             pnSettingCrown1.SuspendLayout();
             pnSettingTrunk1.SuspendLayout();
-            pnSettingSub1.SuspendLayout();
             SuspendLayout();
             // 
             // pnSideMenu
@@ -518,10 +513,8 @@ namespace WinFormsAppTest
             tpSettings.Controls.Add(pnSettingTrunk2);
             tpSettings.Controls.Add(lbCrownSlice);
             tpSettings.Controls.Add(lbTrunkSlice);
-            tpSettings.Controls.Add(lbSubsampling);
             tpSettings.Controls.Add(pnSettingCrown1);
             tpSettings.Controls.Add(pnSettingTrunk1);
-            tpSettings.Controls.Add(pnSettingSub1);
             tpSettings.Location = new Point(4, 14);
             tpSettings.Name = "tpSettings";
             tpSettings.Padding = new Padding(3);
@@ -533,7 +526,7 @@ namespace WinFormsAppTest
             pnSettingTrunk3.BackColor = Color.Gray;
             pnSettingTrunk3.Controls.Add(lbTrunkSmooth);
             pnSettingTrunk3.Controls.Add(tbTrunkSmooth);
-            pnSettingTrunk3.Location = new Point(24, 963);
+            pnSettingTrunk3.Location = new Point(24, 843);
             pnSettingTrunk3.Margin = new Padding(3, 4, 3, 4);
             pnSettingTrunk3.Name = "pnSettingTrunk3";
             pnSettingTrunk3.Size = new Size(850, 58);
@@ -768,7 +761,7 @@ namespace WinFormsAppTest
             pnSettingNor5.BackColor = Color.Gray;
             pnSettingNor5.Controls.Add(tbNorThres);
             pnSettingNor5.Controls.Add(lbNorThres);
-            pnSettingNor5.Location = new Point(24, 711);
+            pnSettingNor5.Location = new Point(24, 591);
             pnSettingNor5.Margin = new Padding(3, 4, 3, 4);
             pnSettingNor5.Name = "pnSettingNor5";
             pnSettingNor5.Size = new Size(850, 58);
@@ -800,7 +793,7 @@ namespace WinFormsAppTest
             pnSettingNor4.BackColor = Color.Gray;
             pnSettingNor4.Controls.Add(tbNorScalar);
             pnSettingNor4.Controls.Add(lbNorScalar);
-            pnSettingNor4.Location = new Point(24, 645);
+            pnSettingNor4.Location = new Point(24, 525);
             pnSettingNor4.Margin = new Padding(3, 4, 3, 4);
             pnSettingNor4.Name = "pnSettingNor4";
             pnSettingNor4.Size = new Size(850, 58);
@@ -832,7 +825,7 @@ namespace WinFormsAppTest
             pnSettingNor3.BackColor = Color.Gray;
             pnSettingNor3.Controls.Add(tbNorSlope);
             pnSettingNor3.Controls.Add(lbNorSlope);
-            pnSettingNor3.Location = new Point(24, 579);
+            pnSettingNor3.Location = new Point(24, 459);
             pnSettingNor3.Margin = new Padding(3, 4, 3, 4);
             pnSettingNor3.Name = "pnSettingNor3";
             pnSettingNor3.Size = new Size(850, 58);
@@ -864,7 +857,7 @@ namespace WinFormsAppTest
             pnSettingNor2.BackColor = Color.Gray;
             pnSettingNor2.Controls.Add(tbNorWinSize);
             pnSettingNor2.Controls.Add(lbNorWinSize);
-            pnSettingNor2.Location = new Point(24, 513);
+            pnSettingNor2.Location = new Point(24, 393);
             pnSettingNor2.Margin = new Padding(3, 4, 3, 4);
             pnSettingNor2.Name = "pnSettingNor2";
             pnSettingNor2.Size = new Size(850, 58);
@@ -896,7 +889,7 @@ namespace WinFormsAppTest
             pnSettingNor1.BackColor = Color.Gray;
             pnSettingNor1.Controls.Add(tbNorCellSize);
             pnSettingNor1.Controls.Add(lbNorCellSize);
-            pnSettingNor1.Location = new Point(24, 447);
+            pnSettingNor1.Location = new Point(24, 327);
             pnSettingNor1.Margin = new Padding(3, 4, 3, 4);
             pnSettingNor1.Name = "pnSettingNor1";
             pnSettingNor1.Size = new Size(850, 58);
@@ -928,7 +921,7 @@ namespace WinFormsAppTest
             lbNormalize.AutoSize = true;
             lbNormalize.Font = new Font("Microsoft Sans Serif", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
             lbNormalize.ForeColor = Color.Black;
-            lbNormalize.Location = new Point(24, 415);
+            lbNormalize.Location = new Point(24, 295);
             lbNormalize.Name = "lbNormalize";
             lbNormalize.Size = new Size(117, 25);
             lbNormalize.TabIndex = 16;
@@ -951,7 +944,7 @@ namespace WinFormsAppTest
             pnSettingTrunk2.BackColor = Color.Gray;
             pnSettingTrunk2.Controls.Add(lbTrunkMaxH);
             pnSettingTrunk2.Controls.Add(tbTrunkMaxHeight);
-            pnSettingTrunk2.Location = new Point(24, 897);
+            pnSettingTrunk2.Location = new Point(24, 777);
             pnSettingTrunk2.Margin = new Padding(3, 4, 3, 4);
             pnSettingTrunk2.Name = "pnSettingTrunk2";
             pnSettingTrunk2.Size = new Size(850, 58);
@@ -983,7 +976,7 @@ namespace WinFormsAppTest
             lbCrownSlice.AutoSize = true;
             lbCrownSlice.Font = new Font("Microsoft Sans Serif", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
             lbCrownSlice.ForeColor = Color.Black;
-            lbCrownSlice.Location = new Point(24, 1051);
+            lbCrownSlice.Location = new Point(24, 931);
             lbCrownSlice.Name = "lbCrownSlice";
             lbCrownSlice.Size = new Size(130, 25);
             lbCrownSlice.TabIndex = 18;
@@ -994,29 +987,18 @@ namespace WinFormsAppTest
             lbTrunkSlice.AutoSize = true;
             lbTrunkSlice.Font = new Font("Microsoft Sans Serif", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
             lbTrunkSlice.ForeColor = Color.Black;
-            lbTrunkSlice.Location = new Point(24, 799);
+            lbTrunkSlice.Location = new Point(24, 679);
             lbTrunkSlice.Name = "lbTrunkSlice";
             lbTrunkSlice.Size = new Size(124, 25);
             lbTrunkSlice.TabIndex = 17;
             lbTrunkSlice.Text = "TrunkSlice";
-            // 
-            // lbSubsampling
-            // 
-            lbSubsampling.AutoSize = true;
-            lbSubsampling.Font = new Font("Microsoft Sans Serif", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
-            lbSubsampling.ForeColor = Color.Black;
-            lbSubsampling.Location = new Point(24, 295);
-            lbSubsampling.Name = "lbSubsampling";
-            lbSubsampling.Size = new Size(150, 25);
-            lbSubsampling.TabIndex = 15;
-            lbSubsampling.Text = "SubSampling";
             // 
             // pnSettingCrown1
             // 
             pnSettingCrown1.BackColor = Color.Gray;
             pnSettingCrown1.Controls.Add(lbCrownMinH);
             pnSettingCrown1.Controls.Add(tbCrownMinHeight);
-            pnSettingCrown1.Location = new Point(24, 1083);
+            pnSettingCrown1.Location = new Point(24, 963);
             pnSettingCrown1.Margin = new Padding(3, 4, 3, 4);
             pnSettingCrown1.Name = "pnSettingCrown1";
             pnSettingCrown1.Size = new Size(850, 58);
@@ -1048,7 +1030,7 @@ namespace WinFormsAppTest
             pnSettingTrunk1.BackColor = Color.Gray;
             pnSettingTrunk1.Controls.Add(tbTrunkMinHeight);
             pnSettingTrunk1.Controls.Add(lbTrunkMinH);
-            pnSettingTrunk1.Location = new Point(24, 831);
+            pnSettingTrunk1.Location = new Point(24, 711);
             pnSettingTrunk1.Margin = new Padding(3, 4, 3, 4);
             pnSettingTrunk1.Name = "pnSettingTrunk1";
             pnSettingTrunk1.Size = new Size(850, 58);
@@ -1075,38 +1057,6 @@ namespace WinFormsAppTest
             lbTrunkMinH.Size = new Size(75, 17);
             lbTrunkMinH.TabIndex = 1;
             lbTrunkMinH.Text = "MinHeight";
-            // 
-            // pnSettingSub1
-            // 
-            pnSettingSub1.BackColor = Color.Gray;
-            pnSettingSub1.Controls.Add(tbSubCellSize);
-            pnSettingSub1.Controls.Add(lbSubCellSize);
-            pnSettingSub1.Location = new Point(24, 327);
-            pnSettingSub1.Margin = new Padding(3, 4, 3, 4);
-            pnSettingSub1.Name = "pnSettingSub1";
-            pnSettingSub1.Size = new Size(850, 58);
-            pnSettingSub1.TabIndex = 4;
-            // 
-            // tbSubCellSize
-            // 
-            tbSubCellSize.BorderStyle = BorderStyle.FixedSingle;
-            tbSubCellSize.Font = new Font("맑은 고딕", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            tbSubCellSize.Location = new Point(725, 15);
-            tbSubCellSize.Margin = new Padding(3, 4, 3, 4);
-            tbSubCellSize.Name = "tbSubCellSize";
-            tbSubCellSize.Size = new Size(109, 29);
-            tbSubCellSize.TabIndex = 0;
-            // 
-            // lbSubCellSize
-            // 
-            lbSubCellSize.AutoSize = true;
-            lbSubCellSize.Font = new Font("맑은 고딕", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-            lbSubCellSize.ForeColor = Color.White;
-            lbSubCellSize.Location = new Point(21, 21);
-            lbSubCellSize.Name = "lbSubCellSize";
-            lbSubCellSize.Size = new Size(60, 17);
-            lbSubCellSize.TabIndex = 1;
-            lbSubCellSize.Text = "Cell Size";
             // 
             // timerFlashPanel
             // 
@@ -1168,8 +1118,6 @@ namespace WinFormsAppTest
             pnSettingCrown1.PerformLayout();
             pnSettingTrunk1.ResumeLayout(false);
             pnSettingTrunk1.PerformLayout();
-            pnSettingSub1.ResumeLayout(false);
-            pnSettingSub1.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -1187,11 +1135,7 @@ namespace WinFormsAppTest
         private CustomBtn btnStart;
         private Label lbTitle;
         private TabPage tpSettings;
-        private TextBox tbSubCellSize;
-        private Label lbSubsampling;
-        private Label lbSubCellSize;
         private CustomBtn btnSettings;
-        private CustomPanel pnSettingSub1;
         private CustomPanel pnSettingCrown1;
         private TextBox tbCrownMinHeight;
         private Label lbCrownSlice;
