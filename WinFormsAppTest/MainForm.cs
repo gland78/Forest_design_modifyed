@@ -171,11 +171,6 @@ namespace WinFormsAppTest
             pnSettingPreset.MouseLeave += pnSettingAll_MouseLeave;
             pnSettingPreset.MouseUp += pnSettingAll_MouseUp;
 
-            pnSettingSub1.MouseDown += pnSettingAll_MouseDown;
-            pnSettingSub1.MouseEnter += pnSettingAll_MouseEnter;
-            pnSettingSub1.MouseLeave += pnSettingAll_MouseLeave;
-            pnSettingSub1.MouseUp += pnSettingAll_MouseUp;
-
             pnSettingNor1.MouseDown += pnSettingAll_MouseDown;
             pnSettingNor1.MouseEnter += pnSettingAll_MouseEnter;
             pnSettingNor1.MouseLeave += pnSettingAll_MouseLeave;
@@ -253,11 +248,6 @@ namespace WinFormsAppTest
             pnSettingPreset.isFill = true;
             pnSettingPreset.isBorder = false;
             pnSettingPreset.fillColor = customPanelColor;
-
-            pnSettingSub1.BackColor = Color.Transparent;
-            pnSettingSub1.isFill = true;
-            pnSettingSub1.isBorder = false;
-            pnSettingSub1.fillColor = customPanelColor;
 
             pnSettingNor1.BackColor = Color.Transparent;
             pnSettingNor1.isFill = true;
@@ -422,9 +412,9 @@ namespace WinFormsAppTest
             string trimedText = text;
 
             Size size = TextRenderer.MeasureText(trimedText, customBtn.Font);
-            double diff = size.Width - customBtn.Width;
+            double diff = size.Width - customBtn.Width + 5;     //5는 보정값
 
-            if (diff <= 0)
+            if (diff < 0)
             {
                 return trimedText;
             }
@@ -438,7 +428,7 @@ namespace WinFormsAppTest
 
             return trimedText + "...";
         }
-        
+
         //최근 작업 콘피그 파일 갯수만큼 버튼 로드
         private void recentConfBtnLoad()
         {
@@ -810,9 +800,6 @@ namespace WinFormsAppTest
             bool[] applyChecker = new bool[10];
             bool result = true;
             DialogResult dialogResult = DialogResult.No;
-
-            //subsamplng_textboxes
-            applyChecker[0] = tbSubCellSize.Text == getParam(csv_data, "filters.sample", "cell");
 
             //normalize_textboxes
             applyChecker[1] = tbNorCellSize.Text == getParam(csv_data, "filters.smrf", "cell");

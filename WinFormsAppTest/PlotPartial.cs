@@ -50,7 +50,11 @@ namespace WinFormsAppTest
 
         //테스트용 변수(임시)
         string progressLog = "";
-        
+
+        public Form progressDialog;
+
+        public System.Windows.Forms.TextBox progressTextBox;
+
         //PLOT
         private void MakeResultDirectory_PLOT()
         {
@@ -89,6 +93,26 @@ namespace WinFormsAppTest
             {
                 MakePolygonPlot();
             }
+
+            progressDialog = new Form
+            {
+                Width = 750,
+                Height = 500,
+                FormBorderStyle = FormBorderStyle.FixedDialog,
+                StartPosition = FormStartPosition.CenterScreen,
+                ShowInTaskbar = false,
+                Owner = this
+            };
+
+            progressTextBox = new System.Windows.Forms.TextBox();
+            progressTextBox.Width = 700;
+            progressTextBox.Height = 400;
+            progressTextBox.ReadOnly = true;
+            progressTextBox.Location = new Point(25, 75);
+
+            progressDialog.Controls.Add(progressTextBox);
+            progressDialog.Show();
+
             RunBatchMakeDat();
         }
 
@@ -111,14 +135,17 @@ namespace WinFormsAppTest
                     //MessageBox.Show("batFileCreated");
                     using (StreamWriter sw = new StreamWriter(new FileStream(batFilePath, FileMode.OpenOrCreate), Encoding.Default))
                     {
-                        sw.WriteLine("chcp 65001");
-                        sw.WriteLine("cls");
                         sw.WriteLine("@ECHO OFF");
+                        sw.WriteLine("chcp 65001 > nul");
+                        sw.WriteLine("cls");
                         sw.WriteLine("echo Buffer 표준지 분류 중...");
+                        sw.WriteLine($"cd {this.resultSavedDirectory + shape + @"\intermediate"}");
                         sw.WriteLine("pdal pipeline \"" + one + originLasName + ".json\"");
                         sw.WriteLine("echo>" + "\"" + one + originLasName + "_B.json\"");
                         sw.WriteLine("pdal info \"" + one + originLasName + "_B.las\" > \"" + one + originLasName + "_B.json\"");
                     }
+
+                    progressLog += ProcessBatch(one + originLasName + ".bat");
                     LogWrite(resultSavedDirectory + @"\intermediate\" + originLasName + "1.crop" + ".bat 파일 생성");
                 }
                 {
@@ -140,9 +167,6 @@ namespace WinFormsAppTest
                     //proc.Start();
                     //proc.WaitForExit();
                     //proc.Close();
-
-                    string batFile = one + originLasName + ".bat";
-                    progressLog += ProcessBatch(batFile) + Environment.NewLine;
 
                     string strFile1 = resultSavedDirectory + @"\intermediate\" + one + originLasName + "_B.las";
                     FileInfo fileInfo1 = new FileInfo(strFile1);//파일 있는지 확인 있을때(true), 없으면(false)
@@ -791,12 +815,16 @@ namespace WinFormsAppTest
             string output = "";
             using (Process proc = new Process())
             {
-                proc.StartInfo.FileName = resultSavedDirectory + shape + @"\intermediate\" + batFile;
                 //proc.StartInfo.WorkingDirectory = resultSavedDirectory + shape + @"\intermediate\";
-                proc.StartInfo.CreateNoWindow = true;
+                proc.StartInfo.FileName = resultSavedDirectory + shape + @"\intermediate\" + batFile;
+                proc.StartInfo.UseShellExecute = false;
+                proc.StartInfo.CreateNoWindow = false;
+                proc.StartInfo.StandardOutputEncoding = System.Text.Encoding.UTF8;
                 proc.StartInfo.RedirectStandardOutput = true;
+                proc.OutputDataReceived += new DataReceivedEventHandler(OutputDataReceived);
 
                 proc.Start();
+                proc.BeginOutputReadLine();
                 proc.WaitForExit();
 
                 output = proc.StandardOutput.ReadToEnd();
@@ -818,6 +846,20 @@ namespace WinFormsAppTest
             */
         }
 
+        private void OutputDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            if (e.Data != null && progressDialog != null)
+            {
+                foreach(Control control in progressDialog.Controls)
+                {
+                    if(control.GetType() == typeof(System.Windows.Forms.TextBox)) 
+                    {
+                        control.Text += e.Data + Environment.NewLine;
+                    }
+                }
+            }
+        }
+
         //배치파일 작성 코드
         private void RunFileZero(string target_path)
         {
@@ -832,10 +874,11 @@ namespace WinFormsAppTest
                 
                 using (StreamWriter sw = new StreamWriter(new FileStream(batFilePath, FileMode.OpenOrCreate), Encoding.Default))
                 {
-                    sw.WriteLine("chcp 65001");
-                    sw.WriteLine("cls");
                     sw.WriteLine("@ECHO OFF");
+                    sw.WriteLine("chcp 65001 > nul");
+                    sw.WriteLine("cls");
                     sw.WriteLine("echo 원본 LAS 중복 점 제거중...");
+                    sw.WriteLine($"cd {this.resultSavedDirectory + shape + @"\intermediate"}");
                     sw.WriteLine("laszip \"" + target_path + "\"");
                     sw.WriteLine();
                 }
@@ -858,10 +901,11 @@ namespace WinFormsAppTest
                 
                 using (StreamWriter sw = new StreamWriter(new FileStream(batFilePath, FileMode.OpenOrCreate), Encoding.Default))
                 {
-                    sw.WriteLine("chcp 65001");
-                    sw.WriteLine("cls");
                     sw.WriteLine("@ECHO OFF");
+                    sw.WriteLine("chcp 65001 > nul");
+                    sw.WriteLine("cls");
                     sw.WriteLine("echo 이상점 제거 중...");
+                    sw.WriteLine($"cd {this.resultSavedDirectory + shape + @"\intermediate"}");
                     sw.WriteLine("pdal pipeline \"" + two + originLasName + ".json\"");
                 }
                 
@@ -882,10 +926,11 @@ namespace WinFormsAppTest
                 
                 using (StreamWriter sw = new StreamWriter(new FileStream(batFilePath, FileMode.OpenOrCreate), Encoding.Default))
                 {
-                    sw.WriteLine("chcp 65001");
-                    sw.WriteLine("cls");
                     sw.WriteLine("@ECHO OFF");
+                    sw.WriteLine("chcp 65001 > nul");
+                    sw.WriteLine("cls");
                     sw.WriteLine("echo 지면 추출 및 평탄화 중...");
+                    sw.WriteLine($"cd {this.resultSavedDirectory + shape + @"\intermediate"}");
                     sw.WriteLine("pdal pipeline \"" + three + originLasName + ".json\"");
                 }
                 
@@ -907,10 +952,11 @@ namespace WinFormsAppTest
                 }
                 using (StreamWriter sw = new StreamWriter(new FileStream(batFilePath, FileMode.OpenOrCreate), Encoding.Default))
                 {
-                    sw.WriteLine("chcp 65001");
-                    sw.WriteLine("cls");
                     sw.WriteLine("@ECHO OFF");
+                    sw.WriteLine("chcp 65001 > nul");
+                    sw.WriteLine("cls");
                     sw.WriteLine("echo LAS to PCD 변환 중...");
+                    sw.WriteLine($"cd {this.resultSavedDirectory + shape + @"\intermediate"}");
                     sw.WriteLine("pdal pipeline \"" + four + originLasName + ".json\"");
                     sw.WriteLine("Delete_duplication \"" + four + originLasName + ".pcd\"");
                 }
@@ -1146,10 +1192,11 @@ namespace WinFormsAppTest
                 }
                 using (StreamWriter sw = new StreamWriter(new FileStream(batFilePath, FileMode.OpenOrCreate), Encoding.Default))
                 {
-                    sw.WriteLine("chcp 65001");
-                    sw.WriteLine("cls");
                     sw.WriteLine("@ECHO OFF");
+                    sw.WriteLine("chcp 65001 > nul");
+                    sw.WriteLine("cls");
                     sw.WriteLine("echo 수관 부분 수간 부분 영역 잘라내는 중...");
+                    sw.WriteLine($"cd {this.resultSavedDirectory + shape + @"\intermediate"}");
                     sw.WriteLine("pdal pipeline \"" + sevenone + originLasName + ".json\"");
                     sw.WriteLine("pdal pipeline \"" + seventwo + originLasName + ".json\"");
                 }
@@ -1171,10 +1218,11 @@ namespace WinFormsAppTest
                 }
                 using (StreamWriter sw = new StreamWriter(new FileStream(batFilePath, FileMode.OpenOrCreate), Encoding.Default))
                 {
-                    sw.WriteLine("chcp 65001");
-                    sw.WriteLine("cls");
                     sw.WriteLine("@ECHO OFF");
+                    sw.WriteLine("chcp 65001 > nul");
+                    sw.WriteLine("cls");
                     sw.WriteLine("echo 수간 추출 및 하층식생 제거 중...");
+                    sw.WriteLine($"cd {this.resultSavedDirectory + shape + @"\intermediate"}");
                     sw.WriteLine("csp_segmentstem \"" + configpath + "\"");
                     sw.WriteLine();
                 }
@@ -1197,11 +1245,11 @@ namespace WinFormsAppTest
                 {
                     string tree_name = "_tree_";
                     string destination = @"..\tree";
-                    sw.WriteLine("chcp 65001");
-                    sw.WriteLine("cls");
                     sw.WriteLine("@ECHO OFF");
+                    sw.WriteLine("chcp 65001 > nul");
+                    sw.WriteLine("cls");
                     sw.WriteLine("echo 개별목 추출 중...");
-
+                    sw.WriteLine($"cd {this.resultSavedDirectory + shape + @"\intermediate"}");
                     sw.WriteLine("csp_segmentcrown \"" + configpath + "\"");
                     sw.WriteLine();
                     sw.WriteLine("set destination=\"{0}\"", destination);
@@ -1229,10 +1277,11 @@ namespace WinFormsAppTest
                 //MessageBox.Show(treeDirectoryPath);
                 using (StreamWriter sw = new StreamWriter(new FileStream(batFilePath, FileMode.OpenOrCreate), Encoding.Default))
                 {
-                    sw.WriteLine("chcp 65001");
-                    sw.WriteLine("cls");
                     sw.WriteLine("@ECHO OFF");
+                    sw.WriteLine("chcp 65001 > nul");
+                    sw.WriteLine("cls");
                     sw.WriteLine("echo 산림 속성 정보 계산중...  ");
+                    sw.WriteLine($"cd {this.resultSavedDirectory + shape + @"\intermediate"}");
                     sw.WriteLine("measure " + @"../tree" + " \"" + configpath + "\"");
                 }
                 progressLog += ProcessBatch(ten + originLasName + ".bat") + Environment.NewLine;
@@ -1253,10 +1302,11 @@ namespace WinFormsAppTest
                 string FolderName2 = "..\\tree";
                 using (StreamWriter sw = new StreamWriter(new FileStream(batFilePath, FileMode.OpenOrCreate), Encoding.Default))
                 {
-                    sw.WriteLine("chcp 65001");
-                    sw.WriteLine("cls");
                     sw.WriteLine("@ECHO OFF");
+                    sw.WriteLine("chcp 65001 > nul");
+                    sw.WriteLine("cls");
                     sw.WriteLine("echo pcd파일 las파일로 변환중");
+                    sw.WriteLine($"cd {this.resultSavedDirectory + shape + @"\intermediate"}");
                     //sw.WriteLine("PCD2LAS " + FolderName);
                     sw.WriteLine("PCD2LAS " + FolderName2);
 
@@ -1461,8 +1511,8 @@ namespace WinFormsAppTest
 
             if (fileInfo1.Exists)
             {
-                //전처리 
-                
+                //전처리
+
                 //Subsampling();
                 //Merge();
                 Outlier();
@@ -1519,6 +1569,18 @@ namespace WinFormsAppTest
                 progress++;
                 mainProgressSet(progress);
                 //del_inter();
+
+                using (StreamWriter sw = File.CreateText(@"C:\testLog.txt"))
+                {
+                    if(!File.Exists(@"C:\testLog.txt"))
+                    {
+                        MessageBox.Show("txt파일 미생성");
+                        return;
+                    }
+                    sw.Write(progressLog);
+                }
+
+                progressDialog.Close();
             }
             else
             {

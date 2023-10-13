@@ -485,6 +485,7 @@ namespace WinFormsAppTest
                         Height = 200,
                         FormBorderStyle = FormBorderStyle.None,
                         StartPosition = FormStartPosition.CenterScreen,
+                        ShowInTaskbar = false,
                         Owner = this
                     };
 
@@ -496,14 +497,12 @@ namespace WinFormsAppTest
                     };
 
                     progressDialog.Controls.Add(gifBox);
-                    this.TopMost = false;
                     progressDialog.Show();
                     //Task를 이용한 이유 : MakeInfo와 progressDialog의 pictureBox gif가
                     //동시에 동작하게 하기 위함.(안쓰면 쓰레드 우선순위 문제로 gif 애니메이션이 안움직임)
                     await Task.Run(() => MakeInfo(filePath, infoDir));
 
                     progressDialog.Dispose();
-                    this.TopMost = true;
                 }
                 //Las파일 크기 정보 읽기
                 readInfo(filePath, infoDir);
