@@ -234,6 +234,26 @@ namespace WinFormsAppTest
 
             resultSavedDirectory = resultPath + @"\" + DateTime.Now.ToString("yyyyMMdd_HH_mm_") + originLasName;
 
+            progressDialog = new Form
+            {
+                Width = 750,
+                Height = 500,
+                FormBorderStyle = FormBorderStyle.FixedDialog,
+                StartPosition = FormStartPosition.CenterScreen,
+                ShowInTaskbar = false,
+                Owner = this
+            };
+
+            progressTextBox = new System.Windows.Forms.TextBox();
+            progressTextBox.Width = 700;
+            progressTextBox.Height = 400;
+            progressTextBox.ReadOnly = true;
+            progressTextBox.Multiline = true;
+            progressTextBox.Location = new Point(25, 50);
+
+            progressDialog.Controls.Add(progressTextBox);
+            progressDialog.Show();
+
             //progressBar 진행도 세팅
             progress = 0;
             mainProgressSet(progress);

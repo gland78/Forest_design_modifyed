@@ -94,25 +94,6 @@ namespace WinFormsAppTest
                 MakePolygonPlot();
             }
 
-            progressDialog = new Form
-            {
-                Width = 750,
-                Height = 500,
-                FormBorderStyle = FormBorderStyle.FixedDialog,
-                StartPosition = FormStartPosition.CenterScreen,
-                ShowInTaskbar = false,
-                Owner = this
-            };
-
-            progressTextBox = new System.Windows.Forms.TextBox();
-            progressTextBox.Width = 700;
-            progressTextBox.Height = 400;
-            progressTextBox.ReadOnly = true;
-            progressTextBox.Location = new Point(25, 75);
-
-            progressDialog.Controls.Add(progressTextBox);
-            progressDialog.Show();
-
             RunBatchMakeDat();
         }
 
@@ -145,7 +126,7 @@ namespace WinFormsAppTest
                         sw.WriteLine("pdal info \"" + one + originLasName + "_B.las\" > \"" + one + originLasName + "_B.json\"");
                     }
 
-                    progressLog += ProcessBatch(one + originLasName + ".bat");
+                    ProcessBatch(one + originLasName + ".bat");
                     LogWrite(resultSavedDirectory + @"\intermediate\" + originLasName + "1.crop" + ".bat 파일 생성");
                 }
                 {
@@ -810,7 +791,7 @@ namespace WinFormsAppTest
             }
         }
         //배치파일 실행 코드
-        private string ProcessBatch(string batFile)
+        private void ProcessBatch(string batFile)
         {
             string output = "";
             using (Process proc = new Process())
@@ -818,7 +799,7 @@ namespace WinFormsAppTest
                 //proc.StartInfo.WorkingDirectory = resultSavedDirectory + shape + @"\intermediate\";
                 proc.StartInfo.FileName = resultSavedDirectory + shape + @"\intermediate\" + batFile;
                 proc.StartInfo.UseShellExecute = false;
-                proc.StartInfo.CreateNoWindow = false;
+                proc.StartInfo.CreateNoWindow = true;
                 proc.StartInfo.StandardOutputEncoding = System.Text.Encoding.UTF8;
                 proc.StartInfo.RedirectStandardOutput = true;
                 proc.OutputDataReceived += new DataReceivedEventHandler(OutputDataReceived);
@@ -826,10 +807,7 @@ namespace WinFormsAppTest
                 proc.Start();
                 proc.BeginOutputReadLine();
                 proc.WaitForExit();
-
-                output = proc.StandardOutput.ReadToEnd();
             }
-            return output;
             /*
             //num(ex. "level1_~";
             Process proc = null;
@@ -854,7 +832,7 @@ namespace WinFormsAppTest
                 {
                     if(control.GetType() == typeof(System.Windows.Forms.TextBox)) 
                     {
-                        control.Text += e.Data + Environment.NewLine;
+                        control.Invoke(new Action(() => control.Text += e.Data + Environment.NewLine));
                     }
                 }
             }
@@ -883,7 +861,7 @@ namespace WinFormsAppTest
                     sw.WriteLine();
                 }
                 
-                progressLog += ProcessBatch(zero + originLasName + ".bat") + Environment.NewLine;
+                ProcessBatch(zero + originLasName + ".bat");
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + originLasName + zero + ".bat 파일을 생성했습니다.");
             }
         }
@@ -909,7 +887,7 @@ namespace WinFormsAppTest
                     sw.WriteLine("pdal pipeline \"" + two + originLasName + ".json\"");
                 }
                 
-                progressLog += ProcessBatch(two + originLasName + ".bat") + Environment.NewLine;
+                ProcessBatch(two + originLasName + ".bat");
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + two + originLasName + ".bat 파일을 생성했습니다.");
             }
         }
@@ -934,7 +912,7 @@ namespace WinFormsAppTest
                     sw.WriteLine("pdal pipeline \"" + three + originLasName + ".json\"");
                 }
                 
-                progressLog += ProcessBatch(three + originLasName + ".bat") + Environment.NewLine;
+                ProcessBatch(three + originLasName + ".bat");
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + three + originLasName + ".bat 파일을 생성했습니다.");
             }
         }
@@ -960,7 +938,7 @@ namespace WinFormsAppTest
                     sw.WriteLine("pdal pipeline \"" + four + originLasName + ".json\"");
                     sw.WriteLine("Delete_duplication \"" + four + originLasName + ".pcd\"");
                 }
-                progressLog += ProcessBatch(four + originLasName + ".bat") + Environment.NewLine;
+                ProcessBatch(four + originLasName + ".bat");
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + four + originLasName + ".bat 파일을 생성했습니다.");
             }
 
@@ -1200,7 +1178,7 @@ namespace WinFormsAppTest
                     sw.WriteLine("pdal pipeline \"" + sevenone + originLasName + ".json\"");
                     sw.WriteLine("pdal pipeline \"" + seventwo + originLasName + ".json\"");
                 }
-                progressLog += ProcessBatch(seven + originLasName + ".bat");
+                ProcessBatch(seven + originLasName + ".bat");
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + seven + originLasName + ".bat 파일을 생성했습니다.");
             }
 
@@ -1226,7 +1204,7 @@ namespace WinFormsAppTest
                     sw.WriteLine("csp_segmentstem \"" + configpath + "\"");
                     sw.WriteLine();
                 }
-                progressLog += ProcessBatch(eight + originLasName + ".bat") + Environment.NewLine;
+                ProcessBatch(eight + originLasName + ".bat");
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + originLasName + eight + ".bat 파일을 생성했습니다.");
             }
             AppendEighthCSVFile();
@@ -1258,7 +1236,7 @@ namespace WinFormsAppTest
                     sw.WriteLine("    move \"%%i\" \"%destination%\"");
                     sw.WriteLine(")");
                 }
-                progressLog += ProcessBatch(nine + originLasName + ".bat") + Environment.NewLine;
+                ProcessBatch(nine + originLasName + ".bat");
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + nine + originLasName + ".bat 파일을 생성했습니다.");
             }
 
@@ -1284,7 +1262,7 @@ namespace WinFormsAppTest
                     sw.WriteLine($"cd {this.resultSavedDirectory + shape + @"\intermediate"}");
                     sw.WriteLine("measure " + @"../tree" + " \"" + configpath + "\"");
                 }
-                progressLog += ProcessBatch(ten + originLasName + ".bat") + Environment.NewLine;
+                ProcessBatch(ten + originLasName + ".bat");
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + ten + originLasName + ".bat 파일을 생성했습니다.");
             }
         }
@@ -1324,7 +1302,7 @@ namespace WinFormsAppTest
                     //sw.WriteLine("attrib +h ../intermediate");
                 }
 
-                progressLog += ProcessBatch(eleven + originLasName + ".bat") + Environment.NewLine;
+                ProcessBatch(eleven + originLasName + ".bat");
                 /*try
                 {
                     ChangeLasName();
