@@ -717,8 +717,6 @@ namespace WinFormsAppTest
             pFrm.configTouch += new configHandler(MakeConfig);
             pFrm.mainPaint += new customEventHandler(recentConfBtnLoad);
             pFrm.enableMainFormBtns += new switchEventHandler(switchCoreBtns);
-            pFrm.mainProgressSet += new setIntEventHandler(progressSetter);
-            pFrm.attachProgressBar += new switchEventHandler(progressAttach);
             pFrm.attachStartBtn += new switchEventHandler(startBtnAttach);
 
             /*
@@ -1147,26 +1145,6 @@ namespace WinFormsAppTest
         private void btnPresetManage_MouseHover(object sender, EventArgs e)
         {
             ttMainInfo.SetToolTip(btnPresetManage, "사용자 설정 관리창을 엽니다");
-        }
-
-        //프로그램 동작시 프로그래바,start 버튼 숨김기능 관련 이벤트
-        //delegate 통하여 다른 폼에서 사용됨
-        private void progressAttach(bool onOff)
-        {
-            pbLoadingBar.Visible = onOff;
-        }
-
-        private void progressSetter(int setValue)
-        {
-            if (pbLoadingBar.InvokeRequired)
-            {
-                pbLoadingBar.Invoke(new setIntEventHandler(progressSetter), setValue);
-            }
-            else
-            {
-                pbLoadingBar.Value = setValue;
-                pbLoadingBar.Invalidate();
-            }
         }
 
         private void startBtnAttach(bool onOff)

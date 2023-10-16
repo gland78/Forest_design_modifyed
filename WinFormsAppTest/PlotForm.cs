@@ -8,7 +8,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Xml.Linq;
 using static WinFormsAppTest.MainForm;
 using Newtonsoft.Json.Linq;
@@ -23,9 +22,7 @@ namespace WinFormsAppTest
 
         internal configHandler configTouch;
         internal customEventHandler mainPaint;
-        internal setIntEventHandler mainProgressSet;
         internal switchEventHandler enableMainFormBtns;
-        internal switchEventHandler attachProgressBar;
         internal switchEventHandler attachStartBtn;
 
         public PlotForm(MainForm paramForm)
@@ -236,29 +233,38 @@ namespace WinFormsAppTest
 
             progressDialog = new Form
             {
-                Width = 750,
-                Height = 500,
+                Width = 600,
+                Height = 400,
                 FormBorderStyle = FormBorderStyle.FixedDialog,
                 StartPosition = FormStartPosition.CenterScreen,
                 ShowInTaskbar = false,
                 Owner = this
             };
 
-            progressTextBox = new System.Windows.Forms.TextBox();
-            progressTextBox.Width = 700;
-            progressTextBox.Height = 400;
+            progressTextBox = new TextBox();
+            progressTextBox.Width = 550;
+            progressTextBox.Height = 280;
             progressTextBox.ReadOnly = true;
             progressTextBox.Multiline = true;
-            progressTextBox.Location = new Point(25, 50);
+            progressTextBox.Location = new Point(17, 70);
+            progressTextBox.BackColor = Color.White;
+            progressTextBox.Font = new Font("맑은 고딕", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            progressTextBox.BorderStyle = BorderStyle.FixedSingle;
 
+            pbLoadingBar = new ProgressBar();
+            pbLoadingBar.Location = new Point(17, 20);
+            pbLoadingBar.MarqueeAnimationSpeed = 5;
+            pbLoadingBar.Maximum = 10;
+            pbLoadingBar.Name = "pbLoadingBar";
+            pbLoadingBar.Size = new Size(550, 30);
+
+            progressDialog.Controls.Add(pbLoadingBar);
             progressDialog.Controls.Add(progressTextBox);
             progressDialog.Show();
 
             //progressBar 진행도 세팅
             progress = 0;
-            mainProgressSet(progress);
-            //progressBar visible
-            attachProgressBar(true);
+            ProgressBarSet(progress);
 
             await Task.Run(() =>
             {
@@ -272,7 +278,7 @@ namespace WinFormsAppTest
                 if (progress == 10)
                 {
                     MessageBox.Show("실행 완료");
-                    attachProgressBar(false);
+                    progressDialog.Close();
                 }
                 else
                 {
@@ -280,6 +286,23 @@ namespace WinFormsAppTest
                     return;
                 }
             });
+        }
+
+        private void ProgressBarSet(int level)
+        {
+            if (pbLoadingBar.InvokeRequired)
+            {
+                pbLoadingBar.Invoke(new Action(() =>
+                {
+                    pbLoadingBar.Value = level;
+                    pbLoadingBar.Invalidate();
+                }));
+            }
+            else
+            {
+                pbLoadingBar.Value = level;
+                pbLoadingBar.Invalidate();
+            }
         }
 
         //PlotForm 콤보박스 이벤트
@@ -644,7 +667,6 @@ namespace WinFormsAppTest
 
         private void PlotForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            attachProgressBar(false);
             attachStartBtn(true);
             enableMainFormBtns(true);
         }
