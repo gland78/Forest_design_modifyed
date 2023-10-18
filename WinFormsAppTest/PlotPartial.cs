@@ -79,6 +79,14 @@ namespace WinFormsAppTest
                 di3.Create();
             }
 
+            string tree_dir = Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(resultSavedDirectory + "\\tree"));
+            string inter_dir= Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(resultSavedDirectory + "\\intermediate"));
+
+            paramForm.setParam(paramForm.csv_data, "gui", "tree_dir", tree_dir);
+            paramForm.setParam(paramForm.csv_data, "gui", "intermediate_dir", inter_dir);
+
+            paramForm.write_csv(configpath);
+
             RemoveDuplicatedPoints(originLasPath);
 
             if (shape == "_circle")
@@ -106,7 +114,6 @@ namespace WinFormsAppTest
             if (di.Exists == true)
             {
                 {
-
                     //배치 파일 생성
                     string batFilePath = resultSavedDirectory + @"\intermediate\" + one + originLasName + ".bat";
                     if (!File.Exists(batFilePath))
