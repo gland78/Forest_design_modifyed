@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.Windows.Forms;
 
 namespace WinFormsAppTest
 {
@@ -53,7 +53,9 @@ namespace WinFormsAppTest
 
         public Form progressDialog;
 
-        public System.Windows.Forms.TextBox progressTextBox;
+        public TextBox progressTextBox;
+
+        public ProgressBar pbLoadingBar;
 
         //PLOT
         private void MakeResultDirectory_PLOT()
@@ -839,7 +841,11 @@ namespace WinFormsAppTest
                 {
                     if(control.GetType() == typeof(System.Windows.Forms.TextBox)) 
                     {
-                        control.Invoke(new Action(() => control.Text += e.Data + Environment.NewLine));
+                        control.Invoke(new Action(() => {
+                            control.Text += "=================================" + Environment.NewLine 
+                            + (e.Data).Trim() + Environment.NewLine;
+                            ((TextBox)control).Select(control.Text.Length, 0);
+                            }));
                     }
                 }
             }
@@ -1506,42 +1512,42 @@ namespace WinFormsAppTest
                 //MakeOriginPlot();
                 Turn_Las_into_PCD();                
                 progress++;
-                mainProgressSet(progress);
+                ProgressBarSet(progress);
                 //=====
 
                 RunFileSecond();
                 progress++;
-                mainProgressSet(progress);
+                ProgressBarSet(progress);
 
                 RunFileThird();
                 progress++;
-                mainProgressSet(progress);
+                ProgressBarSet(progress);
 
                 RunFileFourth();
                 progress++;
-                mainProgressSet(progress);
+                ProgressBarSet(progress);
 
                 //RunFileFifth();
                 progress++;
-                mainProgressSet(progress);
+                ProgressBarSet(progress);
 
                 //RunFileSixth();
                 ExtractOriginDat();
                 progress++;
-                mainProgressSet(progress);
+                ProgressBarSet(progress);
 
                 RunFileSeventh();
                 progress++;
-                mainProgressSet(progress);
+                ProgressBarSet(progress);
 
                 RunFileEighth();//trunk
                 progress++;
-                mainProgressSet(progress);
+                ProgressBarSet(progress);
                 if (CatchError(resultP + @"\intermediate\", 8)) return;
 
                 RunFileNinth();//tree
                 progress++;
-                mainProgressSet(progress);
+                ProgressBarSet(progress);
                 if (CatchError(resultP + @"\tree\", 9)) return;
 
                 RunFileTenth();//measure
@@ -1552,7 +1558,7 @@ namespace WinFormsAppTest
 
                 RunFileEleventh();
                 progress++;
-                mainProgressSet(progress);
+                ProgressBarSet(progress);
                 //del_inter();
 
                 using (StreamWriter sw = File.CreateText(@"C:\testLog.txt"))
