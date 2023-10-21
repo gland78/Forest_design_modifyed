@@ -54,7 +54,6 @@ namespace WinFormsAppTest
             pnReview = new Panel();
             lbReview = new Label();
             pnMain = new CustomPanel();
-            pbLoadingBar = new ProgressBar();
             lbSubTitle = new Label();
             btnStart = new CustomBtn();
             lbTitle = new Label();
@@ -431,7 +430,6 @@ namespace WinFormsAppTest
             // 
             pnMain.BackColor = Color.Gainsboro;
             pnMain.BackgroundImageLayout = ImageLayout.Stretch;
-            pnMain.Controls.Add(pbLoadingBar);
             pnMain.Controls.Add(lbSubTitle);
             pnMain.Controls.Add(btnStart);
             pnMain.Controls.Add(lbTitle);
@@ -441,16 +439,6 @@ namespace WinFormsAppTest
             pnMain.Name = "pnMain";
             pnMain.Size = new Size(888, 482);
             pnMain.TabIndex = 0;
-            // 
-            // pbLoadingBar
-            // 
-            pbLoadingBar.Location = new Point(36, 370);
-            pbLoadingBar.MarqueeAnimationSpeed = 5;
-            pbLoadingBar.Maximum = 10;
-            pbLoadingBar.Name = "pbLoadingBar";
-            pbLoadingBar.Size = new Size(825, 42);
-            pbLoadingBar.TabIndex = 3;
-            pbLoadingBar.Visible = false;
             // 
             // lbSubTitle
             // 
@@ -1168,7 +1156,6 @@ namespace WinFormsAppTest
         private Label lbNormalize;
         private CustomBtn btnPresetManage;
         private CustomBtn btnSettingLoad;
-        private ProgressBar pbLoadingBar;
         private CustomPanel pnSettingPreset;
         private Label lbSettingPreset;
         private Label lbSettingPresetInfo;

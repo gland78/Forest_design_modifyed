@@ -96,7 +96,6 @@ namespace WinFormsAppTest
                 {
                     filePath = openFileDialog.FileName;
                     tbPlotData.Text = filePath;
-
                     Validation(filePath);
                 }
             }
@@ -247,6 +246,7 @@ namespace WinFormsAppTest
             progressTextBox.ReadOnly = true;
             progressTextBox.Multiline = true;
             progressTextBox.Location = new Point(17, 70);
+            progressTextBox.ScrollBars = ScrollBars.Vertical;
             progressTextBox.BackColor = Color.White;
             progressTextBox.Font = new Font("맑은 고딕", 14F, FontStyle.Regular, GraphicsUnit.Point);
             progressTextBox.BorderStyle = BorderStyle.FixedSingle;
@@ -266,6 +266,8 @@ namespace WinFormsAppTest
             progress = 0;
             ProgressBarSet(progress);
 
+            btnPlotOK.Enabled = false;
+            btnPlotCancel.Enabled = false;
             await Task.Run(() =>
             {
                 //각 단계 실행
@@ -286,6 +288,8 @@ namespace WinFormsAppTest
                     return;
                 }
             });
+            btnPlotOK.Enabled = true;
+            btnPlotCancel.Enabled = true;
         }
 
         private void ProgressBarSet(int level)
@@ -543,7 +547,12 @@ namespace WinFormsAppTest
                     progressDialog.Show();
                     //Task를 이용한 이유 : MakeInfo와 progressDialog의 pictureBox gif가
                     //동시에 동작하게 하기 위함.(안쓰면 쓰레드 우선순위 문제로 gif 애니메이션이 안움직임)
+
+                    btnPlotCancel.Enabled = false;
+                    btnPlotOK.Enabled = false;
                     await Task.Run(() => MakeInfo(filePath, infoDir));
+                    btnPlotCancel.Enabled = true;
+                    btnPlotOK.Enabled = true;
 
                     progressDialog.Dispose();
                 }

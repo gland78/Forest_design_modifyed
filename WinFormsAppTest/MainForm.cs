@@ -798,7 +798,7 @@ namespace WinFormsAppTest
             bool[] applyChecker = new bool[10];
             bool result = true;
             DialogResult dialogResult = DialogResult.No;
-
+            
             //normalize_textboxes
             applyChecker[1] = tbNorCellSize.Text == getParam(csv_data, "filters.smrf", "cell");
             applyChecker[2] = tbNorScalar.Text == getParam(csv_data, "filters.smrf", "scalar");
@@ -816,7 +816,7 @@ namespace WinFormsAppTest
 
             foreach (bool checker in applyChecker)
             {
-                result = result == checker;
+                result = (result && result == checker);
             }
 
             if (result == false)

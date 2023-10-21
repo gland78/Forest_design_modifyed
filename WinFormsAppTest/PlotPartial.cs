@@ -813,6 +813,10 @@ namespace WinFormsAppTest
                 proc.StartInfo.RedirectStandardOutput = true;
                 proc.OutputDataReceived += new DataReceivedEventHandler(OutputDataReceived);
 
+                progressTextBox.Invoke(new Action(() =>
+                {
+                    progressTextBox.AppendText("=================================" + Environment.NewLine);
+                }));
                 proc.Start();
                 proc.BeginOutputReadLine();
                 proc.WaitForExit();
@@ -837,17 +841,12 @@ namespace WinFormsAppTest
         {
             if (e.Data != null && progressDialog != null)
             {
-                foreach(Control control in progressDialog.Controls)
+                progressTextBox.Invoke(new Action(() =>
                 {
-                    if(control.GetType() == typeof(System.Windows.Forms.TextBox)) 
-                    {
-                        control.Invoke(new Action(() => {
-                            control.Text += "=================================" + Environment.NewLine 
-                            + (e.Data).Trim() + Environment.NewLine;
-                            ((TextBox)control).Select(control.Text.Length, 0);
-                            }));
-                    }
-                }
+                    progressTextBox.AppendText(e.Data.Trim() + Environment.NewLine);
+                    progressTextBox.Select(progressTextBox.Text.Length, 0);
+                    progressTextBox.ScrollToCaret();
+                }));
             }
         }
 
