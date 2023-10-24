@@ -9,6 +9,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
+using System.Data.SQLite;
 
 namespace WinFormsAppTest
 {
@@ -92,6 +93,7 @@ namespace WinFormsAppTest
 
         public MainForm()
         {
+            
             InitializeComponent();
             DoubleBuffered = true;
 
@@ -131,8 +133,15 @@ namespace WinFormsAppTest
                 Application.Exit();
             }
 
+            //db 변수 초기화, db 생성
+            create_dbFile_dbtable();
+
+
             //기본 config.csv 파일 반영
-            read_csv(csv_path, csv_data);
+            //read_csv(csv_path, csv_data);
+
+            //SelectDataFromTable(databaseFileName);
+
             FillTextboxes();
             RegistTextBoxHandler();
 
@@ -719,51 +728,6 @@ namespace WinFormsAppTest
             pFrm.enableMainFormBtns += new switchEventHandler(switchCoreBtns);
             pFrm.attachStartBtn += new switchEventHandler(startBtnAttach);
 
-            /*
-            bool[] applyChecker = new bool[10];
-            bool result = true;
-            DialogResult dialogResult = DialogResult.No;
-
-            //subsamplng_textboxes
-            applyChecker[0] = tbSubCellSize.Text == getParam(csv_data, "filters.sample", "cell");
-
-            //normalize_textboxes
-            applyChecker[1] = tbNorCellSize.Text == getParam(csv_data, "filters.smrf", "cell");
-            applyChecker[2] = tbNorScalar.Text == getParam(csv_data, "filters.smrf", "scalar");
-            applyChecker[3] = tbNorSlope.Text == getParam(csv_data, "filters.smrf", "slope");
-            applyChecker[4] = tbNorThres.Text == getParam(csv_data, "filters.smrf", "threshold");
-            applyChecker[5] = tbNorWinSize.Text == getParam(csv_data, "filters.smrf", "window");
-
-            //trunkSlice_textboxes
-            applyChecker[6] = tbTrunkMinHeight.Text == getParam(csv_data, "filters.range.trunk", "minheight");
-            applyChecker[7] = tbTrunkMaxHeight.Text == getParam(csv_data, "filters.range.trunk", "maxheight");
-            applyChecker[8] = tbTrunkSmooth.Text == getParam(csv_data, "csp_segmentstem", "smoothness");
-
-            //CrownSlice_textboxes
-            applyChecker[9] = tbCrownMinHeight.Text == getParam(csv_data, "filters.range.crown", "minheight");
-
-            foreach (bool checker in applyChecker)
-            {
-                result = result == checker;
-            }
-
-            if (result == false)
-            {
-                dialogResult = MessageBox.Show("현재 설정이 적용되지 않았습니다.\n적용하시겠습니까?", "", MessageBoxButtons.YesNoCancel);
-            }
-
-            fileType = getParam(csv_data, "FileInfo", "fileType");
-
-            if (dialogResult == DialogResult.Yes)
-            {
-                btnSettingApply_Click(sender, e);
-            }
-            else if (dialogResult == DialogResult.Cancel)
-            {
-                return;
-            }
-            */
-
             pFrm.Show();
 
             //plot창을 모달리스로 띄우는 대신 실행 및 설정 적용 관련 기능 버튼 비활성화
@@ -800,19 +764,18 @@ namespace WinFormsAppTest
             DialogResult dialogResult = DialogResult.No;
             
             //normalize_textboxes
-            applyChecker[1] = tbNorCellSize.Text == getParam(csv_data, "filters.smrf", "cell");
-            applyChecker[2] = tbNorScalar.Text == getParam(csv_data, "filters.smrf", "scalar");
-            applyChecker[3] = tbNorSlope.Text == getParam(csv_data, "filters.smrf", "slope");
-            applyChecker[4] = tbNorThres.Text == getParam(csv_data, "filters.smrf", "threshold");
-            applyChecker[5] = tbNorWinSize.Text == getParam(csv_data, "filters.smrf", "window");
-
+            applyChecker[1] = tbNorCellSize.Text == SelectDataFromTable(databaseFileName, "filters_smrf", "cell");
+            applyChecker[2] = tbNorScalar.Text == SelectDataFromTable(databaseFileName, "filters_smrf", "scalar");
+            applyChecker[3] = tbNorSlope.Text == SelectDataFromTable(databaseFileName, "filters_smrf", "slope");
+            applyChecker[4] = tbNorThres.Text == SelectDataFromTable(databaseFileName, "filters_smrf", "threshold");
+            applyChecker[5] = tbNorWinSize.Text == SelectDataFromTable(databaseFileName, "filters_smrf", "windwo");
             //trunkSlice_textboxes
-            applyChecker[6] = tbTrunkMinHeight.Text == getParam(csv_data, "filters.range.trunk", "minheight");
-            applyChecker[7] = tbTrunkMaxHeight.Text == getParam(csv_data, "filters.range.trunk", "maxheight");
-            applyChecker[8] = tbTrunkSmooth.Text == getParam(csv_data, "csp_segmentstem", "smoothness");
+            applyChecker[6] = tbTrunkMinHeight.Text == SelectDataFromTable(databaseFileName, "filters_range_trunk", "minheight");
+            applyChecker[7] = tbTrunkMaxHeight.Text == SelectDataFromTable(databaseFileName, "filters_range_trunk", "maxheight");
+            applyChecker[8] = tbTrunkSmooth.Text == SelectDataFromTable(databaseFileName, "csp_segmentstem", "smoothness");
 
             //CrownSlice_textboxes
-            applyChecker[9] = tbCrownMinHeight.Text == getParam(csv_data, "filters.range.crown", "minheight");
+            applyChecker[9] = tbCrownMinHeight.Text == SelectDataFromTable(databaseFileName, "filters_range_crown", "minheight");
 
             foreach (bool checker in applyChecker)
             {
@@ -1120,7 +1083,7 @@ namespace WinFormsAppTest
             preConfBtnLoad();
             recentConfBtnLoad();
 
-            read_csv(csv_path, csv_data);
+            //read_csv(csv_path, csv_data);
             FillTextboxes();
             fileType = "";
         }
@@ -1128,7 +1091,10 @@ namespace WinFormsAppTest
         //공장초기화 버튼
         private void btn_factory_reset_Click(object sender, EventArgs e)
         {
-            FactoryReset(csv_path);
+            //FactoryReset(csv_path);
+            DeleteAllTables(databaseFileName, tablename);
+            CreateTable(databaseFileName, tablename);
+            insert_initial_data();
         }
         private void btn_factory_reset_MouseHover(object sender, EventArgs e)
         {
@@ -1151,5 +1117,10 @@ namespace WinFormsAppTest
         {
             btnStart.Visible = onOff;
         }
+
+
+        
+
+        
     }
 }

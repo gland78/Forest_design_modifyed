@@ -66,7 +66,7 @@ namespace WinFormsAppTest
         private void PlotForm_Load(object sender, EventArgs e)
         {
             initTextBox();
-            resultPath = paramForm.getParam(paramForm.csv_data, "gui", "result_path");
+            resultPath = paramForm.SelectDataFromTable(databaseFileName, "gui", "result_path");
 
             this.KeyPreview = true;
 
