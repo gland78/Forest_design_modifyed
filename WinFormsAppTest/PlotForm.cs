@@ -65,6 +65,9 @@ namespace WinFormsAppTest
 
         private void PlotForm_Load(object sender, EventArgs e)
         {
+            bin_folder = paramForm.bin_folder;
+            databaseFileName = paramForm.databaseFileName;
+
             initTextBox();
             resultPath = paramForm.SelectDataFromTable(databaseFileName, "gui", "result_path");
 
@@ -74,6 +77,11 @@ namespace WinFormsAppTest
             attachStartBtn(false);
 
             cbPlotShape.SelectedIndex = 0;
+
+            
+
+            //MessageBox.Show(bin_folder);
+            //MessageBox.Show(databaseFileName);
         }
 
         private void btnPlotCancel_Click(object sender, EventArgs e)

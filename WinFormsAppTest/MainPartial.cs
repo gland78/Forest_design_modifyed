@@ -40,10 +40,10 @@ namespace WinFormsAppTest
         public int activateRecent = -1;
         
         //db 파일 명
-        string bin_folder;
-        string databaseFileName;
+        public string bin_folder;
+        public string databaseFileName;
         //테이블 이름 목록
-        string[] tablename = { "gui", "filters_crop", "filters_outlier", "filters_smrf", "filters_range_trunk", "filters_range_crown", "csp_segmentstem", "csp_segmentcrown", "measure" };
+        public string[] tablename = { "gui", "filters_crop", "filters_outlier", "filters_smrf", "filters_range_trunk", "filters_range_crown", "csp_segmentstem", "csp_segmentcrown", "measure" };
 
         //config.csv 읽는 함수
         private void read_csv(string filePath, List<List<string>> dataList)

@@ -59,8 +59,8 @@ namespace WinFormsAppTest
 
 
         //db 파일 명
-        string bin_folder = @"..\bin";
-        string databaseFileName = @"..\bin\config.db";
+        string bin_folder="";
+        string databaseFileName="";
         //테이블 이름 목록
         string[] tablename = { "gui", "filters_crop", "filters_outlier", "filters_smrf", "filters_range_trunk", "filters_range_crown", "csp_segmentstem", "csp_segmentcrown", "measure" };
 
