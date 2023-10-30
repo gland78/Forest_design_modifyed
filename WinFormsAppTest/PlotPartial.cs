@@ -67,6 +67,12 @@ namespace WinFormsAppTest
         //PLOT
         private void MakeResultDirectory_PLOT()
         {
+            DirectoryInfo result_pth = new DirectoryInfo(resultPath);
+            if (result_pth.Exists == false)
+            {
+                result_pth.Create();
+            }
+
             //MessageBox.Show(this.resultSavedDirectory);
             string resultSavedDirectory = this.resultSavedDirectory + shape;
             DirectoryInfo di1 = new DirectoryInfo(resultSavedDirectory);
@@ -1255,14 +1261,14 @@ namespace WinFormsAppTest
                     sw.WriteLine("chcp 65001 > nul");
                     sw.WriteLine("cls");
                     sw.WriteLine("echo 개별목 추출 중...");
-                    sw.WriteLine($"cd {this.resultSavedDirectory + shape + @"\intermediate"}");
+                    //sw.WriteLine($"cd {this.resultSavedDirectory + shape + @"\intermediate"}");
                     sw.WriteLine("csp_segmentcrown \"" + databaseFileName + "\"");
-                    sw.WriteLine();
-                    sw.WriteLine("set destination=\"{0}\"", destination);
-                    sw.WriteLine();
-                    sw.WriteLine("for /r %%i in (*{0}*.pcd) do (", tree_name);
-                    sw.WriteLine("    move \"%%i\" \"%destination%\"");
-                    sw.WriteLine(")");
+                    //sw.WriteLine();
+                    //sw.WriteLine("set destination=\"{0}\"", destination);
+                    //sw.WriteLine();
+                    //sw.WriteLine("for /r %%i in (*{0}*.pcd) do (", tree_name);
+                    //sw.WriteLine("    move \"%%i\" \"%destination%\"");
+                    //sw.WriteLine(")");
                 }
                 ProcessBatch(nine + originLasName + ".bat");
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + nine + originLasName + ".bat 파일을 생성했습니다.");
@@ -1567,8 +1573,6 @@ namespace WinFormsAppTest
 
                 RunFileTenth();//measure
                 
-
-
                 if (CatchError(resultP + @"\tree\", 10)) return;
 
                 RunFileEleventh();
@@ -1576,15 +1580,15 @@ namespace WinFormsAppTest
                 ProgressBarSet(progress);
                 //del_inter();
 
-                using (StreamWriter sw = File.CreateText(@"C:\testLog.txt"))
-                {
-                    if(!File.Exists(@"C:\testLog.txt"))
-                    {
-                        MessageBox.Show("txt파일 미생성");
-                        return;
-                    }
-                    sw.Write(progressLog);
-                }
+                //using (StreamWriter sw = File.CreateText(@"C:\testLog.txt"))
+                //{
+                //    if(!File.Exists(@"C:\testLog.txt"))
+                //    {
+                //        MessageBox.Show("txt파일 미생성");
+                //        return;
+                //    }
+                //    sw.Write(progressLog);
+                //}
 
                 progressDialog.Close();
             }

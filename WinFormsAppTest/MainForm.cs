@@ -133,9 +133,20 @@ namespace WinFormsAppTest
                 Application.Exit();
             }
 
+
+
+            string currentPath = Directory.GetCurrentDirectory();
+            DirectoryInfo parentDirectory = Directory.GetParent(currentPath);
+
+            //MessageBox.Show("Current Path: " + currentPath);
+            //MessageBox.Show("Previous Path: " + Path.Combine(parentDirectory.FullName,"result"));
+
+            string res_path = Path.Combine(parentDirectory.FullName, "result");
+
             //db 변수 초기화, db 생성
             create_dbFile_dbtable();
-
+            UpdateDataInTable("gui", "result_path", res_path);
+            //MessageBox.Show(SelectDataFromTable(databaseFileName, "gui", "result_path"));
 
             //기본 config.csv 파일 반영
             //read_csv(csv_path, csv_data);
