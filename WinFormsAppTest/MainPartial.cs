@@ -577,14 +577,6 @@ namespace WinFormsAppTest
         }
 
 
-
-
-
-
-
-
-
-
         //db파일 생성 및 테이블 생성
         private void create_dbFile_dbtable()
         {
@@ -598,14 +590,15 @@ namespace WinFormsAppTest
             }
             else
             {
-                Console.WriteLine("파일이 존재하지 않습니다.");
+                MessageBox.Show("필수 파일이 존재하지 않습니다: bin_path.txt");
+                Application.Exit();
             }
 
             databaseFileName = Path.Combine(bin_folder, "config.db");
 
             //MessageBox.Show(databaseFileName);
 
-            //DB 파일 생성, 테이블 삭제 및 재생성, 초기값 insert 
+            if(!File.Exists(databaseFileName))//DB 파일 생성, 테이블 삭제 및 재생성, 초기값 insert 
             {
                 CreateDatabaseFile(bin_folder, databaseFileName);
                 DeleteAllTables(databaseFileName, tablename);
@@ -622,7 +615,7 @@ namespace WinFormsAppTest
             {
                 Directory.CreateDirectory(bin_folder);
             }
-            if (!System.IO.File.Exists(databaseFileName))
+            if (!File.Exists(databaseFileName))
             {
                 SQLiteConnection.CreateFile(databaseFileName);
                 //MessageBox.Show("데이터베이스 파일이 성공적으로 생성되었습니다.");
@@ -979,24 +972,13 @@ namespace WinFormsAppTest
             UpdateDataInTable("filters_smrf", "window", tbNorWinSize.Text.Trim());
             UpdateDataInTable("filters_smrf", "threshold", tbNorThres.Text.Trim());
 
-            //setParam(dataList, "filters.smrf", "cell", tbNorCellSize.Text.Trim());
-            //setParam(dataList, "filters.smrf", "scalar", tbNorScalar.Text.Trim());
-            //setParam(dataList, "filters.smrf", "slope", tbNorSlope.Text.Trim());
-            //setParam(dataList, "filters.smrf", "window", tbNorWinSize.Text.Trim()); 
-            //setParam(dataList, "filters.smrf", "threshold", tbNorThres.Text.Trim());
-
             //trunkSlice_textboxes
             UpdateDataInTable("filters_range_trunk", "minheight", tbTrunkMinHeight.Text.Trim());
             UpdateDataInTable("filters_range_trunk", "maxheight", tbTrunkMaxHeight.Text.Trim());
             UpdateDataInTable("csp_segmentstem", "smoothness", tbTrunkSmooth.Text.Trim());
 
-            //setParam(dataList, "filters.range.trunk", "minheight", tbTrunkMinHeight.Text.Trim());
-            //setParam(dataList, "filters.range.trunk", "maxheight", tbTrunkMaxHeight.Text.Trim());
-            //setParam(dataList, "csp_segmentstem", "smoothness", tbTrunkSmooth.Text.Trim());
-
             //CrownSlice_textboxes
             UpdateDataInTable("filters_range_crown", "minheight", tbCrownMinHeight.Text.Trim());
-            //setParam(dataList, "filters.range.crown", "minheight", tbCrownMinHeight.Text.Trim());
         }
         //List 테이블 -> textbox 대입
         private void FillTextboxes()
