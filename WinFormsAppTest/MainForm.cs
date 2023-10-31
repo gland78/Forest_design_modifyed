@@ -138,9 +138,6 @@ namespace WinFormsAppTest
             string currentPath = Directory.GetCurrentDirectory();
             DirectoryInfo parentDirectory = Directory.GetParent(currentPath);
 
-            //MessageBox.Show("Current Path: " + currentPath);
-            //MessageBox.Show("Previous Path: " + Path.Combine(parentDirectory.FullName,"result"));
-
             string res_path = Path.Combine(parentDirectory.FullName, "result");
 
             //db 변수 초기화, db 생성
@@ -799,7 +796,6 @@ namespace WinFormsAppTest
             }
 
             //아래 btnSettingApply_Click에서 fileType 변수를 사용하므로 채워준 것
-            fileType = getParam(csv_data, "FileInfo", "fileType");
 
             if (dialogResult == DialogResult.Yes)
             {
@@ -913,13 +909,13 @@ namespace WinFormsAppTest
             filePath = Path.Combine(fileDi, fileName);
 
             //csv_data 리스트에 텍스트 박스의 값 적용
-            UpdateParams(csv_data);
+            //UpdateParams();
 
             //최근 기록 혹은 사용자 설정값 csv 불러올 리스트
             List<List<string>> SelectedCsvData = new List<List<string>>();
 
             //최근 기록 혹은 사용자 설정값 csv 불러오기
-            read_csv(filePath, SelectedCsvData);
+            //read_csv(filePath, SelectedCsvData);
 
             //SelectedCsvData 리스트를 반복문 돌려서 string으로 추출
             string tmp1 = "";
@@ -934,7 +930,7 @@ namespace WinFormsAppTest
             }
 
             //이 시점이 텍스트 박스 값이 반영된 리스트
-            UpdateParams(SelectedCsvData);
+            UpdateParams();
             //SelectedCsvData 리스트를 반복문 돌려서 string으로 추출
             string tmp2 = "";
             for (int i = 0; i < SelectedCsvData.Count; i++)
@@ -999,7 +995,6 @@ namespace WinFormsAppTest
         //시작화면으로 이동
         private void btnSettingCancel_Click(object sender, EventArgs e)
         {
-            read_csv(csv_path, csv_data);
             FillTextboxes();
             activatePreset = -1;
             activateRecent = -1;
@@ -1012,14 +1007,7 @@ namespace WinFormsAppTest
         private void btnSettingSave_Click(object sender, EventArgs e)
         {
             //변수들 초기화
-            UpdateParams(csv_data);
-            // csv 작성
-            try
-            {
-                write_csv(csv_path);
-                MessageBox.Show("CSV 파일이 수정되었습니다.");
-            }
-            catch { };
+            UpdateParams();
         }
 
         //사용자 설정값 저장 버튼 클릭 이벤트
@@ -1037,19 +1025,6 @@ namespace WinFormsAppTest
                 mFrm.mainPaint += new customEventHandler(this.preConfBtnLoad);
                 mFrm.presetReflect += new presetReflectHandler(this.reflectConfs);
             }
-
-            /*
-            if (pFrm == null)
-            {
-                pFrm = new PlotForm(this);
-                pFrm.configTouch += new configHandler(MakeConfig);
-                pFrm.mainPaint += new customEventHandler(recentConfBtnLoad);
-                pFrm.enableMainFormBtns += new switchEventHandler(switchCoreBtns);
-                pFrm.mainProgressSet += new setIntEventHandler(progressSetter);
-                pFrm.attachProgressBar += new switchEventHandler(progressAttach);
-                pFrm.attachStartBtn += new switchEventHandler(startBtnAttach);
-            }
-            */
 
             if (activatePreset == -1 && confCheck.Length >= 10)
             {
