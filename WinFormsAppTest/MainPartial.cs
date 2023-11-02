@@ -45,81 +45,6 @@ namespace WinFormsAppTest
         //테이블 이름 목록
         public string[] tablename = { "gui", "filters_crop", "filters_outlier", "filters_smrf", "filters_range_trunk", "filters_range_crown", "csp_segmentstem", "csp_segmentcrown", "measure" };
 
-        //config.csv 읽는 함수
-        private void read_csv(string filePath, List<List<string>> dataList)
-        {
-            dataList.Clear();
-            //csv 읽기
-            string csvFilePath = filePath;
-
-            try
-            {
-                using (StreamReader reader = new StreamReader(csvFilePath, Encoding.UTF8))
-                {
-                    while (!reader.EndOfStream)
-                    {
-                        string line = reader.ReadLine();
-                        string[] values = line.Split(',');
-                        List<string> string_data = new List<string>();
-
-                        if (values.Length >= 4)
-                        {
-                            foreach (var v in values)
-                            {
-                                string_data.Add(v);
-                            }
-                            
-                            dataList.Add(string_data);
-                        }
-                        else
-                        {
-                            MessageBox.Show("config.csv 형식에 문제가 있습니다.");
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("CSV파일 읽는 중 오류 발생: " + ex.Message);
-            }
-        }
-        //plot값 리스트에 담긴 값으로 config.csv 쓰는 함수(기본 config용)
-        public void write_csv(string filepath)
-        {
-            // CSV 파일 경로
-            string filePath = filepath;
-
-            // CSV 내용 생성
-            StringBuilder csvContent = new StringBuilder();
-
-            for (int i = 0; i < csv_data.Count; i++)
-            {
-                string str = "";
-                for (int j = 0; j < csv_data[i].Count; j++)
-                {
-                    if (j == csv_data[i].Count - 1)
-                    {
-                        str += csv_data[i][j];
-                        break;
-                    }
-                    str += csv_data[i][j] + ",";
-
-                }
-                //MessageBox.Show(str);
-                csvContent.AppendLine(str);
-            }
-
-            // CSV 파일 생성 및 내용 기록
-            try
-            {
-                File.WriteAllText(filePath, csvContent.ToString(), Encoding.UTF8);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("CSV 파일 작성 중 오류 발생: " + ex.Message);
-            }
-        }
-
         //Circle형 plot값 csv->구조체로 뽑아내는 메서드
         void ExtractCircleValues(ref GUI guiStruct, string circleString)
         {
@@ -222,7 +147,7 @@ namespace WinFormsAppTest
         //gui구조체의 plot값과 plot 리스트 값을 모두 모아 stringbuilder로 전달
         private void setAllparams(ref StringBuilder csvContent)
         {
-            UpdateParams(csv_data);
+            UpdateParams();
             csv_data[0][3] = $"cx={gui.centerX} cy={gui.centerY} radius={gui.radius}";
             csv_data[1][3] = $"xmin={gui.xMin} ymin={gui.yMin} xmax={gui.xMax} ymax={gui.yMax}";
             for (int i = 0; i < csv_data.Count; i++)
@@ -244,7 +169,6 @@ namespace WinFormsAppTest
         //기본 config.csv 제외 나머지 config 파일을 만드는 메서드(추후 default 부분 삭제 요망)
         private void MakeConfig(configFileType confType)
         {
-            read_csv(csv_path, csv_data);
             string filePath = Path.Combine(basePath, reqDi[(int)confType]);
 
             //해당 폴더 없을 시 만들기
@@ -341,10 +265,6 @@ namespace WinFormsAppTest
                     if (activatePreset != -1)
                     {
                         List<List<string>> csvLoad = new List<List<string>>();
-                        read_csv(Path.Combine(filePath, $"presetConfig{activatePreset}.csv"), csvLoad);
-                        title = getParam(csvLoad, "FileInfo", "title");
-                        info = getParam(csvLoad, "FileInfo", "info");
-                        lasPath = getParam(csvLoad, "FileInfo", "Lasfilename");
                         fileNum = activatePreset;
                     }
                     infoRecent = new string[] {
@@ -390,107 +310,8 @@ namespace WinFormsAppTest
             }
 
             // CSV 파일 경로
-            string filePath = filepath;
-
-            // CSV 내용 생성
-            StringBuilder csvContent = new StringBuilder();
-
-            //설명 변경해야함
-            csvContent.AppendLine("gui,private,circle,cx=0 cy=0 radius=100,cx,cy,radius는 중심점 좌표와 반지름입니다.,");
-            csvContent.AppendLine("gui,private,rectangle,xmin=-10 xmax=10 ymin=-10 ymax=10,xmin,xmax,ymin,ymax는 범위 자료입니다. ");
-            csvContent.AppendLine("gui,private,result_path,..\\result,결과를 저장하는 폴더입니다.,,,");
-            csvContent.AppendLine("filters.crop,private,buffer,120,plot 영역보다 120% 큰 영역을 의미한다.,,,");
-            csvContent.AppendLine("filters.crop,private,bufferd_dat,xmin=-14.74 xmax=5.53 ymin=-2.15 ymax=15.44,bufferd_plot 영역의 정보를 저장하는 파일 이름이다.,,,");
-            csvContent.AppendLine("filters.crop,private,origin_dat,xmin=-14.74 xmax=5.53 ymin=-2.15 ymax=15.44 cx=-4 cy=7 radius=20,origin_plot 영역의 정보를 저장하는 파일 이름이다.,,,");
-            csvContent.AppendLine("filters.sample,public,cell,0.03,복셀 크기 (예: 0.03m),,,");
-            csvContent.AppendLine("filters.outlier,private,method,statistical,통계 기반으로 이상치(이상점) 제거한다.,,,");
-            csvContent.AppendLine("filters.outlier,private,mean_k,12,최근접 이웃의 개수를 지정한다. ,,,");
-            csvContent.AppendLine("filters.outlier,private,multiplier,2.2,거리의 표준편차의 계수를 지정한다. ,,,");
-            csvContent.AppendLine("filters.smrf,public,cell,4,셀 크기를 지정한다. PDAL 기본값이 1.0m인데, ForestLi는 4m를 사용하는데, 확인이 필요하다.,");
-            csvContent.AppendLine("filters.smrf,public,window,16,max window size를 지정한다. PDAL 기본값이 18m인데, ForestLi는 16m를 사용하는데, 확인이 필요하다.,");
-            csvContent.AppendLine("filters.smrf,public,slope,0.3,slope(rise over run)을 지정한다. PDAL 기본값이 0.15인데, ForestLi는 0.3를 사용하는데, 확인이 필요하다. 단위가 무엇일까? Radian인가?,");
-            csvContent.AppendLine("filters.smrf,public,scalar,1.25,Elevation scalar를 지정한다. 단위가 무엇일까? meter인가?,,,");
-            csvContent.AppendLine("filters.smrf,public,threshold,1,Elevation threshold를 지정한다. 단위가 무엇일까? meter인가?,,,");
-            csvContent.AppendLine("filters.range.trunk,public,minheight,0,수간(trunk)으로 조사하는 영역의 높이의 최솟값을 지정한다. 보통은 0m으로 지정한다. Public인지 private인지 고민해 보자.,,,");
-            csvContent.AppendLine("filters.range.trunk,public,maxheight,5,수간(trunk)으로 조사하는 영역의 높이의 최댓값을 지정한다. 보통은 5m으로 지정한다. Public인지 private인지 고민해 보자.,,,");
-            csvContent.AppendLine("filters.range.crown,public,minheight,3,수관(crown)으로 조사하는 영역의 높이의 최솟값을 지정한다. ,,,");
-            csvContent.AppendLine("filters.range.crown,private,maxheight,100,수관(crown)으로 조사하는 영역의 높이의 최댓값을 지정한다. ,,,");
-            csvContent.AppendLine("csp_segmentstem,public,smoothness,10,smoothness (degrees)는 ??이다. 영역성장(regiongrowing) 알고리즘의 smoothness를 설정하는 값이다. 영역성장 알고리즘 파악이 우선이다. ,,,");
-            csvContent.AppendLine("csp_segmentstem,private,mindbh,0.01,수간(trunk)에서 흉고직경의 최솟값이다. 기본적으로 0.01m를 사용한다. ,,,");
-            csvContent.AppendLine("csp_segmentstem,private,maxdbh,1,수간(trunk)에서 흉고직경의 최댓값이다. 기본적으로 1m를 사용한다. ,,,");
-            csvContent.AppendLine("csp_segmentstem,private,nnearest,10,최근접 이웃의 개수를 지정한다. 시스템 인자이다. 사용자가 알 필요가 없다.,,,");
-            csvContent.AppendLine("csp_segmentstem,private,nmin,50,유클리디어 군집화에서 클러스터를 이루는 점들의 최소 개수이다. 시스템 인자이다. 사용자가 알 필요가 없다.,,,");
-            csvContent.AppendLine("csp_segmentstem,private,num_neighbours,50,영역성장(regiongrowing) 알고리즘의 최근접 이웃 점들의 개수를 설정하는 값이다. 영역성장 알고리즘 파악이 우선이다. ,,,");
-            csvContent.AppendLine("csp_segmentstem,private,anglemax,20,주성분 분석에서 수간부의 실린더가 기울기를 설정하는 값이다. 예를 들면, 20 일 때, 수간부(trunk)의 기울기는 70도와 110도 사이에 존재한다.,");
-            csvContent.AppendLine("csp_segmentstem,private,trunk_slice_file,aaa,수간부(trunk) 슬라이스에 해당하는 점들을 저장하는 파일 이름이다.,,,");
-            csvContent.AppendLine("csp_segmentcrown,private,num_nn_samples,16,최근접 이웃 점들의 개수를 지정하는 값이다. 지정된 최근접 이웃 점들까지 거리를 계산하여 거리의 평균과 표준편차를 결정한다.,,,");
-            csvContent.AppendLine("csp_segmentcrown,private,trunk_files,aaa,csp_segmentstem 단계에서 생성된 수간부(trunk) 파일들을 저장한다.,,,");
-            csvContent.AppendLine("csp_segmentcrown,private,crown_slice_file,aaa,수관부(crown) 슬라이스에 해당하는 점들을 저장하는 파일 이름이다.,,,");
-            csvContent.AppendLine("measure,private,nnearest,16,DBH(흉고직경) 측정할 때 stem에서 원형 모델을 찾을 경우, 이웃한 점들의 거리의 표준편차를 사용하는데, 표준편차를 구할때 사용되는 이웃 점들의 개수를 의미한다,");
-            csvContent.AppendLine("measure,private,minrad,0.03,찾는 원형모델의 최소 반지름이다,,,");
-            csvContent.AppendLine("measure,private,maxrad,0.5,찾는 원형모델의 최대 반지름이다,,,");
-            csvContent.AppendLine("measure,private,iterations,10000,원형모델을 찾는 RANSAC 알고리즘의 최대 시도 횟수이다,,,");
-            csvContent.AppendLine("measure,private,zmin_check,0.2,나무가 표준지의 속하는지 판단하기 위해 사용 된다. 기준포인트들 중 최하점의 높이다,,,");
-            csvContent.Append("measure,private,zmax_check,0.7,나무가 표준지의 속하는지 판단하기 위해 사용 된다. 기준포인트들 중 최상점의 높이다,,,");
-
-            // CSV 파일 생성 및 내용 기록
-            try
-            {
-                File.WriteAllText(filePath, csvContent.ToString(), Encoding.UTF8);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("CSV 파일 작성 중 오류 발생: " + ex.Message);
-            }
-
-            read_csv(filePath, csv_data);
             FillTextboxes();
             MessageBox.Show("설정 파일이 초기화 되었습니다.");
-        }
-
-        //csv_data를 저장해놓은 List에서 값을 가져오는 함수
-        public string getParam(List<List<string>> dataList, string Type, string Key)
-        {
-            string ret = "";
-            for (int i = 0; i < dataList.Count; i++)
-            {
-                if (dataList[i][0] != Type)
-                {
-                    continue;
-                }
-                else if (dataList[i][2] != Key)
-                {
-                    continue;
-                }
-                else
-                {
-                    ret = dataList[i][3];
-                    break;
-                }
-            }
-            //MessageBox.Show(ret);
-            return ret;
-        }
-        //csv_data를 저장해놓은 List에 값을 설정하는 함수
-        public void setParam(List<List<string>> dataList, string Type, string Key, string Value)
-        {
-            for (int i = 0; i < dataList.Count; i++)
-            {
-                if (dataList[i][0] != Type)
-                {
-                    continue;
-                }
-                else if (dataList[i][2] != Key)
-                {
-                    continue;
-                }
-                else
-                {
-                    dataList[i][3] = Value;
-                   //MessageBox.Show(csv_data[i][3]); 
-                    return;
-                }
-            }
         }
 
         //텍스트에 반영만 하고, 실제 gui 구조체나 csv_data 리스트에 저장하진 않는다
@@ -585,7 +406,7 @@ namespace WinFormsAppTest
             if (File.Exists(Path.Combine(basePath, filePath)))
             {
                 string content = File.ReadAllText(filePath);
-                bin_folder = content;
+                bin_folder = content;               
                 //MessageBox.Show(content);
             }
             else
@@ -598,7 +419,8 @@ namespace WinFormsAppTest
 
             //MessageBox.Show(databaseFileName);
 
-            if(!File.Exists(databaseFileName))//DB 파일 생성, 테이블 삭제 및 재생성, 초기값 insert 
+            //DB 파일 생성, 테이블 삭제 및 재생성, 초기값 insert 
+            if (!File.Exists(databaseFileName))
             {
                 CreateDatabaseFile(bin_folder, databaseFileName);
                 DeleteAllTables(databaseFileName, tablename);
@@ -963,7 +785,7 @@ namespace WinFormsAppTest
 
 
         //textbox 값 -> List 테이블로 대입 
-        private void UpdateParams(List<List<string>> dataList)
+        private void UpdateParams()
         {
             //Normalize_textboxes
             UpdateDataInTable("filters_smrf", "cell", tbNorCellSize.Text.Trim());

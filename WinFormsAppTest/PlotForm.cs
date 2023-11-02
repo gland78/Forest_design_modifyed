@@ -42,7 +42,6 @@ namespace WinFormsAppTest
             cbPlotShape.SelectedIndex = 0;
             this.paramForm = paramForm;
             paramForm.plotSender += new plotDataHandler(plotPacker);
-            configpath = paramForm.csv_path;
         }
 
         //수정 요망
@@ -277,13 +276,13 @@ namespace WinFormsAppTest
             btnPlotOK.Enabled = false;
             btnPlotCancel.Enabled = false;
             await Task.Run(() =>
-            {
+            { 
                 //각 단계 실행
                 preProAndExcuteStep();
 
-                //csv 초기화
-                if (paramForm.fileType == "")
-                    paramForm.write_csv(paramForm.csv_path);
+                ////csv 초기화
+                //if (paramForm.fileType == "")
+                //    paramForm.write_csv(paramForm.csv_path);
 
                 if (progress == 10)
                 {
