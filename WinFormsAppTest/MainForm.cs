@@ -117,16 +117,6 @@ namespace WinFormsAppTest
             btnStart.Click += btnStart_Click;
 
             //이 아래로 설정창의 CustomPanel 객체들 이벤트
-            pnSettingDefault.MouseDown += pnSettingAll_MouseDown;
-            pnSettingDefault.MouseEnter += pnSettingAll_MouseEnter;
-            pnSettingDefault.MouseLeave += pnSettingAll_MouseLeave;
-            pnSettingDefault.MouseUp += pnSettingAll_MouseUp;
-
-            pnSettingPreset.MouseDown += pnSettingAll_MouseDown;
-            pnSettingPreset.MouseEnter += pnSettingAll_MouseEnter;
-            pnSettingPreset.MouseLeave += pnSettingAll_MouseLeave;
-            pnSettingPreset.MouseUp += pnSettingAll_MouseUp;
-
             pnSettingNor1.MouseDown += pnSettingAll_MouseDown;
             pnSettingNor1.MouseEnter += pnSettingAll_MouseEnter;
             pnSettingNor1.MouseLeave += pnSettingAll_MouseLeave;
@@ -177,16 +167,6 @@ namespace WinFormsAppTest
         private void customPanels_Load()
         {
             Color customPanelColor = Color.Gray;
-
-            pnSettingDefault.BackColor = Color.Transparent;
-            pnSettingDefault.isFill = true;
-            pnSettingDefault.isBorder = false;
-            pnSettingDefault.fillColor = customPanelColor;
-
-            pnSettingPreset.BackColor = Color.Transparent;
-            pnSettingPreset.isFill = true;
-            pnSettingPreset.isBorder = false;
-            pnSettingPreset.fillColor = customPanelColor;
 
             pnSettingNor1.BackColor = Color.Transparent;
             pnSettingNor1.isFill = true;

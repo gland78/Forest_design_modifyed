@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.DirectoryServices;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -1333,7 +1334,7 @@ namespace WinFormsAppTest
                 Normalization();
                 MakeSliceFile();
                 //MakeOriginPlot();
-                Turn_Las_into_PCD();                
+                Turn_Las_into_PCD();
                 progress++;
                 ProgressBarSet(progress);
                 //=====
@@ -1374,7 +1375,7 @@ namespace WinFormsAppTest
                 if (CatchError(resultP + @"\tree\", 9)) return;
 
                 RunFileTenth();//measure
-                
+
                 if (CatchError(resultP + @"\tree\", 10)) return;
 
                 RunFileEleventh();
@@ -1391,8 +1392,16 @@ namespace WinFormsAppTest
                 //    }
                 //    sw.Write(progressLog);
                 //}
+                MessageBox.Show("Close in");
 
-                progressDialog.Close();
+                if (progressDialog == null)
+                {
+                    MessageBox.Show("null");
+                }
+
+                progressDialog.Invoke(new Action(() => progressDialog.Close()));
+
+                MessageBox.Show("Close out");
             }
             else
             {

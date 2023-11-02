@@ -197,7 +197,7 @@ namespace WinFormsAppTest
             paramForm.gui.yMin = double.Parse(tbPlotRecYmin.Text);
             paramForm.gui.yMax = double.Parse(tbPlotRecYmax.Text);
 
-            resultSavedDirectory = resultPath + @"\" + DateTime.Now.ToString("yyyyMMdd_HH_mm_") + originLasName;
+            resultSavedDirectory = resultPath + @"\" + DateTime.Now.ToString("yyyyMMdd_HH_mm_ss") + originLasName;
 
             progressDialog = new Form
             {
@@ -206,8 +206,7 @@ namespace WinFormsAppTest
                 FormBorderStyle = FormBorderStyle.FixedDialog,
                 StartPosition = FormStartPosition.CenterScreen,
                 Name = "progressDialog",
-                ShowInTaskbar = false,
-                Owner = this
+                Owner = paramForm
             };
 
             progressTextBox = new TextBox();
