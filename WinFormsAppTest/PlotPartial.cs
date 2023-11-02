@@ -150,26 +150,8 @@ namespace WinFormsAppTest
                     ProcessBatch(one + originLasName + ".bat");
                     LogWrite(resultSavedDirectory + @"\intermediate\" + originLasName + "1.crop" + ".bat 파일 생성");
                 }
+
                 {
-                    //Process proc = null;
-                    //string _batDir = resultSavedDirectory + @"\intermediate\";
-                    ////MessageBox.Show(_batDir);
-
-                    ////var CurrentDirectory = Directory.GetCurrentDirectory();
-                    ////MessageBox.Show(CurrentDirectory);
-
-                    //proc = new Process();
-
-                    //proc.StartInfo.UseShellExecute = true;
-
-                    //proc.StartInfo.WorkingDirectory = _batDir;
-                    //proc.StartInfo.FileName = one + originLasName + ".bat";
-                    //proc.StartInfo.CreateNoWindow = false;
-                    ////MessageBox.Show("proc.info : " + proc.StartInfo.WorkingDirectory + proc.StartInfo.FileName);
-                    //proc.Start();
-                    //proc.WaitForExit();
-                    //proc.Close();
-
                     string strFile1 = resultSavedDirectory + @"\intermediate\" + one + originLasName + "_B.las";
                     FileInfo fileInfo1 = new FileInfo(strFile1);//파일 있는지 확인 있을때(true), 없으면(false)
                     if (fileInfo1.Exists)
@@ -639,7 +621,6 @@ namespace WinFormsAppTest
                     filenames_pcd.Add(fi.FullName);
                 }
             }
-            
 
             paramForm.UpdateDataInTable("csp_segmentstem", "trunk_files", string.Join(" ", filenames_pcd));
         }
@@ -653,32 +634,38 @@ namespace WinFormsAppTest
                 proc.StartInfo.FileName = resultSavedDirectory + shape + @"\intermediate\" + batFile;
                 proc.StartInfo.UseShellExecute = false;
                 proc.StartInfo.CreateNoWindow = true;
-                proc.StartInfo.StandardOutputEncoding = System.Text.Encoding.UTF8;
+                proc.StartInfo.StandardOutputEncoding = Encoding.UTF8;
                 proc.StartInfo.RedirectStandardOutput = true;
                 proc.OutputDataReceived += new DataReceivedEventHandler(OutputDataReceived);
 
                 progressTextBox.Invoke(new Action(() =>
                 {
+                    if (Application.OpenForms["progressDialog"] == null)
+                    {
+                        MessageBox.Show("기능 실행이 정상적으로 수행되지 않았습니다.");
+                        Process[] allProc = Process.GetProcesses();
+
+                        foreach (Process procs in allProc)
+                        {
+                            try
+                            {
+                                if (procs.ProcessName == "ForestLi" || procs.ProcessName == "PlotForm")
+                                    procs.Kill();
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show(ex.Message);
+                            }
+                        }
+                        return;
+                    }
+
                     progressTextBox.AppendText("=================================" + Environment.NewLine);
                 }));
                 proc.Start();
                 proc.BeginOutputReadLine();
                 proc.WaitForExit();
             }
-            /*
-            //num(ex. "level1_~";
-            Process proc = null;
-            string _batDir = resultSavedDirectory + shape + @"\intermediate\";
-            proc = new Process();
-            //proc.StartInfo.StandardOutputEncoding = Encoding.UTF8;
-            proc.StartInfo.UseShellExecute = true;
-            proc.StartInfo.WorkingDirectory = _batDir;
-            proc.StartInfo.FileName = num + originLasName + ".bat";
-            proc.StartInfo.CreateNoWindow = false;
-            proc.Start();
-            proc.WaitForExit();
-            proc.Close();
-            */
         }
 
         private void OutputDataReceived(object sender, DataReceivedEventArgs e)
@@ -1494,10 +1481,6 @@ namespace WinFormsAppTest
             }
             else if (lasSize.miny == lasSize.maxy || lasSize.minx == lasSize.maxx)
             {
-                MessageBox.Show("Las파일의 사이즈가 적합하지 않습니다." +
-                    $"Lasfile Size\nXmin={lasSize.minx}\nXmax={lasSize.maxx}\n" +
-                    $"Ymin={lasSize.miny}\nYmax={lasSize.maxy}",
-                    "Las File Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
             else
