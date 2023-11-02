@@ -639,28 +639,28 @@ namespace WinFormsAppTest
                 proc.StartInfo.RedirectStandardOutput = true;
                 proc.OutputDataReceived += new DataReceivedEventHandler(OutputDataReceived);
 
+                if (Application.OpenForms["progressDialog"] == null)
+                {
+                    MessageBox.Show("기능 실행이 정상적으로 수행되지 않았습니다.");
+                    Process[] allProc = Process.GetProcesses();
+
+                    foreach (Process procs in allProc)
+                    {
+                        try
+                        {
+                            if (procs.ProcessName == "ForestLi" || procs.ProcessName == "PlotForm")
+                                procs.Kill();
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message);
+                        }
+                    }
+                    return;
+                }
+
                 progressTextBox.Invoke(new Action(() =>
                 {
-                    if (Application.OpenForms["progressDialog"] == null)
-                    {
-                        MessageBox.Show("기능 실행이 정상적으로 수행되지 않았습니다.");
-                        Process[] allProc = Process.GetProcesses();
-
-                        foreach (Process procs in allProc)
-                        {
-                            try
-                            {
-                                if (procs.ProcessName == "ForestLi" || procs.ProcessName == "PlotForm")
-                                    procs.Kill();
-                            }
-                            catch (Exception ex)
-                            {
-                                MessageBox.Show(ex.Message);
-                            }
-                        }
-                        return;
-                    }
-
                     progressTextBox.AppendText("=================================" + Environment.NewLine);
                 }));
                 proc.Start();
@@ -1339,13 +1339,31 @@ namespace WinFormsAppTest
                 ProgressBarSet(progress);
                 //=====
 
+                if (Application.OpenForms["progressDialog"] == null)
+                {
+                    MessageBox.Show("기능 실행이 정상적으로 수행되지 않았습니다.");
+                    return;
+                }
+
                 RunFileSecond();
                 progress++;
                 ProgressBarSet(progress);
 
+                if (Application.OpenForms["progressDialog"] == null)
+                {
+                    MessageBox.Show("기능 실행이 정상적으로 수행되지 않았습니다.");
+                    return;
+                }
+
                 RunFileThird();
                 progress++;
                 ProgressBarSet(progress);
+
+                if (Application.OpenForms["progressDialog"] == null)
+                {
+                    MessageBox.Show("기능 실행이 정상적으로 수행되지 않았습니다.");
+                    return;
+                }
 
                 RunFileFourth();
                 progress++;
@@ -1355,28 +1373,64 @@ namespace WinFormsAppTest
                 progress++;
                 ProgressBarSet(progress);
 
+                if (Application.OpenForms["progressDialog"] == null)
+                {
+                    MessageBox.Show("기능 실행이 정상적으로 수행되지 않았습니다.");
+                    return;
+                }
+
                 //RunFileSixth();
                 ExtractOriginDat();
                 progress++;
                 ProgressBarSet(progress);
 
+                if (Application.OpenForms["progressDialog"] == null)
+                {
+                    MessageBox.Show("기능 실행이 정상적으로 수행되지 않았습니다.");
+                    return;
+                }
+
                 RunFileSeventh();
                 progress++;
                 ProgressBarSet(progress);
+
+                if (Application.OpenForms["progressDialog"] == null)
+                {
+                    MessageBox.Show("기능 실행이 정상적으로 수행되지 않았습니다.");
+                    return;
+                }
 
                 RunFileEighth();//trunk
                 progress++;
                 ProgressBarSet(progress);
                 if (CatchError(resultP + @"\intermediate\", 8)) return;
 
+                if (Application.OpenForms["progressDialog"] == null)
+                {
+                    MessageBox.Show("기능 실행이 정상적으로 수행되지 않았습니다.");
+                    return;
+                }
+
                 RunFileNinth();//tree
                 progress++;
                 ProgressBarSet(progress);
                 if (CatchError(resultP + @"\tree\", 9)) return;
 
+                if (Application.OpenForms["progressDialog"] == null)
+                {
+                    MessageBox.Show("기능 실행이 정상적으로 수행되지 않았습니다.");
+                    return;
+                }
+
                 RunFileTenth();//measure
 
                 if (CatchError(resultP + @"\tree\", 10)) return;
+
+                if (Application.OpenForms["progressDialog"] == null)
+                {
+                    MessageBox.Show("기능 실행이 정상적으로 수행되지 않았습니다.");
+                    return;
+                }
 
                 RunFileEleventh();
                 progress++;
