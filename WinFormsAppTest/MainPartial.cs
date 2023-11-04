@@ -919,7 +919,7 @@ namespace WinFormsAppTest
             InsertDataIntoTable("gui", "private", "org_xmin", "", "원본 las xmin 좌표.");
             InsertDataIntoTable("gui", "private", "org_xmin", "", "원본 las ymin 좌표.");
             InsertDataIntoTable("gui", "private", "org_xmin", "", "원본 las zmin 좌표.");
-            InsertDataIntoTable("gui", "private", "internal_las_file", "", "내부적으로 사용할 las 파일 이름.");
+            InsertDataIntoTable("gui", "private", "internal_las_file", "a", "내부적으로 사용할 las 파일 이름.");
             InsertDataIntoTable("gui", "private", "origin_las_file", "", "원본 las 파일 이름.");
             InsertDataIntoTable("filters_crop", "private", "buffer", "120", "plot 영역보다 120% 큰 영역을 의미한다.");
             InsertDataIntoTable("filters_crop", "private", "bufferd_dat", "xmin=-12.35 xmax=12.43 ymin=-6.22 ymax=22.14", "bufferd_plot 영역의 정보를 저장하는 파일 이름이다.");
