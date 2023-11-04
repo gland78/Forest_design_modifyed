@@ -1082,7 +1082,7 @@ namespace WinFormsAppTest
                 MessageBox.Show("사용자 설정은 10개 까지만 저장 가능합니다");
                 return;
             }
-            MakeConfig(configFileType.Preset);
+            //MakeConfig(configFileType.Preset);
             preConfBtnLoad();
             if (activatePreset == -1)
             {
@@ -1106,6 +1106,24 @@ namespace WinFormsAppTest
             }
             mFrm.ShowDialog();
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         //기본값 불러오기 버튼
         private void btnSettingLoad_Click(object sender, EventArgs e)
@@ -1151,5 +1169,10 @@ namespace WinFormsAppTest
         {
             btnStart.Visible = onOff;
         }
+
+
+        
+
+        
     }
 }

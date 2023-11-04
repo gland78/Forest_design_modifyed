@@ -253,24 +253,8 @@ namespace WinFormsAppTest
         //gui구조체의 plot값과 plot 리스트 값을 모두 모아 stringbuilder로 전달
         private void setAllparams(ref StringBuilder csvContent)
         {
-            UpdateParams(csv_data);
-            csv_data[0][3] = $"cx={gui.centerX} cy={gui.centerY} radius={gui.radius}";
-            csv_data[1][3] = $"xmin={gui.xMin} ymin={gui.yMin} xmax={gui.xMax} ymax={gui.yMax}";
-            for (int i = 0; i < csv_data.Count; i++)
-            {
-                string str = "";
-                for (int j = 0; j < csv_data[i].Count; j++)
-                {
-                    if (j == csv_data[i].Count - 1)
-                    {
-                        str += csv_data[i][j];
-                        break;
-                    }
-                    str += csv_data[i][j] + ",";
-
-                }
-                csvContent.AppendLine(str);
-            }
+            UpdateParams();
+            
         }
         //기본 config.csv 제외 나머지 config 파일을 만드는 메서드(추후 default 부분 삭제 요망)
         private void MakeConfig(configFileType confType)
