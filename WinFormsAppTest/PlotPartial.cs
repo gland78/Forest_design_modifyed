@@ -45,6 +45,8 @@ namespace WinFormsAppTest
             public double maxy;
             public double minx;
             public double miny;
+            public double minz;
+            public double maxz;
         }
         LasSize lasSize = new LasSize();
 
@@ -1641,6 +1643,7 @@ namespace WinFormsAppTest
 
             originLasPath = tbPlotData.Text;
             originLasName = Path.GetFileNameWithoutExtension(originLasPath).ToLower();
+            paramForm.UpdateDataInTable("gui", "origin_las_file", originLasName + ".las");
             originLasDirectory = Path.GetDirectoryName(originLasPath);
         }
 

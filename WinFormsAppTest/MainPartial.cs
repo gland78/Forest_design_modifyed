@@ -222,8 +222,7 @@ namespace WinFormsAppTest
         //gui구조체의 plot값과 plot 리스트 값을 모두 모아 stringbuilder로 전달
         private void setAllparams(ref StringBuilder csvContent)
         {
-            UpdateParams();
-            
+            UpdateParams();   
         }
         //기본 config.csv 제외 나머지 config 파일을 만드는 메서드(추후 default 부분 삭제 요망)
         private void MakeConfig(configFileType confType)
@@ -590,6 +589,7 @@ namespace WinFormsAppTest
             //MessageBox.Show(databaseFileName);
 
             //DB 파일 생성, 테이블 삭제 및 재생성, 초기값 insert 
+            if(!File.Exists(databaseFileName))
             {
                 CreateDatabaseFile(bin_folder, databaseFileName);
                 DeleteAllTables(databaseFileName, tablename);
@@ -916,7 +916,11 @@ namespace WinFormsAppTest
             InsertDataIntoTable("gui", "private", "rectangle", "xmin=-10 xmax=10 ymin=-10 ymax=10", "xmin,xmax,ymin,ymax는 범위 자료입니다.");
             InsertDataIntoTable("gui", "private", "result_path", "..\\result", "결과를 저장하는 폴더입니다.");
             InsertDataIntoTable("gui", "private", "intermediate_dir", "", "중간산출물을 저장하는 폴더입니다.");
-            InsertDataIntoTable("gui", "private", "tree_dir", "", "개체목 저장하는 폴더입니다.");
+            InsertDataIntoTable("gui", "private", "org_xmin", "", "원본 las xmin 좌표.");
+            InsertDataIntoTable("gui", "private", "org_xmin", "", "원본 las ymin 좌표.");
+            InsertDataIntoTable("gui", "private", "org_xmin", "", "원본 las zmin 좌표.");
+            InsertDataIntoTable("gui", "private", "internal_las_file", "", "내부적으로 사용할 las 파일 이름.");
+            InsertDataIntoTable("gui", "private", "origin_las_file", "", "원본 las 파일 이름.");
             InsertDataIntoTable("filters_crop", "private", "buffer", "120", "plot 영역보다 120% 큰 영역을 의미한다.");
             InsertDataIntoTable("filters_crop", "private", "bufferd_dat", "xmin=-12.35 xmax=12.43 ymin=-6.22 ymax=22.14", "bufferd_plot 영역의 정보를 저장하는 파일 이름이다.");
             InsertDataIntoTable("filters_crop", "private", "origin_dat", "xmin=-14.738 xmax=5.531 ymin=-2.147 ymax=15.436 cx=0 cy=0 radius=100", "origin_plot 영역의 정보를 저장하는 파일 이름이다.");
@@ -954,7 +958,7 @@ namespace WinFormsAppTest
 
 
         //textbox 값 -> List 테이블로 대입 
-        private void UpdateParams(List<List<string>> dataList)
+        private void UpdateParams()
         {
             //Normalize_textboxes
             UpdateDataInTable("filters_smrf", "cell", tbNorCellSize.Text.Trim());

@@ -913,7 +913,7 @@ namespace WinFormsAppTest
             filePath = Path.Combine(fileDi, fileName);
 
             //csv_data 리스트에 텍스트 박스의 값 적용
-            UpdateParams(csv_data);
+            UpdateParams();
 
             //최근 기록 혹은 사용자 설정값 csv 불러올 리스트
             List<List<string>> SelectedCsvData = new List<List<string>>();
@@ -934,7 +934,7 @@ namespace WinFormsAppTest
             }
 
             //이 시점이 텍스트 박스 값이 반영된 리스트
-            UpdateParams(SelectedCsvData);
+            UpdateParams();
             //SelectedCsvData 리스트를 반복문 돌려서 string으로 추출
             string tmp2 = "";
             for (int i = 0; i < SelectedCsvData.Count; i++)
@@ -1012,7 +1012,7 @@ namespace WinFormsAppTest
         private void btnSettingSave_Click(object sender, EventArgs e)
         {
             //변수들 초기화
-            UpdateParams(csv_data);
+            UpdateParams();
             // csv 작성
             try
             {

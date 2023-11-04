@@ -236,7 +236,7 @@ namespace WinFormsAppTest
             //MainForm invalidate
             mainPaint();
 
-            resultSavedDirectory = resultPath + @"\" + DateTime.Now.ToString("yyyyMMdd_HH_mm_") + originLasName;
+            resultSavedDirectory = resultPath + @"\" + DateTime.Now.ToString("yyyyMMdd_HH_mm_ss_") + originLasName;
 
             progressDialog = new Form
             {
@@ -614,6 +614,9 @@ namespace WinFormsAppTest
                 lasSize.maxx = (double)jsonSizeTok["maxx"];
                 lasSize.miny = (double)jsonSizeTok["miny"];
                 lasSize.maxy = (double)jsonSizeTok["maxy"];
+                lasSize.minz = (double)jsonSizeTok["minz"];
+                lasSize.maxz = (double)jsonSizeTok["maxz"];
+
 
                 //lasSize에 담긴 정보로.dat파일 만들기
                 string datFilePath = Path.Combine(dirPath, $"{fileName}.dat");
@@ -655,12 +658,21 @@ namespace WinFormsAppTest
                                 break;
                             case "minx":
                                 lasSize.minx = double.Parse(sizeTok[1]);
+                                paramForm.UpdateDataInTable("gui", "org_xmin", lasSize.minx.ToString());
                                 break;
                             case "maxy":
                                 lasSize.maxy = double.Parse(sizeTok[1]);
                                 break;
                             case "miny":
                                 lasSize.miny = double.Parse(sizeTok[1]);
+                                paramForm.UpdateDataInTable("gui", "org_ymin", lasSize.miny.ToString());
+                                break;
+                            case "minz":
+                                lasSize.minz = double.Parse(sizeTok[1]);
+                                paramForm.UpdateDataInTable("gui", "org_zmin", lasSize.minz.ToString());
+                                break;
+                            case "maxz":
+                                lasSize.maxz = double.Parse(sizeTok[1]);
                                 break;
                         }
                     }
