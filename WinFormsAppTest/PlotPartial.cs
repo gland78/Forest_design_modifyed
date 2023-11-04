@@ -57,9 +57,22 @@ namespace WinFormsAppTest
 
         public ProgressBar pbLoadingBar;
 
+
+        //db 파일 명
+        string bin_folder="";
+        string databaseFileName="";
+        //테이블 이름 목록
+        string[] tablename = { "gui", "filters_crop", "filters_outlier", "filters_smrf", "filters_range_trunk", "filters_range_crown", "csp_segmentstem", "csp_segmentcrown", "measure" };
+
         //PLOT
         private void MakeResultDirectory_PLOT()
         {
+            DirectoryInfo result_pth = new DirectoryInfo(resultPath);
+            if (result_pth.Exists == false)
+            {
+                result_pth.Create();
+            }
+
             //MessageBox.Show(this.resultSavedDirectory);
             string resultSavedDirectory = this.resultSavedDirectory + shape;
             DirectoryInfo di1 = new DirectoryInfo(resultSavedDirectory);
@@ -84,8 +97,11 @@ namespace WinFormsAppTest
             string tree_dir = Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(resultSavedDirectory + "\\tree"));
             string inter_dir= Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(resultSavedDirectory + "\\intermediate"));
 
-            paramForm.setParam(paramForm.csv_data, "gui", "tree_dir", tree_dir);
-            paramForm.setParam(paramForm.csv_data, "gui", "intermediate_dir", inter_dir);
+            //MessageBox.Show(tree_dir);
+            //MessageBox.Show(inter_dir);
+
+            paramForm.UpdateDataInTable("gui", "tree_dir", tree_dir);
+            paramForm.UpdateDataInTable("gui", "intermediate_dir", inter_dir);
 
             paramForm.write_csv(configpath);
 
@@ -174,8 +190,10 @@ namespace WinFormsAppTest
                             //str을 만들었으니 이제 그 데이터를 dat 파일에 넣는다.
 
                             dat_str = $"xmin={minx} xmax={maxx} ymin={miny} ymax={maxy}";
-                            paramForm.setParam(paramForm.csv_data, "filters.crop", "bufferd_dat", dat_str);
-                            paramForm.write_csv(configpath);
+                            paramForm.UpdateDataInTable("filters_crop", "bufferd_dat", dat_str);
+
+                            //paramForm.setParam(paramForm.csv_data, "filters.crop", "bufferd_dat", dat_str);
+                            //paramForm.write_csv(configpath);
                         }
                         catch
                         {
@@ -195,7 +213,7 @@ namespace WinFormsAppTest
             double centerX = double.Parse(tbPlotCircleX.Text);
             double centerY = double.Parse(tbPlotCircleY.Text);
             double radius = double.Parse(tbPlotCircleR.Text);
-            double buffer = double.Parse(paramForm.getParam(paramForm.csv_data, "filters.crop", "buffer"));
+            double buffer = double.Parse(paramForm.SelectDataFromTable(databaseFileName, "filters_crop", "buffer"));
             {
                 JObject Readers = new JObject(
                   new JProperty("type", "readers.las"),
@@ -227,7 +245,7 @@ namespace WinFormsAppTest
             double ymin = double.Parse(tbPlotRecYmin.Text);
             double xmax = double.Parse(tbPlotRecXmax.Text);
             double ymax = double.Parse(tbPlotRecYmax.Text);
-            double buffer = double.Parse(paramForm.getParam(paramForm.csv_data, "filters.crop","buffer"));
+            double buffer = double.Parse(paramForm.SelectDataFromTable(databaseFileName, "filters_crop", "buffer"));
 
             double width = Math.Abs(xmax - xmin);
             double height = Math.Abs(ymax - ymin);
@@ -268,7 +286,7 @@ namespace WinFormsAppTest
         /// Cropping step, 사용자가 입력한 좌표를(다각형의 꼭짓점) 읽어온 후 표준지를 다각형으로 자릅니다.
         private void MakePolygonPlot()
         {
-            double buffer = double.Parse(paramForm.getParam(paramForm.csv_data, "filters.crop","buffer"));
+            double buffer = double.Parse(paramForm.SelectDataFromTable(databaseFileName, "filters_crop", "buffer"));
             string one = "level1_cropped_";
             string resultSavedDirectory = this.resultSavedDirectory + shape;
 
@@ -324,8 +342,8 @@ namespace WinFormsAppTest
                 JObject Outlier = new JObject(
                   new JProperty("type", "filters.outlier"),
                   new JProperty("method", "statistical"),
-                  new JProperty("mean_k", paramForm.getParam(paramForm.csv_data, "filters.outlier", "mean_k")),
-                  new JProperty("multiplier", paramForm.getParam(paramForm.csv_data, "filters.outlier", "multiplier"))
+                  new JProperty("mean_k", paramForm.SelectDataFromTable(databaseFileName, "filters_outlier", "mean_k")),
+                  new JProperty("multiplier", paramForm.SelectDataFromTable(databaseFileName, "filters_outlier", "multiplier"))
               );
                 JObject secondout = new JObject(
                    new JProperty("type", "writers.las"),
@@ -357,11 +375,11 @@ namespace WinFormsAppTest
               );
                 JObject smrf = new JObject(
                    new JProperty("type", "filters.smrf"),
-                   new JProperty("cell", paramForm.getParam(paramForm.csv_data, "filters.smrf", "cell")),
-                   new JProperty("window", paramForm.getParam(paramForm.csv_data, "filters.smrf", "window")),
-                   new JProperty("slope", paramForm.getParam(paramForm.csv_data, "filters.smrf", "slope")),
-                   new JProperty("threshold", paramForm.getParam(paramForm.csv_data, "filters.smrf", "threshold")),
-                   new JProperty("scalar", paramForm.getParam(paramForm.csv_data, "filters.smrf", "scalar"))
+                   new JProperty("cell", paramForm.SelectDataFromTable(databaseFileName, "filters_smrf", "cell")),
+                   new JProperty("window", paramForm.SelectDataFromTable(databaseFileName, "filters_smrf", "window")),
+                   new JProperty("slope", paramForm.SelectDataFromTable(databaseFileName, "filters_smrf", "slope")),
+                   new JProperty("threshold", paramForm.SelectDataFromTable(databaseFileName, "filters_smrf", "threshold")),
+                   new JProperty("scalar", paramForm.SelectDataFromTable(databaseFileName, "filters_smrf", "scalar"))
                );
                 JObject hagnn = new JObject(
                   new JProperty("type", "filters.hag_nn")
@@ -543,8 +561,9 @@ namespace WinFormsAppTest
                 {
                     try
                     {
-                        paramForm.setParam(paramForm.csv_data, "filters.crop", "origin_dat", poly_points);
-                        paramForm.write_csv(configpath);
+                        paramForm.UpdateDataInTable("filters_crop", "origin_dat", poly_points);
+                        //paramForm.setParam(paramForm.csv_data, "filters.crop", "origin_dat", poly_points);
+                        //paramForm.write_csv(configpath);
                     }
                     catch (Exception ex)
                     {
@@ -571,8 +590,9 @@ namespace WinFormsAppTest
                             maxy = lasSize.maxy < (paramForm.gui.centerX + radius) ? lasSize.maxy : (paramForm.gui.centerX + radius);
 
                             dat_str = $"xmin={minx} xmax={maxx} ymin={miny} ymax={maxy} cx={centerX} cy={centerY} radius={radius}";
-                            paramForm.setParam(paramForm.csv_data, "filters.crop", "origin_dat", dat_str);
-                            paramForm.write_csv(configpath);
+                            paramForm.UpdateDataInTable("filters_crop", "origin_dat", dat_str);
+                            //paramForm.setParam(paramForm.csv_data, "filters.crop", "origin_dat", dat_str);
+                            //paramForm.write_csv(configpath);
                         }
                         else
                         {
@@ -582,8 +602,9 @@ namespace WinFormsAppTest
                             maxy = lasSize.maxy < (paramForm.gui.yMax) ? lasSize.maxy : (paramForm.gui.yMax);
 
                             dat_str = $"xmin={minx} xmax={maxx} ymin={miny} ymax={maxy}";
-                            paramForm.setParam(paramForm.csv_data, "filters.crop", "origin_dat", dat_str);
-                            paramForm.write_csv(configpath);
+                            paramForm.UpdateDataInTable("filters_crop", "origin_dat", dat_str);
+                            //paramForm.setParam(paramForm.csv_data, "filters.crop", "origin_dat", dat_str);
+                            //paramForm.write_csv(configpath);
                         }
                     }
                     catch (Exception ex)
@@ -703,8 +724,8 @@ namespace WinFormsAppTest
               );
                 JObject sonSpec = new JObject(
                    new JProperty("type", "filters.range"),
-                   new JProperty("limits", @"Z[" + paramForm.getParam(paramForm.csv_data, "filters.range.trunk", "minheight") + ":"
-                   + paramForm.getParam(paramForm.csv_data, "filters.range.trunk", "maxheight") + "]")
+                   new JProperty("limits", @"Z[" + paramForm.SelectDataFromTable(databaseFileName, "filters_range_trunk", "minheight") + ":"
+                   + paramForm.SelectDataFromTable(databaseFileName, "filters_range_trunk", "maxheight") + "]")
                );
                 JObject Writers = new JObject(
                    new JProperty("type", "writers.pcd"),
@@ -724,8 +745,8 @@ namespace WinFormsAppTest
               );
                 JObject sonSpec = new JObject(
                    new JProperty("type", "filters.range"),
-                   new JProperty("limits", @"Z[" + paramForm.getParam(paramForm.csv_data, "filters.range.crown", "minheight") + ":"
-                   + paramForm.getParam(paramForm.csv_data, "filters.range.crown", "maxheight") + "]")
+                   new JProperty("limits", @"Z[" + paramForm.SelectDataFromTable(databaseFileName, "filters_range_crown", "minheight") + ":"
+                   + paramForm.SelectDataFromTable(databaseFileName, "filters_range_crown", "maxheight") + "]")
                );
                 JObject Writers = new JObject(
                    new JProperty("type", "writers.pcd"),
@@ -742,6 +763,7 @@ namespace WinFormsAppTest
         private void AppendSeventhCSVFile()
         {
             string trunkslicefile = "";
+            string crownslicefile = "";
 
             String FolderName = resultSavedDirectory + shape + @"\intermediate";
             System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(FolderName);
@@ -752,9 +774,15 @@ namespace WinFormsAppTest
                     trunkslicefile = fi.FullName;
                 }
             }
-
-            paramForm.setParam(paramForm.csv_data, "csp_segmentstem", "trunk_slice_file", trunkslicefile);
-
+            foreach (System.IO.FileInfo fi in di.GetFiles())
+            {
+                if (fi.Extension.ToLower().CompareTo(".pcd") == 0 && fi.Name.ToLower().Contains(originLasName.ToLower()) == true && fi.Name.ToLower().Contains("crownslice") == true)
+                {
+                    crownslicefile = fi.FullName;
+                }
+            }
+            paramForm.UpdateDataInTable("csp_segmentstem", "trunk_slice_file", trunkslicefile);
+            paramForm.UpdateDataInTable("csp_segmentcrown", "crown_slice_file", crownslicefile);
             try
             {
                 paramForm.write_csv(configpath);
@@ -768,7 +796,6 @@ namespace WinFormsAppTest
         {
             List<String> filenames_pcd = new List<String>();
 
-            string crownslicefile = "";
             string FolderName = resultSavedDirectory + shape + @"\intermediate";
             System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(FolderName);
             foreach (System.IO.FileInfo fi in di.GetFiles())
@@ -778,16 +805,11 @@ namespace WinFormsAppTest
                     filenames_pcd.Add(fi.FullName);
                 }
             }
-            foreach (System.IO.FileInfo fi in di.GetFiles())
-            {
-                if (fi.Extension.ToLower().CompareTo(".pcd") == 0 && fi.Name.ToLower().Contains(originLasName.ToLower()) == true && fi.Name.ToLower().Contains("crownslice") == true)
-                {
-                    crownslicefile = fi.FullName;
-                }
-            }
+            
 
-            paramForm.setParam(paramForm.csv_data, "csp_segmentcrown", "trunk_files", string.Join(" ", filenames_pcd));
-            paramForm.setParam(paramForm.csv_data, "csp_segmentcrown", "crown_slice_file", crownslicefile);
+            paramForm.UpdateDataInTable("csp_segmentstem", "trunk_files", string.Join(" ", filenames_pcd));
+            //paramForm.setParam(paramForm.csv_data, "csp_segmentcrown", "trunk_files", string.Join(" ", filenames_pcd));
+            //paramForm.setParam(paramForm.csv_data, "csp_segmentcrown", "crown_slice_file", crownslicefile);
 
             // CSV 파일에 내용 추가
             try
@@ -1213,7 +1235,7 @@ namespace WinFormsAppTest
                     sw.WriteLine("cls");
                     sw.WriteLine("echo 수간 추출 및 하층식생 제거 중...");
                     sw.WriteLine($"cd {this.resultSavedDirectory + shape + @"\intermediate"}");
-                    sw.WriteLine("csp_segmentstem \"" + configpath + "\"");
+                    sw.WriteLine("csp_segmentstem \"" + databaseFileName + "\"");
                     sw.WriteLine();
                 }
                 ProcessBatch(eight + originLasName + ".bat");
@@ -1239,14 +1261,14 @@ namespace WinFormsAppTest
                     sw.WriteLine("chcp 65001 > nul");
                     sw.WriteLine("cls");
                     sw.WriteLine("echo 개별목 추출 중...");
-                    sw.WriteLine($"cd {this.resultSavedDirectory + shape + @"\intermediate"}");
-                    sw.WriteLine("csp_segmentcrown \"" + configpath + "\"");
-                    sw.WriteLine();
-                    sw.WriteLine("set destination=\"{0}\"", destination);
-                    sw.WriteLine();
-                    sw.WriteLine("for /r %%i in (*{0}*.pcd) do (", tree_name);
-                    sw.WriteLine("    move \"%%i\" \"%destination%\"");
-                    sw.WriteLine(")");
+                    //sw.WriteLine($"cd {this.resultSavedDirectory + shape + @"\intermediate"}");
+                    sw.WriteLine("csp_segmentcrown \"" + databaseFileName + "\"");
+                    //sw.WriteLine();
+                    //sw.WriteLine("set destination=\"{0}\"", destination);
+                    //sw.WriteLine();
+                    //sw.WriteLine("for /r %%i in (*{0}*.pcd) do (", tree_name);
+                    //sw.WriteLine("    move \"%%i\" \"%destination%\"");
+                    //sw.WriteLine(")");
                 }
                 ProcessBatch(nine + originLasName + ".bat");
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + nine + originLasName + ".bat 파일을 생성했습니다.");
@@ -1272,7 +1294,7 @@ namespace WinFormsAppTest
                     sw.WriteLine("cls");
                     sw.WriteLine("echo 산림 속성 정보 계산중...  ");
                     sw.WriteLine($"cd {this.resultSavedDirectory + shape + @"\intermediate"}");
-                    sw.WriteLine("measure " + @"../tree" + " \"" + configpath + "\"");
+                    sw.WriteLine("measure " + @"../tree" + " \"" + databaseFileName + "\"");
                 }
                 ProcessBatch(ten + originLasName + ".bat");
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + ten + originLasName + ".bat 파일을 생성했습니다.");
@@ -1551,8 +1573,6 @@ namespace WinFormsAppTest
 
                 RunFileTenth();//measure
                 
-
-
                 if (CatchError(resultP + @"\tree\", 10)) return;
 
                 RunFileEleventh();
@@ -1560,15 +1580,15 @@ namespace WinFormsAppTest
                 ProgressBarSet(progress);
                 //del_inter();
 
-                using (StreamWriter sw = File.CreateText(@"C:\testLog.txt"))
-                {
-                    if(!File.Exists(@"C:\testLog.txt"))
-                    {
-                        MessageBox.Show("txt파일 미생성");
-                        return;
-                    }
-                    sw.Write(progressLog);
-                }
+                //using (StreamWriter sw = File.CreateText(@"C:\testLog.txt"))
+                //{
+                //    if(!File.Exists(@"C:\testLog.txt"))
+                //    {
+                //        MessageBox.Show("txt파일 미생성");
+                //        return;
+                //    }
+                //    sw.Write(progressLog);
+                //}
 
                 progressDialog.Close();
             }
