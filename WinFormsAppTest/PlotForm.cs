@@ -27,15 +27,11 @@ namespace WinFormsAppTest
         {
             InitializeComponent();
 
-
             //아래 plotForm 컴포넌트들 세팅
             pnPlotSelection.isBorder = false;
             pnPlotSelection.borderColor = Color.White;
             pnPlotData.isBorder = false;
             pnPlotData.borderColor = Color.White;
-            //tpPlotCircle.BackColor = this.BackColor;
-            //tpPlotPoly.BackColor = this.BackColor;
-            //tpPlotRec.BackColor = this.BackColor;
 
             cbPlotShape.SelectedIndex = 0;
             this.paramForm = paramForm;
@@ -43,10 +39,13 @@ namespace WinFormsAppTest
 
         private void PlotForm_Load(object sender, EventArgs e)
         {
+            //각종 DB 연결을 위한 파라메터 전처리
             bin_folder = paramForm.bin_folder;
             databaseFileName = paramForm.databaseFileName;
 
+            //DB에서 GUI 구조체로 미리 담아둔 plot값을 textBox로 읽어옴
             initTextBox();
+            //결과 폴더 경로 설정
             resultPath = paramForm.SelectDataFromTable(databaseFileName, "gui", "result_path");
 
             this.KeyPreview = true;
@@ -197,8 +196,36 @@ namespace WinFormsAppTest
             paramForm.gui.yMin = double.Parse(tbPlotRecYmin.Text);
             paramForm.gui.yMax = double.Parse(tbPlotRecYmax.Text);
 
-            resultSavedDirectory = resultPath + @"\" + DateTime.Now.ToString("yyyyMMdd_HH_mm_ss") + originLasName;
+            resultSavedDirectory = resultPath + @"\" + DateTime.Now.ToString("yyyyMMdd_HH_mm_ss_") + originLasName;
 
+            ProgressDialog_Create();
+
+            btnPlotOK.Enabled = false;
+            btnPlotCancel.Enabled = false;
+
+            //winform을 실행하는 스레드와 다른 스레드에서 본 기능을 실행하기 위함(나름의 자원 분산)
+            await Task.Run(() =>
+            { 
+                //각 단계 실행
+                preProAndExcuteStep();
+
+                if (progress == 10)
+                {
+                    MessageBox.Show("실행 완료");
+                    progressDialog.Close();
+                }
+                else
+                {
+                    MessageBox.Show(progress + "단계 에러");
+                    return;
+                }
+            });
+            btnPlotOK.Enabled = true;
+            btnPlotCancel.Enabled = true;
+        }
+
+        private void ProgressDialog_Create()
+        {
             progressDialog = new Form
             {
                 Width = 600,
@@ -230,31 +257,6 @@ namespace WinFormsAppTest
             progressDialog.Controls.Add(pbLoadingBar);
             progressDialog.Controls.Add(progressTextBox);
             progressDialog.Show();
-
-            //progressBar 진행도 세팅
-            progress = 0;
-            ProgressBarSet(progress);
-
-            btnPlotOK.Enabled = false;
-            btnPlotCancel.Enabled = false;
-            await Task.Run(() =>
-            { 
-                //각 단계 실행
-                preProAndExcuteStep();
-
-                if (progress == 10)
-                {
-                    MessageBox.Show("실행 완료");
-                    progressDialog.Close();
-                }
-                else
-                {
-                    MessageBox.Show(progress + "단계 에러");
-                    return;
-                }
-            });
-            btnPlotOK.Enabled = true;
-            btnPlotCancel.Enabled = true;
         }
 
         private void ProgressBarSet(int level)
@@ -460,7 +462,8 @@ namespace WinFormsAppTest
             }
             paramForm.gui.yMax = double.Parse(tbPlotRecYmax.Text);
         }
-        //텍스트박스 초기화
+
+        //Gui 구조체 -> plot값 텍스트박스 초기화
         private void initTextBox()
         {
             tbPlotCircleX.Text = paramForm.gui.centerX.ToString();
@@ -492,7 +495,7 @@ namespace WinFormsAppTest
                 if (!File.Exists(dat_filePath))
                 {
                     //progressDialog -> 사용자를 위한 로딩창
-                    var progressDialog = new Form
+                    var extractDialog = new Form
                     {
                         Width = 250,
                         Height = 200,
@@ -509,8 +512,8 @@ namespace WinFormsAppTest
                         SizeMode = PictureBoxSizeMode.StretchImage,
                     };
 
-                    progressDialog.Controls.Add(gifBox);
-                    progressDialog.Show();
+                    extractDialog.Controls.Add(gifBox);
+                    extractDialog.Show();
                     //Task를 이용한 이유 : MakeInfo와 progressDialog의 pictureBox gif가
                     //동시에 동작하게 하기 위함.(안쓰면 쓰레드 우선순위 문제로 gif 애니메이션이 안움직임)
 
@@ -520,7 +523,7 @@ namespace WinFormsAppTest
                     btnPlotCancel.Enabled = true;
                     btnPlotOK.Enabled = true;
 
-                    progressDialog.Dispose();
+                    extractDialog.Dispose();
                 }
                 //Las파일 크기 정보 읽기
                 readInfo(filePath, infoDir);

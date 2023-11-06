@@ -19,24 +19,20 @@ namespace WinFormsAppTest
         //변수 구조체   --> public 제외 나머지는 삭제예정
         public GUI gui = new GUI();
 
-        //csv의 파라메터를 저장하기 위한 변수
-        public List<List<string>> csv_data = new List<List<string>>();
-
         //exe파일이 위치한 기본 폴더와 그 내부 config 폴더들
         internal static string basePath = (Environment.CurrentDirectory).ToString();
-        internal static string[] reqDi = { "", "RecentConfig", "PresetConfig" };
-        public string csv_path = Path.Combine(basePath, "config.csv");
 
-        //config 파일의 타입(preset recent default)
-        public string fileType = "";
-
-        //db 파일 명
+        //db 파일의 위치와 db 파일 명
         public string bin_folder;
         public string databaseFileName;
+
         //테이블 이름 목록
         public string[] tablename = { "gui", "filters_crop", "filters_outlier", "filters_smrf", "filters_range_trunk", "filters_range_crown", "csp_segmentstem", "csp_segmentcrown", "measure" };
 
-        //Circle형 plot값 csv->구조체로 뽑아내는 메서드
+
+
+        //Circle형 plot값 DB 파일->구조체로 뽑아내는 메서드
+        //plot값은 plotForm이 열리기 전까지 넣을 곳이 없기에 구조체가 필요
         void ExtractCircleValues(ref GUI guiStruct, string circleString)
         {
             string[] parts = circleString.Split(' ');
@@ -64,7 +60,9 @@ namespace WinFormsAppTest
                 }
             }
         }
-        //Rect형 plot값 csv->구조체로 뽑아내는 메서드
+
+        //Rect형 plot값 DB 파일->구조체로 뽑아내는 메서드
+        //plot값은 plotForm이 열리기 전까지 넣을 곳이 없기에 구조체가 필요
         void ExtractRectangleValues(ref GUI guiStruct,string rectangleString)
         {
             string[] parts = rectangleString.Split(' ');
@@ -96,8 +94,6 @@ namespace WinFormsAppTest
             }
         }
         
-        
-
         // 무결성 검사를 위한 코드
         private void RegistTextBoxHandler()
         {
@@ -213,6 +209,7 @@ namespace WinFormsAppTest
                 MessageBox.Show("오류: " + ex.Message);
             }
         }
+
         //전체 테이블 삭제
         public void DeleteAllTables(string databaseFileName, string[] tableNames)
         {
@@ -242,6 +239,7 @@ namespace WinFormsAppTest
                 MessageBox.Show("오류: " + ex.Message);
             }
         }
+
         //db파일 삭제
         public void delete_dbFile()
         {
@@ -379,6 +377,7 @@ namespace WinFormsAppTest
 
             return value;
         }
+
         //db를 읽어서 하나의 테이블을 List<List<string>>형태로 반환
         public List<List<string>> SelectDataFromTable(string databaseFileName, string tableName)
         {
@@ -519,8 +518,7 @@ namespace WinFormsAppTest
             InsertDataIntoTable("measure", "private", "tree_files", "", "추출된 개체목 파일입니다.");
         }
 
-
-        //textbox 값 -> List 테이블로 대입 
+        //textbox 값 -> DB 테이블로 대입 
         private void UpdateParams()
         {
             //Normalize_textboxes
@@ -538,7 +536,7 @@ namespace WinFormsAppTest
             //CrownSlice_textboxes
             UpdateDataInTable("filters_range_crown", "minheight", tbCrownMinHeight.Text.Trim());
         }
-        //List 테이블 -> textbox 대입
+        //DB 테이블 -> textbox 대입
         private void FillTextboxes()
         {
             ExtractCircleValues(ref gui, SelectDataFromTable(databaseFileName, "gui", "circle"));

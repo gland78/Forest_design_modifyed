@@ -34,9 +34,6 @@ namespace WinFormsAppTest
         //버퍼 계산 시 사용되는 좌표 구조체
         Coords bufferedPolycords = new Coords();
 
-        //PlotForm 윈폼 이동 이벤트 관련 변수
-        private Point relativePformPos = new Point();
-
         //las파일 크기 저장 구조체
         struct LasSize
         {
@@ -47,20 +44,15 @@ namespace WinFormsAppTest
         }
         LasSize lasSize = new LasSize();
 
-        //테스트용 변수(임시)
-        string progressLog = "";
-
         public Form progressDialog;
-
         public TextBox progressTextBox;
-
         public ProgressBar pbLoadingBar;
 
 
         //db 파일 명
         string bin_folder="";
         string databaseFileName="";
-        //테이블 이름 목록
+        //테이블 이름 목록(현재 안쓰였음 - 삭제 보류 중)
         string[] tablename = { "gui", "filters_crop", "filters_outlier", "filters_smrf", "filters_range_trunk", "filters_range_crown", "csp_segmentstem", "csp_segmentcrown", "measure" };
 
         //PLOT
@@ -441,6 +433,7 @@ namespace WinFormsAppTest
             }
             LogWrite(resultSavedDirectory + shape + @"\intermediate\" + six + originLasName + "_O.dat 파일을 생성했습니다.");
         }
+
         private void Turn_Las_into_PCD()
         {
             string four = "level4_LAStoPCD";
@@ -609,6 +602,7 @@ namespace WinFormsAppTest
             paramForm.UpdateDataInTable("csp_segmentstem", "trunk_slice_file", trunkslicefile);
             paramForm.UpdateDataInTable("csp_segmentcrown", "crown_slice_file", crownslicefile);
         }
+
         private void AppendEighthCSVFile()
         {
             List<String> filenames_pcd = new List<String>();
@@ -625,10 +619,10 @@ namespace WinFormsAppTest
 
             paramForm.UpdateDataInTable("csp_segmentstem", "trunk_files", string.Join(" ", filenames_pcd));
         }
+
         //배치파일 실행 코드
         private void ProcessBatch(string batFile)
         {
-            string output = "";
             using (Process proc = new Process())
             {
                 //proc.StartInfo.WorkingDirectory = resultSavedDirectory + shape + @"\intermediate\";
@@ -683,6 +677,7 @@ namespace WinFormsAppTest
         }
 
         //배치파일 작성 코드
+        //배치파일 작성 부분 메서드로 빼서 정리 가능해보임
         private void RunFileZero(string target_path)
         {
             string zero = "level0_DuplicateRemove_";
@@ -1162,7 +1157,6 @@ namespace WinFormsAppTest
             }
         }
 
-
         //LAS파일 이름 변경 코드
         private void ChangeLasName()
         {
@@ -1272,6 +1266,7 @@ namespace WinFormsAppTest
                 MessageBox.Show("10단계 오류 : " + ex.Message);
             }
         }
+
         //로그 작성 코드
         private void LogWrite(string message)
         {
@@ -1307,6 +1302,7 @@ namespace WinFormsAppTest
                 MessageBox.Show(e.ToString());
             }
         }
+
         //전체 process 실행 코드
         private void preProAndExcuteStep()
         {
@@ -1499,7 +1495,8 @@ namespace WinFormsAppTest
 
             return isError;
         }
-        //LAS 데이터 텍스트 박스 change 이벤트 처리 코드
+
+        //LAS파일 입력 시 각 경로 세팅(Las파일 경로, 이름 등)
         private void tbPlotData_TextChanged(object sender, EventArgs e)
         {
             paramForm.gui.loadPath = tbPlotData.Text;
@@ -1535,7 +1532,7 @@ namespace WinFormsAppTest
             }
         }
 
-        //일단 대기
+        //Las파일 크기 읽고 유효값인지 점검
         private bool IsLasSizeValid()
         {
             if (lasSize.minx == 0 && lasSize.miny == 0 && lasSize.maxx == 0 && lasSize.maxy == 0)
@@ -1572,6 +1569,5 @@ namespace WinFormsAppTest
             RunFileZero(filename);
             originLasName = dupRemovedfile;
         }
-
     }
 }

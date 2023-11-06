@@ -682,6 +682,7 @@ namespace WinFormsAppTest
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterParent;
             Text = "ForestLi";
+            FormClosing += MainForm_FormClosing;
             Load += MainForm_Load;
             pnSideMenu.ResumeLayout(false);
             pnSideMenu.PerformLayout();

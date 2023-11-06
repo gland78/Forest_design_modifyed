@@ -10,27 +10,16 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Data.SQLite;
+using System.Diagnostics;
 
 namespace WinFormsAppTest
 {
     //델리게이트 메서드들. private인 일반 메서드를 다른 form에서 쓸 수 있게하는 역할
-    internal delegate Dictionary<string, double> plotDataHandler();
-
-    internal delegate void customEventHandler();
-
-    internal delegate void configHandler(configFileType type);
-
-    internal delegate void setIntEventHandler(int setValue);
-
-    internal delegate void setStringEventHandler(string setValue);
-
     internal delegate void switchEventHandler(bool onOff);
-
-    internal delegate void presetReflectHandler(string fileDi, string fileName);
 
     public partial class MainForm : Form
     {
-        //아래 enum 전까지 윈도우폼 최대화 제거 작업
+        //OnLoad 메서드까지 윈도우의 최대화 버튼 비활성화 작업
         [DllImport("user32.dll")]
         private static extern bool DeleteMenu(IntPtr hMenu, uint uPosition, uint uFlags);
         [DllImport("user32.dll")]
@@ -47,16 +36,6 @@ namespace WinFormsAppTest
             DeleteMenu(systemMenu, SC_MAXIMIZE, MF_BYCOMMAND);
         }
 
-        public enum configFileType
-        {
-            Default,
-            Recent,
-            Preset
-        }
-
-        //plot값을 PlotForm으로부터 받기 위한 delegate
-        internal plotDataHandler plotSender;
-
         //다른 폼들을 띄우고 delegate를 통해 메서드 전달을 위한 form 변수
         private PlotForm? pFrm;
 
@@ -69,10 +48,6 @@ namespace WinFormsAppTest
         {
             InitializeComponent();
             DoubleBuffered = true;
-
-            customPanels_Load();
-
-            custom_Initialize();
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -94,16 +69,12 @@ namespace WinFormsAppTest
             Point screenSize = ((Point)Screen.PrimaryScreen.Bounds.Size);
             this.Location = new Point((screenSize.X - this.Width) / 2, (screenSize.Y - this.Height) / 2);
 
-            //메인폼의 각 컴포넌트 이벤트 설정
-            mainForm_AddEvent();
-        }
-
-        private void custom_Initialize()
-        {
+            //프로그램 각종 외형 설정(커스텀 파라미터는 Designer.cs에서 설정 불가)
+            customPanels_Load();
             pnMain.isBorder = false;
 
-            pnSideMenu.Width = MIN_SLIDING_WIDTH;
-            tcMainHome.Left -= SLIDING_GAP / 2;
+            //메인폼의 각 컴포넌트 이벤트 설정
+            mainForm_AddEvent();
         }
 
         //메인 폼 로드 전 이벤트 전처리(Designer.cs에 넣으면 찾기가 힘듬)
@@ -303,12 +274,12 @@ namespace WinFormsAppTest
                 dialogResult = MessageBox.Show("현재 설정이 적용되지 않았습니다.\n적용하시겠습니까?", "", MessageBoxButtons.YesNo);
             }
 
-            //아래 btnSettingApply_Click에서 fileType 변수를 사용하므로 채워준 것
-
+            //예 클릭 시 설정값 적용
             if (dialogResult == DialogResult.Yes)
             {
                 btnSettingApply_Click(sender, e);
             }
+            //아니요 클릭 시 DB값 읽어서 원상복구
             else if (dialogResult == DialogResult.No)
             {
                 FillTextboxes();
@@ -384,6 +355,24 @@ namespace WinFormsAppTest
         private void startBtnAttach(bool onOff)
         {
             btnStart.Visible = onOff;
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Process[] allProc = Process.GetProcesses();
+
+            foreach (Process procs in allProc)
+            {
+                try
+                {
+                    if (procs.ProcessName == "ForestLi")
+                        procs.Kill();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
         }
     }
 }
