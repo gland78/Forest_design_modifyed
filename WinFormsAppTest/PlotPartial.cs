@@ -215,8 +215,8 @@ namespace WinFormsAppTest
         {
             string one = "level1_cropped_";
             string resultSavedDirectory = this.resultSavedDirectory + shape;
-            double centerX = double.Parse(tbPlotCircleX.Text);
-            double centerY = double.Parse(tbPlotCircleY.Text);
+            double centerX = double.Parse(tbPlotCircleX.Text) + double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_xmin"));
+            double centerY = double.Parse(tbPlotCircleY.Text) + double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_ymin"));
             double radius = double.Parse(tbPlotCircleR.Text);
             double buffer = double.Parse(paramForm.SelectDataFromTable(databaseFileName, "filters_crop", "buffer"));
             {
@@ -246,10 +246,10 @@ namespace WinFormsAppTest
             string one = "level1_cropped_";
             string resultSavedDirectory = this.resultSavedDirectory + shape;
 
-            double xmin = double.Parse(tbPlotRecXmin.Text);
-            double ymin = double.Parse(tbPlotRecYmin.Text);
-            double xmax = double.Parse(tbPlotRecXmax.Text);
-            double ymax = double.Parse(tbPlotRecYmax.Text);
+            double xmin = double.Parse(tbPlotRecXmin.Text) + double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_xmin")); ;
+            double ymin = double.Parse(tbPlotRecYmin.Text) + double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_ymin")); ;
+            double xmax = double.Parse(tbPlotRecXmax.Text) + double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_xmin")); ;
+            double ymax = double.Parse(tbPlotRecYmax.Text) + double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_ymin")); ;
             double buffer = double.Parse(paramForm.SelectDataFromTable(databaseFileName, "filters_crop", "buffer"));
 
             double width = Math.Abs(xmax - xmin);
@@ -305,12 +305,12 @@ namespace WinFormsAppTest
             double dif_h = (buffer_height - height) / 2;
 
             point new_LT;
-            new_LT.x = bufferedPolycords.left.x - dif_w;
-            new_LT.y = bufferedPolycords.top.y + dif_h;
+            new_LT.x = bufferedPolycords.left.x + double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_xmin")) - dif_w;
+            new_LT.y = bufferedPolycords.top.y + double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_ymin")) + dif_h;
 
             point new_RB;
-            new_RB.x = bufferedPolycords.right.x + dif_w;
-            new_RB.y = bufferedPolycords.bottom.y - dif_h;
+            new_RB.x = bufferedPolycords.right.x + double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_xmin")) + dif_w;
+            new_RB.y = bufferedPolycords.bottom.y + double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_ymin")) - dif_h;
             {
                 //default
                 //버퍼 적용
@@ -560,15 +560,14 @@ namespace WinFormsAppTest
         private void ExtractOriginDat()
         {
             string six = "level6_extractOriginDat_"; //crop 후 dat 파일 만들기
-            string dat_str = "";                    
+            string dat_str = "";
+            poly_points = paramForm.gui.pointList;
             {
                 if (shape == "_polygon")
                 {
                     try
                     {
                         paramForm.UpdateDataInTable("filters_crop", "origin_dat", poly_points);
-                        //paramForm.setParam(paramForm.csv_data, "filters.crop", "origin_dat", poly_points);
-                        //paramForm.write_csv(configpath);
                     }
                     catch (Exception ex)
                     {
