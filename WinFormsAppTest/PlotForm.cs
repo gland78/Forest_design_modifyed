@@ -128,9 +128,12 @@ namespace WinFormsAppTest
                     {
                         points[i].x = double.Parse(tempPointList[i][0]);
                         points[i].y = double.Parse(tempPointList[i][1]);
+
+                        poly_points += tempPointList[i][0] + " " + tempPointList[i][1] + " ";
+
                         for (int j = 1; j < tempPointList[i].Length; j++)
                         {
-                            pointList += (tempPointList[i][j - 1] + " "); ;
+                            pointList += (tempPointList[i][j - 1] + " ");
                         }
                         pointList += ", ";
                     }
@@ -142,7 +145,6 @@ namespace WinFormsAppTest
                     pointList += tempPointList[0][0] + " ";
                     pointList += tempPointList[0][1];
                     //=============================================
-                    //MessageBox.Show(pointList);
                     paramForm.gui.pointList = pointList;
                 }//if문
             }
@@ -150,6 +152,12 @@ namespace WinFormsAppTest
         /// 전체 과정 실행 버튼
         private async void btnPlotOK_Click(object sender, EventArgs e)
         {
+
+            paramForm.UpdateDataInTable("gui", "org_xmin", lasSize.minx.ToString());
+            paramForm.UpdateDataInTable("gui", "org_ymin", lasSize.miny.ToString());
+            paramForm.UpdateDataInTable("gui", "org_zmin", lasSize.minz.ToString());
+            paramForm.UpdateDataInTable("gui", "origin_las_file", originLasName + ".las");
+
             //무결성 검사
             bool isEmptyVal_cir = tbPlotCircleX.Text == "" && tbPlotCircleY.Text == "" && tbPlotCircleR.Text == "";//원형 표준지에 필요한 값들이 비어있는경우
             bool isRadiusZero = (Double.Parse(tbPlotCircleR.Text) <= 0);//radius값이 0인지 확인
@@ -592,6 +600,9 @@ namespace WinFormsAppTest
                 lasSize.maxx = (double)jsonSizeTok["maxx"];
                 lasSize.miny = (double)jsonSizeTok["miny"];
                 lasSize.maxy = (double)jsonSizeTok["maxy"];
+                lasSize.minz = (double)jsonSizeTok["minz"];
+                lasSize.maxz = (double)jsonSizeTok["maxz"];
+
 
                 //lasSize에 담긴 정보로.dat파일 만들기
                 string datFilePath = Path.Combine(dirPath, $"{fileName}.dat");
@@ -640,6 +651,12 @@ namespace WinFormsAppTest
                             case "miny":
                                 lasSize.miny = double.Parse(sizeTok[1]);
                                 break;
+                            case "minz":
+                                lasSize.minz = double.Parse(sizeTok[1]);
+                                break;
+                            case "maxz":
+                                lasSize.maxz = double.Parse(sizeTok[1]);
+                                break;
                         }
                     }
                 }
@@ -650,7 +667,6 @@ namespace WinFormsAppTest
                 return;
             }
         }
-
         //esc키로 창 닫기
         private void PlotForm_KeyDown(object sender, KeyEventArgs e)
         {

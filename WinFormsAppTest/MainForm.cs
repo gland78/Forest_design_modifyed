@@ -36,7 +36,7 @@ namespace WinFormsAppTest
 
             string res_path = Path.Combine(parentDirectory.FullName, "result");
 
-            //bin_path 확인 및 db파일 체크
+            //db 변수 초기화, db 생성
             create_dbFile_dbtable();
             UpdateDataInTable("gui", "result_path", res_path);
             //MessageBox.Show(SelectDataFromTable(databaseFileName, "gui", "result_path"));
@@ -236,12 +236,12 @@ namespace WinFormsAppTest
             applyChecker[3] = tbNorThres.Text == SelectDataFromTable(databaseFileName, "filters_smrf", "threshold");
             applyChecker[4] = tbNorWinSize.Text == SelectDataFromTable(databaseFileName, "filters_smrf", "window");
             //trunkSlice_textboxes
-            applyChecker[5] = tbTrunkMinHeight.Text == SelectDataFromTable(databaseFileName, "filters_range_trunk", "minheight");
-            applyChecker[6] = tbTrunkMaxHeight.Text == SelectDataFromTable(databaseFileName, "filters_range_trunk", "maxheight");
-            applyChecker[7] = tbTrunkSmooth.Text == SelectDataFromTable(databaseFileName, "csp_segmentstem", "smoothness");
+            applyChecker[6] = tbTrunkMinHeight.Text == SelectDataFromTable(databaseFileName, "filters_range_trunk", "minheight");
+            applyChecker[7] = tbTrunkMaxHeight.Text == SelectDataFromTable(databaseFileName, "filters_range_trunk", "maxheight");
+            applyChecker[8] = tbTrunkSmooth.Text == SelectDataFromTable(databaseFileName, "csp_segmentstem", "smoothness");
 
             //CrownSlice_textboxes
-            applyChecker[8] = tbCrownMinHeight.Text == SelectDataFromTable(databaseFileName, "filters_range_crown", "minheight");
+            applyChecker[9] = tbCrownMinHeight.Text == SelectDataFromTable(databaseFileName, "filters_range_crown", "minheight");
 
             foreach (bool checker in applyChecker)
             {
@@ -352,6 +352,19 @@ namespace WinFormsAppTest
                     MessageBox.Show(ex.Message);
                 }
             }
+        }
+
+        //공장초기화 버튼
+        private void btn_factory_reset_Click(object sender, EventArgs e)
+        {
+            //FactoryReset(csv_path);
+            DeleteAllTables(databaseFileName, tablename);
+            CreateTable(databaseFileName, tablename);
+            insert_initial_data();
+        }
+        private void btn_factory_reset_MouseHover(object sender, EventArgs e)
+        {
+            ttMainInfo.SetToolTip(btnFactoryReset, "기본 설정값을 초기로 되돌립니다\n기존의 기본값은 따로 저장되지 않습니다");
         }
     }
 }

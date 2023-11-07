@@ -129,6 +129,40 @@ namespace WinFormsAppTest
                 e.Handled = true;
             }
         }
+                    if (csvLines.Contains("gui,private,rectangle"))
+                        tbTrunkMinHeight.Text = csvLines.Split(",")[3];
+                    }
+
+                    else if (csvLines.Contains("filters.range.trunk,public,maxheight"))
+                    {
+                        tbTrunkMaxHeight.Text = csvLines.Split(",")[3];
+                    }
+                    else if (csvLines.Contains("csp_segmentstem,public,smoothness"))
+                    {
+                        tbTrunkSmooth.Text = csvLines.Split(",")[3];
+                    }
+                    else if (csvLines.Contains("filters.range.crown,public,minheight"))
+                    {
+                        tbCrownMinHeight.Text = csvLines.Split(",")[3];
+                    }
+                }
+            }
+            tcMainHome.SelectedIndex = 1;
+        }
+        //임시로 저장된 plot값을 적용하기 버튼을 누를 시
+        //gui 구조체로 옮겨담는 역할
+        private void apply_temp()
+        {
+            gui.loadPath = guiTemp.loadPath;
+            gui.centerX = guiTemp.centerX;
+            gui.centerY = guiTemp.centerY;
+            gui.radius = guiTemp.radius;
+            gui.xMin = guiTemp.xMin;
+            gui.xMax = guiTemp.xMax;
+            gui.yMin = guiTemp.yMin;
+            gui.yMax = guiTemp.yMax;
+        }
+
 
         //db파일 생성 및 테이블 생성
         private void create_dbFile_dbtable()
@@ -143,8 +177,7 @@ namespace WinFormsAppTest
             }
             else
             {
-                MessageBox.Show("필수 파일이 존재하지 않습니다: bin_path.txt");
-                Application.Exit();
+                Console.WriteLine("파일이 존재하지 않습니다.");
             }
 
             databaseFileName = Path.Combine(bin_folder, "config.db");
@@ -169,7 +202,7 @@ namespace WinFormsAppTest
             {
                 Directory.CreateDirectory(bin_folder);
             }
-            if (!File.Exists(databaseFileName))
+            if (!System.IO.File.Exists(databaseFileName))
             {
                 SQLiteConnection.CreateFile(databaseFileName);
                 //MessageBox.Show("데이터베이스 파일이 성공적으로 생성되었습니다.");
@@ -482,7 +515,11 @@ namespace WinFormsAppTest
             InsertDataIntoTable("gui", "private", "rectangle", "xmin=-10 xmax=10 ymin=-10 ymax=10", "xmin,xmax,ymin,ymax는 범위 자료입니다.");
             InsertDataIntoTable("gui", "private", "result_path", "..\\result", "결과를 저장하는 폴더입니다.");
             InsertDataIntoTable("gui", "private", "intermediate_dir", "", "중간산출물을 저장하는 폴더입니다.");
-            InsertDataIntoTable("gui", "private", "tree_dir", "", "개체목 저장하는 폴더입니다.");
+            InsertDataIntoTable("gui", "private", "org_xmin", "", "원본 las xmin 좌표.");
+            InsertDataIntoTable("gui", "private", "org_xmin", "", "원본 las ymin 좌표.");
+            InsertDataIntoTable("gui", "private", "org_xmin", "", "원본 las zmin 좌표.");
+            InsertDataIntoTable("gui", "private", "internal_las_file", "a", "내부적으로 사용할 las 파일 이름.");
+            InsertDataIntoTable("gui", "private", "origin_las_file", "", "원본 las 파일 이름.");
             InsertDataIntoTable("filters_crop", "private", "buffer", "120", "plot 영역보다 120% 큰 영역을 의미한다.");
             InsertDataIntoTable("filters_crop", "private", "bufferd_dat", "xmin=-12.35 xmax=12.43 ymin=-6.22 ymax=22.14", "bufferd_plot 영역의 정보를 저장하는 파일 이름이다.");
             InsertDataIntoTable("filters_crop", "private", "origin_dat", "xmin=-14.738 xmax=5.531 ymin=-2.147 ymax=15.436 cx=0 cy=0 radius=100", "origin_plot 영역의 정보를 저장하는 파일 이름이다.");
