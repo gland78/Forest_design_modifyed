@@ -1146,10 +1146,5 @@ namespace WinFormsAppTest
         {
             btnStart.Visible = onOff;
         }
-
-
-        
-
-        
     }
 }

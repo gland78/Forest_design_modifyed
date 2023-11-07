@@ -156,9 +156,12 @@ namespace WinFormsAppTest
                     {
                         points[i].x = double.Parse(tempPointList[i][0]);
                         points[i].y = double.Parse(tempPointList[i][1]);
+
+                        poly_points += tempPointList[i][0] + " " + tempPointList[i][1] + " ";
+
                         for (int j = 1; j < tempPointList[i].Length; j++)
                         {
-                            pointList += (tempPointList[i][j - 1] + " "); ;
+                            pointList += (tempPointList[i][j - 1] + " ");
                         }
                         pointList += ", ";
                     }
@@ -170,8 +173,11 @@ namespace WinFormsAppTest
                     pointList += tempPointList[0][0] + " ";
                     pointList += tempPointList[0][1];
                     //=============================================
-                    //MessageBox.Show(pointList);
                     paramForm.gui.pointList = pointList;
+
+                    //poly_points = pointList;
+
+                    //MessageBox.Show(poly_points);
                 }//if문
             }
         }
