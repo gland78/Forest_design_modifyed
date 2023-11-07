@@ -19,35 +19,14 @@ namespace WinFormsAppTest
 
     public partial class MainForm : Form
     {
-        //OnLoad 메서드까지 윈도우의 최대화 버튼 비활성화 작업
-        [DllImport("user32.dll")]
-        private static extern bool DeleteMenu(IntPtr hMenu, uint uPosition, uint uFlags);
-        [DllImport("user32.dll")]
-        private static extern IntPtr GetSystemMenu(IntPtr hWnd, bool bRevert);
-
-        private const uint MF_BYCOMMAND = 0x00000000;
-        private const uint SC_MAXIMIZE = 0xF030;
-
-        protected override void OnLoad(EventArgs e)
-        {
-            base.OnLoad(e);
-
-            IntPtr systemMenu = GetSystemMenu(this.Handle, false);
-            DeleteMenu(systemMenu, SC_MAXIMIZE, MF_BYCOMMAND);
-        }
-
         //다른 폼들을 띄우고 delegate를 통해 메서드 전달을 위한 form 변수
         private PlotForm? pFrm;
-
-        //사이드 메뉴의 최대, 최소 폭 크기 및 그 차이
-        const int MAX_SLIDING_WIDTH = 384;
-        const int MIN_SLIDING_WIDTH = 65;
-        const int SLIDING_GAP = MAX_SLIDING_WIDTH - MIN_SLIDING_WIDTH;
 
         public MainForm()
         {
             InitializeComponent();
             DoubleBuffered = true;
+            MaximizeBox = false;
         }
 
         private void MainForm_Load(object sender, EventArgs e)

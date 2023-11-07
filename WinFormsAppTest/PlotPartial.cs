@@ -1442,16 +1442,8 @@ namespace WinFormsAppTest
                 //    }
                 //    sw.Write(progressLog);
                 //}
-                MessageBox.Show("Close in");
-
-                if (progressDialog == null)
-                {
-                    MessageBox.Show("null");
-                }
 
                 progressDialog.Invoke(new Action(() => progressDialog.Close()));
-
-                MessageBox.Show("Close out");
             }
             else
             {

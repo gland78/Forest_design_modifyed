@@ -35,10 +35,10 @@ namespace WinFormsAppTest
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             pnSideMenu = new Panel();
+            btnSettings = new CustomBtn();
             lbSetting = new Label();
             lbHome = new Label();
             btnHome = new CustomBtn();
-            btnSettings = new CustomBtn();
             tcMainHome = new CustomTabControl();
             tpMainHome = new TabPage();
             pnMain = new CustomPanel();
@@ -100,16 +100,36 @@ namespace WinFormsAppTest
             // 
             pnSideMenu.BackColor = Color.FromArgb(60, 94, 94);
             pnSideMenu.BackgroundImageLayout = ImageLayout.Zoom;
+            pnSideMenu.Controls.Add(btnSettings);
             pnSideMenu.Controls.Add(lbSetting);
             pnSideMenu.Controls.Add(lbHome);
             pnSideMenu.Controls.Add(btnHome);
-            pnSideMenu.Controls.Add(btnSettings);
             pnSideMenu.Dock = DockStyle.Left;
             pnSideMenu.Location = new Point(0, 0);
             pnSideMenu.Margin = new Padding(3, 4, 3, 4);
             pnSideMenu.Name = "pnSideMenu";
             pnSideMenu.Size = new Size(65, 500);
             pnSideMenu.TabIndex = 2;
+            // 
+            // btnSettings
+            // 
+            btnSettings.BackColor = Color.Transparent;
+            btnSettings.BackgroundColor = Color.Transparent;
+            btnSettings.BorderColor = Color.Transparent;
+            btnSettings.BorderRadius = 5;
+            btnSettings.BorderSize = 0;
+            btnSettings.FlatAppearance.BorderSize = 0;
+            btnSettings.FlatAppearance.MouseDownBackColor = Color.FromArgb(128, 162, 162);
+            btnSettings.FlatAppearance.MouseOverBackColor = Color.FromArgb(96, 128, 128);
+            btnSettings.FlatStyle = FlatStyle.Flat;
+            btnSettings.ForeColor = Color.White;
+            btnSettings.Image = (Image)resources.GetObject("btnSettings.Image");
+            btnSettings.Location = new Point(14, 66);
+            btnSettings.Name = "btnSettings";
+            btnSettings.Size = new Size(38, 34);
+            btnSettings.TabIndex = 10;
+            btnSettings.TextColor = Color.White;
+            btnSettings.UseVisualStyleBackColor = false;
             // 
             // lbSetting
             // 
@@ -157,30 +177,6 @@ namespace WinFormsAppTest
             btnHome.TextColor = Color.White;
             btnHome.TextImageRelation = TextImageRelation.ImageAboveText;
             btnHome.UseVisualStyleBackColor = false;
-            // 
-            // btnSettings
-            // 
-            btnSettings.BackColor = Color.Transparent;
-            btnSettings.BackgroundColor = Color.Transparent;
-            btnSettings.BackgroundImage = (Image)resources.GetObject("btnSettings.BackgroundImage");
-            btnSettings.BackgroundImageLayout = ImageLayout.Center;
-            btnSettings.BorderColor = Color.Transparent;
-            btnSettings.BorderRadius = 5;
-            btnSettings.BorderSize = 0;
-            btnSettings.FlatAppearance.BorderSize = 0;
-            btnSettings.FlatAppearance.MouseDownBackColor = Color.FromArgb(128, 162, 162);
-            btnSettings.FlatAppearance.MouseOverBackColor = Color.FromArgb(96, 128, 128);
-            btnSettings.FlatStyle = FlatStyle.Flat;
-            btnSettings.Font = new Font("Microsoft Sans Serif", 14.25F, FontStyle.Bold, GraphicsUnit.Point);
-            btnSettings.ForeColor = SystemColors.ControlLightLight;
-            btnSettings.Location = new Point(14, 67);
-            btnSettings.Margin = new Padding(3, 4, 3, 4);
-            btnSettings.Name = "btnSettings";
-            btnSettings.Size = new Size(38, 34);
-            btnSettings.TabIndex = 3;
-            btnSettings.TextAlign = ContentAlignment.MiddleLeft;
-            btnSettings.TextColor = SystemColors.ControlLightLight;
-            btnSettings.UseVisualStyleBackColor = false;
             // 
             // tcMainHome
             // 
@@ -676,7 +672,7 @@ namespace WinFormsAppTest
             Controls.Add(tcMainHome);
             Controls.Add(pnSideMenu);
             DoubleBuffered = true;
-            FormBorderStyle = FormBorderStyle.FixedDialog;
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             Margin = new Padding(3, 4, 3, 4);
             MaximizeBox = false;
             Name = "MainForm";
@@ -724,7 +720,6 @@ namespace WinFormsAppTest
         private CustomBtn btnStart;
         private Label lbTitle;
         private TabPage tpSettings;
-        private CustomBtn btnSettings;
         private CustomPanel pnSettingCrown1;
         private TextBox tbCrownMinHeight;
         private Label lbCrownSlice;
@@ -764,5 +759,6 @@ namespace WinFormsAppTest
         private CustomBtn customBtn1;
         private Label label2;
         private Label lbSetting;
+        private CustomBtn btnSettings;
     }
 }

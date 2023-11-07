@@ -254,6 +254,7 @@ namespace WinFormsAppTest
             pbLoadingBar.Name = "pbLoadingBar";
             pbLoadingBar.Size = new Size(550, 30);
 
+            progressDialog.MaximizeBox = false;
             progressDialog.Controls.Add(pbLoadingBar);
             progressDialog.Controls.Add(progressTextBox);
             progressDialog.Show();
@@ -534,7 +535,7 @@ namespace WinFormsAppTest
                     MessageBox.Show("Las파일의 사이즈가 적합하지 않습니다." +
                     $"Lasfile Size\nXmin={lasSize.minx}\nXmax={lasSize.maxx}\n" +
                     $"Ymin={lasSize.miny}\nYmax={lasSize.maxy}\n다시 실행해주세요.",
-                    "Las File Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    "Las File Read Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                     foreach (string fName in Directory.GetFiles(infoDir, $"{fileName}.*"))
                     {
