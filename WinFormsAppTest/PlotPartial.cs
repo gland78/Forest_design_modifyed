@@ -186,8 +186,8 @@ namespace WinFormsAppTest
         {
             string one = "level1_cropped_";
             string resultSavedDirectory = this.resultSavedDirectory + shape;
-            double centerX = double.Parse(tbPlotCircleX.Text);// + double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_xmin"));
-            double centerY = double.Parse(tbPlotCircleY.Text);// + double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_ymin"));
+            double centerX = double.Parse(tbPlotCircleX.Text) + double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_xmin"));
+            double centerY = double.Parse(tbPlotCircleY.Text) + double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_ymin"));
             double radius = double.Parse(tbPlotCircleR.Text);
             double buffer = double.Parse(paramForm.SelectDataFromTable(databaseFileName, "filters_crop", "buffer"));
             {
@@ -217,10 +217,10 @@ namespace WinFormsAppTest
             string one = "level1_cropped_";
             string resultSavedDirectory = this.resultSavedDirectory + shape;
 
-            double xmin = double.Parse(tbPlotRecXmin.Text);// + double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_xmin")); ;
-            double ymin = double.Parse(tbPlotRecYmin.Text);// + double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_ymin")); ;
-            double xmax = double.Parse(tbPlotRecXmax.Text);// + double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_xmin")); ;
-            double ymax = double.Parse(tbPlotRecYmax.Text);// + double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_ymin")); ;
+            double xmin = double.Parse(tbPlotRecXmin.Text) + double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_xmin")); ;
+            double ymin = double.Parse(tbPlotRecYmin.Text) + double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_ymin")); ;
+            double xmax = double.Parse(tbPlotRecXmax.Text) + double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_xmin")); ;
+            double ymax = double.Parse(tbPlotRecYmax.Text) + double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_ymin")); ;
             double buffer = double.Parse(paramForm.SelectDataFromTable(databaseFileName, "filters_crop", "buffer"));
 
             double width = Math.Abs(xmax - xmin);
@@ -276,8 +276,8 @@ namespace WinFormsAppTest
             double dif_h = (buffer_height - height) / 2;
 
             point new_LT;
-            new_LT.x = bufferedPolycords.left.x;// + double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_xmin")) - dif_w;
-            new_LT.y = bufferedPolycords.top.y;// + double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_ymin")) + dif_h;
+            new_LT.x = bufferedPolycords.left.x + double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_xmin")) - dif_w;
+            new_LT.y = bufferedPolycords.top.y + double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_ymin")) + dif_h;
 
             point new_RB;
             new_RB.x = bufferedPolycords.right.x;// + double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_xmin")) + dif_w;

@@ -128,41 +128,7 @@ namespace WinFormsAppTest
                 MessageBox.Show("정수만 입력 가능합니다!");
                 e.Handled = true;
             }
-        }
-                    if (csvLines.Contains("gui,private,rectangle"))
-                        tbTrunkMinHeight.Text = csvLines.Split(",")[3];
-                    }
-
-                    else if (csvLines.Contains("filters.range.trunk,public,maxheight"))
-                    {
-                        tbTrunkMaxHeight.Text = csvLines.Split(",")[3];
-                    }
-                    else if (csvLines.Contains("csp_segmentstem,public,smoothness"))
-                    {
-                        tbTrunkSmooth.Text = csvLines.Split(",")[3];
-                    }
-                    else if (csvLines.Contains("filters.range.crown,public,minheight"))
-                    {
-                        tbCrownMinHeight.Text = csvLines.Split(",")[3];
-                    }
-                }
-            }
-            tcMainHome.SelectedIndex = 1;
-        }
-        //임시로 저장된 plot값을 적용하기 버튼을 누를 시
-        //gui 구조체로 옮겨담는 역할
-        private void apply_temp()
-        {
-            gui.loadPath = guiTemp.loadPath;
-            gui.centerX = guiTemp.centerX;
-            gui.centerY = guiTemp.centerY;
-            gui.radius = guiTemp.radius;
-            gui.xMin = guiTemp.xMin;
-            gui.xMax = guiTemp.xMax;
-            gui.yMin = guiTemp.yMin;
-            gui.yMax = guiTemp.yMax;
-        }
-
+        }             
 
         //db파일 생성 및 테이블 생성
         private void create_dbFile_dbtable()

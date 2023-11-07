@@ -152,6 +152,7 @@ namespace WinFormsAppTest
         /// 전체 과정 실행 버튼
         private async void btnPlotOK_Click(object sender, EventArgs e)
         {
+            progress = 0;
 
             paramForm.UpdateDataInTable("gui", "org_xmin", lasSize.minx.ToString());
             paramForm.UpdateDataInTable("gui", "org_ymin", lasSize.miny.ToString());
