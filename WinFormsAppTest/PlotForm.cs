@@ -75,6 +75,13 @@ namespace WinFormsAppTest
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     filePath = openFileDialog.FileName;
+
+                    if (Path.GetExtension(filePath) != ".las")
+                    {
+                        MessageBox.Show("las 확장자 파일만 불러와주세요");
+                        return;
+                    }
+
                     tbPlotData.Text = filePath;
                     Validation(filePath);
                 }
@@ -210,11 +217,10 @@ namespace WinFormsAppTest
             ProgressDialog_Create();
 
             btnPlotOK.Enabled = false;
-            btnPlotCancel.Enabled = false;
 
             //winform을 실행하는 스레드와 다른 스레드에서 본 기능을 실행하기 위함(나름의 자원 분산)
             await Task.Run(() =>
-            { 
+            {
                 //각 단계 실행
                 preProAndExcuteStep();
 
@@ -230,7 +236,6 @@ namespace WinFormsAppTest
                 }
             });
             btnPlotOK.Enabled = true;
-            btnPlotCancel.Enabled = true;
         }
 
         private void ProgressDialog_Create()
@@ -527,10 +532,8 @@ namespace WinFormsAppTest
                     //Task를 이용한 이유 : MakeInfo와 progressDialog의 pictureBox gif가
                     //동시에 동작하게 하기 위함.(안쓰면 쓰레드 우선순위 문제로 gif 애니메이션이 안움직임)
 
-                    btnPlotCancel.Enabled = false;
                     btnPlotOK.Enabled = false;
                     await Task.Run(() => MakeInfo(filePath, infoDir));
-                    btnPlotCancel.Enabled = true;
                     btnPlotOK.Enabled = true;
 
                     extractDialog.Dispose();
@@ -696,6 +699,49 @@ namespace WinFormsAppTest
                     MessageBox.Show(ex.Message);
                 }
             }
+        }
+
+        private async void cloudCompareToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string lasPath = tbPlotData.Text;
+            string exePath = FindProgramPath("CloudCompare.exe");
+
+            if (exePath == "")
+            {
+                MessageBox.Show("CloudCompare 프로그램의 경로를 환경 변수(Path)에 추가해주세요");
+                return;
+            }
+
+            ProcessStartInfo psi = new ProcessStartInfo
+            {
+                FileName = exePath,
+                Arguments = lasPath,
+                UseShellExecute = true,
+                CreateNoWindow = true
+            };
+
+            await Task.Run(() =>
+            {
+                using (Process process = new Process { StartInfo = psi })
+                {
+                    process.Start();
+                    process.WaitForExit();
+                }
+            });
+        }
+
+        private string FindProgramPath(string programName)
+        {
+            string paths = Environment.GetEnvironmentVariable("Path");
+            foreach (string path in paths.Split(';'))
+            {
+                string programPath = Path.Combine(path, programName);
+                if (File.Exists(programPath))
+                {
+                    return programPath;
+                }
+            }
+            return string.Empty;
         }
     }
 }
