@@ -28,6 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PlotForm));
             tbPlotCircleR = new TextBox();
             lbPlotCircleR = new Label();
             tbPlotCircleY = new TextBox();
@@ -61,12 +63,15 @@
             btnPlotData = new CustomBtn();
             tbPlotData = new TextBox();
             lbPlotData = new Label();
+            cmsPlotData = new ContextMenuStrip(components);
+            cloudCompareToolStripMenuItem = new ToolStripMenuItem();
             tcPlot.SuspendLayout();
             tpPlotCircle.SuspendLayout();
             tpPlotRec.SuspendLayout();
             tpPlotPoly.SuspendLayout();
             pnPlotSelection.SuspendLayout();
             pnPlotData.SuspendLayout();
+            cmsPlotData.SuspendLayout();
             SuspendLayout();
             // 
             // tbPlotCircleR
@@ -435,6 +440,7 @@
             // tbPlotData
             // 
             tbPlotData.BackColor = Color.White;
+            tbPlotData.ContextMenuStrip = cmsPlotData;
             tbPlotData.Location = new Point(89, 19);
             tbPlotData.Name = "tbPlotData";
             tbPlotData.ReadOnly = true;
@@ -452,6 +458,20 @@
             lbPlotData.Size = new Size(62, 15);
             lbPlotData.TabIndex = 2;
             lbPlotData.Text = "Data Load";
+            // 
+            // cmsPlotData
+            // 
+            cmsPlotData.Items.AddRange(new ToolStripItem[] { cloudCompareToolStripMenuItem });
+            cmsPlotData.Name = "cmsPlotData";
+            cmsPlotData.Size = new Size(181, 48);
+            // 
+            // cloudCompareToolStripMenuItem
+            // 
+            cloudCompareToolStripMenuItem.Image = (Image)resources.GetObject("cloudCompareToolStripMenuItem.Image");
+            cloudCompareToolStripMenuItem.Name = "cloudCompareToolStripMenuItem";
+            cloudCompareToolStripMenuItem.Size = new Size(180, 22);
+            cloudCompareToolStripMenuItem.Text = "CloudCompare";
+            cloudCompareToolStripMenuItem.Click += cloudCompareToolStripMenuItem_Click;
             // 
             // PlotForm
             // 
@@ -483,6 +503,7 @@
             pnPlotSelection.PerformLayout();
             pnPlotData.ResumeLayout(false);
             pnPlotData.PerformLayout();
+            cmsPlotData.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -520,5 +541,7 @@
         private CustomBtn btnPlotData;
         private TextBox tbPlotData;
         private Label lbPlotData;
+        private ContextMenuStrip cmsPlotData;
+        private ToolStripMenuItem cloudCompareToolStripMenuItem;
     }
 }
