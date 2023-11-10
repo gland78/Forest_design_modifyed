@@ -167,12 +167,6 @@ namespace WinFormsAppTest
         {
             progress = 0;
 
-            string org_xmin = paramForm.SelectDataFromTable(databaseFileName, "gui", "org_xmin");
-            string org_ymin = paramForm.SelectDataFromTable(databaseFileName, "gui", "org_ymin");
-
-
-            //MessageBox.Show(org_xmin + " " + org_ymin);
-
             paramForm.UpdateDataInTable("gui", "origin_las_file", tbPlotData.Text);
 
             //무결성 검사
@@ -221,7 +215,8 @@ namespace WinFormsAppTest
             paramForm.gui.yMin = double.Parse(tbPlotRecYmin.Text);
             paramForm.gui.yMax = double.Parse(tbPlotRecYmax.Text);
 
-            resultSavedDirectory = resultPath + @"\" + DateTime.Now.ToString("yyyyMMdd_HH_mm_ss_") + originLasName;
+            string resultOriginLas = (originLasName.Length > 20 ? originLasName.Substring(0, 20) : originLasName).Replace(' ', '_');
+            resultSavedDirectory = resultPath + @"\" + DateTime.Now.ToString("MMdd_HHmmss_") + resultOriginLas;
 
             ProgressDialog_Create();
 

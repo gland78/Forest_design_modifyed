@@ -63,6 +63,7 @@ namespace WinFormsAppTest
         //PLOT
         private void MakeResultDirectory_PLOT()
         {
+            //result 폴더 생성
             DirectoryInfo result_pth = new DirectoryInfo(resultPath);
             if (result_pth.Exists == false)
             {
@@ -70,6 +71,7 @@ namespace WinFormsAppTest
             }
 
             //MessageBox.Show(this.resultSavedDirectory);
+            //이 아래로 각 las파일 결과 폴더 생성(intermediate, Log, tree)
             string resultSavedDirectory = this.resultSavedDirectory + shape;
             DirectoryInfo di1 = new DirectoryInfo(resultSavedDirectory);
             if (di1.Exists == true)
@@ -89,6 +91,7 @@ namespace WinFormsAppTest
             {
                 di3.Create();
             }
+
 
             string tree_dir = Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(resultSavedDirectory + "\\tree"));
             string inter_dir= Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(resultSavedDirectory + "\\intermediate"));
@@ -201,7 +204,7 @@ namespace WinFormsAppTest
             string org_ymin = paramForm.SelectDataFromTable(databaseFileName, "gui", "org_ymin");
 
 
-            //MessageBox.Show(org_xmin + " " + org_ymin);
+            MessageBox.Show(org_xmin + " " + org_ymin);
 
             double centerX = double.Parse(tbPlotCircleX.Text) - double.Parse(org_xmin);
             double centerY = double.Parse(tbPlotCircleY.Text) - double.Parse(org_ymin);

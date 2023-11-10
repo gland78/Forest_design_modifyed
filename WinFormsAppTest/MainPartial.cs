@@ -361,7 +361,7 @@ namespace WinFormsAppTest
 
                         using (SQLiteDataReader reader = command.ExecuteReader())
                         {
-                            if (reader.Read())
+                            if (reader.Read() == true)
                             {
                                 value = reader["value"].ToString();
                             }
