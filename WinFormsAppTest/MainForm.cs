@@ -17,15 +17,10 @@ namespace WinFormsAppTest
     //델리게이트 메서드들. private인 일반 메서드를 다른 form에서 쓸 수 있게하는 역할
     internal delegate void switchEventHandler(bool onOff);
 
-    internal delegate void presetReflectHandler(string fileDi, string fileName);
-
     public partial class MainForm : Form
     {
         //다른 폼들을 띄우고 delegate를 통해 메서드 전달을 위한 form 변수
         private PlotForm? pFrm;
-
-        internal static string configPath = (Environment.CurrentDirectory).ToString();
-        internal static string[] reqDi = { "", "RecentConfig", "PresetConfig" };
 
         public MainForm()
         {
@@ -48,10 +43,9 @@ namespace WinFormsAppTest
 
             FillTextboxes();
             RegistTextBoxHandler();
+
             //프로그램 창 생성 위치 지정
             Point screenSize = ((Point)Screen.PrimaryScreen.Bounds.Size);
-
-            //메인 폼 로드 전 이벤트 전처리(Designer.cs에 넣으면 찾기가 힘듬)
             this.Location = new Point((screenSize.X - this.Width) / 2, (screenSize.Y - this.Height) / 2);
 
             //프로그램 각종 외형 설정(커스텀 파라미터는 Designer.cs에서 설정 불가)
@@ -181,14 +175,14 @@ namespace WinFormsAppTest
             if (diff < 0)
             {
                 return trimedText;
+            }
+            //14는 보정값(보정값이 없으면 의도보다 조금 더 길어져서 줄바꿈이 일어남)
+            while (diff + 14 > 0)
+            {
                 trimedText = trimedText.Substring(0, trimedText.Length - 1);
                 size = TextRenderer.MeasureText(trimedText + "...", customBtn.Font);
                 diff = size.Width - customBtn.Width;
             }
-            }
-            pnSideMenu.ResumeLayout(false);
-            pnSideMenu.PerformLayout();
-        }
 
             return trimedText + "...";
         }*/
@@ -203,11 +197,15 @@ namespace WinFormsAppTest
 
             pFrm.Show();
 
+            //plot창을 모달리스로 띄우는 대신 실행 및 설정 적용 관련 기능 버튼 비활성화
+            switchCoreBtns(false);
+        }
+
         private void switchCoreBtns(bool onOff)
         {
             switchBtns(tpSettings, onOff);
         }
-                        }
+
         private void switchBtns(Control control, bool onOff)
         {
             foreach (Control btns in control.Controls)
@@ -249,12 +247,12 @@ namespace WinFormsAppTest
             {
                 result = (result && result == checker);
             }
-            string[] confCheck = Directory.GetFiles(fileDi, "recentConfig*");
-            string fileName = ((Button)sender).Name;
 
-            string? csvLines;
+            if (result == false)
+            {
+                dialogResult = MessageBox.Show("현재 설정이 적용되지 않았습니다.\n적용하시겠습니까?", "", MessageBoxButtons.YesNo);
+            }
 
-            using (StreamReader sr = new StreamReader(Path.Combine(fileDi, fileName)))
             //예 클릭 시 설정값 적용
             if (dialogResult == DialogResult.Yes)
             {
@@ -265,65 +263,65 @@ namespace WinFormsAppTest
             {
                 FillTextboxes();
             }
-                    else if (csvLines.Contains("smrf") && csvLines.Contains("threshold"))
-                    {
-                        tbNorThres.Text = csvLines.Split(",")[3];
-                    }
+            tcMainHome.SelectedIndex = 0;
+        }
 
-                    else if (csvLines.Contains("range") && csvLines.Contains("trunk") && csvLines.Contains("minheight"))
-                    {
-                        tbTrunkMinHeight.Text = csvLines.Split(",")[3];
-                    }
-
-                    else if (csvLines.Contains("range") && csvLines.Contains("trunk") && csvLines.Contains("maxheight"))
-                    {
-                        tbTrunkMaxHeight.Text = csvLines.Split(",")[3];
-                    }
-
-                    else if (csvLines.Contains("range") && csvLines.Contains("crown") && csvLines.Contains("minheight"))
-                    {
-                        tbCrownMinHeight.Text = csvLines.Split(",")[3];
-                    }
-
-                    else if (csvLines.Contains("range") && csvLines.Contains("crown") && csvLines.Contains("maxheight"))
-                    {
-                        tbCrownMaxHeight.Text = csvLines.Split(",")[3];
-                    }
-                }
-            }
+        private void btnSettings_Click(object sender, EventArgs e)
+        {
             tcMainHome.SelectedIndex = 1;
         }
 
-            if (result == false)
-            {
-                dialogResult = MessageBox.Show("현재 설정이 적용되지 않았습니다.\n적용하시겠습니까?", "", MessageBoxButtons.YesNo);
-            }
-
-        private void btnRecentConf_Up(object sender, EventArgs e)
+        //이 아래 4개 메서드 설정창 파라메터 판넬 마우스 이벤트
+        private void pnSettingAll_MouseEnter(object sender, EventArgs e)
         {
-            Button btn = (Button)sender;
-            btn.FlatStyle = FlatStyle.Flat;
-            btn.Invalidate();
+            if (sender is CustomPanel)
+            {
+                CustomPanel cPanel = (CustomPanel)sender;
+
+                cPanel.fillColor = Color.DarkGray;
+                cPanel.Invalidate();
+            }
         }
-        //preConfig 버튼 클릭 이벤트 처리 코드
-        private void btnPreConf_Click(object sender, EventArgs e)
+        private void pnSettingAll_MouseLeave(object sender, EventArgs e)
         {
-            string[] confCheck = Directory.GetFiles(Path.Combine(configPath, reqDi[(int)configFileType.Preset]), "PresetConfig*");
-
-            foreach (string conf in confCheck)
+            if (sender is CustomPanel)
             {
-                string fileName = conf.Substring(conf.IndexOf("presetConfig"), conf.Length - conf.IndexOf("presetConfig") - 4);
-                if (((Button)sender).Name == fileName + ".csv")
-                {
-                    read_csv(conf);
-                    FillTextboxes();
-                }
+                CustomPanel cPanel = (CustomPanel)sender;
+
+                cPanel.fillColor = Color.Gray;
+                cPanel.Invalidate();
             }
+        }
+        private void pnSettingAll_MouseDown(object sender, MouseEventArgs e)
         {
+            if (sender is CustomPanel)
+            {
+                CustomPanel cPanel = (CustomPanel)sender;
+
+                cPanel.fillColor = Color.Silver;
+                cPanel.Invalidate();
+            }
+        }
+        private void pnSettingAll_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (sender is CustomPanel)
+            {
+                CustomPanel cPanel = (CustomPanel)sender;
+
+                cPanel.fillColor = Color.DarkGray;
+                cPanel.Invalidate();
+            }
+        }
+
+        //적용하기 버튼 이벤트
+        private void btnSettingApply_Click(object sender, EventArgs e)
+        {
+            UpdateParams();
+
             MessageBox.Show("적용되었습니다.");
             tcMainHome.SelectedIndex = 0;
         }
-        //이 아래 4개 메서드 설정창 파라메터 판넬 마우스 이벤트
+
         //취소버튼
         //저장하지 않고 기본 config 값으로 텍스트 박스 값 교체 후
         //시작화면으로 이동
@@ -332,16 +330,16 @@ namespace WinFormsAppTest
             FillTextboxes();
             tcMainHome.SelectedIndex = 0;
         }
-        private void pnSettingAll_MouseLeave(object sender, EventArgs e)
+
+        private void startBtnAttach(bool onOff)
         {
-            if (sender is CustomPanel)
-            {
-                CustomPanel cPanel = (CustomPanel)sender;
+            btnStart.Visible = onOff;
+        }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             Process[] allProc = Process.GetProcesses();
-                cPanel.Invalidate();
+
             foreach (Process procs in allProc)
             {
                 try
@@ -354,90 +352,15 @@ namespace WinFormsAppTest
                     MessageBox.Show(ex.Message);
                 }
             }
-            {
-                mFrm = new ManageForm();
-                mFrm.mainPaint += new customEventHandler(this.preConfBtnLoad);
-            }
-
-            //FactoryReset(csv_path);
-            DeleteAllTables(databaseFileName, tablename);
-            CreateTable(databaseFileName, tablename);
-            insert_initial_data();
-                pFrm = new PlotForm(this);
-                pFrm.configTouch += new configHandler(MakeConfig);
-                pFrm.mainPaint += new customEventHandler(recentConfBtnLoad);
-            }
-            MakeConfig(configFileType.Preset);
-
-            mFrm.ShowDialog();
-            preConfBtnLoad();
-        }
-
-        //프리셋 관리 버튼 클릭 이벤트
-        private void btnPresetManage_Click(object sender, EventArgs e)
-        {
-            if (mFrm == null)
-            {
-                mFrm = new ManageForm();
-                mFrm.mainPaint += new customEventHandler(this.preConfBtnLoad);
-            }
-            mFrm.ShowDialog();
-        }
-
-        private void startBtnAttach(bool onOff)
-        {
-            btnStart.Visible = onOff;
-        }
-
-        //기본값 불러오기 버튼
-        private void btnSettingLoad_Click(object sender, EventArgs e)
-        {
-            if (MessageBox.Show("기본값을 적용하시겠습니까?\n저장되지 않은 설정값은 사라집니다.",
-                "기본 설정 적용", MessageBoxButtons.OKCancel) == DialogResult.Cancel)
-            {
-                return;
-            }
-            read_csv(csv_path);
-            FillTextboxes();
-        }
-
-        //프로그램 동작시 프로그래바,start 버튼 숨김기능 관련 이벤트
-        private void progressAttach(bool onOff)
-        {
-            pbLoadingBar.Visible = onOff;
-        }
-
-        private void progressSetter(int setValue)
-        {
-            pbLoadingBar.Value = setValue;
-            pbLoadingBar.Invalidate();
-        }
-
-        private void startBtnAttach(bool onOff)
-        {
-            btnStart.Visible = onOff;
-        }
-
-        //적용하기 버튼 이벤트
-        private void btnSettingApply_Click(object sender, EventArgs e)
-        {
-            UpdateParams();
-            MessageBox.Show("적용되었습니다.");
-            tcMainHome.SelectedIndex = 0;
-        }
-
-        //취소버튼 
-        private void btnSettingCancel_Click(object sender, EventArgs e)
-        {
-            FillTextboxes();
-            tcMainHome.SelectedIndex = 0;
         }
 
         //공장초기화 버튼
         private void btn_factory_reset_Click(object sender, EventArgs e)
         {
-            FactoryReset(csv_path);
-            MessageBox.Show("설정 파일이 초기화 되었습니다.");
+            //FactoryReset(csv_path);
+            DeleteAllTables(databaseFileName, tablename);
+            CreateTable(databaseFileName, tablename);
+            insert_initial_data();
         }
     }
 }
