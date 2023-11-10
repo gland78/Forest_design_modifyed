@@ -167,9 +167,12 @@ namespace WinFormsAppTest
         {
             progress = 0;
 
-            paramForm.UpdateDataInTable("gui", "org_xmin", lasSize.minx.ToString());
-            paramForm.UpdateDataInTable("gui", "org_ymin", lasSize.miny.ToString());
-            paramForm.UpdateDataInTable("gui", "org_zmin", lasSize.minz.ToString());
+            string org_xmin = paramForm.SelectDataFromTable(databaseFileName, "gui", "org_xmin");
+            string org_ymin = paramForm.SelectDataFromTable(databaseFileName, "gui", "org_ymin");
+
+
+            //MessageBox.Show(org_xmin + " " + org_ymin);
+
             paramForm.UpdateDataInTable("gui", "origin_las_file", tbPlotData.Text);
 
             //무결성 검사
@@ -546,6 +549,7 @@ namespace WinFormsAppTest
                 }
                 //Las파일 크기 정보 읽기
                 readInfo(filePath, infoDir);
+                //MessageBox.Show(lasSize.minx + " " + lasSize.miny + " " + lasSize.maxx + " " + lasSize.maxy);
 
                 //읽은 Las파일 크기가 정상적이지 않을 경우
                 if (!IsLasSizeValid())
@@ -670,6 +674,9 @@ namespace WinFormsAppTest
                         }
                     }
                 }
+                paramForm.UpdateDataInTable("gui", "org_xmin", lasSize.minx.ToString());
+                paramForm.UpdateDataInTable("gui", "org_ymin", lasSize.miny.ToString());
+                paramForm.UpdateDataInTable("gui", "org_zmin", lasSize.minz.ToString());
             }
             catch (Exception e)
             {

@@ -196,8 +196,16 @@ namespace WinFormsAppTest
         {
             string one = "level1_cropped_";
             string resultSavedDirectory = this.resultSavedDirectory + shape;
-            double centerX = double.Parse(tbPlotCircleX.Text) - double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_xmin"));
-            double centerY = double.Parse(tbPlotCircleY.Text) - double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_ymin"));
+
+            string org_xmin = paramForm.SelectDataFromTable(databaseFileName, "gui", "org_xmin");
+            string org_ymin = paramForm.SelectDataFromTable(databaseFileName, "gui", "org_ymin");
+
+
+            //MessageBox.Show(org_xmin + " " + org_ymin);
+
+            double centerX = double.Parse(tbPlotCircleX.Text) - double.Parse(org_xmin);
+            double centerY = double.Parse(tbPlotCircleY.Text) - double.Parse(org_ymin);
+
             double radius = double.Parse(tbPlotCircleR.Text);
             double buffer = double.Parse(paramForm.SelectDataFromTable(databaseFileName, "filters_crop", "buffer"));
             {
