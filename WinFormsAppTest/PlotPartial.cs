@@ -203,9 +203,6 @@ namespace WinFormsAppTest
             string org_xmin = paramForm.SelectDataFromTable(databaseFileName, "gui", "org_xmin");
             string org_ymin = paramForm.SelectDataFromTable(databaseFileName, "gui", "org_ymin");
 
-
-            MessageBox.Show(org_xmin + " " + org_ymin);
-
             double centerX = double.Parse(tbPlotCircleX.Text) - double.Parse(org_xmin);
             double centerY = double.Parse(tbPlotCircleY.Text) - double.Parse(org_ymin);
 

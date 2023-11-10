@@ -167,6 +167,21 @@ namespace WinFormsAppTest
         {
             progress = 0;
 
+            if (tcPlot.SelectedIndex == 0)
+            {
+                tbPlotCircleX_Leave(sender, e);
+                tbPlotCircleY_Leave(sender, e);
+                return;
+            }
+            else if (tcPlot.SelectedIndex == 1)
+            {
+                tbPlotRecXmax_Leave(sender, e);
+                tbPlotRecXmin_Leave(sender, e);
+                tbPlotRecYmax_Leave(sender, e);
+                tbPlotRecYmin_Leave(sender, e);
+                return;
+            }
+
             paramForm.UpdateDataInTable("gui", "origin_las_file", tbPlotData.Text);
 
             //무결성 검사
@@ -323,6 +338,7 @@ namespace WinFormsAppTest
             {
                 MessageBox.Show($"선택하신 las 파일의 최소 x좌표값보다 작습니다.\n{lasSize.minx}보다 크게 설정해주세요");
                 tbPlotCircleX.Clear();
+                tbPlotCircleX.Text = lasSize.minx.ToString();
                 this.ActiveControl = tbPlotCircleX;
                 return;
             }
@@ -330,6 +346,7 @@ namespace WinFormsAppTest
             {
                 MessageBox.Show($"선택하신 las 파일의 최대 x좌표값보다 큽니다.\n{lasSize.maxx}보다 작게 설정해주세요");
                 tbPlotCircleX.Clear();
+                tbPlotCircleX.Text = lasSize.maxx.ToString();
                 this.ActiveControl = tbPlotCircleX;
                 return;
             }
@@ -353,15 +370,17 @@ namespace WinFormsAppTest
             double cy = double.Parse(tbPlotCircleY.Text);
             if (tbPlotData.Text != "" && cy < lasSize.miny)
             {
-                MessageBox.Show($"선택하신 las 파일의 최소 y좌표값보다 작습니다.{lasSize.miny}보다 크게 설정해주세요");
+                MessageBox.Show($"선택하신 las 파일의 최소 y좌표값보다 작습니다.\n{lasSize.miny} 이상으로 설정해주세요");
                 tbPlotCircleY.Clear();
+                tbPlotCircleY.Text = lasSize.miny.ToString();
                 this.ActiveControl = tbPlotCircleY;
                 return;
             }
             if (tbPlotData.Text != "" && cy > lasSize.maxy)
             {
-                MessageBox.Show($"선택하신 las 파일의 최대 y좌표값보다 큽니다.{lasSize.maxy}보다 작게 설정해주세요");
+                MessageBox.Show($"선택하신 las 파일의 최대 y좌표값보다 큽니다.\n{lasSize.maxy} 이하로 설정해주세요");
                 tbPlotCircleY.Clear();
+                tbPlotCircleY.Text = lasSize.maxy.ToString();
                 this.ActiveControl = tbPlotCircleY;
                 return;
             }
@@ -402,8 +421,9 @@ namespace WinFormsAppTest
             }
             if (tbPlotData.Text != "" && double.Parse(tbPlotRecXmin.Text) < lasSize.minx)
             {
-                MessageBox.Show($"선택하신 las 파일의 최소 x좌표값보다 작습니다.{lasSize.minx}보다 크게 설정해주세요");
+                MessageBox.Show($"선택하신 las 파일의 최소 x좌표값보다 작습니다.{lasSize.minx} 이상으로 설정해주세요");
                 tbPlotRecXmin.Clear();
+                tbPlotRecXmin.Text = lasSize.minx.ToString();
                 this.ActiveControl = tbPlotRecXmin;
                 return;
             }
@@ -426,8 +446,9 @@ namespace WinFormsAppTest
             }
             if (tbPlotData.Text != "" && double.Parse(tbPlotRecXmax.Text) > lasSize.maxx)
             {
-                MessageBox.Show($"선택하신 las 파일의 최대 x좌표값보다 큽니다.{lasSize.maxx}보다 작게 설정해주세요");
+                MessageBox.Show($"선택하신 las 파일의 최대 x좌표값보다 큽니다.{lasSize.maxx} 이하로 설정해주세요");
                 tbPlotRecXmax.Clear();
+                tbPlotRecXmax.Text = lasSize.maxx.ToString();
                 this.ActiveControl = tbPlotRecXmax;
                 return;
             }
@@ -450,8 +471,9 @@ namespace WinFormsAppTest
             }
             if (tbPlotData.Text != "" && double.Parse(tbPlotRecYmin.Text) < lasSize.miny)
             {
-                MessageBox.Show($"선택하신 las 파일의 최소 y좌표값보다 작습니다.{lasSize.miny}보다 크게 설정해주세요");
+                MessageBox.Show($"선택하신 las 파일의 최소 y좌표값보다 작습니다.\n{lasSize.miny} 이상으로 설정해주세요");
                 tbPlotRecYmin.Clear();
+                tbPlotRecYmin.Text = lasSize.miny.ToString();
                 this.ActiveControl = tbPlotRecYmin;
                 return;
             }
@@ -474,8 +496,9 @@ namespace WinFormsAppTest
             }
             if (tbPlotData.Text != "" && double.Parse(tbPlotRecYmax.Text) > lasSize.maxy)
             {
-                MessageBox.Show($"선택하신 las 파일의 최대 y좌표값보다 큽니다.{lasSize.maxy}보다 작게 설정해주세요");
+                MessageBox.Show($"선택하신 las 파일의 최대 y좌표값보다 큽니다.\n{lasSize.maxy} 이하로 설정해주세요");
                 tbPlotRecYmax.Clear();
+                tbPlotRecYmax.Text = lasSize.maxy.ToString();
                 this.ActiveControl = tbPlotRecYmax;
                 return;
             }
