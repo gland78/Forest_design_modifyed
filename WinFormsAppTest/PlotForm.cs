@@ -129,7 +129,13 @@ namespace WinFormsAppTest
                         points[i].x = double.Parse(tempPointList[i][0]);
                         points[i].y = double.Parse(tempPointList[i][1]);
 
+                        //상대좌표
+                        //double x= double.Parse(tempPointList[i][0]) - double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_xmin"));
+                        //double y = double.Parse(tempPointList[i][0]) - double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_ymin"));
+                        //poly_points += x.ToString() + " " + y.ToString() + " ";
+
                         poly_points += tempPointList[i][0] + " " + tempPointList[i][1] + " ";
+
 
                         for (int j = 1; j < tempPointList[i].Length; j++)
                         {

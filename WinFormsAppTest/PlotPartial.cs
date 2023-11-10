@@ -157,7 +157,7 @@ namespace WinFormsAppTest
                 }
 
                 {
-                    string strFile1 = resultSavedDirectory + @"\intermediate\" + one + originLasName + "_B.las";
+                    string strFile1 = resultSavedDirectory + @"\intermediate\" + one + inter + "_B.las";
                     FileInfo fileInfo1 = new FileInfo(strFile1);//파일 있는지 확인 있을때(true), 없으면(false)
                     if (fileInfo1.Exists)
                     {
@@ -173,6 +173,9 @@ namespace WinFormsAppTest
                             //str을 만들었으니 이제 그 데이터를 dat 파일에 넣는다.
 
                             dat_str = $"xmin={minx} xmax={maxx} ymin={miny} ymax={maxy}";
+                            
+                            //MessageBox.Show(dat_str);
+
                             paramForm.UpdateDataInTable("filters_crop", "bufferd_dat", dat_str);
 
                             //paramForm.setParam(paramForm.csv_data, "filters.crop", "bufferd_dat", dat_str);
@@ -224,10 +227,10 @@ namespace WinFormsAppTest
             string one = "level1_cropped_";
             string resultSavedDirectory = this.resultSavedDirectory + shape;
 
-            double xmin = double.Parse(tbPlotRecXmin.Text) - double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_xmin")); ;
-            double ymin = double.Parse(tbPlotRecYmin.Text) - double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_ymin")); ;
-            double xmax = double.Parse(tbPlotRecXmax.Text) - double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_xmin")); ;
-            double ymax = double.Parse(tbPlotRecYmax.Text) - double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_ymin")); ;
+            double xmin = double.Parse(tbPlotRecXmin.Text) - double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_xmin")); 
+            double ymin = double.Parse(tbPlotRecYmin.Text) - double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_ymin"));
+            double xmax = double.Parse(tbPlotRecXmax.Text) - double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_xmin")); 
+            double ymax = double.Parse(tbPlotRecYmax.Text) - double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_ymin")); 
             double buffer = double.Parse(paramForm.SelectDataFromTable(databaseFileName, "filters_crop", "buffer"));
 
             double width = Math.Abs(xmax - xmin);
@@ -571,6 +574,12 @@ namespace WinFormsAppTest
                             miny = lasSize.miny > (paramForm.gui.centerX - radius) ? lasSize.miny : (paramForm.gui.centerX - radius);
                             maxy = lasSize.maxy < (paramForm.gui.centerX + radius) ? lasSize.maxy : (paramForm.gui.centerX + radius);
 
+                            //상대좌표
+                            //minx-= double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_xmin"));
+                            //maxx-= double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_xmin"));
+                            //miny-= double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_ymin"));
+                            //maxy-= double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_ymin"));
+
                             dat_str = $"xmin={minx} xmax={maxx} ymin={miny} ymax={maxy} cx={centerX} cy={centerY} radius={radius}";
                             paramForm.UpdateDataInTable("filters_crop", "origin_dat", dat_str);
                             //paramForm.setParam(paramForm.csv_data, "filters.crop", "origin_dat", dat_str);
@@ -582,6 +591,13 @@ namespace WinFormsAppTest
                             maxx = lasSize.maxx < (paramForm.gui.xMax) ? lasSize.maxx : (paramForm.gui.xMax);
                             miny = lasSize.miny > (paramForm.gui.yMin) ? lasSize.miny : (paramForm.gui.yMin);
                             maxy = lasSize.maxy < (paramForm.gui.yMax) ? lasSize.maxy : (paramForm.gui.yMax);
+
+
+                            //상대좌표 
+                            //minx-= double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_xmin"));
+                            //maxx-= double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_xmin"));
+                            //miny-= double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_ymin"));
+                            //maxy-= double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_ymin"));
 
                             dat_str = $"xmin={minx} xmax={maxx} ymin={miny} ymax={maxy}";
                             paramForm.UpdateDataInTable("filters_crop", "origin_dat", dat_str);
