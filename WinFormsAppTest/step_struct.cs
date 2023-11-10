@@ -55,7 +55,7 @@ namespace WinFormsAppTest
         public string pointList { get; set; }
     }
 
-    public struct Crop
+    /*public struct Crop
     {
         public double buffer { get; set; }
     }
@@ -130,7 +130,7 @@ namespace WinFormsAppTest
         public int iterations { get; set; }
         public double zmin_check { get; set; }
         public double zmax_check { get; set; }
-    }
+    }*/
 
 
 }

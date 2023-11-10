@@ -8,9 +8,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Xml.Linq;
 using static WinFormsAppTest.MainForm;
+using Newtonsoft.Json.Linq;
+using System.Security.Policy;
+using System.Reflection;
 
 namespace WinFormsAppTest
 {
@@ -18,74 +20,51 @@ namespace WinFormsAppTest
     {
         MainForm paramForm;
 
-        internal configHandler configTouch;
-
-        internal customEventHandler mainPaint;
-
-        internal setIntEventHandler mainProgressSet;
-        internal switchEventHandler attachProgressBar;
-
+        internal switchEventHandler enableMainFormBtns;
         internal switchEventHandler attachStartBtn;
 
         public PlotForm(MainForm paramForm)
         {
             InitializeComponent();
-            pnPlotSelection.isFill = true;
+
+            //아래 plotForm 컴포넌트들 세팅
             pnPlotSelection.isBorder = false;
-            pnPlotSelection.borderColor = Color.Honeydew;
-            pnPlotData.isFill = true;
+            pnPlotSelection.borderColor = Color.White;
             pnPlotData.isBorder = false;
-            pnPlotData.borderColor = Color.Honeydew;
+            pnPlotData.borderColor = Color.White;
 
             cbPlotShape.SelectedIndex = 0;
             this.paramForm = paramForm;
-            paramForm.plotSender += new plotDataHandler(plotPacker);
-        }
-
-        //수정 요망
-        private Dictionary<string, double> plotPacker()
-        {
-            Dictionary<string, double> plots = new Dictionary<string, double>();
-            plots.Add("selection", cbPlotShape.SelectedIndex);
-
-            plots.Add("cx", paramForm.gui.centerX);
-            plots.Add("cy", paramForm.gui.centerY);
-            plots.Add("radius", paramForm.gui.radius);
-
-            plots.Add("xmin", paramForm.gui.xMin);
-            plots.Add("ymin", paramForm.gui.yMin);
-            plots.Add("xmax", paramForm.gui.xMax);
-            plots.Add("ymax", paramForm.gui.yMax);
-
-            return plots;
         }
 
         private void PlotForm_Load(object sender, EventArgs e)
         {
+            //각종 DB 연결을 위한 파라메터 전처리
+            bin_folder = paramForm.bin_folder;
+            databaseFileName = paramForm.databaseFileName;
+
+            //DB에서 GUI 구조체로 미리 담아둔 plot값을 textBox로 읽어옴
             initTextBox();
-            resultPath = paramForm.gui.resultPath;
+            //결과 폴더 경로 설정
+            resultPath = paramForm.SelectDataFromTable(databaseFileName, "gui", "result_path");
 
-            ////////////////////////////////////////////////////////////////
+            this.KeyPreview = true;
+
+            //메인폼의 start 버튼 감추기(중복 실행 방지)
             attachStartBtn(false);
-
-            Point screenSize = ((Point)Screen.PrimaryScreen.Bounds.Size);
-
-            this.Location = new Point((screenSize.X - this.Width) / 2, (screenSize.Y - this.Height) / 2);
 
             cbPlotShape.SelectedIndex = 0;
         }
 
         private void btnPlotCancel_Click(object sender, EventArgs e)
         {
-            attachProgressBar(false);
-            attachStartBtn(true);
             this.Close();
         }
 
         //원본 Las 파일 찾기 버튼
         private void btnPlotData_Click(object sender, EventArgs e)
         {
-            String filePath = string.Empty;
+            string filePath = string.Empty;
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
                 openFileDialog.InitialDirectory = @"..\LIDAR_PROJECT";
@@ -97,7 +76,22 @@ namespace WinFormsAppTest
                 {
                     filePath = openFileDialog.FileName;
 
+                    if (Path.GetExtension(filePath) != ".las")
+                    {
+                        MessageBox.Show("las 확장자 파일만 불러와주세요");
+                        return;
+                    }
+
                     tbPlotData.Text = filePath;
+                    Validation(filePath);
+
+                    tbPlotCircleX.Text = (Math.Truncate((lasSize.maxx + lasSize.minx) / 2 * 1000) / 1000).ToString();
+                    tbPlotCircleY.Text = (Math.Truncate((lasSize.maxy + lasSize.miny) / 2 * 1000) / 1000).ToString();
+
+                    tbPlotRecXmax.Text = (Math.Truncate(lasSize.maxx * 1000) / 1000).ToString();
+                    tbPlotRecXmin.Text = (Math.Truncate(lasSize.minx * 1000) / 1000).ToString();
+                    tbPlotRecYmax.Text = (Math.Truncate(lasSize.maxy * 1000) / 1000).ToString();
+                    tbPlotRecYmin.Text = (Math.Truncate(lasSize.miny * 1000) / 1000).ToString();
                 }
             }
         }
@@ -149,9 +143,18 @@ namespace WinFormsAppTest
                     {
                         points[i].x = double.Parse(tempPointList[i][0]);
                         points[i].y = double.Parse(tempPointList[i][1]);
+
+                        //상대좌표
+                        //double x= double.Parse(tempPointList[i][0]) - double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_xmin"));
+                        //double y = double.Parse(tempPointList[i][0]) - double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_ymin"));
+                        //poly_points += x.ToString() + " " + y.ToString() + " ";
+
+                        poly_points += tempPointList[i][0] + " " + tempPointList[i][1] + " ";
+
+
                         for (int j = 1; j < tempPointList[i].Length; j++)
                         {
-                            pointList += (tempPointList[i][j - 1] + " "); ;
+                            pointList += (tempPointList[i][j - 1] + " ");
                         }
                         pointList += ", ";
                     }
@@ -163,27 +166,16 @@ namespace WinFormsAppTest
                     pointList += tempPointList[0][0] + " ";
                     pointList += tempPointList[0][1];
                     //=============================================
-                    //MessageBox.Show(pointList);
                     paramForm.gui.pointList = pointList;
                 }//if문
             }
         }
         /// 전체 과정 실행 버튼
-        private void btnPlotOK_Click(object sender, EventArgs e)
+        private async void btnPlotOK_Click(object sender, EventArgs e)
         {
-            ///////////////////////////////////////////////////////////////////////
-            attachProgressBar(true);
-            //최근 작업 config 생성
-            string fileDi = Path.Combine(configPath, reqDi[(int)configFileType.Recent]);
+            progress = 0;
 
-            if (!Directory.Exists(fileDi))
-            {
-                Directory.CreateDirectory(fileDi);
-            }
-            string[] confCheck = Directory.GetFiles(fileDi, "recentConfig*");
-            configTouch(configFileType.Recent);
-            mainPaint();
-
+            paramForm.UpdateDataInTable("gui", "origin_las_file", tbPlotData.Text);
 
             //무결성 검사
             bool isEmptyVal_cir = tbPlotCircleX.Text == "" && tbPlotCircleY.Text == "" && tbPlotCircleR.Text == "";//원형 표준지에 필요한 값들이 비어있는경우
@@ -206,11 +198,6 @@ namespace WinFormsAppTest
                 MessageBox.Show("Rectangle Shape 필수 입력 값 오류.");
                 return;
             }
-            else if (cbPlotShape.SelectedIndex >= 3)
-            {
-                MessageBox.Show("표준지 모양을 선택해주세요.");
-                return;
-            }
 
 
             //콤보 박스의 선택된 인덱스에 따라 표준지 모양 전역변수 초기화
@@ -227,47 +214,92 @@ namespace WinFormsAppTest
                 shape = "_polygon";
             }
 
+            //구조체 변수 업데이트
+            paramForm.gui.centerX = double.Parse(tbPlotCircleX.Text);
+            paramForm.gui.centerY = double.Parse(tbPlotCircleY.Text);
+            paramForm.gui.radius = double.Parse(tbPlotCircleR.Text);
+            paramForm.gui.xMin = double.Parse(tbPlotRecXmin.Text);
+            paramForm.gui.xMax = double.Parse(tbPlotRecXmax.Text);
+            paramForm.gui.yMin = double.Parse(tbPlotRecYmin.Text);
+            paramForm.gui.yMax = double.Parse(tbPlotRecYmax.Text);
 
-            //MessageBox.Show(resultPath);
-            resultSavedDirectory = resultPath + @"\" + DateTime.Now.ToString("yyyyMMdd_HH_mm_") + originLasName;
-            //MessageBox.Show(resultSavedDirectory);
+            string resultOriginLas = (originLasName.Length > 20 ? originLasName.Substring(0, 20) : originLasName).Replace(' ', '_');
+            resultSavedDirectory = resultPath + @"\" + DateTime.Now.ToString("MMdd_HHmmss_") + resultOriginLas;
 
-            progress = 0;
-            mainProgressSet(progress);
-            attachProgressBar(true);
+            ProgressDialog_Create();
 
-            //csv 초기화
+            btnPlotOK.Enabled = false;
 
-            preProAndExcuteStep();
-
-            if (paramForm.fileType == "")
-                paramForm.write_csv(paramForm.csv_path);
-
-            if (progress == 10)
+            //winform을 실행하는 스레드와 다른 스레드에서 본 기능을 실행하기 위함(나름의 자원 분산)
+            await Task.Run(() =>
             {
-                MessageBox.Show("실행 완료");
+                //각 단계 실행
+                preProAndExcuteStep();
+
+                if (progress == 10)
+                {
+                    MessageBox.Show("실행 완료");
+                    progressDialog.Close();
+                }
+                else
+                {
+                    MessageBox.Show(progress + "단계 에러");
+                    return;
+                }
+            });
+            btnPlotOK.Enabled = true;
+        }
+
+        private void ProgressDialog_Create()
+        {
+            progressDialog = new Form
+            {
+                Width = 600,
+                Height = 400,
+                FormBorderStyle = FormBorderStyle.FixedDialog,
+                StartPosition = FormStartPosition.CenterScreen,
+                Name = "progressDialog",
+                Owner = paramForm
+            };
+
+            progressTextBox = new TextBox();
+            progressTextBox.Width = 550;
+            progressTextBox.Height = 280;
+            progressTextBox.ReadOnly = true;
+            progressTextBox.Multiline = true;
+            progressTextBox.Location = new Point(17, 70);
+            progressTextBox.ScrollBars = ScrollBars.Vertical;
+            progressTextBox.BackColor = Color.White;
+            progressTextBox.Font = new Font("맑은 고딕", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            progressTextBox.BorderStyle = BorderStyle.FixedSingle;
+
+            pbLoadingBar = new ProgressBar();
+            pbLoadingBar.Location = new Point(17, 20);
+            pbLoadingBar.MarqueeAnimationSpeed = 5;
+            pbLoadingBar.Maximum = 10;
+            pbLoadingBar.Name = "pbLoadingBar";
+            pbLoadingBar.Size = new Size(550, 30);
+
+            progressDialog.MaximizeBox = false;
+            progressDialog.Controls.Add(pbLoadingBar);
+            progressDialog.Controls.Add(progressTextBox);
+            progressDialog.Show();
+        }
+
+        private void ProgressBarSet(int level)
+        {
+            if (pbLoadingBar.InvokeRequired)
+            {
+                pbLoadingBar.Invoke(new Action(() =>
+                {
+                    pbLoadingBar.Value = level;
+                    pbLoadingBar.Invalidate();
+                }));
             }
             else
             {
-                MessageBox.Show(progress + "단계 에러");
-            }
-        }
-
-
-        //아래 두 메서드 PlotForm 마우스 드래그 시 윈폼 이동 이벤트
-        private void PlotForm_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                relativePformPos = e.Location;
-            }
-        }
-        private void PlotForm_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                this.Location = new Point(this.Location.X + (e.X - relativePformPos.X),
-                    this.Location.Y + (e.Y - relativePformPos.Y));
+                pbLoadingBar.Value = level;
+                pbLoadingBar.Invalidate();
             }
         }
 
@@ -275,8 +307,10 @@ namespace WinFormsAppTest
         private void cbPlotShape_SelectedIndexChanged(object sender, EventArgs e)
         {
             tcPlot.SelectedIndex = cbPlotShape.SelectedIndex;
+            cbPlotShape.Focus();
         }
-        //텍스트 박스 무결성 체크
+
+        //텍스트 박스 무결성 체크 및 las파일 크기 placeholder 처리
         private void tbPlotCircleX_Leave(object sender, EventArgs e)
         {
             int dummy1 = 1;
@@ -295,19 +329,20 @@ namespace WinFormsAppTest
             double cx = double.Parse(tbPlotCircleX.Text);
             if (tbPlotData.Text != "" && cx < lasSize.minx)
             {
-                MessageBox.Show($"선택하신 las 파일의 최소 x좌표값보다 작습니다.{lasSize.minx}보다 크게 설정해주세요");
+                MessageBox.Show($"선택하신 las 파일의 최소 x좌표값보다 작습니다.\n{lasSize.minx}보다 크게 설정해주세요");
                 tbPlotCircleX.Clear();
+                tbPlotCircleX.Text = lasSize.minx.ToString();
                 this.ActiveControl = tbPlotCircleX;
                 return;
             }
             if (tbPlotData.Text != "" && cx > lasSize.maxx)
             {
-                MessageBox.Show($"선택하신 las 파일의 최대 x좌표값보다 큽니다.{lasSize.maxx}보다 작게 설정해주세요");
+                MessageBox.Show($"선택하신 las 파일의 최대 x좌표값보다 큽니다.\n{lasSize.maxx}보다 작게 설정해주세요");
                 tbPlotCircleX.Clear();
+                tbPlotCircleX.Text = lasSize.maxx.ToString();
                 this.ActiveControl = tbPlotCircleX;
                 return;
             }
-
             paramForm.gui.centerX = cx;
         }
         private void tbPlotCircleY_Leave(object sender, EventArgs e)
@@ -328,15 +363,17 @@ namespace WinFormsAppTest
             double cy = double.Parse(tbPlotCircleY.Text);
             if (tbPlotData.Text != "" && cy < lasSize.miny)
             {
-                MessageBox.Show($"선택하신 las 파일의 최소 y좌표값보다 작습니다.{lasSize.miny}보다 크게 설정해주세요");
+                MessageBox.Show($"선택하신 las 파일의 최소 y좌표값보다 작습니다.\n{lasSize.miny} 이상으로 설정해주세요");
                 tbPlotCircleY.Clear();
+                tbPlotCircleY.Text = lasSize.miny.ToString();
                 this.ActiveControl = tbPlotCircleY;
                 return;
             }
             if (tbPlotData.Text != "" && cy > lasSize.maxy)
             {
-                MessageBox.Show($"선택하신 las 파일의 최대 y좌표값보다 큽니다.{lasSize.maxy}보다 작게 설정해주세요");
+                MessageBox.Show($"선택하신 las 파일의 최대 y좌표값보다 큽니다.\n{lasSize.maxy} 이하로 설정해주세요");
                 tbPlotCircleY.Clear();
+                tbPlotCircleY.Text = lasSize.maxy.ToString();
                 this.ActiveControl = tbPlotCircleY;
                 return;
             }
@@ -377,6 +414,14 @@ namespace WinFormsAppTest
             }
             if (tbPlotData.Text != "" && double.Parse(tbPlotRecXmin.Text) < lasSize.minx)
             {
+                MessageBox.Show($"선택하신 las 파일의 최소 x좌표값보다 작습니다.{lasSize.minx} 이상으로 설정해주세요");
+                tbPlotRecXmin.Clear();
+                tbPlotRecXmin.Text = lasSize.minx.ToString();
+                this.ActiveControl = tbPlotRecXmin;
+                return;
+            }
+            if (tbPlotData.Text != "" && double.Parse(tbPlotRecXmin.Text) < lasSize.minx)
+            {
                 MessageBox.Show($"선택하신 las 파일의 최소 x좌표값보다 작습니다.{lasSize.minx}보다 크게 설정해주세요");
                 tbPlotRecXmin.Clear();
                 this.ActiveControl = tbPlotRecXmin;
@@ -396,6 +441,14 @@ namespace WinFormsAppTest
             {
                 MessageBox.Show("실수형 숫자만 입력할 수 있습니다.");
                 tbPlotRecXmax.Clear();
+                this.ActiveControl = tbPlotRecXmax;
+                return;
+            }
+            if (tbPlotData.Text != "" && double.Parse(tbPlotRecXmax.Text) > lasSize.maxx)
+            {
+                MessageBox.Show($"선택하신 las 파일의 최대 x좌표값보다 큽니다.{lasSize.maxx} 이하로 설정해주세요");
+                tbPlotRecXmax.Clear();
+                tbPlotRecXmax.Text = lasSize.maxx.ToString();
                 this.ActiveControl = tbPlotRecXmax;
                 return;
             }
@@ -425,6 +478,14 @@ namespace WinFormsAppTest
             }
             if (tbPlotData.Text != "" && double.Parse(tbPlotRecYmin.Text) < lasSize.miny)
             {
+                MessageBox.Show($"선택하신 las 파일의 최소 y좌표값보다 작습니다.\n{lasSize.miny} 이상으로 설정해주세요");
+                tbPlotRecYmin.Clear();
+                tbPlotRecYmin.Text = lasSize.miny.ToString();
+                this.ActiveControl = tbPlotRecYmin;
+                return;
+            }
+            if (tbPlotData.Text != "" && double.Parse(tbPlotRecYmin.Text) < lasSize.miny)
+            {
                 MessageBox.Show($"선택하신 las 파일의 최소 y좌표값보다 작습니다.{lasSize.miny}보다 크게 설정해주세요");
                 tbPlotRecYmin.Clear();
                 this.ActiveControl = tbPlotRecYmin;
@@ -447,6 +508,14 @@ namespace WinFormsAppTest
                 this.ActiveControl = tbPlotRecYmax;
                 return;
             }
+            if (tbPlotData.Text != "" && double.Parse(tbPlotRecYmax.Text) > lasSize.maxy)
+            {
+                MessageBox.Show($"선택하신 las 파일의 최대 y좌표값보다 큽니다.\n{lasSize.maxy} 이하로 설정해주세요");
+                tbPlotRecYmax.Clear();
+                tbPlotRecYmax.Text = lasSize.maxy.ToString();
+                this.ActiveControl = tbPlotRecYmax;
+                return;
+            }
             if (tbPlotData.Text != "" && double.Parse(tbPlotRecYmax.Text) < lasSize.maxy)
             {
                 MessageBox.Show($"선택하신 las 파일의 최대 y좌표값보다 큽니다.{lasSize.maxy}보다 작게 설정해주세요");
@@ -456,7 +525,8 @@ namespace WinFormsAppTest
             }
             paramForm.gui.yMax = double.Parse(tbPlotRecYmax.Text);
         }
-        //텍스트박스 초기화
+
+        //Gui 구조체 -> plot값 텍스트박스 초기화
         private void initTextBox()
         {
             tbPlotCircleX.Text = paramForm.gui.centerX.ToString();
@@ -468,13 +538,11 @@ namespace WinFormsAppTest
             tbPlotRecYmin.Text = paramForm.gui.yMin.ToString();
             tbPlotRecYmax.Text = paramForm.gui.yMax.ToString();
 
-
             tbPlotData.Text = paramForm.gui.loadPath;
-
         }
 
         //사용자가 입력한 좌표값이 올바른지 체크하기 위한 함수들
-        private async void validation(string filePath)
+        private async void Validation(string filePath)
         {
             string infoDir = Path.Combine(basePath, "LAS_info");
             string fileName = Path.GetFileNameWithoutExtension(filePath);
@@ -484,42 +552,68 @@ namespace WinFormsAppTest
             }
             try
             {
+                //Las파일에서 이미 뽑아놓은 Las파일 크기 정보가 있는 지 체크 후
+                //정보를 읽거나, MakeInfo로 정보 만들고 읽기(만들어진 정보는 .dat파일)
                 string dat_filePath = Path.Combine(infoDir, fileName + ".dat");
                 if (!File.Exists(dat_filePath))
                 {
-                    string str = "Extracting information from the first run target file...";
-
-                    var progressDialog = new Form
+                    //progressDialog -> 사용자를 위한 로딩창
+                    var extractDialog = new Form
                     {
-                        Width = 200,
-                        Height = 100,
+                        Width = 250,
+                        Height = 200,
                         FormBorderStyle = FormBorderStyle.None,
-                        Text = "Progress",
-                        StartPosition = FormStartPosition.CenterScreen
+                        StartPosition = FormStartPosition.CenterScreen,
+                        ShowInTaskbar = false,
+                        Owner = this
                     };
 
-                    var label = new Label { Left = 50, Top = 20, Text = str };
+                    PictureBox gifBox = new PictureBox
+                    {
+                        Dock = DockStyle.Fill,
+                        Image = Image.FromFile(Environment.CurrentDirectory.ToString() + @"\sand_glass.gif"),
+                        SizeMode = PictureBoxSizeMode.StretchImage,
+                    };
 
-                    progressDialog.Controls.Add(label);
-                    progressDialog.Show();
+                    extractDialog.Controls.Add(gifBox);
+                    extractDialog.Show();
+                    //Task를 이용한 이유 : MakeInfo와 progressDialog의 pictureBox gif가
+                    //동시에 동작하게 하기 위함.(안쓰면 쓰레드 우선순위 문제로 gif 애니메이션이 안움직임)
 
-                    MakeInfo(filePath, infoDir);
+                    btnPlotOK.Enabled = false;
+                    await Task.Run(() => MakeInfo(filePath, infoDir));
+                    btnPlotOK.Enabled = true;
 
-                    progressDialog.Dispose();
-                    readInfo(filePath, infoDir);
+                    extractDialog.Dispose();
                 }
-                else
+                //Las파일 크기 정보 읽기
+                readInfo(filePath, infoDir);
+                //MessageBox.Show(lasSize.minx + " " + lasSize.miny + " " + lasSize.maxx + " " + lasSize.maxy);
+
+                //읽은 Las파일 크기가 정상적이지 않을 경우
+                if (!IsLasSizeValid())
                 {
-                    readInfo(filePath, infoDir);
+                    MessageBox.Show("Las파일의 사이즈가 적합하지 않습니다." +
+                    $"Lasfile Size\nXmin={lasSize.minx}\nXmax={lasSize.maxx}\n" +
+                    $"Ymin={lasSize.miny}\nYmax={lasSize.maxy}\n다시 실행해주세요.",
+                    "Las File Read Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                    foreach (string fName in Directory.GetFiles(infoDir, $"{fileName}.*"))
+                    {
+                        File.Delete(fName);
+                    }
+
+                    tbPlotData.Text = "";
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error reorganizing folder: {ex.Message}");
             }
-
         }
-        private async void MakeInfo(string filePath, string dirPath)
+
+        //PDAL로 Las파일에서 정보를 뽑은 json을 만들고, 거기서 크기 정보만 빼서 .dat파일로 생성
+        private async Task MakeInfo(string filePath, string dirPath)
         {
             string fileName = Path.GetFileNameWithoutExtension(filePath);
 
@@ -537,7 +631,7 @@ namespace WinFormsAppTest
                 process.Start();
                 //process.StandardInput.WriteLine($"echo {str}");
                 //process.StandardInput.WriteLine("echo off");
-                process.StandardInput.WriteLine($"pdal info {filePath} > {Path.Combine(dirPath, fileName)}.json");
+                process.StandardInput.WriteLine($"pdal info \"{filePath}\" > \"{Path.Combine(dirPath, fileName)}.json\"");
                 process.StandardInput.WriteLine("exit");
                 process.WaitForExit();
             }
@@ -552,24 +646,29 @@ namespace WinFormsAppTest
 
             try
             {
+                //LasSize 구조체의 객체인 lasSize에 각 크기 정보 담기
                 string jsonText = File.ReadAllText(fileInfo1.FullName);
-                //JObject JsonData1 = JObject.Parse(JsonText1);
                 JToken jsonSizeTok = JObject.Parse(jsonText)["stats"]["bbox"]["native"]["bbox"];
                 lasSize.minx = (double)jsonSizeTok["minx"];
                 lasSize.maxx = (double)jsonSizeTok["maxx"];
                 lasSize.miny = (double)jsonSizeTok["miny"];
                 lasSize.maxy = (double)jsonSizeTok["maxy"];
+                lasSize.minz = (double)jsonSizeTok["minz"];
+                lasSize.maxz = (double)jsonSizeTok["maxz"];
 
-                // Create the .dat file in the specified directory
+
+                //lasSize에 담긴 정보로.dat파일 만들기
                 string datFilePath = Path.Combine(dirPath, $"{fileName}.dat");
                 string sizeText = "";
-                Type type = typeof(LasSize);
-                FieldInfo[] lasProp = type.GetFields();
+                //FieldInfo[] 배열에 구조체의 정보 중 필드에 관한 정보만 담고
+                FieldInfo[] lasProp = typeof(LasSize).GetFields();
 
+                //해당 필드의 이름과 맞는 lasSize에 담긴 정보를 "이름,정보" 형태로 한줄 씩 sizeText에 담아서
                 foreach (FieldInfo fi in lasProp)
                 {
                     sizeText += $"{fi.Name},{fi.GetValue(lasSize)}\n";
                 }
+                //datFilePath에 담긴 파일 경로명으로 저장한다.
                 File.WriteAllText(datFilePath, sizeText);
             }
             catch (Exception ex)
@@ -605,15 +704,96 @@ namespace WinFormsAppTest
                             case "miny":
                                 lasSize.miny = double.Parse(sizeTok[1]);
                                 break;
+                            case "minz":
+                                lasSize.minz = double.Parse(sizeTok[1]);
+                                break;
+                            case "maxz":
+                                lasSize.maxz = double.Parse(sizeTok[1]);
+                                break;
                         }
                     }
                 }
+                paramForm.UpdateDataInTable("gui", "org_xmin", lasSize.minx.ToString());
+                paramForm.UpdateDataInTable("gui", "org_ymin", lasSize.miny.ToString());
+                paramForm.UpdateDataInTable("gui", "org_zmin", lasSize.minz.ToString());
             }
             catch (Exception e)
             {
                 MessageBox.Show($"Las파일 사이즈 읽기 실패\n{e}", "사이즈 파일 읽기 오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+        }
+        //esc키로 창 닫기
+        private void PlotForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)
+            {
+                this.Close();
+            }
+        }
+
+        private void PlotForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            attachStartBtn(true);
+            enableMainFormBtns(true);
+
+            Process[] allProc = Process.GetProcesses();
+
+            foreach (Process procs in allProc)
+            {
+                try
+                {
+                    if (procs.ProcessName == "ForestLi")
+                        procs.Kill();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+        }
+
+        private async void cloudCompareToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string lasPath = tbPlotData.Text;
+            string exePath = FindProgramPath("CloudCompare.exe");
+
+            if (exePath == "")
+            {
+                MessageBox.Show("CloudCompare 프로그램의 경로를 환경 변수(Path)에 추가해주세요");
+                return;
+            }
+
+            ProcessStartInfo psi = new ProcessStartInfo
+            {
+                FileName = exePath,
+                Arguments = lasPath,
+                UseShellExecute = true,
+                CreateNoWindow = true
+            };
+
+            await Task.Run(() =>
+            {
+                using (Process process = new Process { StartInfo = psi })
+                {
+                    process.Start();
+                    process.WaitForExit();
+                }
+            });
+        }
+
+        private string FindProgramPath(string programName)
+        {
+            string paths = Environment.GetEnvironmentVariable("Path");
+            foreach (string path in paths.Split(';'))
+            {
+                string programPath = Path.Combine(path, programName);
+                if (File.Exists(programPath))
+                {
+                    return programPath;
+                }
+            }
+            return string.Empty;
         }
     }
 }
