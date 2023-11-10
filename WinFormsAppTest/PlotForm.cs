@@ -84,6 +84,14 @@ namespace WinFormsAppTest
 
                     tbPlotData.Text = filePath;
                     Validation(filePath);
+
+                    tbPlotCircleX.Text = (Math.Truncate((lasSize.maxx + lasSize.minx) / 2 * 1000) / 1000).ToString();
+                    tbPlotCircleY.Text = (Math.Truncate((lasSize.maxy + lasSize.miny) / 2 * 1000) / 1000).ToString();
+
+                    tbPlotRecXmax.Text = (Math.Truncate(lasSize.maxx * 1000) / 1000).ToString();
+                    tbPlotRecXmin.Text = (Math.Truncate(lasSize.minx * 1000) / 1000).ToString();
+                    tbPlotRecYmax.Text = (Math.Truncate(lasSize.maxy * 1000) / 1000).ToString();
+                    tbPlotRecYmin.Text = (Math.Truncate(lasSize.miny * 1000) / 1000).ToString();
                 }
             }
         }
@@ -166,21 +174,6 @@ namespace WinFormsAppTest
         private async void btnPlotOK_Click(object sender, EventArgs e)
         {
             progress = 0;
-
-            if (tcPlot.SelectedIndex == 0)
-            {
-                tbPlotCircleX_Leave(sender, e);
-                tbPlotCircleY_Leave(sender, e);
-                return;
-            }
-            else if (tcPlot.SelectedIndex == 1)
-            {
-                tbPlotRecXmax_Leave(sender, e);
-                tbPlotRecXmin_Leave(sender, e);
-                tbPlotRecYmax_Leave(sender, e);
-                tbPlotRecYmin_Leave(sender, e);
-                return;
-            }
 
             paramForm.UpdateDataInTable("gui", "origin_las_file", tbPlotData.Text);
 
