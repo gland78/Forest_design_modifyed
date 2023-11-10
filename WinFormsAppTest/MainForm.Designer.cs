@@ -35,26 +35,13 @@ namespace WinFormsAppTest
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             pnSideMenu = new Panel();
-            lbSetting = new Label();
-            btnSideClose = new CustomBtn();
-            lbSlideMenu = new Label();
-            lbHome = new Label();
-            pnSidePreset = new CustomPanel();
-            lbSidePresetTitle = new Label();
-            lbSidePresetDate = new Label();
-            lbSlidePreset = new Label();
-            btnPresetManage = new CustomBtn();
-            btnHome = new CustomBtn();
             btnSettings = new CustomBtn();
-            btnSideMenu = new CustomBtn();
+            lbSetting = new Label();
+            lbHome = new Label();
+            btnHome = new CustomBtn();
             tcMainHome = new CustomTabControl();
             tpMainHome = new TabPage();
-            pnReviewMain = new Panel();
-            btnRecentInfo = new CustomBtn();
-            pnReview = new Panel();
-            lbReview = new Label();
             pnMain = new CustomPanel();
-            pbLoadingBar = new ProgressBar();
             lbSubTitle = new Label();
             btnStart = new CustomBtn();
             lbTitle = new Label();
@@ -64,16 +51,6 @@ namespace WinFormsAppTest
             tbTrunkSmooth = new TextBox();
             btnSettingCancel = new CustomBtn();
             btnSettingApply = new CustomBtn();
-            pnSettingDefault = new CustomPanel();
-            btnFactoryReset = new CustomBtn();
-            lbSettingDefault = new Label();
-            lbSettingDefaultInfo = new Label();
-            btnSettingLoad = new CustomBtn();
-            btnSettingSave = new CustomBtn();
-            pnSettingPreset = new CustomPanel();
-            lbSettingPreset = new Label();
-            lbSettingPresetInfo = new Label();
-            btnPresetSave = new CustomBtn();
             pnSettingNor5 = new CustomPanel();
             tbNorThres = new TextBox();
             lbNorThres = new Label();
@@ -96,29 +73,19 @@ namespace WinFormsAppTest
             tbTrunkMaxHeight = new TextBox();
             lbCrownSlice = new Label();
             lbTrunkSlice = new Label();
-            lbSubsampling = new Label();
             pnSettingCrown1 = new CustomPanel();
             lbCrownMinH = new Label();
             tbCrownMinHeight = new TextBox();
             pnSettingTrunk1 = new CustomPanel();
             tbTrunkMinHeight = new TextBox();
             lbTrunkMinH = new Label();
-            pnSettingSub1 = new CustomPanel();
-            tbSubCellSize = new TextBox();
-            lbSubCellSize = new Label();
             ttMainInfo = new ToolTip(components);
-            timerFlashPanel = new Timer(components);
-            timerFlashBtn = new Timer(components);
             pnSideMenu.SuspendLayout();
-            pnSidePreset.SuspendLayout();
             tcMainHome.SuspendLayout();
             tpMainHome.SuspendLayout();
-            pnReviewMain.SuspendLayout();
             pnMain.SuspendLayout();
             tpSettings.SuspendLayout();
             pnSettingTrunk3.SuspendLayout();
-            pnSettingDefault.SuspendLayout();
-            pnSettingPreset.SuspendLayout();
             pnSettingNor5.SuspendLayout();
             pnSettingNor4.SuspendLayout();
             pnSettingNor3.SuspendLayout();
@@ -127,29 +94,42 @@ namespace WinFormsAppTest
             pnSettingTrunk2.SuspendLayout();
             pnSettingCrown1.SuspendLayout();
             pnSettingTrunk1.SuspendLayout();
-            pnSettingSub1.SuspendLayout();
             SuspendLayout();
             // 
             // pnSideMenu
             // 
             pnSideMenu.BackColor = Color.FromArgb(60, 94, 94);
             pnSideMenu.BackgroundImageLayout = ImageLayout.Zoom;
-            pnSideMenu.Controls.Add(lbSetting);
-            pnSideMenu.Controls.Add(btnSideClose);
-            pnSideMenu.Controls.Add(lbSlideMenu);
-            pnSideMenu.Controls.Add(lbHome);
-            pnSideMenu.Controls.Add(pnSidePreset);
-            pnSideMenu.Controls.Add(lbSlidePreset);
-            pnSideMenu.Controls.Add(btnPresetManage);
-            pnSideMenu.Controls.Add(btnHome);
             pnSideMenu.Controls.Add(btnSettings);
-            pnSideMenu.Controls.Add(btnSideMenu);
+            pnSideMenu.Controls.Add(lbSetting);
+            pnSideMenu.Controls.Add(lbHome);
+            pnSideMenu.Controls.Add(btnHome);
             pnSideMenu.Dock = DockStyle.Left;
             pnSideMenu.Location = new Point(0, 0);
             pnSideMenu.Margin = new Padding(3, 4, 3, 4);
             pnSideMenu.Name = "pnSideMenu";
-            pnSideMenu.Size = new Size(384, 800);
+            pnSideMenu.Size = new Size(65, 500);
             pnSideMenu.TabIndex = 2;
+            // 
+            // btnSettings
+            // 
+            btnSettings.BackColor = Color.Transparent;
+            btnSettings.BackgroundColor = Color.Transparent;
+            btnSettings.BorderColor = Color.Transparent;
+            btnSettings.BorderRadius = 5;
+            btnSettings.BorderSize = 0;
+            btnSettings.FlatAppearance.BorderSize = 0;
+            btnSettings.FlatAppearance.MouseDownBackColor = Color.FromArgb(128, 162, 162);
+            btnSettings.FlatAppearance.MouseOverBackColor = Color.FromArgb(96, 128, 128);
+            btnSettings.FlatStyle = FlatStyle.Flat;
+            btnSettings.ForeColor = Color.White;
+            btnSettings.Image = (Image)resources.GetObject("btnSettings.Image");
+            btnSettings.Location = new Point(14, 66);
+            btnSettings.Name = "btnSettings";
+            btnSettings.Size = new Size(38, 34);
+            btnSettings.TabIndex = 10;
+            btnSettings.TextColor = Color.White;
+            btnSettings.UseVisualStyleBackColor = false;
             // 
             // lbSetting
             // 
@@ -161,41 +141,6 @@ namespace WinFormsAppTest
             lbSetting.TabIndex = 9;
             lbSetting.Text = "설정";
             // 
-            // btnSideClose
-            // 
-            btnSideClose.BackColor = Color.Transparent;
-            btnSideClose.BackgroundColor = Color.Transparent;
-            btnSideClose.BackgroundImage = (Image)resources.GetObject("btnSideClose.BackgroundImage");
-            btnSideClose.BackgroundImageLayout = ImageLayout.Center;
-            btnSideClose.BorderColor = Color.Transparent;
-            btnSideClose.BorderRadius = 5;
-            btnSideClose.BorderSize = 0;
-            btnSideClose.CausesValidation = false;
-            btnSideClose.FlatAppearance.BorderColor = Color.DarkSlateGray;
-            btnSideClose.FlatAppearance.BorderSize = 0;
-            btnSideClose.FlatAppearance.MouseDownBackColor = Color.FromArgb(128, 162, 162);
-            btnSideClose.FlatAppearance.MouseOverBackColor = Color.FromArgb(96, 128, 128);
-            btnSideClose.FlatStyle = FlatStyle.Flat;
-            btnSideClose.ForeColor = Color.White;
-            btnSideClose.Location = new Point(351, 11);
-            btnSideClose.Name = "btnSideClose";
-            btnSideClose.Size = new Size(22, 22);
-            btnSideClose.TabIndex = 8;
-            btnSideClose.TabStop = false;
-            btnSideClose.TextColor = Color.White;
-            btnSideClose.UseVisualStyleBackColor = false;
-            btnSideClose.Click += btnSlideMenu_Click;
-            // 
-            // lbSlideMenu
-            // 
-            lbSlideMenu.AutoSize = true;
-            lbSlideMenu.ForeColor = Color.White;
-            lbSlideMenu.Location = new Point(4, 155);
-            lbSlideMenu.Name = "lbSlideMenu";
-            lbSlideMenu.Size = new Size(59, 15);
-            lbSlideMenu.TabIndex = 5;
-            lbSlideMenu.Text = "설정 목록";
-            // 
             // lbHome
             // 
             lbHome.AutoSize = true;
@@ -205,74 +150,6 @@ namespace WinFormsAppTest
             lbHome.Size = new Size(19, 15);
             lbHome.TabIndex = 4;
             lbHome.Text = "홈";
-            // 
-            // pnSidePreset
-            // 
-            pnSidePreset.BackColor = Color.Transparent;
-            pnSidePreset.Controls.Add(lbSidePresetTitle);
-            pnSidePreset.Controls.Add(lbSidePresetDate);
-            pnSidePreset.Location = new Point(12, 222);
-            pnSidePreset.Name = "pnSidePreset";
-            pnSidePreset.Size = new Size(360, 483);
-            pnSidePreset.TabIndex = 5;
-            // 
-            // lbSidePresetTitle
-            // 
-            lbSidePresetTitle.AutoSize = true;
-            lbSidePresetTitle.ForeColor = Color.White;
-            lbSidePresetTitle.Location = new Point(221, 11);
-            lbSidePresetTitle.Name = "lbSidePresetTitle";
-            lbSidePresetTitle.Size = new Size(43, 15);
-            lbSidePresetTitle.TabIndex = 2;
-            lbSidePresetTitle.Text = "설정명";
-            // 
-            // lbSidePresetDate
-            // 
-            lbSidePresetDate.AutoSize = true;
-            lbSidePresetDate.ForeColor = Color.White;
-            lbSidePresetDate.Location = new Point(49, 11);
-            lbSidePresetDate.Name = "lbSidePresetDate";
-            lbSidePresetDate.Size = new Size(31, 15);
-            lbSidePresetDate.TabIndex = 0;
-            lbSidePresetDate.Text = "날짜";
-            // 
-            // lbSlidePreset
-            // 
-            lbSlidePreset.AutoSize = true;
-            lbSlidePreset.Font = new Font("맑은 고딕", 16F, FontStyle.Bold, GraphicsUnit.Point);
-            lbSlidePreset.ForeColor = SystemColors.ControlLightLight;
-            lbSlidePreset.Location = new Point(12, 184);
-            lbSlidePreset.Name = "lbSlidePreset";
-            lbSlidePreset.Size = new Size(109, 30);
-            lbSlidePreset.TabIndex = 7;
-            lbSlidePreset.Text = "설정 관리";
-            // 
-            // btnPresetManage
-            // 
-            btnPresetManage.BackColor = Color.Transparent;
-            btnPresetManage.BackgroundColor = Color.Transparent;
-            btnPresetManage.BackgroundImage = (Image)resources.GetObject("btnPresetManage.BackgroundImage");
-            btnPresetManage.BackgroundImageLayout = ImageLayout.Zoom;
-            btnPresetManage.BorderColor = Color.Transparent;
-            btnPresetManage.BorderRadius = 5;
-            btnPresetManage.BorderSize = 0;
-            btnPresetManage.CausesValidation = false;
-            btnPresetManage.FlatAppearance.BorderColor = Color.DarkSlateGray;
-            btnPresetManage.FlatAppearance.BorderSize = 0;
-            btnPresetManage.FlatAppearance.MouseDownBackColor = Color.FromArgb(128, 162, 162);
-            btnPresetManage.FlatAppearance.MouseOverBackColor = Color.FromArgb(96, 128, 128);
-            btnPresetManage.FlatStyle = FlatStyle.Flat;
-            btnPresetManage.ForeColor = Color.White;
-            btnPresetManage.Location = new Point(350, 189);
-            btnPresetManage.Margin = new Padding(3, 4, 3, 4);
-            btnPresetManage.Name = "btnPresetManage";
-            btnPresetManage.Size = new Size(22, 22);
-            btnPresetManage.TabIndex = 2;
-            btnPresetManage.TabStop = false;
-            btnPresetManage.TextColor = Color.White;
-            btnPresetManage.UseVisualStyleBackColor = false;
-            btnPresetManage.Click += btnPresetManage_Click;
-            btnPresetManage.MouseHover += btnPresetManage_MouseHover;
             // 
             // btnHome
             // 
@@ -301,161 +178,45 @@ namespace WinFormsAppTest
             btnHome.TextImageRelation = TextImageRelation.ImageAboveText;
             btnHome.UseVisualStyleBackColor = false;
             // 
-            // btnSettings
-            // 
-            btnSettings.BackColor = Color.Transparent;
-            btnSettings.BackgroundColor = Color.Transparent;
-            btnSettings.BackgroundImage = (Image)resources.GetObject("btnSettings.BackgroundImage");
-            btnSettings.BackgroundImageLayout = ImageLayout.Center;
-            btnSettings.BorderColor = Color.Transparent;
-            btnSettings.BorderRadius = 5;
-            btnSettings.BorderSize = 0;
-            btnSettings.FlatAppearance.BorderSize = 0;
-            btnSettings.FlatAppearance.MouseDownBackColor = Color.FromArgb(128, 162, 162);
-            btnSettings.FlatAppearance.MouseOverBackColor = Color.FromArgb(96, 128, 128);
-            btnSettings.FlatStyle = FlatStyle.Flat;
-            btnSettings.Font = new Font("Microsoft Sans Serif", 14.25F, FontStyle.Bold, GraphicsUnit.Point);
-            btnSettings.ForeColor = SystemColors.ControlLightLight;
-            btnSettings.Location = new Point(14, 67);
-            btnSettings.Margin = new Padding(3, 4, 3, 4);
-            btnSettings.Name = "btnSettings";
-            btnSettings.Size = new Size(38, 34);
-            btnSettings.TabIndex = 3;
-            btnSettings.TextAlign = ContentAlignment.MiddleLeft;
-            btnSettings.TextColor = SystemColors.ControlLightLight;
-            btnSettings.UseVisualStyleBackColor = false;
-            // 
-            // btnSideMenu
-            // 
-            btnSideMenu.BackColor = Color.Transparent;
-            btnSideMenu.BackgroundColor = Color.Transparent;
-            btnSideMenu.BackgroundImageLayout = ImageLayout.None;
-            btnSideMenu.BorderColor = Color.Transparent;
-            btnSideMenu.BorderRadius = 5;
-            btnSideMenu.BorderSize = 0;
-            btnSideMenu.CausesValidation = false;
-            btnSideMenu.FlatAppearance.BorderColor = Color.DarkSlateGray;
-            btnSideMenu.FlatAppearance.BorderSize = 0;
-            btnSideMenu.FlatAppearance.MouseDownBackColor = Color.FromArgb(128, 162, 162);
-            btnSideMenu.FlatAppearance.MouseOverBackColor = Color.FromArgb(96, 128, 128);
-            btnSideMenu.FlatStyle = FlatStyle.Flat;
-            btnSideMenu.ForeColor = Color.White;
-            btnSideMenu.Image = (Image)resources.GetObject("btnSideMenu.Image");
-            btnSideMenu.Location = new Point(14, 120);
-            btnSideMenu.Margin = new Padding(3, 4, 3, 4);
-            btnSideMenu.Name = "btnSideMenu";
-            btnSideMenu.Size = new Size(38, 34);
-            btnSideMenu.TabIndex = 1;
-            btnSideMenu.TabStop = false;
-            btnSideMenu.TextColor = Color.White;
-            btnSideMenu.UseVisualStyleBackColor = false;
-            // 
             // tcMainHome
             // 
             tcMainHome.Controls.Add(tpMainHome);
             tcMainHome.Controls.Add(tpSettings);
+            tcMainHome.Dock = DockStyle.Right;
             tcMainHome.ItemSize = new Size(0, 10);
-            tcMainHome.Location = new Point(384, 0);
+            tcMainHome.Location = new Point(65, 0);
             tcMainHome.Margin = new Padding(0);
             tcMainHome.Multiline = true;
             tcMainHome.Name = "tcMainHome";
             tcMainHome.Padding = new Point(0, 0);
             tcMainHome.SelectedIndex = 0;
-            tcMainHome.Size = new Size(896, 800);
+            tcMainHome.Size = new Size(896, 500);
             tcMainHome.TabIndex = 3;
             tcMainHome.TabStop = false;
             // 
             // tpMainHome
             // 
-            tpMainHome.Controls.Add(pnReviewMain);
             tpMainHome.Controls.Add(pnMain);
             tpMainHome.Location = new Point(4, 14);
             tpMainHome.Margin = new Padding(0);
             tpMainHome.Name = "tpMainHome";
-            tpMainHome.Size = new Size(888, 782);
+            tpMainHome.Size = new Size(888, 482);
             tpMainHome.TabIndex = 0;
             tpMainHome.UseVisualStyleBackColor = true;
-            // 
-            // pnReviewMain
-            // 
-            pnReviewMain.BackColor = Color.GhostWhite;
-            pnReviewMain.Controls.Add(btnRecentInfo);
-            pnReviewMain.Controls.Add(pnReview);
-            pnReviewMain.Controls.Add(lbReview);
-            pnReviewMain.Dock = DockStyle.Bottom;
-            pnReviewMain.Location = new Point(0, 463);
-            pnReviewMain.Margin = new Padding(3, 4, 3, 4);
-            pnReviewMain.Name = "pnReviewMain";
-            pnReviewMain.Size = new Size(888, 319);
-            pnReviewMain.TabIndex = 1;
-            // 
-            // btnRecentInfo
-            // 
-            btnRecentInfo.BackColor = Color.Transparent;
-            btnRecentInfo.BackgroundColor = Color.Transparent;
-            btnRecentInfo.BackgroundImage = (Image)resources.GetObject("btnRecentInfo.BackgroundImage");
-            btnRecentInfo.BackgroundImageLayout = ImageLayout.Zoom;
-            btnRecentInfo.BorderColor = Color.Transparent;
-            btnRecentInfo.BorderRadius = 10;
-            btnRecentInfo.BorderSize = 0;
-            btnRecentInfo.FlatAppearance.BorderSize = 0;
-            btnRecentInfo.FlatStyle = FlatStyle.Flat;
-            btnRecentInfo.ForeColor = Color.White;
-            btnRecentInfo.Location = new Point(219, 24);
-            btnRecentInfo.Name = "btnRecentInfo";
-            btnRecentInfo.Size = new Size(20, 20);
-            btnRecentInfo.TabIndex = 1;
-            btnRecentInfo.TabStop = false;
-            btnRecentInfo.TextColor = Color.White;
-            btnRecentInfo.UseVisualStyleBackColor = false;
-            btnRecentInfo.MouseHover += btnRecentInfo_MouseHover;
-            // 
-            // pnReview
-            // 
-            pnReview.AutoScroll = true;
-            pnReview.BackColor = Color.Transparent;
-            pnReview.Dock = DockStyle.Bottom;
-            pnReview.Location = new Point(0, 64);
-            pnReview.Margin = new Padding(3, 4, 3, 4);
-            pnReview.Name = "pnReview";
-            pnReview.Size = new Size(888, 255);
-            pnReview.TabIndex = 2;
-            // 
-            // lbReview
-            // 
-            lbReview.AutoSize = true;
-            lbReview.Font = new Font("굴림", 24F, FontStyle.Regular, GraphicsUnit.Point);
-            lbReview.Location = new Point(17, 18);
-            lbReview.Name = "lbReview";
-            lbReview.Size = new Size(199, 32);
-            lbReview.TabIndex = 0;
-            lbReview.Text = "Recent Task";
-            lbReview.TextAlign = ContentAlignment.BottomLeft;
             // 
             // pnMain
             // 
             pnMain.BackColor = Color.Gainsboro;
             pnMain.BackgroundImageLayout = ImageLayout.Stretch;
-            pnMain.Controls.Add(pbLoadingBar);
             pnMain.Controls.Add(lbSubTitle);
             pnMain.Controls.Add(btnStart);
             pnMain.Controls.Add(lbTitle);
-            pnMain.Dock = DockStyle.Top;
+            pnMain.Dock = DockStyle.Fill;
             pnMain.Location = new Point(0, 0);
             pnMain.Margin = new Padding(3, 4, 3, 4);
             pnMain.Name = "pnMain";
             pnMain.Size = new Size(888, 482);
             pnMain.TabIndex = 0;
-            // 
-            // pbLoadingBar
-            // 
-            pbLoadingBar.Location = new Point(36, 370);
-            pbLoadingBar.MarqueeAnimationSpeed = 5;
-            pbLoadingBar.Maximum = 10;
-            pbLoadingBar.Name = "pbLoadingBar";
-            pbLoadingBar.Size = new Size(825, 42);
-            pbLoadingBar.TabIndex = 3;
-            pbLoadingBar.Visible = false;
             // 
             // lbSubTitle
             // 
@@ -478,7 +239,7 @@ namespace WinFormsAppTest
             btnStart.FlatStyle = FlatStyle.Flat;
             btnStart.Font = new Font("굴림", 20.25F, FontStyle.Regular, GraphicsUnit.Point);
             btnStart.ForeColor = Color.White;
-            btnStart.Location = new Point(643, 244);
+            btnStart.Location = new Point(643, 270);
             btnStart.Margin = new Padding(3, 4, 3, 4);
             btnStart.Name = "btnStart";
             btnStart.Size = new Size(179, 61);
@@ -506,8 +267,6 @@ namespace WinFormsAppTest
             tpSettings.Controls.Add(pnSettingTrunk3);
             tpSettings.Controls.Add(btnSettingCancel);
             tpSettings.Controls.Add(btnSettingApply);
-            tpSettings.Controls.Add(pnSettingDefault);
-            tpSettings.Controls.Add(pnSettingPreset);
             tpSettings.Controls.Add(pnSettingNor5);
             tpSettings.Controls.Add(pnSettingNor4);
             tpSettings.Controls.Add(pnSettingNor3);
@@ -518,14 +277,12 @@ namespace WinFormsAppTest
             tpSettings.Controls.Add(pnSettingTrunk2);
             tpSettings.Controls.Add(lbCrownSlice);
             tpSettings.Controls.Add(lbTrunkSlice);
-            tpSettings.Controls.Add(lbSubsampling);
             tpSettings.Controls.Add(pnSettingCrown1);
             tpSettings.Controls.Add(pnSettingTrunk1);
-            tpSettings.Controls.Add(pnSettingSub1);
             tpSettings.Location = new Point(4, 14);
             tpSettings.Name = "tpSettings";
             tpSettings.Padding = new Padding(3);
-            tpSettings.Size = new Size(888, 782);
+            tpSettings.Size = new Size(888, 482);
             tpSettings.TabIndex = 1;
             // 
             // pnSettingTrunk3
@@ -533,7 +290,7 @@ namespace WinFormsAppTest
             pnSettingTrunk3.BackColor = Color.Gray;
             pnSettingTrunk3.Controls.Add(lbTrunkSmooth);
             pnSettingTrunk3.Controls.Add(tbTrunkSmooth);
-            pnSettingTrunk3.Location = new Point(24, 963);
+            pnSettingTrunk3.Location = new Point(24, 665);
             pnSettingTrunk3.Margin = new Padding(3, 4, 3, 4);
             pnSettingTrunk3.Name = "pnSettingTrunk3";
             pnSettingTrunk3.Size = new Size(850, 58);
@@ -604,171 +361,12 @@ namespace WinFormsAppTest
             btnSettingApply.UseVisualStyleBackColor = false;
             btnSettingApply.Click += btnSettingApply_Click;
             // 
-            // pnSettingDefault
-            // 
-            pnSettingDefault.BackColor = Color.Gray;
-            pnSettingDefault.Controls.Add(btnFactoryReset);
-            pnSettingDefault.Controls.Add(lbSettingDefault);
-            pnSettingDefault.Controls.Add(lbSettingDefaultInfo);
-            pnSettingDefault.Controls.Add(btnSettingLoad);
-            pnSettingDefault.Controls.Add(btnSettingSave);
-            pnSettingDefault.Location = new Point(24, 117);
-            pnSettingDefault.Margin = new Padding(3, 4, 3, 4);
-            pnSettingDefault.Name = "pnSettingDefault";
-            pnSettingDefault.Size = new Size(850, 72);
-            pnSettingDefault.TabIndex = 2;
-            // 
-            // btnFactoryReset
-            // 
-            btnFactoryReset.BackColor = Color.FromArgb(64, 64, 64);
-            btnFactoryReset.BackgroundColor = Color.FromArgb(64, 64, 64);
-            btnFactoryReset.BorderColor = Color.Transparent;
-            btnFactoryReset.BorderRadius = 10;
-            btnFactoryReset.BorderSize = 1;
-            btnFactoryReset.FlatAppearance.BorderSize = 0;
-            btnFactoryReset.FlatAppearance.MouseDownBackColor = Color.FromArgb(80, 80, 80);
-            btnFactoryReset.FlatStyle = FlatStyle.Flat;
-            btnFactoryReset.Font = new Font("맑은 고딕", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
-            btnFactoryReset.ForeColor = Color.White;
-            btnFactoryReset.Location = new Point(470, 18);
-            btnFactoryReset.Name = "btnFactoryReset";
-            btnFactoryReset.Size = new Size(104, 36);
-            btnFactoryReset.TabIndex = 0;
-            btnFactoryReset.TabStop = false;
-            btnFactoryReset.Text = "공장초기화";
-            btnFactoryReset.TextColor = Color.White;
-            btnFactoryReset.UseVisualStyleBackColor = false;
-            btnFactoryReset.Click += btn_factory_reset_Click;
-            btnFactoryReset.MouseHover += btn_factory_reset_MouseHover;
-            // 
-            // lbSettingDefault
-            // 
-            lbSettingDefault.AutoSize = true;
-            lbSettingDefault.Font = new Font("맑은 고딕", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-            lbSettingDefault.ForeColor = Color.White;
-            lbSettingDefault.Location = new Point(21, 21);
-            lbSettingDefault.Name = "lbSettingDefault";
-            lbSettingDefault.Size = new Size(78, 17);
-            lbSettingDefault.TabIndex = 3;
-            lbSettingDefault.Text = "기본값 관리";
-            // 
-            // lbSettingDefaultInfo
-            // 
-            lbSettingDefaultInfo.AutoSize = true;
-            lbSettingDefaultInfo.Font = new Font("맑은 고딕", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            lbSettingDefaultInfo.ForeColor = Color.White;
-            lbSettingDefaultInfo.Location = new Point(21, 40);
-            lbSettingDefaultInfo.Name = "lbSettingDefaultInfo";
-            lbSettingDefaultInfo.Size = new Size(367, 13);
-            lbSettingDefaultInfo.TabIndex = 4;
-            lbSettingDefaultInfo.Text = "현재 설정 상태를 기본값으로 저장하거나, 저장된 기본값으로 변경합니다";
-            // 
-            // btnSettingLoad
-            // 
-            btnSettingLoad.BackColor = Color.FromArgb(64, 64, 64);
-            btnSettingLoad.BackgroundColor = Color.FromArgb(64, 64, 64);
-            btnSettingLoad.BorderColor = Color.Transparent;
-            btnSettingLoad.BorderRadius = 10;
-            btnSettingLoad.BorderSize = 1;
-            btnSettingLoad.FlatAppearance.BorderSize = 0;
-            btnSettingLoad.FlatAppearance.MouseDownBackColor = Color.FromArgb(80, 80, 80);
-            btnSettingLoad.FlatStyle = FlatStyle.Flat;
-            btnSettingLoad.Font = new Font("맑은 고딕", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
-            btnSettingLoad.ForeColor = Color.White;
-            btnSettingLoad.Location = new Point(580, 18);
-            btnSettingLoad.Name = "btnSettingLoad";
-            btnSettingLoad.Size = new Size(138, 36);
-            btnSettingLoad.TabIndex = 1;
-            btnSettingLoad.TabStop = false;
-            btnSettingLoad.Text = "기본값 불러오기";
-            btnSettingLoad.TextColor = Color.White;
-            btnSettingLoad.UseVisualStyleBackColor = false;
-            btnSettingLoad.Click += btnSettingLoad_Click;
-            // 
-            // btnSettingSave
-            // 
-            btnSettingSave.BackColor = Color.FromArgb(64, 64, 64);
-            btnSettingSave.BackgroundColor = Color.FromArgb(64, 64, 64);
-            btnSettingSave.BorderColor = Color.Transparent;
-            btnSettingSave.BorderRadius = 10;
-            btnSettingSave.BorderSize = 1;
-            btnSettingSave.FlatAppearance.BorderSize = 0;
-            btnSettingSave.FlatAppearance.MouseDownBackColor = Color.FromArgb(80, 80, 80);
-            btnSettingSave.FlatStyle = FlatStyle.Flat;
-            btnSettingSave.Font = new Font("맑은 고딕", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
-            btnSettingSave.ForeColor = Color.White;
-            btnSettingSave.Location = new Point(724, 18);
-            btnSettingSave.Name = "btnSettingSave";
-            btnSettingSave.Size = new Size(110, 36);
-            btnSettingSave.TabIndex = 2;
-            btnSettingSave.TabStop = false;
-            btnSettingSave.Text = "기본값 저장";
-            btnSettingSave.TextColor = Color.White;
-            btnSettingSave.UseVisualStyleBackColor = false;
-            btnSettingSave.Click += btnSettingSave_Click;
-            // 
-            // pnSettingPreset
-            // 
-            pnSettingPreset.BackColor = Color.Gray;
-            pnSettingPreset.Controls.Add(lbSettingPreset);
-            pnSettingPreset.Controls.Add(lbSettingPresetInfo);
-            pnSettingPreset.Controls.Add(btnPresetSave);
-            pnSettingPreset.Location = new Point(24, 193);
-            pnSettingPreset.Margin = new Padding(3, 4, 3, 4);
-            pnSettingPreset.Name = "pnSettingPreset";
-            pnSettingPreset.Size = new Size(850, 72);
-            pnSettingPreset.TabIndex = 3;
-            // 
-            // lbSettingPreset
-            // 
-            lbSettingPreset.AutoSize = true;
-            lbSettingPreset.Font = new Font("맑은 고딕", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-            lbSettingPreset.ForeColor = Color.White;
-            lbSettingPreset.Location = new Point(21, 21);
-            lbSettingPreset.Name = "lbSettingPreset";
-            lbSettingPreset.Size = new Size(122, 17);
-            lbSettingPreset.TabIndex = 1;
-            lbSettingPreset.Text = "사용자 설정값 저장";
-            // 
-            // lbSettingPresetInfo
-            // 
-            lbSettingPresetInfo.AutoSize = true;
-            lbSettingPresetInfo.Font = new Font("맑은 고딕", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            lbSettingPresetInfo.ForeColor = Color.White;
-            lbSettingPresetInfo.Location = new Point(21, 40);
-            lbSettingPresetInfo.Name = "lbSettingPresetInfo";
-            lbSettingPresetInfo.Size = new Size(273, 13);
-            lbSettingPresetInfo.TabIndex = 2;
-            lbSettingPresetInfo.Text = "현재 설정 상태를 사이드의 사용자 메뉴로 저장합니다";
-            // 
-            // btnPresetSave
-            // 
-            btnPresetSave.BackColor = Color.FromArgb(64, 64, 64);
-            btnPresetSave.BackgroundColor = Color.FromArgb(64, 64, 64);
-            btnPresetSave.BorderColor = Color.Transparent;
-            btnPresetSave.BorderRadius = 10;
-            btnPresetSave.BorderSize = 1;
-            btnPresetSave.FlatAppearance.BorderSize = 0;
-            btnPresetSave.FlatAppearance.MouseDownBackColor = Color.FromArgb(80, 80, 80);
-            btnPresetSave.FlatStyle = FlatStyle.Flat;
-            btnPresetSave.Font = new Font("맑은 고딕", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
-            btnPresetSave.ForeColor = Color.White;
-            btnPresetSave.Location = new Point(694, 18);
-            btnPresetSave.Name = "btnPresetSave";
-            btnPresetSave.Size = new Size(140, 36);
-            btnPresetSave.TabIndex = 0;
-            btnPresetSave.TabStop = false;
-            btnPresetSave.Text = "사용자 설정 저장";
-            btnPresetSave.TextColor = Color.White;
-            btnPresetSave.UseVisualStyleBackColor = false;
-            btnPresetSave.Click += btnPresetSave_Click;
-            // 
             // pnSettingNor5
             // 
             pnSettingNor5.BackColor = Color.Gray;
             pnSettingNor5.Controls.Add(tbNorThres);
             pnSettingNor5.Controls.Add(lbNorThres);
-            pnSettingNor5.Location = new Point(24, 711);
+            pnSettingNor5.Location = new Point(24, 413);
             pnSettingNor5.Margin = new Padding(3, 4, 3, 4);
             pnSettingNor5.Name = "pnSettingNor5";
             pnSettingNor5.Size = new Size(850, 58);
@@ -800,7 +398,7 @@ namespace WinFormsAppTest
             pnSettingNor4.BackColor = Color.Gray;
             pnSettingNor4.Controls.Add(tbNorScalar);
             pnSettingNor4.Controls.Add(lbNorScalar);
-            pnSettingNor4.Location = new Point(24, 645);
+            pnSettingNor4.Location = new Point(24, 347);
             pnSettingNor4.Margin = new Padding(3, 4, 3, 4);
             pnSettingNor4.Name = "pnSettingNor4";
             pnSettingNor4.Size = new Size(850, 58);
@@ -832,7 +430,7 @@ namespace WinFormsAppTest
             pnSettingNor3.BackColor = Color.Gray;
             pnSettingNor3.Controls.Add(tbNorSlope);
             pnSettingNor3.Controls.Add(lbNorSlope);
-            pnSettingNor3.Location = new Point(24, 579);
+            pnSettingNor3.Location = new Point(24, 281);
             pnSettingNor3.Margin = new Padding(3, 4, 3, 4);
             pnSettingNor3.Name = "pnSettingNor3";
             pnSettingNor3.Size = new Size(850, 58);
@@ -864,7 +462,7 @@ namespace WinFormsAppTest
             pnSettingNor2.BackColor = Color.Gray;
             pnSettingNor2.Controls.Add(tbNorWinSize);
             pnSettingNor2.Controls.Add(lbNorWinSize);
-            pnSettingNor2.Location = new Point(24, 513);
+            pnSettingNor2.Location = new Point(24, 215);
             pnSettingNor2.Margin = new Padding(3, 4, 3, 4);
             pnSettingNor2.Name = "pnSettingNor2";
             pnSettingNor2.Size = new Size(850, 58);
@@ -896,7 +494,7 @@ namespace WinFormsAppTest
             pnSettingNor1.BackColor = Color.Gray;
             pnSettingNor1.Controls.Add(tbNorCellSize);
             pnSettingNor1.Controls.Add(lbNorCellSize);
-            pnSettingNor1.Location = new Point(24, 447);
+            pnSettingNor1.Location = new Point(24, 149);
             pnSettingNor1.Margin = new Padding(3, 4, 3, 4);
             pnSettingNor1.Name = "pnSettingNor1";
             pnSettingNor1.Size = new Size(850, 58);
@@ -928,7 +526,7 @@ namespace WinFormsAppTest
             lbNormalize.AutoSize = true;
             lbNormalize.Font = new Font("Microsoft Sans Serif", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
             lbNormalize.ForeColor = Color.Black;
-            lbNormalize.Location = new Point(24, 415);
+            lbNormalize.Location = new Point(24, 117);
             lbNormalize.Name = "lbNormalize";
             lbNormalize.Size = new Size(117, 25);
             lbNormalize.TabIndex = 16;
@@ -951,7 +549,7 @@ namespace WinFormsAppTest
             pnSettingTrunk2.BackColor = Color.Gray;
             pnSettingTrunk2.Controls.Add(lbTrunkMaxH);
             pnSettingTrunk2.Controls.Add(tbTrunkMaxHeight);
-            pnSettingTrunk2.Location = new Point(24, 897);
+            pnSettingTrunk2.Location = new Point(24, 599);
             pnSettingTrunk2.Margin = new Padding(3, 4, 3, 4);
             pnSettingTrunk2.Name = "pnSettingTrunk2";
             pnSettingTrunk2.Size = new Size(850, 58);
@@ -983,7 +581,7 @@ namespace WinFormsAppTest
             lbCrownSlice.AutoSize = true;
             lbCrownSlice.Font = new Font("Microsoft Sans Serif", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
             lbCrownSlice.ForeColor = Color.Black;
-            lbCrownSlice.Location = new Point(24, 1051);
+            lbCrownSlice.Location = new Point(24, 753);
             lbCrownSlice.Name = "lbCrownSlice";
             lbCrownSlice.Size = new Size(130, 25);
             lbCrownSlice.TabIndex = 18;
@@ -994,29 +592,18 @@ namespace WinFormsAppTest
             lbTrunkSlice.AutoSize = true;
             lbTrunkSlice.Font = new Font("Microsoft Sans Serif", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
             lbTrunkSlice.ForeColor = Color.Black;
-            lbTrunkSlice.Location = new Point(24, 799);
+            lbTrunkSlice.Location = new Point(24, 501);
             lbTrunkSlice.Name = "lbTrunkSlice";
             lbTrunkSlice.Size = new Size(124, 25);
             lbTrunkSlice.TabIndex = 17;
             lbTrunkSlice.Text = "TrunkSlice";
-            // 
-            // lbSubsampling
-            // 
-            lbSubsampling.AutoSize = true;
-            lbSubsampling.Font = new Font("Microsoft Sans Serif", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
-            lbSubsampling.ForeColor = Color.Black;
-            lbSubsampling.Location = new Point(24, 295);
-            lbSubsampling.Name = "lbSubsampling";
-            lbSubsampling.Size = new Size(150, 25);
-            lbSubsampling.TabIndex = 15;
-            lbSubsampling.Text = "SubSampling";
             // 
             // pnSettingCrown1
             // 
             pnSettingCrown1.BackColor = Color.Gray;
             pnSettingCrown1.Controls.Add(lbCrownMinH);
             pnSettingCrown1.Controls.Add(tbCrownMinHeight);
-            pnSettingCrown1.Location = new Point(24, 1083);
+            pnSettingCrown1.Location = new Point(24, 785);
             pnSettingCrown1.Margin = new Padding(3, 4, 3, 4);
             pnSettingCrown1.Name = "pnSettingCrown1";
             pnSettingCrown1.Size = new Size(850, 58);
@@ -1048,7 +635,7 @@ namespace WinFormsAppTest
             pnSettingTrunk1.BackColor = Color.Gray;
             pnSettingTrunk1.Controls.Add(tbTrunkMinHeight);
             pnSettingTrunk1.Controls.Add(lbTrunkMinH);
-            pnSettingTrunk1.Location = new Point(24, 831);
+            pnSettingTrunk1.Location = new Point(24, 533);
             pnSettingTrunk1.Margin = new Padding(3, 4, 3, 4);
             pnSettingTrunk1.Name = "pnSettingTrunk1";
             pnSettingTrunk1.Size = new Size(850, 58);
@@ -1076,82 +663,33 @@ namespace WinFormsAppTest
             lbTrunkMinH.TabIndex = 1;
             lbTrunkMinH.Text = "MinHeight";
             // 
-            // pnSettingSub1
-            // 
-            pnSettingSub1.BackColor = Color.Gray;
-            pnSettingSub1.Controls.Add(tbSubCellSize);
-            pnSettingSub1.Controls.Add(lbSubCellSize);
-            pnSettingSub1.Location = new Point(24, 327);
-            pnSettingSub1.Margin = new Padding(3, 4, 3, 4);
-            pnSettingSub1.Name = "pnSettingSub1";
-            pnSettingSub1.Size = new Size(850, 58);
-            pnSettingSub1.TabIndex = 4;
-            // 
-            // tbSubCellSize
-            // 
-            tbSubCellSize.BorderStyle = BorderStyle.FixedSingle;
-            tbSubCellSize.Font = new Font("맑은 고딕", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            tbSubCellSize.Location = new Point(725, 15);
-            tbSubCellSize.Margin = new Padding(3, 4, 3, 4);
-            tbSubCellSize.Name = "tbSubCellSize";
-            tbSubCellSize.Size = new Size(109, 29);
-            tbSubCellSize.TabIndex = 0;
-            // 
-            // lbSubCellSize
-            // 
-            lbSubCellSize.AutoSize = true;
-            lbSubCellSize.Font = new Font("맑은 고딕", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-            lbSubCellSize.ForeColor = Color.White;
-            lbSubCellSize.Location = new Point(21, 21);
-            lbSubCellSize.Name = "lbSubCellSize";
-            lbSubCellSize.Size = new Size(60, 17);
-            lbSubCellSize.TabIndex = 1;
-            lbSubCellSize.Text = "Cell Size";
-            // 
-            // timerFlashPanel
-            // 
-            timerFlashPanel.Interval = 50;
-            timerFlashPanel.Tick += timerFlashPanel_Tick;
-            // 
-            // timerFlashBtn
-            // 
-            timerFlashBtn.Interval = 150;
-            timerFlashBtn.Tick += timerFlashBtn_Tick;
-            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.DarkSlateGray;
-            ClientSize = new Size(1280, 800);
+            ClientSize = new Size(961, 500);
             Controls.Add(tcMainHome);
             Controls.Add(pnSideMenu);
             DoubleBuffered = true;
-            FormBorderStyle = FormBorderStyle.FixedDialog;
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             Margin = new Padding(3, 4, 3, 4);
             MaximizeBox = false;
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterParent;
             Text = "ForestLi";
+            FormClosing += MainForm_FormClosing;
             Load += MainForm_Load;
             pnSideMenu.ResumeLayout(false);
             pnSideMenu.PerformLayout();
-            pnSidePreset.ResumeLayout(false);
-            pnSidePreset.PerformLayout();
             tcMainHome.ResumeLayout(false);
             tpMainHome.ResumeLayout(false);
-            pnReviewMain.ResumeLayout(false);
-            pnReviewMain.PerformLayout();
             pnMain.ResumeLayout(false);
             pnMain.PerformLayout();
             tpSettings.ResumeLayout(false);
             tpSettings.PerformLayout();
             pnSettingTrunk3.ResumeLayout(false);
             pnSettingTrunk3.PerformLayout();
-            pnSettingDefault.ResumeLayout(false);
-            pnSettingDefault.PerformLayout();
-            pnSettingPreset.ResumeLayout(false);
-            pnSettingPreset.PerformLayout();
             pnSettingNor5.ResumeLayout(false);
             pnSettingNor5.PerformLayout();
             pnSettingNor4.ResumeLayout(false);
@@ -1168,8 +706,6 @@ namespace WinFormsAppTest
             pnSettingCrown1.PerformLayout();
             pnSettingTrunk1.ResumeLayout(false);
             pnSettingTrunk1.PerformLayout();
-            pnSettingSub1.ResumeLayout(false);
-            pnSettingSub1.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -1179,19 +715,11 @@ namespace WinFormsAppTest
         private CustomTabControl tcMainHome;
         private Panel pnSideMenu;
         private TabPage tpMainHome;
-        private Panel pnReviewMain;
-        private Panel pnReview;
-        private Label lbReview;
         private CustomPanel pnMain;
         private Label lbSubTitle;
         private CustomBtn btnStart;
         private Label lbTitle;
         private TabPage tpSettings;
-        private TextBox tbSubCellSize;
-        private Label lbSubsampling;
-        private Label lbSubCellSize;
-        private CustomBtn btnSettings;
-        private CustomPanel pnSettingSub1;
         private CustomPanel pnSettingCrown1;
         private TextBox tbCrownMinHeight;
         private Label lbCrownSlice;
@@ -1203,9 +731,7 @@ namespace WinFormsAppTest
         private Label lbTrunkMaxH;
         private TextBox tbTrunkMinHeight;
         private CustomPanel pnSettingTrunk2;
-        private CustomBtn btnSettingSave;
         private Label lbSettings;
-        private CustomBtn btnPresetSave;
         private CustomPanel pnSettingNor5;
         private TextBox tbNorThres;
         private Label lbNorThres;
@@ -1222,36 +748,17 @@ namespace WinFormsAppTest
         private TextBox tbNorCellSize;
         private Label lbNorCellSize;
         private Label lbNormalize;
-        private CustomBtn btnPresetManage;
-        private CustomBtn btnSettingLoad;
-        private ProgressBar pbLoadingBar;
-        private CustomPanel pnSettingPreset;
-        private Label lbSettingPreset;
-        private Label lbSettingPresetInfo;
-        private CustomPanel pnSettingDefault;
-        private Label lbSettingDefault;
-        private Label lbSettingDefaultInfo;
         private CustomBtn btnSettingApply;
         private CustomBtn btnSettingCancel;
-        private CustomBtn btnFactoryReset;
-        private CustomBtn btnRecentInfo;
         private ToolTip ttMainInfo;
         private Label lbTrunkSmooth;
-        private Label lbSlidePreset;
-        private CustomPanel pnSidePreset;
         private CustomPanel pnSettingTrunk3;
         private TextBox tbTrunkSmooth;
         private Label lbHome;
-        private Label lbSlideMenu;
         private Label lbPresetManage;
         private CustomBtn customBtn1;
-        private CustomBtn btnSideClose;
-        private CustomBtn btnSideMenu;
         private Label label2;
-        private Label lbSidePresetDate;
-        private Label lbSidePresetTitle;
-        private Timer timerFlashPanel;
-        private Timer timerFlashBtn;
         private Label lbSetting;
+        private CustomBtn btnSettings;
     }
 }
