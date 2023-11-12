@@ -27,13 +27,8 @@ namespace WinFormsAppTest
         {
             InitializeComponent();
 
-            //아래 plotForm 컴포넌트들 세팅
-            pnPlotSelection.isBorder = false;
-            pnPlotSelection.borderColor = Color.White;
-            pnPlotData.isBorder = false;
-            pnPlotData.borderColor = Color.White;
+            SetPlotFormComponent();
 
-            cbPlotShape.SelectedIndex = 0;
             this.paramForm = paramForm;
         }
 
@@ -53,6 +48,16 @@ namespace WinFormsAppTest
             //메인폼의 start 버튼 감추기(중복 실행 방지)
             attachStartBtn(false);
 
+            cbPlotShape.SelectedIndex = 0;
+        }
+
+        //plotForm 컴포넌트들 세팅
+        private void SetPlotFormComponent()
+        {
+            pnPlotSelection.isBorder = false;
+            pnPlotSelection.borderColor = Color.White;
+            pnPlotData.isBorder = false;
+            pnPlotData.borderColor = Color.White;
             cbPlotShape.SelectedIndex = 0;
         }
 
@@ -78,7 +83,7 @@ namespace WinFormsAppTest
 
                     if (Path.GetExtension(filePath) != ".las")
                     {
-                        MessageBox.Show("las 확장자 파일만 불러와주세요");
+                        MessageBox.Show("las 확장자 파일만 불러와주세요.");
                         return;
                     }
 
@@ -725,7 +730,7 @@ namespace WinFormsAppTest
             }
         }
 
-        private async void cloudCompareToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void CloudCompareToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string lasPath = tbPlotData.Text;
             string exePath = FindProgramPath("CloudCompare.exe");
@@ -765,7 +770,7 @@ namespace WinFormsAppTest
                     return programPath;
                 }
             }
-            return string.Empty;
+            return "";
         }
     }
 }

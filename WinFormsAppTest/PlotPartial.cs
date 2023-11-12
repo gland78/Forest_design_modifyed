@@ -36,15 +36,6 @@ namespace WinFormsAppTest
         Coords bufferedPolycords = new Coords();
 
         //las파일 크기 저장 구조체
-        struct LasSize
-        {
-            public double maxx;
-            public double maxy;
-            public double minx;
-            public double miny;
-            public double minz;
-            public double maxz;
-        }
         LasSize lasSize = new LasSize();
 
         public Form progressDialog;

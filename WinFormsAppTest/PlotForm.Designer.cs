@@ -471,7 +471,7 @@
             cloudCompareToolStripMenuItem.Name = "cloudCompareToolStripMenuItem";
             cloudCompareToolStripMenuItem.Size = new Size(180, 22);
             cloudCompareToolStripMenuItem.Text = "CloudCompare";
-            cloudCompareToolStripMenuItem.Click += cloudCompareToolStripMenuItem_Click;
+            cloudCompareToolStripMenuItem.Click += CloudCompareToolStripMenuItem_Click;
             // 
             // PlotForm
             // 

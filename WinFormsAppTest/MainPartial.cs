@@ -429,7 +429,7 @@ namespace WinFormsAppTest
                     connection.Open();
 
                     string num_of_tables= "SELECT count(*) as num_of_tables FROM sqlite_master WHERE type=\"table\";";
-                    int num = 0; ;
+                    int num = 0;
 
                     using (SQLiteCommand command = new SQLiteCommand(num_of_tables, connection))
                     {
@@ -438,7 +438,7 @@ namespace WinFormsAppTest
                             while (reader.Read())
                             {
                                 num = int.Parse(reader["num_of_tables"].ToString());
-                                MessageBox.Show(num.ToString());
+                                //MessageBox.Show(num.ToString());
                             }
                         }
                     }

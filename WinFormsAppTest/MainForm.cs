@@ -67,6 +67,11 @@ namespace WinFormsAppTest
             btnStart.Click += btnStart_Click;
 
             //이 아래로 설정창의 CustomPanel 객체들 이벤트
+            pnSettingReset.MouseDown += pnSettingAll_MouseDown;
+            pnSettingReset.MouseEnter += pnSettingAll_MouseEnter;
+            pnSettingReset.MouseLeave += pnSettingAll_MouseLeave;
+            pnSettingReset.MouseUp += pnSettingAll_MouseUp;
+
             pnSettingNor1.MouseDown += pnSettingAll_MouseDown;
             pnSettingNor1.MouseEnter += pnSettingAll_MouseEnter;
             pnSettingNor1.MouseLeave += pnSettingAll_MouseLeave;
@@ -118,6 +123,11 @@ namespace WinFormsAppTest
         {
             Color customPanelColor = Color.Gray;
 
+            pnSettingReset.BackColor = Color.Transparent;
+            pnSettingReset.isFill = true;
+            pnSettingReset.isBorder = false;
+            pnSettingReset.fillColor = customPanelColor;
+
             pnSettingNor1.BackColor = Color.Transparent;
             pnSettingNor1.isFill = true;
             pnSettingNor1.isBorder = false;
@@ -163,29 +173,6 @@ namespace WinFormsAppTest
             pnSettingCrown1.isBorder = false;
             pnSettingCrown1.fillColor = customPanelColor;
         }
-
-        //삭제 보류
-        /*private string textLengthTrim(CustomBtn customBtn, string text)
-        {
-            string trimedText = text;
-
-            Size size = TextRenderer.MeasureText(trimedText, customBtn.Font);
-            double diff = size.Width - customBtn.Width + 5;     //5는 보정값
-
-            if (diff < 0)
-            {
-                return trimedText;
-            }
-            //14는 보정값(보정값이 없으면 의도보다 조금 더 길어져서 줄바꿈이 일어남)
-            while (diff + 14 > 0)
-            {
-                trimedText = trimedText.Substring(0, trimedText.Length - 1);
-                size = TextRenderer.MeasureText(trimedText + "...", customBtn.Font);
-                diff = size.Width - customBtn.Width;
-            }
-
-            return trimedText + "...";
-        }*/
 
         //사이드메뉴 버튼 관련 이벤트 처리 코드
         private void btnStart_Click(object sender, EventArgs e)

@@ -55,6 +55,16 @@ namespace WinFormsAppTest
         public string pointList { get; set; }
     }
 
+    struct LasSize
+    {
+        public double maxx;
+        public double maxy;
+        public double minx;
+        public double miny;
+        public double minz;
+        public double maxz;
+    }
+
     /*public struct Crop
     {
         public double buffer { get; set; }
