@@ -323,7 +323,7 @@ namespace WinFormsAppTest
             btnSettingReset.Text = "DB 초기화";
             btnSettingReset.TextColor = Color.White;
             btnSettingReset.UseVisualStyleBackColor = false;
-            btnSettingReset.Click += btn_factory_reset_Click;
+            btnSettingReset.Click += BtnFactoryReset_Click;
             // 
             // lbSettingResetInfo
             // 

@@ -343,8 +343,15 @@ namespace WinFormsAppTest
         }
 
         //공장초기화 버튼
-        private void btn_factory_reset_Click(object sender, EventArgs e)
+        private void BtnFactoryReset_Click(object sender, EventArgs e)
         {
+            DialogResult = MessageBox.Show("설정값 관련 파일을 초기화 합니다.", "DB 초기화", MessageBoxButtons.YesNo);
+
+            if (DialogResult == DialogResult.No) 
+            {
+                return;
+            }
+
             //FactoryReset(csv_path);
             DeleteAllTables(databaseFileName, tablename);
             CreateTable(databaseFileName, tablename);

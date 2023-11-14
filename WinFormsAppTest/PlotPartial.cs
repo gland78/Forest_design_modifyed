@@ -42,8 +42,6 @@ namespace WinFormsAppTest
         string[] tablename = { "gui", "filters_crop", "filters_outlier", "filters_smrf", "filters_range_trunk", "filters_range_crown", "csp_segmentstem", "csp_segmentcrown", "measure" };
         string inter;
 
-        Process batProcess;
-
 
         //PLOT
         private void MakeResultDirectory_PLOT()
@@ -559,35 +557,32 @@ namespace WinFormsAppTest
         //배치파일 실행 코드
         private void ProcessBatch(string batFile)
         {
-            Process proc = new Process();
-
-            //proc.StartInfo.WorkingDirectory = resultSavedDirectory + shape + @"\intermediate\";
-            proc.StartInfo.FileName = resultSavedDirectory + shape + @"\intermediate\" + batFile;
-            proc.StartInfo.UseShellExecute = false;
-            proc.StartInfo.CreateNoWindow = true;
-            proc.StartInfo.StandardOutputEncoding = Encoding.UTF8;
-            proc.StartInfo.RedirectStandardOutput = true;
-            proc.OutputDataReceived += new DataReceivedEventHandler(OutputDataReceived);
-
-            if (progressDialog.IsDisposed == false)
+            using (Process proc = new Process())
             {
-                progressTextBox.Invoke(new Action(() =>
+                //proc.StartInfo.WorkingDirectory = resultSavedDirectory + shape + @"\intermediate\";
+                proc.StartInfo.FileName = resultSavedDirectory + shape + @"\intermediate\" + batFile;
+                proc.StartInfo.UseShellExecute = false;
+                proc.StartInfo.CreateNoWindow = true;
+                proc.StartInfo.StandardOutputEncoding = Encoding.UTF8;
+                proc.StartInfo.RedirectStandardOutput = true;
+                proc.OutputDataReceived += new DataReceivedEventHandler(OutputDataReceived);
+
+                if (progressDialog.IsDisposed == false)
                 {
-                    progressTextBox.AppendText("=================================" + Environment.NewLine);
-                }));
-            }
-            else
-            {
-                return;
-            }
+                    progressTextBox.Invoke(new Action(() =>
+                    {
+                        progressTextBox.AppendText("=================================" + Environment.NewLine);
+                    }));
+                }
+                else
+                {
+                    return;
+                }
 
-            batProcess = proc;
-            proc.Start();
-            proc.BeginOutputReadLine();
-            proc.WaitForExit();
-            batProcess = null;
-
-            proc.Dispose();
+                proc.Start();
+                proc.BeginOutputReadLine();
+                proc.WaitForExit();
+            }
         }
 
 
@@ -601,6 +596,10 @@ namespace WinFormsAppTest
                     progressTextBox.Select(progressTextBox.Text.Length, 0);
                     progressTextBox.ScrollToCaret();
                 }));
+            }
+            else
+            {
+                
             }
         }
 

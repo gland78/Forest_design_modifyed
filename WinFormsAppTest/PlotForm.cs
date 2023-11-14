@@ -233,6 +233,8 @@ namespace WinFormsAppTest
 
             ProgressDialog_Create();
 
+            btnPlotData.Enabled = false;
+
             //winform을 실행하는 스레드와 다른 스레드에서 본 기능을 실행하기 위함(나름의 자원 분산)
             await Task.Run(() =>
             {
@@ -242,7 +244,7 @@ namespace WinFormsAppTest
                 if (progress == 10)
                 {
                     MessageBox.Show("실행 완료");
-                    progressDialog.Close();
+                    //progressDialog.Close();
                 }
                 else
                 {
@@ -250,6 +252,8 @@ namespace WinFormsAppTest
                     return;
                 }
             });
+
+            btnPlotData.Enabled = true;
         }
 
         private void ProgressDialog_Create()
@@ -297,6 +301,28 @@ namespace WinFormsAppTest
         private void FormDisposing(object sender, FormClosingEventArgs e)
         {
             progressDialog = null;
+            try
+            {
+                string procList = "";
+                string[] targetExe = { "laszip", "csp_segment", "measure", "Delete_duplication", "LAS", "PCD" };
+
+                foreach (Process proc in Process.GetProcesses())
+                {
+                    if(targetExe.Any(name => proc.ProcessName.Contains(name)))
+                    {
+                        //procList += proc.ProcessName + Environment.NewLine;
+                        foreach (Process target in Process.GetProcessesByName(proc.ProcessName))
+                        {
+                            target.Kill();
+                        }
+                    }
+                }
+                //MessageBox.Show(procList);
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("백그라운드 프로그램 강제종료에 실패하였습니다\n" + ex.Message);
+            }
         }
 
         private void ProgressBarSet(int level)
