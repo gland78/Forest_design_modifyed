@@ -1,14 +1,6 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
+﻿using Newtonsoft.Json.Linq;
 using System.Diagnostics;
-using System.DirectoryServices;
-using System.Linq;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace WinFormsAppTest
 {
@@ -30,7 +22,7 @@ namespace WinFormsAppTest
         int progress = 0;
 
         //csv 작성용 Original data poiygon_points
-        string poly_points="";
+        string poly_points = "";
 
         //버퍼 계산 시 사용되는 좌표 구조체
         Coords bufferedPolycords = new Coords();
@@ -38,17 +30,19 @@ namespace WinFormsAppTest
         //las파일 크기 저장 구조체
         LasSize lasSize = new LasSize();
 
-        public Form progressDialog;
+        public Form? progressDialog;
         public TextBox progressTextBox;
         public ProgressBar pbLoadingBar;
 
 
         //db 파일 명
-        string bin_folder="";
-        string databaseFileName="";
+        string bin_folder = "";
+        string databaseFileName = "";
         //테이블 이름 목록(현재 안쓰였음 - 삭제 보류 중)
         string[] tablename = { "gui", "filters_crop", "filters_outlier", "filters_smrf", "filters_range_trunk", "filters_range_crown", "csp_segmentstem", "csp_segmentcrown", "measure" };
         string inter;
+
+        Process batProcess;
 
 
         //PLOT
@@ -85,13 +79,18 @@ namespace WinFormsAppTest
 
 
             string tree_dir = Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(resultSavedDirectory + "\\tree"));
-            string inter_dir= Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(resultSavedDirectory + "\\intermediate"));
+            string inter_dir = Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(resultSavedDirectory + "\\intermediate"));
 
 
             paramForm.UpdateDataInTable("gui", "tree_dir", tree_dir);
             paramForm.UpdateDataInTable("gui", "intermediate_dir", inter_dir);
 
             RunFileZero(originLasPath);
+
+            if (progressDialog == null)
+            {
+                return;
+            }
 
             internalLasName = paramForm.SelectDataFromTable(databaseFileName, "gui", "internal_las_file");
 
@@ -162,7 +161,7 @@ namespace WinFormsAppTest
                             //str을 만들었으니 이제 그 데이터를 dat 파일에 넣는다.
 
                             dat_str = $"xmin={minx} xmax={maxx} ymin={miny} ymax={maxy}";
-                            
+
                             //MessageBox.Show(dat_str);
 
                             paramForm.UpdateDataInTable("filters_crop", "bufferd_dat", dat_str);
@@ -206,8 +205,8 @@ namespace WinFormsAppTest
                );
                 JObject Writers = new JObject(
                    new JProperty("type", "writers.las"),
-                   new JProperty ("compression","laszip"),
-                   new JProperty("filename",  one + inter + "_B.las")
+                   new JProperty("compression", "laszip"),
+                   new JProperty("filename", one + inter + "_B.las")
                );
                 File.WriteAllText(resultSavedDirectory + @"\intermediate\" + one + inter + ".json",
                     "[" + Readers.ToString() + ", " + sonSpec.ToString() + ", " + Writers.ToString() + "]");
@@ -221,10 +220,10 @@ namespace WinFormsAppTest
             string one = "lv1_cropped_";
             string resultSavedDirectory = this.resultSavedDirectory + shape;
 
-            double xmin = double.Parse(tbPlotRecXmin.Text) - double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_xmin")); 
+            double xmin = double.Parse(tbPlotRecXmin.Text) - double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_xmin"));
             double ymin = double.Parse(tbPlotRecYmin.Text) - double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_ymin"));
-            double xmax = double.Parse(tbPlotRecXmax.Text) - double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_xmin")); 
-            double ymax = double.Parse(tbPlotRecYmax.Text) - double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_ymin")); 
+            double xmax = double.Parse(tbPlotRecXmax.Text) - double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_xmin"));
+            double ymax = double.Parse(tbPlotRecYmax.Text) - double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_ymin"));
             double buffer = double.Parse(paramForm.SelectDataFromTable(databaseFileName, "filters_crop", "buffer"));
 
             double width = Math.Abs(xmax - xmin);
@@ -384,7 +383,7 @@ namespace WinFormsAppTest
             string dat_str = "";
             {
                 if (shape == "_polygon")
-                {             
+                {
                     try
                     {
                         paramForm.UpdateDataInTable("filters_crop", "origin_dat", poly_points);
@@ -397,7 +396,7 @@ namespace WinFormsAppTest
                     }
                 }
                 else
-                {                   
+                {
                     try
                     {
                         double minx = 0, maxx = 0, miny = 0, maxy = 0;
@@ -470,7 +469,7 @@ namespace WinFormsAppTest
                 File.WriteAllText(resultSavedDirectory + shape + @"\intermediate\" + four + inter + ".json", "[" + Readers.ToString() + ", " + Writers.ToString() + "]");
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + four + inter + ".json 파일을 생성했습니다.");
             }
-            
+
         }
 
         private void MakeSliceFile()
@@ -560,45 +559,37 @@ namespace WinFormsAppTest
         //배치파일 실행 코드
         private void ProcessBatch(string batFile)
         {
-            using (Process proc = new Process())
+            Process proc = new Process();
+
+            //proc.StartInfo.WorkingDirectory = resultSavedDirectory + shape + @"\intermediate\";
+            proc.StartInfo.FileName = resultSavedDirectory + shape + @"\intermediate\" + batFile;
+            proc.StartInfo.UseShellExecute = false;
+            proc.StartInfo.CreateNoWindow = true;
+            proc.StartInfo.StandardOutputEncoding = Encoding.UTF8;
+            proc.StartInfo.RedirectStandardOutput = true;
+            proc.OutputDataReceived += new DataReceivedEventHandler(OutputDataReceived);
+
+            if (progressDialog.IsDisposed == false)
             {
-                //proc.StartInfo.WorkingDirectory = resultSavedDirectory + shape + @"\intermediate\";
-                proc.StartInfo.FileName = resultSavedDirectory + shape + @"\intermediate\" + batFile;
-                proc.StartInfo.UseShellExecute = false;
-                proc.StartInfo.CreateNoWindow = true;
-                proc.StartInfo.StandardOutputEncoding = Encoding.UTF8;
-                proc.StartInfo.RedirectStandardOutput = true;
-                proc.OutputDataReceived += new DataReceivedEventHandler(OutputDataReceived);
-
-                if (Application.OpenForms["progressDialog"] == null)
-                {
-                    MessageBox.Show("기능 실행이 정상적으로 수행되지 않았습니다.");
-                    Process[] allProc = Process.GetProcesses();
-
-                    foreach (Process procs in allProc)
-                    {
-                        try
-                        {
-                            if (procs.ProcessName == "ForestLi" || procs.ProcessName == "PlotForm")
-                                procs.Kill();
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show(ex.Message);
-                        }
-                    }
-                    return;
-                }
-
                 progressTextBox.Invoke(new Action(() =>
                 {
                     progressTextBox.AppendText("=================================" + Environment.NewLine);
                 }));
-                proc.Start();
-                proc.BeginOutputReadLine();
-                proc.WaitForExit();
             }
+            else
+            {
+                return;
+            }
+
+            batProcess = proc;
+            proc.Start();
+            proc.BeginOutputReadLine();
+            proc.WaitForExit();
+            batProcess = null;
+
+            proc.Dispose();
         }
+
 
         private void OutputDataReceived(object sender, DataReceivedEventArgs e)
         {
@@ -627,7 +618,7 @@ namespace WinFormsAppTest
                 {
                     using FileStream fs = File.Create(batFilePath);
                 }
-                
+
                 using (StreamWriter sw = new StreamWriter(new FileStream(batFilePath, FileMode.OpenOrCreate), Encoding.Default))
                 {
                     sw.WriteLine("@ECHO OFF");
@@ -638,7 +629,7 @@ namespace WinFormsAppTest
                     sw.WriteLine("laszip \"" + databaseFileName + "\"");
                     sw.WriteLine();
                 }
-                
+
                 ProcessBatch(zero + inter + ".bat");
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + inter + zero + ".bat 파일을 생성했습니다.");
             }
@@ -655,7 +646,7 @@ namespace WinFormsAppTest
                 {
                     using FileStream fs = File.Create(batFilePath);
                 }
-                
+
                 using (StreamWriter sw = new StreamWriter(new FileStream(batFilePath, FileMode.OpenOrCreate), Encoding.Default))
                 {
                     sw.WriteLine("@ECHO OFF");
@@ -665,7 +656,7 @@ namespace WinFormsAppTest
                     sw.WriteLine($"cd {this.resultSavedDirectory + shape + @"\intermediate"}");
                     sw.WriteLine("pdal pipeline \"" + two + inter + ".json\"");
                 }
-                
+
                 ProcessBatch(two + inter + ".bat");
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + two + inter + ".bat 파일을 생성했습니다.");
             }
@@ -681,7 +672,7 @@ namespace WinFormsAppTest
                 {
                     using FileStream fs = File.Create(batFilePath);
                 }
-                
+
                 using (StreamWriter sw = new StreamWriter(new FileStream(batFilePath, FileMode.OpenOrCreate), Encoding.Default))
                 {
                     sw.WriteLine("@ECHO OFF");
@@ -691,12 +682,12 @@ namespace WinFormsAppTest
                     sw.WriteLine($"cd {this.resultSavedDirectory + shape + @"\intermediate"}");
                     sw.WriteLine("pdal pipeline \"" + three + inter + ".json\"");
                 }
-                
+
                 ProcessBatch(three + inter + ".bat");
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + three + inter + ".bat 파일을 생성했습니다.");
             }
         }
-       
+
         //LAS2PCD
         private void RunFileFourth()
         {
@@ -998,6 +989,11 @@ namespace WinFormsAppTest
         {
             MakeResultDirectory_PLOT();
 
+            if (Application.OpenForms["progressDialog"] == null)
+            {
+                return;
+            }
+
             string resultP = resultSavedDirectory + shape;
             string strFile1 = resultP + @"\intermediate\" + "lv1_cropped_" + inter + "_B.las";
             FileInfo fileInfo1 = new FileInfo(strFile1);//파일 있는지 확인 있을때(true), 없으면(false)
@@ -1015,7 +1011,6 @@ namespace WinFormsAppTest
 
                 if (Application.OpenForms["progressDialog"] == null)
                 {
-                    MessageBox.Show("기능 실행이 정상적으로 수행되지 않았습니다.");
                     return;
                 }
 
@@ -1025,7 +1020,6 @@ namespace WinFormsAppTest
 
                 if (Application.OpenForms["progressDialog"] == null)
                 {
-                    MessageBox.Show("기능 실행이 정상적으로 수행되지 않았습니다.");
                     return;
                 }
 
@@ -1035,7 +1029,6 @@ namespace WinFormsAppTest
 
                 if (Application.OpenForms["progressDialog"] == null)
                 {
-                    MessageBox.Show("기능 실행이 정상적으로 수행되지 않았습니다.");
                     return;
                 }
 
@@ -1049,7 +1042,6 @@ namespace WinFormsAppTest
 
                 if (Application.OpenForms["progressDialog"] == null)
                 {
-                    MessageBox.Show("기능 실행이 정상적으로 수행되지 않았습니다.");
                     return;
                 }
 
@@ -1060,7 +1052,6 @@ namespace WinFormsAppTest
 
                 if (Application.OpenForms["progressDialog"] == null)
                 {
-                    MessageBox.Show("기능 실행이 정상적으로 수행되지 않았습니다.");
                     return;
                 }
 
@@ -1070,7 +1061,6 @@ namespace WinFormsAppTest
 
                 if (Application.OpenForms["progressDialog"] == null)
                 {
-                    MessageBox.Show("기능 실행이 정상적으로 수행되지 않았습니다.");
                     return;
                 }
 
@@ -1081,7 +1071,6 @@ namespace WinFormsAppTest
 
                 if (Application.OpenForms["progressDialog"] == null)
                 {
-                    MessageBox.Show("기능 실행이 정상적으로 수행되지 않았습니다.");
                     return;
                 }
 
@@ -1092,7 +1081,6 @@ namespace WinFormsAppTest
 
                 if (Application.OpenForms["progressDialog"] == null)
                 {
-                    MessageBox.Show("기능 실행이 정상적으로 수행되지 않았습니다.");
                     return;
                 }
 
@@ -1102,7 +1090,6 @@ namespace WinFormsAppTest
 
                 if (Application.OpenForms["progressDialog"] == null)
                 {
-                    MessageBox.Show("기능 실행이 정상적으로 수행되지 않았습니다.");
                     return;
                 }
 

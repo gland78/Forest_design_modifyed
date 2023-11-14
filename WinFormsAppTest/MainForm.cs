@@ -336,7 +336,8 @@ namespace WinFormsAppTest
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message);
+                    MessageBox.Show("Main Closing Error: " + ex.Message);
+                    Application.Exit();
                 }
             }
         }

@@ -233,8 +233,6 @@ namespace WinFormsAppTest
 
             ProgressDialog_Create();
 
-            btnPlotOK.Enabled = false;
-
             //winform을 실행하는 스레드와 다른 스레드에서 본 기능을 실행하기 위함(나름의 자원 분산)
             await Task.Run(() =>
             {
@@ -252,11 +250,15 @@ namespace WinFormsAppTest
                     return;
                 }
             });
-            btnPlotOK.Enabled = true;
         }
 
         private void ProgressDialog_Create()
         {
+            if(progressDialog != null)
+            {
+                return;
+            }
+
             progressDialog = new Form
             {
                 Width = 600,
@@ -286,9 +288,15 @@ namespace WinFormsAppTest
             pbLoadingBar.Size = new Size(550, 30);
 
             progressDialog.MaximizeBox = false;
+            progressDialog.FormClosing += FormDisposing;
             progressDialog.Controls.Add(pbLoadingBar);
             progressDialog.Controls.Add(progressTextBox);
             progressDialog.Show();
+        }
+
+        private void FormDisposing(object sender, FormClosingEventArgs e)
+        {
+            progressDialog = null;
         }
 
         private void ProgressBarSet(int level)
@@ -548,7 +556,7 @@ namespace WinFormsAppTest
                     PictureBox gifBox = new PictureBox
                     {
                         Dock = DockStyle.Fill,
-                        Image = Image.FromFile(Environment.CurrentDirectory.ToString() + @"\sand_glass.gif"),
+                        Image = Image.FromFile(Environment.CurrentDirectory.ToString() + @"\Loading.gif"),
                         SizeMode = PictureBoxSizeMode.StretchImage,
                     };
 
@@ -713,21 +721,6 @@ namespace WinFormsAppTest
         {
             attachStartBtn(true);
             enableMainFormBtns(true);
-
-            Process[] allProc = Process.GetProcesses();
-
-            foreach (Process procs in allProc)
-            {
-                try
-                {
-                    if (procs.ProcessName == "ForestLi")
-                        procs.Kill();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-            }
         }
 
         private async void CloudCompareToolStripMenuItem_Click(object sender, EventArgs e)
@@ -743,8 +736,8 @@ namespace WinFormsAppTest
 
             ProcessStartInfo psi = new ProcessStartInfo
             {
-                FileName = exePath,
-                Arguments = lasPath,
+                FileName = $"\"{exePath}\"",
+                Arguments = $"\"{lasPath}\"",
                 UseShellExecute = true,
                 CreateNoWindow = true
             };
