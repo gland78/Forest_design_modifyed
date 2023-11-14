@@ -67,7 +67,7 @@ namespace WinFormsAppTest
         }
 
         //원본 Las 파일 찾기 버튼
-        private void btnPlotData_Click(object sender, EventArgs e)
+        private async void btnPlotData_Click(object sender, EventArgs e)
         {
             string filePath = string.Empty;
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
@@ -89,14 +89,6 @@ namespace WinFormsAppTest
 
                     tbPlotData.Text = filePath;
                     Validation(filePath);
-
-                    tbPlotCircleX.Text = (Math.Truncate((lasSize.maxx + lasSize.minx) / 2 * 1000) / 1000).ToString();
-                    tbPlotCircleY.Text = (Math.Truncate((lasSize.maxy + lasSize.miny) / 2 * 1000) / 1000).ToString();
-
-                    tbPlotRecXmax.Text = (Math.Truncate(lasSize.maxx * 1000) / 1000).ToString();
-                    tbPlotRecXmin.Text = (Math.Truncate(lasSize.minx * 1000) / 1000).ToString();
-                    tbPlotRecYmax.Text = (Math.Truncate(lasSize.maxy * 1000) / 1000).ToString();
-                    tbPlotRecYmin.Text = (Math.Truncate(lasSize.miny * 1000) / 1000).ToString();
                 }
             }
         }
@@ -588,9 +580,9 @@ namespace WinFormsAppTest
 
                     extractDialog.Controls.Add(gifBox);
                     extractDialog.Show();
+
                     //Task를 이용한 이유 : MakeInfo와 progressDialog의 pictureBox gif가
                     //동시에 동작하게 하기 위함.(안쓰면 쓰레드 우선순위 문제로 gif 애니메이션이 안움직임)
-
                     btnPlotOK.Enabled = false;
                     await Task.Run(() => MakeInfo(filePath, infoDir));
                     btnPlotOK.Enabled = true;
@@ -615,7 +607,17 @@ namespace WinFormsAppTest
                     }
 
                     tbPlotData.Text = "";
+
+                    return;
                 }
+
+                tbPlotCircleX.Text = (Math.Truncate((lasSize.maxx + lasSize.minx) / 2 * 1000) / 1000).ToString();
+                tbPlotCircleY.Text = (Math.Truncate((lasSize.maxy + lasSize.miny) / 2 * 1000) / 1000).ToString();
+
+                tbPlotRecXmax.Text = (Math.Truncate(lasSize.maxx * 1000) / 1000).ToString();
+                tbPlotRecXmin.Text = (Math.Truncate(lasSize.minx * 1000) / 1000).ToString();
+                tbPlotRecYmax.Text = (Math.Truncate(lasSize.maxy * 1000) / 1000).ToString();
+                tbPlotRecYmin.Text = (Math.Truncate(lasSize.miny * 1000) / 1000).ToString();
             }
             catch (Exception ex)
             {
