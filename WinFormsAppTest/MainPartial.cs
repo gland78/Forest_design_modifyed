@@ -481,11 +481,13 @@ namespace WinFormsAppTest
             InsertDataIntoTable("gui", "private", "rectangle", "xmin=-10 xmax=10 ymin=-10 ymax=10", "xmin,xmax,ymin,ymax는 범위 자료입니다.");
             InsertDataIntoTable("gui", "private", "result_path", "..\\result", "결과를 저장하는 폴더입니다.");
             InsertDataIntoTable("gui", "private", "intermediate_dir", "", "중간산출물을 저장하는 폴더입니다.");
+            InsertDataIntoTable("gui", "private", "tree_dir", "", "개체목을 저장하는 폴더입니다.");
             InsertDataIntoTable("gui", "private", "org_xmin", "", "원본 las xmin 좌표.");
-            InsertDataIntoTable("gui", "private", "org_xmin", "", "원본 las ymin 좌표.");
-            InsertDataIntoTable("gui", "private", "org_xmin", "", "원본 las zmin 좌표.");
+            InsertDataIntoTable("gui", "private", "org_ymin", "", "원본 las ymin 좌표.");
+            InsertDataIntoTable("gui", "private", "org_zmin", "", "원본 las zmin 좌표.");
             InsertDataIntoTable("gui", "private", "internal_las_file", "a", "내부적으로 사용할 las 파일 이름.");
             InsertDataIntoTable("gui", "private", "origin_las_file", "", "원본 las 파일 이름.");
+            InsertDataIntoTable("gui", "private", "del_inter", "FALSE", "intermediate 폴더 삭제여부를 결정하는 bool 값입니다");
             InsertDataIntoTable("filters_crop", "private", "buffer", "120", "plot 영역보다 120% 큰 영역을 의미한다.");
             InsertDataIntoTable("filters_crop", "private", "bufferd_dat", "xmin=-12.35 xmax=12.43 ymin=-6.22 ymax=22.14", "bufferd_plot 영역의 정보를 저장하는 파일 이름이다.");
             InsertDataIntoTable("filters_crop", "private", "origin_dat", "xmin=-14.738 xmax=5.531 ymin=-2.147 ymax=15.436 cx=0 cy=0 radius=100", "origin_plot 영역의 정보를 저장하는 파일 이름이다.");

@@ -564,8 +564,10 @@ namespace WinFormsAppTest
                     var extractDialog = new Form
                     {
                         Width = 250,
-                        Height = 200,
+                        Height = 250,
                         FormBorderStyle = FormBorderStyle.None,
+                        TransparencyKey = Color.Transparent,
+                        BackColor = TransparencyKey,
                         StartPosition = FormStartPosition.CenterScreen,
                         ShowInTaskbar = false,
                         Owner = this
@@ -574,8 +576,9 @@ namespace WinFormsAppTest
                     PictureBox gifBox = new PictureBox
                     {
                         Dock = DockStyle.Fill,
-                        Image = Image.FromFile(Environment.CurrentDirectory.ToString() + @"\Loading.gif"),
+                        Image = Image.FromFile(Environment.CurrentDirectory.ToString() + @"\LoadingPx.gif"),
                         SizeMode = PictureBoxSizeMode.StretchImage,
+                        BackColor = TransparencyKey
                     };
 
                     extractDialog.Controls.Add(gifBox);
