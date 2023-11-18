@@ -820,12 +820,9 @@ namespace WinFormsAppTest
         private TextBox tbTrunkSmooth;
         private Label lbHome;
         private Label lbPresetManage;
-        private CustomBtn customBtn1;
-        private Label label2;
         private Label lbSetting;
         private CustomBtn btnSettings;
         private CustomPanel pnSettingReset;
-        private TextBox textBox1;
         private Label lbSettingReset;
         private Label lbSettingResetInfo;
         private CustomBtn btnSettingReset;

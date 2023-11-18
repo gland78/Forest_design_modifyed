@@ -371,7 +371,7 @@ namespace WinFormsAppTest
             }
             catch (Exception ex)
             {
-                MessageBox.Show("오류: " + ex.Message);
+                MessageBox.Show("DB 오류: " + ex.Message);
             }
 
             return value;

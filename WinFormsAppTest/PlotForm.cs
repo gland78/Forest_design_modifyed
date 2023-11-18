@@ -30,6 +30,8 @@ namespace WinFormsAppTest
             SetPlotFormComponent();
 
             this.paramForm = paramForm;
+
+            lasSizeInit();
         }
 
         private void PlotForm_Load(object sender, EventArgs e)
@@ -67,7 +69,7 @@ namespace WinFormsAppTest
         }
 
         //원본 Las 파일 찾기 버튼
-        private async void btnPlotData_Click(object sender, EventArgs e)
+        private void btnPlotData_Click(object sender, EventArgs e)
         {
             string filePath = string.Empty;
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
@@ -614,6 +616,7 @@ namespace WinFormsAppTest
                     return;
                 }
 
+                /*
                 tbPlotCircleX.Text = (Math.Truncate((lasSize.maxx + lasSize.minx) / 2 * 1000) / 1000).ToString();
                 tbPlotCircleY.Text = (Math.Truncate((lasSize.maxy + lasSize.miny) / 2 * 1000) / 1000).ToString();
 
@@ -621,6 +624,17 @@ namespace WinFormsAppTest
                 tbPlotRecXmin.Text = (Math.Truncate(lasSize.minx * 1000) / 1000).ToString();
                 tbPlotRecYmax.Text = (Math.Truncate(lasSize.maxy * 1000) / 1000).ToString();
                 tbPlotRecYmin.Text = (Math.Truncate(lasSize.miny * 1000) / 1000).ToString();
+                */
+
+                paramForm.gui.centerX = Math.Truncate((lasSize.maxx + lasSize.minx) / 2 * 1000) / 1000;
+                paramForm.gui.centerY = Math.Truncate((lasSize.maxy + lasSize.miny) / 2 * 1000) / 1000;
+
+                paramForm.gui.xMin = Math.Truncate(lasSize.minx * 1000) / 1000;
+                paramForm.gui.xMax = Math.Truncate(lasSize.maxx * 1000) / 1000;
+                paramForm.gui.yMin = Math.Truncate(lasSize.miny * 1000) / 1000;
+                paramForm.gui.yMax = Math.Truncate(lasSize.maxy * 1000) / 1000;
+
+                initTextBox();
             }
             catch (Exception ex)
             {
@@ -752,6 +766,7 @@ namespace WinFormsAppTest
         {
             attachStartBtn(true);
             enableMainFormBtns(true);
+            this.Dispose();
         }
 
         private async void CloudCompareToolStripMenuItem_Click(object sender, EventArgs e)
@@ -795,6 +810,14 @@ namespace WinFormsAppTest
                 }
             }
             return "";
+        }
+
+        private void lasSizeInit()
+        {
+            lasSize.minx = paramForm.gui.xMin;
+            lasSize.maxx = paramForm.gui.xMax;
+            lasSize.miny = paramForm.gui.yMin;
+            lasSize.maxy = paramForm.gui.yMax;
         }
     }
 }
