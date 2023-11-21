@@ -848,13 +848,13 @@ namespace WinFormsAppTest
                     sw.WriteLine("PCD2LAS " + FolderName2);
 
                     //pcd 지우는 코드  ---> 배포 시 주석 풀기
-                    //sw.WriteLine("for /r \"..\\tree\" %%i in (*.pcd) do (");
-                    //sw.WriteLine("    del \"%%i\"");
-                    //sw.WriteLine(")");
+                    sw.WriteLine("for /r \"..\\tree\" %%i in (*.pcd) do (");
+                    sw.WriteLine("    del \"%%i\"");
+                    sw.WriteLine(")");
 
-                    //sw.WriteLine("for /r \".\" %%i in (*.pcd) do (");
-                    //sw.WriteLine("    del \"%%i\"");
-                    //sw.WriteLine(")");
+                    sw.WriteLine("for /r \".\" %%i in (*.pcd) do (");
+                    sw.WriteLine("    del \"%%i\"");
+                    sw.WriteLine(")");
 
 
                     //intermediate 폴더 숨김처리 코드
@@ -1086,7 +1086,7 @@ namespace WinFormsAppTest
 
                 RunFileTenth();//measure
 
-                if (CatchError(resultP + @"\tree\", 10)) return;
+                //if (CatchError(resultP + @"\tree\", 10)) return;
 
                 if (Application.OpenForms["progressDialog"] == null)
                 {
