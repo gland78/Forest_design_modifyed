@@ -844,13 +844,13 @@ namespace WinFormsAppTest
                     sw.WriteLine("PCD2LAS " + FolderName2);
 
                     //pcd 지우는 코드  ---> 배포 시 주석 풀기
-                    //sw.WriteLine("for /r \"..\\tree\" %%i in (*.pcd) do (");
-                    //sw.WriteLine("    del \"%%i\"");
-                    //sw.WriteLine(")");
+                    sw.WriteLine("for /r \"..\\tree\" %%i in (*.pcd) do (");
+                    sw.WriteLine("    del \"%%i\"");
+                    sw.WriteLine(")");
 
-                    //sw.WriteLine("for /r \".\" %%i in (*.pcd) do (");
-                    //sw.WriteLine("    del \"%%i\"");
-                    //sw.WriteLine(")");
+                    sw.WriteLine("for /r \".\" %%i in (*.pcd) do (");
+                    sw.WriteLine("    del \"%%i\"");
+                    sw.WriteLine(")");
 
 
                     //intermediate 폴더 숨김처리 코드
@@ -870,10 +870,11 @@ namespace WinFormsAppTest
         {
             {
                 // 실행할 명령 프롬프트 명령어 설정
-                string resultSavedDirectory = this.resultSavedDirectory + shape;
-                string resultSavedDirectory3 = resultSavedDirectory + @"\" + "intermediate";
+                //string resultSavedDirectory = this.resultSavedDirectory + shape;
+                //string resultSavedDirectory3 = resultSavedDirectory + @"\" + "intermediate";
+                string inter_dir = paramForm.SelectDataFromTable(databaseFileName, "gui", "intermediate_dir");
 
-                string command = @$"rmdir /s /q {resultSavedDirectory3}";
+                string command = @$"rmdir /s /q {inter_dir}";
 
                 // Process 시작
                 Process process = new Process();
@@ -1081,7 +1082,7 @@ namespace WinFormsAppTest
 
                 RunFileTenth();//measure
 
-                if (CatchError(resultP + @"\tree\", 10)) return;
+                //if (CatchError(resultP + @"\tree\", 10)) return;
 
                 if (Application.OpenForms["progressDialog"] == null)
                 {
@@ -1092,8 +1093,11 @@ namespace WinFormsAppTest
                 progress++;
                 ProgressBarSet(progress);
 
-
-                //del_inter();
+                if(paramForm.SelectDataFromTable(databaseFileName,"gui","del_inter").Trim().ToLower() == "true")
+                {
+                    try { del_inter(); }
+                    catch(Exception ex) { MessageBox.Show(ex.Message); }
+                }
 
                 progressDialog.Invoke(new Action(() => progressDialog.Close()));
             }
@@ -1192,6 +1196,7 @@ namespace WinFormsAppTest
             {
                 return true;
             }
+        
         }
     }
 }
