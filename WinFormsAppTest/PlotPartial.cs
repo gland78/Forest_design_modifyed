@@ -597,10 +597,6 @@ namespace WinFormsAppTest
                     progressTextBox.ScrollToCaret();
                 }));
             }
-            else
-            {
-                
-            }
         }
 
         //배치파일 작성 코드

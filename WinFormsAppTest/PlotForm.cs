@@ -143,11 +143,6 @@ namespace WinFormsAppTest
                         points[i].x = double.Parse(tempPointList[i][0]);
                         points[i].y = double.Parse(tempPointList[i][1]);
 
-                        //상대좌표
-                        //double x= double.Parse(tempPointList[i][0]) - double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_xmin"));
-                        //double y = double.Parse(tempPointList[i][0]) - double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_ymin"));
-                        //poly_points += x.ToString() + " " + y.ToString() + " ";
-
                         poly_points += tempPointList[i][0] + " " + tempPointList[i][1] + " ";
 
 
@@ -164,6 +159,7 @@ namespace WinFormsAppTest
                     //frm 구조체에 시작점 저장
                     pointList += tempPointList[0][0] + " ";
                     pointList += tempPointList[0][1];
+
                     //=============================================
                     paramForm.gui.pointList = pointList;
                 }//if문
@@ -229,7 +225,7 @@ namespace WinFormsAppTest
 
             btnPlotData.Enabled = false;
 
-            //winform을 실행하는 스레드와 다른 스레드에서 본 기능을 실행하기 위함(나름의 자원 분산)
+            //winform을 실행하는 스레드와 다른 스레드에서 추출 기능을 실행하기 위함(나름의 자원 분산)
             await Task.Run(() =>
             {
                 //각 단계 실행
