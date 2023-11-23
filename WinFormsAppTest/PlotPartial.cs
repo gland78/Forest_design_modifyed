@@ -1099,7 +1099,17 @@ namespace WinFormsAppTest
                     catch(Exception ex) { MessageBox.Show(ex.Message); }
                 }
 
-                progressDialog.Invoke(new Action(() => progressDialog.Close()));
+                if(progressDialog != null)
+                {
+                    try
+                    {
+                        progressDialog.Invoke(new Action(() => progressDialog.Close()));
+                    }
+                    catch
+                    {
+                        LogWrite("Form Closing Error: CS3X1110L");
+                    }
+                }
             }
             else
             {
