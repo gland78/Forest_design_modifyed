@@ -47,8 +47,9 @@ namespace WinFormsAppTest
             lbTitle = new Label();
             tpSettings = new TabPage();
             pnSettingFileDel = new CustomPanel();
+            lbSettingToggle = new Label();
             tgBtnSettingFileDel = new LiDAR_PROJECT.ToggleBtn();
-            label1 = new Label();
+            lbSettingFileDelInfo = new Label();
             lbSettingFileDel = new Label();
             pnSettingCrown1 = new CustomPanel();
             lbCrownVoxel = new Label();
@@ -310,8 +311,9 @@ namespace WinFormsAppTest
             // pnSettingFileDel
             // 
             pnSettingFileDel.BackColor = Color.Gray;
+            pnSettingFileDel.Controls.Add(lbSettingToggle);
             pnSettingFileDel.Controls.Add(tgBtnSettingFileDel);
-            pnSettingFileDel.Controls.Add(label1);
+            pnSettingFileDel.Controls.Add(lbSettingFileDelInfo);
             pnSettingFileDel.Controls.Add(lbSettingFileDel);
             pnSettingFileDel.Location = new Point(24, 187);
             pnSettingFileDel.Margin = new Padding(3, 4, 3, 4);
@@ -319,31 +321,45 @@ namespace WinFormsAppTest
             pnSettingFileDel.Size = new Size(850, 62);
             pnSettingFileDel.TabIndex = 20;
             // 
+            // lbSettingToggle
+            // 
+            lbSettingToggle.AutoSize = true;
+            lbSettingToggle.Font = new Font("맑은 고딕", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
+            lbSettingToggle.ForeColor = Color.White;
+            lbSettingToggle.Location = new Point(704, 23);
+            lbSettingToggle.Name = "lbSettingToggle";
+            lbSettingToggle.Size = new Size(34, 17);
+            lbSettingToggle.TabIndex = 4;
+            lbSettingToggle.Text = "유지";
+            // 
             // tgBtnSettingFileDel
             // 
             tgBtnSettingFileDel.AutoSize = true;
             tgBtnSettingFileDel.BackColor = Color.White;
-            tgBtnSettingFileDel.Location = new Point(759, 20);
-            tgBtnSettingFileDel.MinimumSize = new Size(45, 22);
+            tgBtnSettingFileDel.ForeColor = Color.Black;
+            tgBtnSettingFileDel.Location = new Point(740, 16);
+            tgBtnSettingFileDel.MaximumSize = new Size(65, 30);
+            tgBtnSettingFileDel.MinimumSize = new Size(81, 30);
             tgBtnSettingFileDel.Name = "tgBtnSettingFileDel";
             tgBtnSettingFileDel.OffBackColor = Color.Gray;
             tgBtnSettingFileDel.OffToggleColor = Color.Gainsboro;
             tgBtnSettingFileDel.OnBackColor = Color.MediumSlateBlue;
             tgBtnSettingFileDel.OnToggleColor = Color.WhiteSmoke;
-            tgBtnSettingFileDel.Size = new Size(45, 22);
+            tgBtnSettingFileDel.Size = new Size(81, 30);
             tgBtnSettingFileDel.TabIndex = 3;
             tgBtnSettingFileDel.UseVisualStyleBackColor = false;
+            tgBtnSettingFileDel.CheckedChanged += tgBtnSettingFileDel_CheckedChanged;
             // 
-            // label1
+            // lbSettingFileDelInfo
             // 
-            label1.AutoSize = true;
-            label1.Font = new Font("맑은 고딕", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
-            label1.ForeColor = Color.White;
-            label1.Location = new Point(18, 31);
-            label1.Name = "label1";
-            label1.Size = new Size(346, 17);
-            label1.TabIndex = 2;
-            label1.Text = "개체목 추출 과정에서 나온 파일들을 정리합니다. (off/on)";
+            lbSettingFileDelInfo.AutoSize = true;
+            lbSettingFileDelInfo.Font = new Font("맑은 고딕", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
+            lbSettingFileDelInfo.ForeColor = Color.White;
+            lbSettingFileDelInfo.Location = new Point(18, 31);
+            lbSettingFileDelInfo.Name = "lbSettingFileDelInfo";
+            lbSettingFileDelInfo.Size = new Size(296, 17);
+            lbSettingFileDelInfo.TabIndex = 2;
+            lbSettingFileDelInfo.Text = "개체목 추출 과정에서 나온 파일들을 삭제합니다.";
             // 
             // lbSettingFileDel
             // 
@@ -968,8 +984,9 @@ namespace WinFormsAppTest
         private Label lbCrownVoxel;
         private TextBox tbCrownVoxel;
         private CustomPanel pnSettingFileDel;
-        private Label label1;
+        private Label lbSettingFileDelInfo;
         private Label lbSettingFileDel;
         private LiDAR_PROJECT.ToggleBtn tgBtnSettingFileDel;
+        private Label lbSettingToggle;
     }
 }

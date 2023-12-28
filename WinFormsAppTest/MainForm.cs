@@ -52,11 +52,13 @@ namespace WinFormsAppTest
             //프로그램 각종 외형 설정(커스텀 파라미터는 Designer.cs에서 설정 불가)
             customPanels_Load();
             pnMain.isBorder = false;
-            tgBtnSettingFileDel.OffBackColor = Color.Black;
-            tgBtnSettingFileDel.OffToggleColor = Color.White;
-            tgBtnSettingFileDel.OnBackColor = Color.White;
-            tgBtnSettingFileDel.OnToggleColor = Color.Black;
+            tgBtnSettingFileDel.OffBackColor = Color.White;
+            tgBtnSettingFileDel.OffToggleColor = Color.Black;
+            tgBtnSettingFileDel.OnBackColor = Color.Black;
+            tgBtnSettingFileDel.OnToggleColor = Color.White;
             //tgBtnSettingFileDel.SolidStyle = false;
+
+            //lbSettingToggle.Text = tgBtnSettingFileDel.Checked ? "삭제" : "유지";
 
             //메인폼의 각 컴포넌트 이벤트 설정
             mainForm_AddEvent();
@@ -324,7 +326,7 @@ namespace WinFormsAppTest
                 cPanel.fillColor = Color.Gray;
                 cPanel.Invalidate();
 
-                foreach(Control control in cPanel.Controls)
+                foreach (Control control in cPanel.Controls)
                 {
                     control.Invalidate();
                 }
@@ -408,7 +410,7 @@ namespace WinFormsAppTest
         {
             DialogResult = MessageBox.Show("설정값 관련 파일을 초기화 합니다.", "DB 초기화", MessageBoxButtons.YesNo);
 
-            if (DialogResult == DialogResult.No) 
+            if (DialogResult == DialogResult.No)
             {
                 return;
             }
@@ -417,6 +419,11 @@ namespace WinFormsAppTest
             DeleteAllTables(databaseFileName, tablename);
             CreateTable(databaseFileName, tablename);
             insert_initial_data();
+        }
+
+        private void tgBtnSettingFileDel_CheckedChanged(object sender, EventArgs e)
+        {
+            lbSettingToggle.Text = tgBtnSettingFileDel.Checked ? "삭제" : "유지";
         }
     }
 }
