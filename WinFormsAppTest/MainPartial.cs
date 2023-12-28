@@ -491,7 +491,6 @@ namespace WinFormsAppTest
             InsertDataIntoTable("filters_crop", "private", "buffer", "120", "plot 영역보다 120% 큰 영역을 의미한다.");
             InsertDataIntoTable("filters_crop", "private", "bufferd_dat", "xmin=-12.35 xmax=12.43 ymin=-6.22 ymax=22.14", "bufferd_plot 영역의 정보를 저장한다.");
             InsertDataIntoTable("filters_crop", "private", "origin_dat", "xmin=-14.738 xmax=5.531 ymin=-2.147 ymax=15.436 cx=0 cy=0 radius=100", "origin_plot 영역의 정보를 저장한다.");
-            InsertDataIntoTable("filters_crop", "private", "voxel_length", "0.05", "복셀다운샘플링할 때, 한 변의 길이를 설정한다. (단위 : m) (기본값 0.05m)");
             InsertDataIntoTable("filters_outlier", "private", "method", "statistical", "통계 기반으로 이상치(이상점) 제거한다.");
             InsertDataIntoTable("filters_outlier", "private", "mean_k", "12", "최근접 이웃의 개수를 지정한다.");
             InsertDataIntoTable("filters_outlier", "private", "multiplier", "2.2", "거리의 표준편차의 계수를 지정한다.(단위 : m) (기본값 : 2.2m)");
@@ -516,6 +515,7 @@ namespace WinFormsAppTest
             InsertDataIntoTable("csp_segmentcrown", "private", "trunk_files", "", "csp_segmentstem 단계에서 생성된 수간부(trunk) 파일들을 저장한다.");
             InsertDataIntoTable("csp_segmentcrown", "private", "crown_slice_file", "", "수관부(crown) 슬라이스에 해당하는 점들을 저장하는 파일 이름이다.");
             InsertDataIntoTable("csp_segmentcrown", "private", "crown_radius", "10", "수관부 검색 반경을 설정합니다.(단위 : m) (기본값 10m)");
+            InsertDataIntoTable("csp_segmentcrown", "private", "voxel_length", "0.05", "복셀다운샘플링할 때, 한 변의 길이를 설정한다. (단위 : m) (기본값 0.05m)");
             InsertDataIntoTable("measure", "private", "nnearest", "16", "DBH(흉고직경) 측정할 때 stem에서 원형 모델을 찾을 경우, 이웃한 점들의 거리의 표준편차를 사용하는데, 표준편차를 구할때 사용되는 이웃 점들의 개수를 의미한다");
             InsertDataIntoTable("measure", "private", "minrad", "0.03", "찾는 원형모델의 최소 반지름이다.(단위 : m) (기본값 : 0.03m)");
             InsertDataIntoTable("measure", "private", "maxrad", "0.5", "찾는 원형모델의 최대 반지름이다.(단위 : m) (기본값 : 0.5m)");
