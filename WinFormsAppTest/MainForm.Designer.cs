@@ -341,9 +341,9 @@ namespace WinFormsAppTest
             label1.ForeColor = Color.White;
             label1.Location = new Point(18, 31);
             label1.Name = "label1";
-            label1.Size = new Size(296, 17);
+            label1.Size = new Size(346, 17);
             label1.TabIndex = 2;
-            label1.Text = "개체목 추출 과정에서 나온 파일들을 정리합니다.";
+            label1.Text = "개체목 추출 과정에서 나온 파일들을 정리합니다. (off/on)";
             // 
             // lbSettingFileDel
             // 

@@ -308,6 +308,11 @@ namespace WinFormsAppTest
 
                 cPanel.fillColor = Color.DarkGray;
                 cPanel.Invalidate();
+
+                foreach (Control control in cPanel.Controls)
+                {
+                    control.Invalidate();
+                }
             }
         }
         private void pnSettingAll_MouseLeave(object sender, EventArgs e)
@@ -318,6 +323,11 @@ namespace WinFormsAppTest
 
                 cPanel.fillColor = Color.Gray;
                 cPanel.Invalidate();
+
+                foreach(Control control in cPanel.Controls)
+                {
+                    control.Invalidate();
+                }
             }
         }
         private void pnSettingAll_MouseDown(object sender, MouseEventArgs e)
@@ -328,6 +338,11 @@ namespace WinFormsAppTest
 
                 cPanel.fillColor = Color.Silver;
                 cPanel.Invalidate();
+
+                foreach (Control control in cPanel.Controls)
+                {
+                    control.Invalidate();
+                }
             }
         }
         private void pnSettingAll_MouseUp(object sender, MouseEventArgs e)
@@ -338,6 +353,11 @@ namespace WinFormsAppTest
 
                 cPanel.fillColor = Color.DarkGray;
                 cPanel.Invalidate();
+
+                foreach (Control control in cPanel.Controls)
+                {
+                    control.Invalidate();
+                }
             }
         }
 

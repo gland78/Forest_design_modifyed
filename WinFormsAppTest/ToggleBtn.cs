@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
+using WinFormsAppTest;
 
 namespace LiDAR_PROJECT
 {
@@ -132,7 +133,10 @@ namespace LiDAR_PROJECT
         {
             int toggleSize = this.Height - 5;
             pevent.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-            pevent.Graphics.Clear(Color.Gray);
+
+            Color backColor = ((CustomPanel)this.Parent).fillColor;
+
+            pevent.Graphics.Clear(backColor);
 
             if (this.Checked) //ON
             {
