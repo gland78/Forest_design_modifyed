@@ -512,7 +512,7 @@ namespace WinFormsAppTest
             }
         }
 
-        private void AppendSeventhCSVFile()
+        private void UpdateDBAfterSeventh()
         {
             string trunkslicefile = "";
             string crownslicefile = "";
@@ -537,7 +537,7 @@ namespace WinFormsAppTest
             paramForm.UpdateDataInTable("csp_segmentcrown", "crown_slice_file", crownslicefile);
         }
 
-        private void AppendEighthCSVFile()
+        private void UpdateDBAfterEighth()
         {
             List<String> filenames_pcd = new List<String>();
 
@@ -740,7 +740,7 @@ namespace WinFormsAppTest
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + seven + inter + ".bat 파일을 생성했습니다.");
             }
 
-            AppendSeventhCSVFile();
+            UpdateDBAfterSeventh();
         }
         //SegTrunk
         private void RunFileEighth()
@@ -766,7 +766,7 @@ namespace WinFormsAppTest
                 ProcessBatch(eight + inter + ".bat");
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + inter + eight + ".bat 파일을 생성했습니다.");
             }
-            AppendEighthCSVFile();
+            UpdateDBAfterEighth();
         }
         //SegCrown
         private void RunFileNinth()
