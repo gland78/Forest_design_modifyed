@@ -11,6 +11,7 @@ using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Data.SQLite;
 using System.Diagnostics;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace WinFormsAppTest
 {
@@ -51,6 +52,11 @@ namespace WinFormsAppTest
             //프로그램 각종 외형 설정(커스텀 파라미터는 Designer.cs에서 설정 불가)
             customPanels_Load();
             pnMain.isBorder = false;
+            tgBtnSettingFileDel.OffBackColor = Color.Black;
+            tgBtnSettingFileDel.OffToggleColor = Color.White;
+            tgBtnSettingFileDel.OnBackColor = Color.White;
+            tgBtnSettingFileDel.OnToggleColor = Color.Black;
+            //tgBtnSettingFileDel.SolidStyle = false;
 
             //메인폼의 각 컴포넌트 이벤트 설정
             mainForm_AddEvent();
@@ -71,6 +77,11 @@ namespace WinFormsAppTest
             pnSettingReset.MouseEnter += pnSettingAll_MouseEnter;
             pnSettingReset.MouseLeave += pnSettingAll_MouseLeave;
             pnSettingReset.MouseUp += pnSettingAll_MouseUp;
+
+            pnSettingFileDel.MouseDown += pnSettingAll_MouseDown;
+            pnSettingFileDel.MouseEnter += pnSettingAll_MouseEnter;
+            pnSettingFileDel.MouseLeave += pnSettingAll_MouseLeave;
+            pnSettingFileDel.MouseUp += pnSettingAll_MouseUp;
 
             pnSettingNor1.MouseDown += pnSettingAll_MouseDown;
             pnSettingNor1.MouseEnter += pnSettingAll_MouseEnter;
@@ -116,6 +127,16 @@ namespace WinFormsAppTest
             pnSettingCrown1.MouseEnter += pnSettingAll_MouseEnter;
             pnSettingCrown1.MouseLeave += pnSettingAll_MouseLeave;
             pnSettingCrown1.MouseUp += pnSettingAll_MouseUp;
+
+            pnSettingCrown2.MouseDown += pnSettingAll_MouseDown;
+            pnSettingCrown2.MouseEnter += pnSettingAll_MouseEnter;
+            pnSettingCrown2.MouseLeave += pnSettingAll_MouseLeave;
+            pnSettingCrown2.MouseUp += pnSettingAll_MouseUp;
+
+            pnSettingCrown3.MouseDown += pnSettingAll_MouseDown;
+            pnSettingCrown3.MouseEnter += pnSettingAll_MouseEnter;
+            pnSettingCrown3.MouseLeave += pnSettingAll_MouseLeave;
+            pnSettingCrown3.MouseUp += pnSettingAll_MouseUp;
         }
 
         //CustomPanel 색 및 테두리 지정(Designer.cs에서 지정하면 컴파일 시 없어짐)
@@ -127,6 +148,11 @@ namespace WinFormsAppTest
             pnSettingReset.isFill = true;
             pnSettingReset.isBorder = false;
             pnSettingReset.fillColor = customPanelColor;
+
+            pnSettingFileDel.BackColor = Color.Transparent;
+            pnSettingFileDel.isFill = true;
+            pnSettingFileDel.isBorder = false;
+            pnSettingFileDel.fillColor = customPanelColor;
 
             pnSettingNor1.BackColor = Color.Transparent;
             pnSettingNor1.isFill = true;
@@ -172,6 +198,16 @@ namespace WinFormsAppTest
             pnSettingCrown1.isFill = true;
             pnSettingCrown1.isBorder = false;
             pnSettingCrown1.fillColor = customPanelColor;
+
+            pnSettingCrown2.BackColor = Color.Transparent;
+            pnSettingCrown2.isFill = true;
+            pnSettingCrown2.isBorder = false;
+            pnSettingCrown2.fillColor = customPanelColor;
+
+            pnSettingCrown3.BackColor = Color.Transparent;
+            pnSettingCrown3.isFill = true;
+            pnSettingCrown3.isBorder = false;
+            pnSettingCrown3.fillColor = customPanelColor;
         }
 
         //사이드메뉴 버튼 관련 이벤트 처리 코드
@@ -212,23 +248,28 @@ namespace WinFormsAppTest
                 return;
             }
 
-            bool[] applyChecker = new bool[9];
+            bool[] applyChecker = new bool[12];
             bool result = true;
             DialogResult dialogResult = DialogResult.No;
 
+            //del_inter
+            applyChecker[0] = tgBtnSettingFileDel.Checked == (SelectDataFromTable(databaseFileName, "gui", "del_inter") == "true" ? true : false);
+
             //normalize_textboxes
-            applyChecker[0] = tbNorCellSize.Text == SelectDataFromTable(databaseFileName, "filters_smrf", "cell");
-            applyChecker[1] = tbNorScalar.Text == SelectDataFromTable(databaseFileName, "filters_smrf", "scalar");
-            applyChecker[2] = tbNorSlope.Text == SelectDataFromTable(databaseFileName, "filters_smrf", "slope");
-            applyChecker[3] = tbNorThres.Text == SelectDataFromTable(databaseFileName, "filters_smrf", "threshold");
-            applyChecker[4] = tbNorWinSize.Text == SelectDataFromTable(databaseFileName, "filters_smrf", "window");
+            applyChecker[1] = tbNorCellSize.Text == SelectDataFromTable(databaseFileName, "filters_smrf", "cell");
+            applyChecker[2] = tbNorScalar.Text == SelectDataFromTable(databaseFileName, "filters_smrf", "scalar");
+            applyChecker[3] = tbNorSlope.Text == SelectDataFromTable(databaseFileName, "filters_smrf", "slope");
+            applyChecker[4] = tbNorThres.Text == SelectDataFromTable(databaseFileName, "filters_smrf", "threshold");
+            applyChecker[5] = tbNorWinSize.Text == SelectDataFromTable(databaseFileName, "filters_smrf", "window");
             //trunkSlice_textboxes
-            applyChecker[5] = tbTrunkMinHeight.Text == SelectDataFromTable(databaseFileName, "filters_range_trunk", "minheight");
-            applyChecker[6] = tbTrunkMaxHeight.Text == SelectDataFromTable(databaseFileName, "filters_range_trunk", "maxheight");
-            applyChecker[7] = tbTrunkSmooth.Text == SelectDataFromTable(databaseFileName, "csp_segmentstem", "smoothness");
+            applyChecker[6] = tbTrunkMinHeight.Text == SelectDataFromTable(databaseFileName, "filters_range_trunk", "minheight");
+            applyChecker[7] = tbTrunkMaxHeight.Text == SelectDataFromTable(databaseFileName, "filters_range_trunk", "maxheight");
+            applyChecker[8] = tbTrunkSmooth.Text == SelectDataFromTable(databaseFileName, "csp_segmentstem", "smoothness");
 
             //CrownSlice_textboxes
-            applyChecker[8] = tbCrownMinHeight.Text == SelectDataFromTable(databaseFileName, "filters_range_crown", "minheight");
+            applyChecker[9] = tbCrownVoxel.Text == SelectDataFromTable(databaseFileName, "csp_segmentcrown", "voxel_length");
+            applyChecker[10] = tbCrownRadius.Text == SelectDataFromTable(databaseFileName, "csp_segmentcrown", "crown_radius");
+            applyChecker[11] = tbCrownMinHeight.Text == SelectDataFromTable(databaseFileName, "filters_range_crown", "minheight");
 
             foreach (bool checker in applyChecker)
             {

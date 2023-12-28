@@ -528,6 +528,10 @@ namespace WinFormsAppTest
         //textbox 값 -> DB 테이블로 대입 
         private void UpdateParams()
         {
+            //del_inter
+            string toggle = tgBtnSettingFileDel.Checked ? "true" : "false";
+            UpdateDataInTable("gui", "del_inter", toggle.Trim());
+
             //Normalize_textboxes
             UpdateDataInTable("filters_smrf", "cell", tbNorCellSize.Text.Trim());
             UpdateDataInTable("filters_smrf", "scalar", tbNorScalar.Text.Trim());
@@ -541,6 +545,8 @@ namespace WinFormsAppTest
             UpdateDataInTable("csp_segmentstem", "smoothness", tbTrunkSmooth.Text.Trim());
 
             //CrownSlice_textboxes
+            UpdateDataInTable("csp_segmentcrown", "voxel_length", tbCrownVoxel.Text.Trim());
+            UpdateDataInTable("csp_segmentcrown", "crown_radius", tbCrownRadius.Text.Trim());
             UpdateDataInTable("filters_range_crown", "minheight", tbCrownMinHeight.Text.Trim());
         }
         //DB 테이블 -> textbox 대입
@@ -548,6 +554,12 @@ namespace WinFormsAppTest
         {
             ExtractCircleValues(ref gui, SelectDataFromTable(databaseFileName, "gui", "circle"));
             ExtractRectangleValues(ref gui, SelectDataFromTable(databaseFileName, "gui", "rectangle"));
+
+            //del_inter
+            if (SelectDataFromTable(databaseFileName, "gui", "del_inter").Trim().ToLower() == "true"){
+                tgBtnSettingFileDel.Checked = true;
+            }
+            else { tgBtnSettingFileDel.Checked = false;}
 
             //normalize_textboxes
             tbNorCellSize.Text = SelectDataFromTable(databaseFileName, "filters_smrf", "cell");
@@ -562,6 +574,8 @@ namespace WinFormsAppTest
             tbTrunkSmooth.Text = SelectDataFromTable(databaseFileName, "csp_segmentstem", "smoothness");
 
             //CrownSlice_textboxes
+            tbCrownVoxel.Text = SelectDataFromTable(databaseFileName, "csp_segmentcrown", "voxel_length");
+            tbCrownRadius.Text = SelectDataFromTable(databaseFileName, "csp_segmentcrown", "crown_radius");
             tbCrownMinHeight.Text = SelectDataFromTable(databaseFileName, "filters_range_crown", "minheight");
         }
     }
