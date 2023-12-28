@@ -1105,10 +1105,6 @@ namespace WinFormsAppTest
 
                 progressDialog.Invoke(new Action(() => progressDialog.Close()));
             }
-            else
-            {
-                MessageBox.Show("1단계 산출물 에러");
-            }
         }
 
         //파일 생성을 기준, 에러 확인 코드
