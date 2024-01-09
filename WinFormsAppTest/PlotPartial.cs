@@ -863,12 +863,12 @@ namespace WinFormsAppTest
 
 
                     //del inter 삭제 cmd에서 실행하는 코드
-                    string inter_dir = paramForm.SelectDataFromTable(databaseFileName, "gui", "intermediate_dir");
-                    string command = @$"rmdir /s /q {inter_dir}";
-                    if (paramForm.SelectDataFromTable(databaseFileName, "gui", "del_inter").Trim().ToLower() == "true")
-                    {
-                        sw.WriteLine(command);
-                    }
+                    //string inter_dir = paramForm.SelectDataFromTable(databaseFileName, "gui", "intermediate_dir");
+                    //string command = @$"rmdir /s /q {inter_dir}";
+                    //if (paramForm.SelectDataFromTable(databaseFileName, "gui", "del_inter").Trim().ToLower() == "true")
+                    //{
+                    //    sw.WriteLine(command);
+                    //}
 
                     //intermediate 폴더 숨김처리 코드
                     //sw.WriteLine("attrib +h ../intermediate");
@@ -878,12 +878,7 @@ namespace WinFormsAppTest
 
                 MakeInfoFile();
 
-                //del inter 삭제 함수
-                //if (paramForm.SelectDataFromTable(databaseFileName, "gui", "del_inter").Trim().ToLower() == "true")
-                //{
-                //    try { del_inter(); }
-                //    catch (Exception ex) { MessageBox.Show(ex.Message); }
-                //}
+                
 
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + eleven + originLasName + ".bat 파일을 생성했습니다.");
             }
@@ -1117,7 +1112,12 @@ namespace WinFormsAppTest
                 progress++;
                 ProgressBarSet(progress);
 
-                
+                //del inter 삭제 함수
+                if (paramForm.SelectDataFromTable(databaseFileName, "gui", "del_inter").Trim().ToLower() == "true")
+                {
+                    try { del_inter(); }
+                    catch (Exception ex) { MessageBox.Show(ex.Message); }
+                }
 
                 progressDialog.Invoke(new Action(() => progressDialog.Close()));
             }
