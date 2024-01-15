@@ -482,30 +482,31 @@ namespace WinFormsAppTest
             InsertDataIntoTable("gui", "private", "result_path", "..\\result", "결과를 저장하는 폴더입니다.");
             InsertDataIntoTable("gui", "private", "intermediate_dir", "", "중간산출물을 저장하는 폴더입니다.");
             InsertDataIntoTable("gui", "private", "tree_dir", "", "개체목을 저장하는 폴더입니다.");
-            InsertDataIntoTable("gui", "private", "org_xmin", "", "원본 las xmin 좌표.");
-            InsertDataIntoTable("gui", "private", "org_ymin", "", "원본 las ymin 좌표.");
-            InsertDataIntoTable("gui", "private", "org_zmin", "", "원본 las zmin 좌표.");
-            InsertDataIntoTable("gui", "private", "internal_las_file", "a", "내부적으로 사용할 las 파일 이름.");
-            InsertDataIntoTable("gui", "private", "origin_las_file", "", "원본 las 파일 이름.");
-            InsertDataIntoTable("gui", "private", "del_inter", "FALSE", "intermediate 폴더 삭제여부를 결정하는 bool 값입니다");
+            InsertDataIntoTable("gui", "private", "org_xmin", "", "원본 las xmin 좌표 입니다.");
+            InsertDataIntoTable("gui", "private", "org_ymin", "", "원본 las ymin 좌표 입니다.");
+            InsertDataIntoTable("gui", "private", "org_zmin", "", "원본 las zmin 좌표 입니다.");
+            InsertDataIntoTable("gui", "private", "internal_las_file", "", "내부적으로 사용할 las 파일 이름 입니다.");
+            InsertDataIntoTable("gui", "private", "origin_las_file", "", "원본 las 파일 이름 입니다.");
+            InsertDataIntoTable("gui", "public", "del_inter", "true", "intermediate 폴더 삭제여부를 설정합니다. (기본값 : true)");
             InsertDataIntoTable("filters_crop", "private", "buffer", "120", "plot 영역보다 120% 큰 영역을 의미한다.");
-            InsertDataIntoTable("filters_crop", "private", "bufferd_dat", "xmin=-12.35 xmax=12.43 ymin=-6.22 ymax=22.14", "bufferd_plot 영역의 정보를 저장하는 파일 이름이다.");
-            InsertDataIntoTable("filters_crop", "private", "origin_dat", "xmin=-14.738 xmax=5.531 ymin=-2.147 ymax=15.436 cx=0 cy=0 radius=100", "origin_plot 영역의 정보를 저장하는 파일 이름이다.");
+            InsertDataIntoTable("filters_crop", "private", "bufferd_dat", "xmin=-12.35 xmax=12.43 ymin=-6.22 ymax=22.14", "bufferd_plot 영역의 정보를 저장한다.");
+            InsertDataIntoTable("filters_crop", "private", "origin_dat", "xmin=-14.738 xmax=5.531 ymin=-2.147 ymax=15.436 cx=0 cy=0 radius=100", "origin_plot 영역의 정보를 저장한다.");
+            InsertDataIntoTable("filters_crop", "private", "voxel_length", "0.05", "복셀다운샘플링할 때, 한 변의 길이를 설정한다. (단위 : m) (기본값 0.05m)");
             InsertDataIntoTable("filters_outlier", "private", "method", "statistical", "통계 기반으로 이상치(이상점) 제거한다.");
             InsertDataIntoTable("filters_outlier", "private", "mean_k", "12", "최근접 이웃의 개수를 지정한다.");
-            InsertDataIntoTable("filters_outlier", "private", "multiplier", "2.2", "거리의 표준편차의 계수를 지정한다.");
-            InsertDataIntoTable("filters_smrf", "public", "cell", "4", "셀 크기를 지정한다. PDAL 기본값이 1.0m인데, ForestLi는 4m를 사용하는데, 확인이 필요하다.");
-            InsertDataIntoTable("filters_smrf", "public", "window", "16", "max window size를 지정한다.PDAL 기본값이 18m인데, ForestLi는 16m를 사용하는데, 확인이 필요하다.");
+            InsertDataIntoTable("filters_outlier", "private", "multiplier", "2.2", "거리의 표준편차의 계수를 지정한다.(단위 : m) (기본값 : 2.2m)");
+            InsertDataIntoTable("filters_smrf", "public", "cell", "4", "셀 크기를 지정한다. PDAL 기본값이 1.0m인데, ForestLi는 4m를 사용하는데, 확인이 필요하다.(단위 : m) (기본값 : 4m)");
+            InsertDataIntoTable("filters_smrf", "public", "window", "16", "max window size를 지정한다.PDAL 기본값이 18m인데, ForestLi는 16m를 사용하는데, 확인이 필요하다.(단위 : m) (기본값 : 16m)");
             InsertDataIntoTable("filters_smrf", "public", "slope", "0.3", "slope(rise over run)을 지정한다.PDAL 기본값이 0.15인데, ForestLi는 0.3를 사용하는데, 확인이 필요하다. 단위가 무엇일까? Radian인가?");
             InsertDataIntoTable("filters_smrf", "public", "scalar", "1.25", "Elevation scalar를 지정한다. 단위가 무엇일까? meter인가?");
             InsertDataIntoTable("filters_smrf", "public", "threshold", "1", "Elevation threshold를 지정한다. 단위가 무엇일까? meter인가?");
-            InsertDataIntoTable("filters_range_trunk", "public", "minheight", "0", "수간(trunk)으로 조사하는 영역의 높이의 최솟값을 지정한다.보통은 0m으로 지정한다.");
-            InsertDataIntoTable("filters_range_trunk", "public", "maxheight", "5", "수간(trunk)으로 조사하는 영역의 높이의 최댓값을 지정한다.보통은 5m으로 지정한다.");
-            InsertDataIntoTable("filters_range_crown", "public", "minheight", "3", "수관(crown)으로 조사하는 영역의 높이의 최솟값을 지정한다.");
-            InsertDataIntoTable("filters_range_crown", "public", "maxheight", "100", "수관(crown)으로 조사하는 영역의 높이의 최댓값을 지정한다.");
+            InsertDataIntoTable("filters_range_trunk", "public", "minheight", "0", "수간(trunk)으로 조사하는 영역의 높이의 최솟값을 지정한다.보통은 0m으로 지정한다.(단위 : m) (기본값 : 0m)");
+            InsertDataIntoTable("filters_range_trunk", "public", "maxheight", "5", "수간(trunk)으로 조사하는 영역의 높이의 최댓값을 지정한다.보통은 5m으로 지정한다.(단위 : m) (기본값 : 5m)");
+            InsertDataIntoTable("filters_range_crown", "public", "minheight", "3", "수관(crown)으로 조사하는 영역의 높이의 최솟값을 지정한다.(단위 : m) (기본값 : 3m)");
+            InsertDataIntoTable("filters_range_crown", "public", "maxheight", "100", "수관(crown)으로 조사하는 영역의 높이의 최댓값을 지정한다.(단위 : m) (기본값 : 100m)");
             InsertDataIntoTable("csp_segmentstem", "private", "smoothness", "10", "smoothness (degrees)는 ??이다. 영역성장(regiongrowing) 알고리즘의 smoothness를 설정하는 값이다. 영역성장 알고리즘 파악이 우선이다");
-            InsertDataIntoTable("csp_segmentstem", "private", "mindbh", "0.01", "수간(trunk)에서 흉고직경의 최솟값이다. 기본적으로 0.01m를 사용한다.");
-            InsertDataIntoTable("csp_segmentstem", "private", "maxdbh", "1", "수간(trunk)에서 흉고직경의 최댓값이다. 기본적으로 1m를 사용한다.");
+            InsertDataIntoTable("csp_segmentstem", "private", "mindbh", "0.01", "수간(trunk)에서 흉고직경의 최솟값이다. 기본적으로 0.01m를 사용한다.(단위 : m) (기본값 : 0.01m)");
+            InsertDataIntoTable("csp_segmentstem", "private", "maxdbh", "1", "수간(trunk)에서 흉고직경의 최댓값이다. 기본적으로 1m를 사용한다.(단위 : m) (기본값 : 1m)");
             InsertDataIntoTable("csp_segmentstem", "private", "nnearest", "10", "최근접 이웃의 개수를 지정한다. 시스템 인자이다. 사용자가 알 필요가 없다.");
             InsertDataIntoTable("csp_segmentstem", "private", "nmin", "50", "유클리디어 군집화에서 클러스터를 이루는 점들의 최소 개수이다. 시스템 인자이다. 사용자가 알 필요가 없다.");
             InsertDataIntoTable("csp_segmentstem", "private", "num_neighbours", "50", "영역성장(regiongrowing) 알고리즘의 최근접 이웃 점들의 개수를 설정하는 값이다. 영역성장 알고리즘 파악이 우선이다.");
@@ -514,18 +515,24 @@ namespace WinFormsAppTest
             InsertDataIntoTable("csp_segmentcrown", "private", "num_nn_samples", "16", "최근접 이웃 점들의 개수를 지정하는 값이다. 지정된 최근접 이웃 점들까지 거리를 계산하여 거리의 평균과 표준편차를 결정한다.");
             InsertDataIntoTable("csp_segmentcrown", "private", "trunk_files", "", "csp_segmentstem 단계에서 생성된 수간부(trunk) 파일들을 저장한다.");
             InsertDataIntoTable("csp_segmentcrown", "private", "crown_slice_file", "", "수관부(crown) 슬라이스에 해당하는 점들을 저장하는 파일 이름이다.");
+            InsertDataIntoTable("csp_segmentcrown", "private", "crown_radius", "10", "수관부 검색 반경을 설정합니다.(단위 : m) (기본값 10m)");
+            InsertDataIntoTable("csp_segmentcrown", "private", "voxel_length", "0.05", "복셀다운샘플링할 때, 한 변의 길이를 설정한다. (단위 : m) (기본값 0.05m)");
             InsertDataIntoTable("measure", "private", "nnearest", "16", "DBH(흉고직경) 측정할 때 stem에서 원형 모델을 찾을 경우, 이웃한 점들의 거리의 표준편차를 사용하는데, 표준편차를 구할때 사용되는 이웃 점들의 개수를 의미한다");
-            InsertDataIntoTable("measure", "private", "minrad", "0.03", "찾는 원형모델의 최소 반지름이다");
-            InsertDataIntoTable("measure", "private", "maxrad", "0.5", "찾는 원형모델의 최대 반지름이다");
+            InsertDataIntoTable("measure", "private", "minrad", "0.03", "찾는 원형모델의 최소 반지름이다.(단위 : m) (기본값 : 0.03m)");
+            InsertDataIntoTable("measure", "private", "maxrad", "0.5", "찾는 원형모델의 최대 반지름이다.(단위 : m) (기본값 : 0.5m)");
             InsertDataIntoTable("measure", "private", "iterations", "10000", "원형모델을 찾는 RANSAC 알고리즘의 최대 시도 횟수이다");
-            InsertDataIntoTable("measure", "private", "zmin_check", "0.2", "나무가 표준지의 속하는지 판단하기 위해 사용 된다. 기준포인트들 중 최하점의 높이다");
-            InsertDataIntoTable("measure", "private", "zmax_check", "0.7", "나무가 표준지의 속하는지 판단하기 위해 사용 된다. 기준포인트들 중 최상점의 높이다");
+            InsertDataIntoTable("measure", "private", "zmin_check", "0.2", "나무가 표준지의 속하는지 판단하기 위해 사용 된다. 기준포인트들 중 최하점의 높이다.(단위 : m) (기본값 : 0.2m)");
+            InsertDataIntoTable("measure", "private", "zmax_check", "0.7", "나무가 표준지의 속하는지 판단하기 위해 사용 된다. 기준포인트들 중 최상점의 높이다.(단위 : m) (기본값 : 0.7m)");
             InsertDataIntoTable("measure", "private", "tree_files", "", "추출된 개체목 파일입니다.");
         }
 
         //textbox 값 -> DB 테이블로 대입 
         private void UpdateParams()
         {
+            //del_inter
+            string toggle = tgBtnSettingFileDel.Checked ? "true" : "false";
+            UpdateDataInTable("gui", "del_inter", toggle.Trim());
+
             //Normalize_textboxes
             UpdateDataInTable("filters_smrf", "cell", tbNorCellSize.Text.Trim());
             UpdateDataInTable("filters_smrf", "scalar", tbNorScalar.Text.Trim());
@@ -539,6 +546,8 @@ namespace WinFormsAppTest
             UpdateDataInTable("csp_segmentstem", "smoothness", tbTrunkSmooth.Text.Trim());
 
             //CrownSlice_textboxes
+            UpdateDataInTable("csp_segmentcrown", "voxel_length", tbCrownVoxel.Text.Trim());
+            UpdateDataInTable("csp_segmentcrown", "crown_radius", tbCrownRadius.Text.Trim());
             UpdateDataInTable("filters_range_crown", "minheight", tbCrownMinHeight.Text.Trim());
         }
 
@@ -547,6 +556,12 @@ namespace WinFormsAppTest
         {
             ExtractCircleValues(ref gui, SelectDataFromTable(databaseFileName, "gui", "circle"));
             ExtractRectangleValues(ref gui, SelectDataFromTable(databaseFileName, "gui", "rectangle"));
+
+            //del_inter
+            if (SelectDataFromTable(databaseFileName, "gui", "del_inter").Trim().ToLower() == "true"){
+                tgBtnSettingFileDel.Checked = true;
+            }
+            else { tgBtnSettingFileDel.Checked = false;}
 
             //normalize_textboxes
             tbNorCellSize.Text = SelectDataFromTable(databaseFileName, "filters_smrf", "cell");
@@ -561,6 +576,8 @@ namespace WinFormsAppTest
             tbTrunkSmooth.Text = SelectDataFromTable(databaseFileName, "csp_segmentstem", "smoothness");
 
             //CrownSlice_textboxes
+            tbCrownVoxel.Text = SelectDataFromTable(databaseFileName, "csp_segmentcrown", "voxel_length");
+            tbCrownRadius.Text = SelectDataFromTable(databaseFileName, "csp_segmentcrown", "crown_radius");
             tbCrownMinHeight.Text = SelectDataFromTable(databaseFileName, "filters_range_crown", "minheight");
         }
     }

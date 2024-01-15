@@ -512,7 +512,7 @@ namespace WinFormsAppTest
             }
         }
 
-        private void AppendSeventhCSVFile()
+        private void UpdateDBAfterSeventh()
         {
             string trunkslicefile = "";
             string crownslicefile = "";
@@ -537,7 +537,7 @@ namespace WinFormsAppTest
             paramForm.UpdateDataInTable("csp_segmentcrown", "crown_slice_file", crownslicefile);
         }
 
-        private void AppendEighthCSVFile()
+        private void UpdateDBAfterEighth()
         {
             List<String> filenames_pcd = new List<String>();
 
@@ -736,7 +736,7 @@ namespace WinFormsAppTest
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + seven + inter + ".bat 파일을 생성했습니다.");
             }
 
-            AppendSeventhCSVFile();
+            UpdateDBAfterSeventh();
         }
         //SegTrunk
         private void RunFileEighth()
@@ -762,7 +762,7 @@ namespace WinFormsAppTest
                 ProcessBatch(eight + inter + ".bat");
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + inter + eight + ".bat 파일을 생성했습니다.");
             }
-            AppendEighthCSVFile();
+            UpdateDBAfterEighth();
         }
         //SegCrown
         private void RunFileNinth()
@@ -829,6 +829,9 @@ namespace WinFormsAppTest
             string eleven = "lv9_PCDtoLAS";
             {
                 string batFilePath = resultSavedDirectory + shape + @"\intermediate\" + eleven + inter + ".bat";
+
+                
+
                 if (!File.Exists(batFilePath))
                 {
                     using FileStream fs = File.Create(batFilePath);
@@ -842,6 +845,7 @@ namespace WinFormsAppTest
                     sw.WriteLine("echo pcd파일 las파일로 변환중");
                     sw.WriteLine($"cd {this.resultSavedDirectory + shape + @"\intermediate"}");
                     sw.WriteLine("PCD2LAS " + FolderName2);
+                    sw.WriteLine("PCD2LAS " + resultSavedDirectory + shape + @"\intermediate\");
 
                     //pcd 지우는 코드  ---> 배포 시 주석 풀기
                     sw.WriteLine("for /r \"..\\tree\" %%i in (*.pcd) do (");
@@ -853,6 +857,15 @@ namespace WinFormsAppTest
                     sw.WriteLine(")");
 
 
+
+                    //del inter 삭제 cmd에서 실행하는 코드
+                    //string inter_dir = paramForm.SelectDataFromTable(databaseFileName, "gui", "intermediate_dir");
+                    //string command = @$"rmdir /s /q {inter_dir}";
+                    //if (paramForm.SelectDataFromTable(databaseFileName, "gui", "del_inter").Trim().ToLower() == "true")
+                    //{
+                    //    sw.WriteLine(command);
+                    //}
+
                     //intermediate 폴더 숨김처리 코드
                     //sw.WriteLine("attrib +h ../intermediate");
                 }
@@ -860,6 +873,8 @@ namespace WinFormsAppTest
                 ProcessBatch(eleven + inter + ".bat");
 
                 MakeInfoFile();
+
+                
 
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + eleven + originLasName + ".bat 파일을 생성했습니다.");
             }
@@ -1093,10 +1108,11 @@ namespace WinFormsAppTest
                 progress++;
                 ProgressBarSet(progress);
 
-                if(paramForm.SelectDataFromTable(databaseFileName,"gui","del_inter").Trim().ToLower() == "true")
+                //del inter 삭제 함수
+                if (paramForm.SelectDataFromTable(databaseFileName, "gui", "del_inter").Trim().ToLower() == "true")
                 {
                     try { del_inter(); }
-                    catch(Exception ex) { MessageBox.Show(ex.Message); }
+                    catch (Exception ex) { MessageBox.Show(ex.Message); }
                 }
 
                 if(progressDialog != null)
@@ -1110,10 +1126,6 @@ namespace WinFormsAppTest
                         LogWrite("Form Closing Error: CS3X1110L");
                     }
                 }
-            }
-            else
-            {
-                MessageBox.Show("1단계 산출물 에러");
             }
         }
 
