@@ -174,7 +174,7 @@ namespace WinFormsAppTest
         {
             progress = 0;
 
-            paramForm.UpdateDataInTable("gui", "origin_las_file", tbPlotData.Text);
+            paramForm.UpdateDataInTable(databaseFileName, "gui", "origin_las_file", tbPlotData.Text);
 
             //무결성 검사
             bool isEmptyVal_cir = tbPlotCircleX.Text == "" && tbPlotCircleY.Text == "" && tbPlotCircleR.Text == "";//원형 표준지에 필요한 값들이 비어있는경우
@@ -743,9 +743,9 @@ namespace WinFormsAppTest
                         }
                     }
                 }
-                paramForm.UpdateDataInTable("gui", "org_xmin", lasSize.minx.ToString());
-                paramForm.UpdateDataInTable("gui", "org_ymin", lasSize.miny.ToString());
-                paramForm.UpdateDataInTable("gui", "org_zmin", lasSize.minz.ToString());
+                paramForm.UpdateDataInTable(databaseFileName, "gui", "org_xmin", lasSize.minx.ToString());
+                paramForm.UpdateDataInTable(databaseFileName, "gui", "org_ymin", lasSize.miny.ToString());
+                paramForm.UpdateDataInTable(databaseFileName, "gui", "org_zmin", lasSize.minz.ToString());
             }
             catch (Exception e)
             {

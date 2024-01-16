@@ -305,7 +305,7 @@ namespace WinFormsAppTest
         }
 
         //update 쿼리 실행
-        public void UpdateDataInTable(string tableName, string ID, string newValue)
+        public void UpdateDataInTable(string databaseFileName, string tableName, string ID, string newValue)
         {
             string connectionString = $"Data Source={databaseFileName};Version=3;";
 
@@ -494,7 +494,7 @@ namespace WinFormsAppTest
             InsertDataIntoTable("filters_crop", "private", "voxel_length", "0.05", "복셀다운샘플링할 때, 한 변의 길이를 설정한다. (단위 : m) (기본값 0.05m)");
             InsertDataIntoTable("filters_outlier", "private", "method", "statistical", "통계 기반으로 이상치(이상점) 제거한다.");
             InsertDataIntoTable("filters_outlier", "private", "mean_k", "12", "최근접 이웃의 개수를 지정한다.");
-            InsertDataIntoTable("filters_outlier", "private", "multiplier", "2.2", "거리의 표준편차의 계수를 지정한다.(단위 : m) (기본값 : 2.2m)");
+            InsertDataIntoTable("filters_outlier", "private", "multiplier", "2.2", "거리의 표준편차의 계수를 지정한다.");
             InsertDataIntoTable("filters_smrf", "public", "cell", "4", "셀 크기를 지정한다. PDAL 기본값이 1.0m인데, ForestLi는 4m를 사용하는데, 확인이 필요하다.(단위 : m) (기본값 : 4m)");
             InsertDataIntoTable("filters_smrf", "public", "window", "16", "max window size를 지정한다.PDAL 기본값이 18m인데, ForestLi는 16m를 사용하는데, 확인이 필요하다.(단위 : m) (기본값 : 16m)");
             InsertDataIntoTable("filters_smrf", "public", "slope", "0.3", "slope(rise over run)을 지정한다.PDAL 기본값이 0.15인데, ForestLi는 0.3를 사용하는데, 확인이 필요하다. 단위가 무엇일까? Radian인가?");
@@ -531,24 +531,24 @@ namespace WinFormsAppTest
         {
             //del_inter
             string toggle = tgBtnSettingFileDel.Checked ? "true" : "false";
-            UpdateDataInTable("gui", "del_inter", toggle.Trim());
+            UpdateDataInTable(databaseFileName,"gui", "del_inter", toggle.Trim());
 
             //Normalize_textboxes
-            UpdateDataInTable("filters_smrf", "cell", tbNorCellSize.Text.Trim());
-            UpdateDataInTable("filters_smrf", "scalar", tbNorScalar.Text.Trim());
-            UpdateDataInTable("filters_smrf", "slope", tbNorSlope.Text.Trim());
-            UpdateDataInTable("filters_smrf", "window", tbNorWinSize.Text.Trim());
-            UpdateDataInTable("filters_smrf", "threshold", tbNorThres.Text.Trim());
+            UpdateDataInTable(databaseFileName, "filters_smrf", "cell", tbNorCellSize.Text.Trim());
+            UpdateDataInTable(databaseFileName, "filters_smrf", "scalar", tbNorScalar.Text.Trim());
+            UpdateDataInTable(databaseFileName, "filters_smrf", "slope", tbNorSlope.Text.Trim());
+            UpdateDataInTable(databaseFileName, "filters_smrf", "window", tbNorWinSize.Text.Trim());
+            UpdateDataInTable(databaseFileName, "filters_smrf", "threshold", tbNorThres.Text.Trim());
 
             //trunkSlice_textboxes
-            UpdateDataInTable("filters_range_trunk", "minheight", tbTrunkMinHeight.Text.Trim());
-            UpdateDataInTable("filters_range_trunk", "maxheight", tbTrunkMaxHeight.Text.Trim());
-            UpdateDataInTable("csp_segmentstem", "smoothness", tbTrunkSmooth.Text.Trim());
+            UpdateDataInTable(databaseFileName, "filters_range_trunk", "minheight", tbTrunkMinHeight.Text.Trim());
+            UpdateDataInTable(databaseFileName, "filters_range_trunk", "maxheight", tbTrunkMaxHeight.Text.Trim());
+            UpdateDataInTable(databaseFileName, "csp_segmentstem", "smoothness", tbTrunkSmooth.Text.Trim());
 
             //CrownSlice_textboxes
-            UpdateDataInTable("csp_segmentcrown", "voxel_length", tbCrownVoxel.Text.Trim());
-            UpdateDataInTable("csp_segmentcrown", "crown_radius", tbCrownRadius.Text.Trim());
-            UpdateDataInTable("filters_range_crown", "minheight", tbCrownMinHeight.Text.Trim());
+            UpdateDataInTable(databaseFileName, "csp_segmentcrown", "voxel_length", tbCrownVoxel.Text.Trim());
+            UpdateDataInTable(databaseFileName, "csp_segmentcrown", "crown_radius", tbCrownRadius.Text.Trim());
+            UpdateDataInTable(databaseFileName, "filters_range_crown", "minheight", tbCrownMinHeight.Text.Trim());
         }
         //DB 테이블 -> textbox 대입
         private void FillTextboxes()

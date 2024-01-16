@@ -39,7 +39,7 @@ namespace WinFormsAppTest
 
             //db 변수 초기화, db 생성
             create_dbFile_dbtable();
-            UpdateDataInTable("gui", "result_path", res_path);
+            UpdateDataInTable(databaseFileName, "gui", "result_path", res_path);
             //MessageBox.Show(SelectDataFromTable(databaseFileName, "gui", "result_path"));
 
             FillTextboxes();

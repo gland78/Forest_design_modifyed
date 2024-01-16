@@ -80,9 +80,21 @@ namespace WinFormsAppTest
             string inter_dir = Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(resultSavedDirectory + "\\intermediate"));
 
 
-            paramForm.UpdateDataInTable("gui", "tree_dir", tree_dir);
-            paramForm.UpdateDataInTable("gui", "intermediate_dir", inter_dir);
+            paramForm.UpdateDataInTable(databaseFileName, "gui", "tree_dir", tree_dir);
+            paramForm.UpdateDataInTable(databaseFileName, "gui", "intermediate_dir", inter_dir);
 
+
+
+
+
+            //config 복사
+            copy_bin();
+
+
+            databaseFileName = Path.Combine(paramForm.SelectDataFromTable(databaseFileName, "gui", "tree_dir"), "config.db");
+            //databaseFileName = "config.db";
+
+            originLasPath = paramForm.SelectDataFromTable(databaseFileName, "gui", "origin_las_file");
             RunFileZero(originLasPath);
 
             if (progressDialog == null)
@@ -90,7 +102,10 @@ namespace WinFormsAppTest
                 return;
             }
 
+
             internalLasName = paramForm.SelectDataFromTable(databaseFileName, "gui", "internal_las_file");
+
+            //MessageBox.Show(inter);
 
             inter = Path.GetFileNameWithoutExtension(internalLasName);
 
@@ -162,7 +177,7 @@ namespace WinFormsAppTest
 
                             //MessageBox.Show(dat_str);
 
-                            paramForm.UpdateDataInTable("filters_crop", "bufferd_dat", dat_str);
+                            paramForm.UpdateDataInTable(databaseFileName, "filters_crop", "bufferd_dat", dat_str);
 
                             //paramForm.setParam(paramForm.csv_data, "filters.crop", "bufferd_dat", dat_str);
                             //paramForm.write_csv(configpath);
@@ -384,7 +399,7 @@ namespace WinFormsAppTest
                 {
                     try
                     {
-                        paramForm.UpdateDataInTable("filters_crop", "origin_dat", poly_points);
+                        paramForm.UpdateDataInTable(databaseFileName, "filters_crop", "origin_dat", poly_points);
 
                     }
                     catch (Exception ex)
@@ -418,7 +433,7 @@ namespace WinFormsAppTest
                             //maxy-= double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_ymin"));
 
                             dat_str = $"xmin={minx} xmax={maxx} ymin={miny} ymax={maxy} cx={centerX} cy={centerY} radius={radius}";
-                            paramForm.UpdateDataInTable("filters_crop", "origin_dat", dat_str);
+                            paramForm.UpdateDataInTable(databaseFileName, "filters_crop", "origin_dat", dat_str);
                         }
                         else
                         {
@@ -435,7 +450,7 @@ namespace WinFormsAppTest
                             //maxy-= double.Parse(paramForm.SelectDataFromTable(databaseFileName, "gui", "org_ymin"));
 
                             dat_str = $"xmin={minx} xmax={maxx} ymin={miny} ymax={maxy}";
-                            paramForm.UpdateDataInTable("filters_crop", "origin_dat", dat_str);
+                            paramForm.UpdateDataInTable(databaseFileName, "filters_crop", "origin_dat", dat_str);
                         }
                     }
                     catch (Exception ex)
@@ -533,8 +548,8 @@ namespace WinFormsAppTest
                     crownslicefile = fi.FullName;
                 }
             }
-            paramForm.UpdateDataInTable("csp_segmentstem", "trunk_slice_file", trunkslicefile);
-            paramForm.UpdateDataInTable("csp_segmentcrown", "crown_slice_file", crownslicefile);
+            paramForm.UpdateDataInTable(databaseFileName, "csp_segmentstem", "trunk_slice_file", trunkslicefile);
+            paramForm.UpdateDataInTable(databaseFileName, "csp_segmentcrown", "crown_slice_file", crownslicefile);
         }
 
         private void UpdateDBAfterEighth()
@@ -551,7 +566,7 @@ namespace WinFormsAppTest
                 }
             }
 
-            paramForm.UpdateDataInTable("csp_segmentstem", "trunk_files", string.Join(" ", filenames_pcd));
+            paramForm.UpdateDataInTable(databaseFileName, "csp_segmentstem", "trunk_files", string.Join(" ", filenames_pcd));
         }
 
         //배치파일 실행 코드
@@ -624,7 +639,7 @@ namespace WinFormsAppTest
                     sw.WriteLine("chcp 65001 > nul");
                     sw.WriteLine("cls");
                     sw.WriteLine("echo 원본 LAS 중복 점 제거중...");
-                    sw.WriteLine($"cd {this.resultSavedDirectory + shape + @"\intermediate"}");
+                    //sw.WriteLine($"cd {this.resultSavedDirectory + shape + @"\tree"}");
                     sw.WriteLine("laszip \"" + databaseFileName + "\"");
                     sw.WriteLine();
                 }
@@ -687,7 +702,7 @@ namespace WinFormsAppTest
             }
         }
 
-        //LAS2PCD
+        //LAS2PCDoriginLasPath
         private void RunFileFourth()
         {
             string four = "lv4_LAStoPCD_";
@@ -787,7 +802,7 @@ namespace WinFormsAppTest
                     sw.WriteLine("chcp 65001 > nul");
                     sw.WriteLine("cls");
                     sw.WriteLine("echo 개별목 추출 중...");
-                    //sw.WriteLine($"cd {this.resultSavedDirectory + shape + @"\intermediate"}");
+                    sw.WriteLine($"cd {this.resultSavedDirectory + shape + @"\intermediate"}");
                     sw.WriteLine("csp_segmentcrown \"" + databaseFileName + "\"");
                     //sw.WriteLine();
                     //sw.WriteLine("set destination=\"{0}\"", destination);
@@ -849,7 +864,7 @@ namespace WinFormsAppTest
                     sw.WriteLine("echo pcd파일 las파일로 변환중");
                     sw.WriteLine($"cd {this.resultSavedDirectory + shape + @"\intermediate"}");
                     sw.WriteLine("PCD2LAS " + FolderName2);
-                    sw.WriteLine("PCD2LAS " + resultSavedDirectory + shape + @"\intermediate\");
+                    sw.WriteLine("PCD2LAS " + resultSavedDirectory + shape + @"\intermediate");
 
                     //pcd 지우는 코드  ---> 배포 시 주석 풀기
                     sw.WriteLine("for /r \"..\\tree\" %%i in (*.pcd) do (");
@@ -882,6 +897,83 @@ namespace WinFormsAppTest
 
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + eleven + originLasName + ".bat 파일을 생성했습니다.");
             }
+        }
+
+
+
+        private void RunFileTwelveth()
+        {
+            string twelve = "lv10_add_RGB_Trees";
+            {
+                string batFilePath = resultSavedDirectory + shape + @"\intermediate\" + twelve + inter + ".bat";
+
+
+
+                if (!File.Exists(batFilePath))
+                {
+                    using FileStream fs = File.Create(batFilePath);
+                }
+                string FolderName2 = "..\\tree";
+                using (StreamWriter sw = new StreamWriter(new FileStream(batFilePath, FileMode.OpenOrCreate), Encoding.Default))
+                {
+                    sw.WriteLine("@ECHO OFF");
+                    sw.WriteLine("chcp 65001 > nul");
+                    sw.WriteLine("cls");
+                    sw.WriteLine("echo 개체목에 색깔을 추가합니다.");
+                    //sw.WriteLine($"cd {this.resultSavedDirectory + shape + @"\tree"}");
+                    sw.WriteLine("pdal_add_RGB.exe " + databaseFileName);
+                }
+
+                ProcessBatch(twelve + inter + ".bat");
+
+                MakeInfoFile();
+
+
+
+                LogWrite(resultSavedDirectory + shape + @"\intermediate\" + twelve + originLasName + ".bat 파일을 생성했습니다.");
+            }
+        }
+
+
+        private void copy_bin()
+        {
+            {
+                // 실행할 명령 프롬프트 명령어 설정
+                //string resultSavedDirectory = this.resultSavedDirectory + shape;
+                //string resultSavedDirectory3 = resultSavedDirectory + @"\" + "intermediate";
+                string tree_dir = paramForm.SelectDataFromTable(databaseFileName, "gui", "tree_dir");
+
+                //MessageBox.Show(databaseFileName);
+                //MessageBox.Show(tree_dir);
+
+                string command = @$"copy {databaseFileName} {tree_dir}";
+
+                //MessageBox.Show(command);
+
+                // Process 시작
+                Process process = new Process();
+                process.StartInfo.FileName = "cmd.exe"; // 명령 프롬프트 실행
+                process.StartInfo.Arguments = "/c " + command; // /c 옵션은 명령어 실행 후 프롬프트 종료
+
+                // 출력을 읽기 위한 설정
+                process.StartInfo.RedirectStandardOutput = true;
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.CreateNoWindow = true;
+
+                // 프로세스 실행
+                process.Start();
+
+                // 출력을 읽어오기
+                string output = process.StandardOutput.ReadToEnd();
+                Console.WriteLine(output);
+
+                // 프로세스가 종료될 때까지 대기
+                process.WaitForExit();
+
+                // 프로세스 종료
+                process.Close();
+            }
+
         }
 
         //intermediate 삭제 코드
@@ -1111,6 +1203,9 @@ namespace WinFormsAppTest
                 RunFileEleventh();
                 progress++;
                 ProgressBarSet(progress);
+
+
+                RunFileTwelveth();
 
                 //del inter 삭제 함수
                 if (paramForm.SelectDataFromTable(databaseFileName, "gui", "del_inter").Trim().ToLower() == "true")
