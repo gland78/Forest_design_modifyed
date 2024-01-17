@@ -56,7 +56,11 @@ namespace WinFormsAppTest
             tgBtnSettingFileDel.OffToggleColor = Color.Black;
             tgBtnSettingFileDel.OnBackColor = Color.Black;
             tgBtnSettingFileDel.OnToggleColor = Color.White;
-            //tgBtnSettingFileDel.SolidStyle = false;
+
+            tgBtnSettingRemoveOutlier.OffBackColor = Color.White;
+            tgBtnSettingRemoveOutlier.OffToggleColor = Color.Black;
+            tgBtnSettingRemoveOutlier.OnBackColor = Color.Black;
+            tgBtnSettingRemoveOutlier.OnToggleColor = Color.White;
 
             //lbSettingToggle.Text = tgBtnSettingFileDel.Checked ? "삭제" : "유지";
 
@@ -84,6 +88,11 @@ namespace WinFormsAppTest
             pnSettingFileDel.MouseEnter += pnSettingAll_MouseEnter;
             pnSettingFileDel.MouseLeave += pnSettingAll_MouseLeave;
             pnSettingFileDel.MouseUp += pnSettingAll_MouseUp;
+
+            pnSettingRemoveOutlier.MouseDown += pnSettingAll_MouseDown;
+            pnSettingRemoveOutlier.MouseEnter += pnSettingAll_MouseEnter;
+            pnSettingRemoveOutlier.MouseLeave += pnSettingAll_MouseLeave;
+            pnSettingRemoveOutlier.MouseUp += pnSettingAll_MouseUp;
 
             pnSettingNor1.MouseDown += pnSettingAll_MouseDown;
             pnSettingNor1.MouseEnter += pnSettingAll_MouseEnter;
@@ -155,6 +164,11 @@ namespace WinFormsAppTest
             pnSettingFileDel.isFill = true;
             pnSettingFileDel.isBorder = false;
             pnSettingFileDel.fillColor = customPanelColor;
+
+            pnSettingRemoveOutlier.BackColor = Color.Transparent;
+            pnSettingRemoveOutlier.isFill = true;
+            pnSettingRemoveOutlier.isBorder = false;
+            pnSettingRemoveOutlier.fillColor = customPanelColor;
 
             pnSettingNor1.BackColor = Color.Transparent;
             pnSettingNor1.isFill = true;
@@ -423,7 +437,7 @@ namespace WinFormsAppTest
 
         private void tgBtnSettingFileDel_CheckedChanged(object sender, EventArgs e)
         {
-            lbSettingToggle.Text = tgBtnSettingFileDel.Checked ? "삭제" : "유지";
+            lbSettingFileToggle.Text = tgBtnSettingFileDel.Checked ? "삭제" : "유지";
         }
     }
 }
