@@ -47,7 +47,7 @@ namespace WinFormsAppTest
             lbTitle = new Label();
             tpSettings = new TabPage();
             pnSettingFileDel = new CustomPanel();
-            lbSettingToggle = new Label();
+            lbSettingFileToggle = new Label();
             tgBtnSettingFileDel = new LiDAR_PROJECT.ToggleBtn();
             lbSettingFileDelInfo = new Label();
             lbSettingFileDel = new Label();
@@ -95,6 +95,11 @@ namespace WinFormsAppTest
             tbTrunkMinHeight = new TextBox();
             lbTrunkMinH = new Label();
             ttMainInfo = new ToolTip(components);
+            pnSettingRemoveOutlier = new CustomPanel();
+            lbSettingOutlierToggle = new Label();
+            tgBtnSettingRemoveOutlier = new LiDAR_PROJECT.ToggleBtn();
+            lbSettingRemoveOutlierInfo = new Label();
+            lbSettingRemoveOutlier = new Label();
             pnSideMenu.SuspendLayout();
             tcMainHome.SuspendLayout();
             tpMainHome.SuspendLayout();
@@ -113,6 +118,7 @@ namespace WinFormsAppTest
             pnSettingTrunk2.SuspendLayout();
             pnSettingCrown3.SuspendLayout();
             pnSettingTrunk1.SuspendLayout();
+            pnSettingRemoveOutlier.SuspendLayout();
             SuspendLayout();
             // 
             // pnSideMenu
@@ -283,6 +289,7 @@ namespace WinFormsAppTest
             tpSettings.AutoScrollMargin = new Size(0, 20);
             tpSettings.AutoScrollMinSize = new Size(0, 5);
             tpSettings.BackColor = Color.Gainsboro;
+            tpSettings.Controls.Add(pnSettingRemoveOutlier);
             tpSettings.Controls.Add(pnSettingFileDel);
             tpSettings.Controls.Add(pnSettingCrown1);
             tpSettings.Controls.Add(pnSettingCrown2);
@@ -311,7 +318,7 @@ namespace WinFormsAppTest
             // pnSettingFileDel
             // 
             pnSettingFileDel.BackColor = Color.Gray;
-            pnSettingFileDel.Controls.Add(lbSettingToggle);
+            pnSettingFileDel.Controls.Add(lbSettingFileToggle);
             pnSettingFileDel.Controls.Add(tgBtnSettingFileDel);
             pnSettingFileDel.Controls.Add(lbSettingFileDelInfo);
             pnSettingFileDel.Controls.Add(lbSettingFileDel);
@@ -321,16 +328,16 @@ namespace WinFormsAppTest
             pnSettingFileDel.Size = new Size(850, 62);
             pnSettingFileDel.TabIndex = 20;
             // 
-            // lbSettingToggle
+            // lbSettingFileToggle
             // 
-            lbSettingToggle.AutoSize = true;
-            lbSettingToggle.Font = new Font("맑은 고딕", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-            lbSettingToggle.ForeColor = Color.White;
-            lbSettingToggle.Location = new Point(704, 23);
-            lbSettingToggle.Name = "lbSettingToggle";
-            lbSettingToggle.Size = new Size(34, 17);
-            lbSettingToggle.TabIndex = 4;
-            lbSettingToggle.Text = "유지";
+            lbSettingFileToggle.AutoSize = true;
+            lbSettingFileToggle.Font = new Font("맑은 고딕", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
+            lbSettingFileToggle.ForeColor = Color.White;
+            lbSettingFileToggle.Location = new Point(704, 23);
+            lbSettingFileToggle.Name = "lbSettingFileToggle";
+            lbSettingFileToggle.Size = new Size(34, 17);
+            lbSettingFileToggle.TabIndex = 4;
+            lbSettingFileToggle.Text = "유지";
             // 
             // tgBtnSettingFileDel
             // 
@@ -377,7 +384,7 @@ namespace WinFormsAppTest
             pnSettingCrown1.BackColor = Color.Gray;
             pnSettingCrown1.Controls.Add(lbCrownVoxel);
             pnSettingCrown1.Controls.Add(tbCrownVoxel);
-            pnSettingCrown1.Location = new Point(24, 943);
+            pnSettingCrown1.Location = new Point(24, 1013);
             pnSettingCrown1.Margin = new Padding(3, 4, 3, 4);
             pnSettingCrown1.Name = "pnSettingCrown1";
             pnSettingCrown1.Size = new Size(850, 58);
@@ -409,7 +416,7 @@ namespace WinFormsAppTest
             pnSettingCrown2.BackColor = Color.Gray;
             pnSettingCrown2.Controls.Add(lbCrownRadius);
             pnSettingCrown2.Controls.Add(tbCrownRadius);
-            pnSettingCrown2.Location = new Point(24, 1009);
+            pnSettingCrown2.Location = new Point(24, 1079);
             pnSettingCrown2.Margin = new Padding(3, 4, 3, 4);
             pnSettingCrown2.Name = "pnSettingCrown2";
             pnSettingCrown2.Size = new Size(850, 58);
@@ -497,7 +504,7 @@ namespace WinFormsAppTest
             pnSettingTrunk3.BackColor = Color.Gray;
             pnSettingTrunk3.Controls.Add(lbTrunkSmooth);
             pnSettingTrunk3.Controls.Add(tbTrunkSmooth);
-            pnSettingTrunk3.Location = new Point(24, 823);
+            pnSettingTrunk3.Location = new Point(24, 893);
             pnSettingTrunk3.Margin = new Padding(3, 4, 3, 4);
             pnSettingTrunk3.Name = "pnSettingTrunk3";
             pnSettingTrunk3.Size = new Size(850, 58);
@@ -573,7 +580,7 @@ namespace WinFormsAppTest
             pnSettingNor5.BackColor = Color.Gray;
             pnSettingNor5.Controls.Add(tbNorThres);
             pnSettingNor5.Controls.Add(lbNorThres);
-            pnSettingNor5.Location = new Point(24, 571);
+            pnSettingNor5.Location = new Point(24, 641);
             pnSettingNor5.Margin = new Padding(3, 4, 3, 4);
             pnSettingNor5.Name = "pnSettingNor5";
             pnSettingNor5.Size = new Size(850, 58);
@@ -605,7 +612,7 @@ namespace WinFormsAppTest
             pnSettingNor4.BackColor = Color.Gray;
             pnSettingNor4.Controls.Add(tbNorScalar);
             pnSettingNor4.Controls.Add(lbNorScalar);
-            pnSettingNor4.Location = new Point(24, 505);
+            pnSettingNor4.Location = new Point(24, 575);
             pnSettingNor4.Margin = new Padding(3, 4, 3, 4);
             pnSettingNor4.Name = "pnSettingNor4";
             pnSettingNor4.Size = new Size(850, 58);
@@ -637,7 +644,7 @@ namespace WinFormsAppTest
             pnSettingNor3.BackColor = Color.Gray;
             pnSettingNor3.Controls.Add(tbNorSlope);
             pnSettingNor3.Controls.Add(lbNorSlope);
-            pnSettingNor3.Location = new Point(24, 439);
+            pnSettingNor3.Location = new Point(24, 509);
             pnSettingNor3.Margin = new Padding(3, 4, 3, 4);
             pnSettingNor3.Name = "pnSettingNor3";
             pnSettingNor3.Size = new Size(850, 58);
@@ -669,7 +676,7 @@ namespace WinFormsAppTest
             pnSettingNor2.BackColor = Color.Gray;
             pnSettingNor2.Controls.Add(tbNorWinSize);
             pnSettingNor2.Controls.Add(lbNorWinSize);
-            pnSettingNor2.Location = new Point(24, 373);
+            pnSettingNor2.Location = new Point(24, 443);
             pnSettingNor2.Margin = new Padding(3, 4, 3, 4);
             pnSettingNor2.Name = "pnSettingNor2";
             pnSettingNor2.Size = new Size(850, 58);
@@ -701,7 +708,7 @@ namespace WinFormsAppTest
             pnSettingNor1.BackColor = Color.Gray;
             pnSettingNor1.Controls.Add(tbNorCellSize);
             pnSettingNor1.Controls.Add(lbNorCellSize);
-            pnSettingNor1.Location = new Point(24, 307);
+            pnSettingNor1.Location = new Point(24, 377);
             pnSettingNor1.Margin = new Padding(3, 4, 3, 4);
             pnSettingNor1.Name = "pnSettingNor1";
             pnSettingNor1.Size = new Size(850, 58);
@@ -733,7 +740,7 @@ namespace WinFormsAppTest
             lbNormalize.AutoSize = true;
             lbNormalize.Font = new Font("Microsoft Sans Serif", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
             lbNormalize.ForeColor = Color.Black;
-            lbNormalize.Location = new Point(24, 275);
+            lbNormalize.Location = new Point(24, 345);
             lbNormalize.Name = "lbNormalize";
             lbNormalize.Size = new Size(117, 25);
             lbNormalize.TabIndex = 16;
@@ -756,7 +763,7 @@ namespace WinFormsAppTest
             pnSettingTrunk2.BackColor = Color.Gray;
             pnSettingTrunk2.Controls.Add(lbTrunkMaxH);
             pnSettingTrunk2.Controls.Add(tbTrunkMaxHeight);
-            pnSettingTrunk2.Location = new Point(24, 757);
+            pnSettingTrunk2.Location = new Point(24, 827);
             pnSettingTrunk2.Margin = new Padding(3, 4, 3, 4);
             pnSettingTrunk2.Name = "pnSettingTrunk2";
             pnSettingTrunk2.Size = new Size(850, 58);
@@ -788,7 +795,7 @@ namespace WinFormsAppTest
             lbCrownSlice.AutoSize = true;
             lbCrownSlice.Font = new Font("Microsoft Sans Serif", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
             lbCrownSlice.ForeColor = Color.Black;
-            lbCrownSlice.Location = new Point(24, 911);
+            lbCrownSlice.Location = new Point(24, 981);
             lbCrownSlice.Name = "lbCrownSlice";
             lbCrownSlice.Size = new Size(130, 25);
             lbCrownSlice.TabIndex = 18;
@@ -799,7 +806,7 @@ namespace WinFormsAppTest
             lbTrunkSlice.AutoSize = true;
             lbTrunkSlice.Font = new Font("Microsoft Sans Serif", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
             lbTrunkSlice.ForeColor = Color.Black;
-            lbTrunkSlice.Location = new Point(24, 659);
+            lbTrunkSlice.Location = new Point(24, 729);
             lbTrunkSlice.Name = "lbTrunkSlice";
             lbTrunkSlice.Size = new Size(124, 25);
             lbTrunkSlice.TabIndex = 17;
@@ -810,7 +817,7 @@ namespace WinFormsAppTest
             pnSettingCrown3.BackColor = Color.Gray;
             pnSettingCrown3.Controls.Add(lbCrownMinH);
             pnSettingCrown3.Controls.Add(tbCrownMinHeight);
-            pnSettingCrown3.Location = new Point(24, 1075);
+            pnSettingCrown3.Location = new Point(24, 1145);
             pnSettingCrown3.Margin = new Padding(3, 4, 3, 4);
             pnSettingCrown3.Name = "pnSettingCrown3";
             pnSettingCrown3.Size = new Size(850, 58);
@@ -842,7 +849,7 @@ namespace WinFormsAppTest
             pnSettingTrunk1.BackColor = Color.Gray;
             pnSettingTrunk1.Controls.Add(tbTrunkMinHeight);
             pnSettingTrunk1.Controls.Add(lbTrunkMinH);
-            pnSettingTrunk1.Location = new Point(24, 691);
+            pnSettingTrunk1.Location = new Point(24, 761);
             pnSettingTrunk1.Margin = new Padding(3, 4, 3, 4);
             pnSettingTrunk1.Name = "pnSettingTrunk1";
             pnSettingTrunk1.Size = new Size(850, 58);
@@ -869,6 +876,69 @@ namespace WinFormsAppTest
             lbTrunkMinH.Size = new Size(75, 17);
             lbTrunkMinH.TabIndex = 1;
             lbTrunkMinH.Text = "MinHeight";
+            // 
+            // pnSettingRemoveOutlier
+            // 
+            pnSettingRemoveOutlier.BackColor = Color.Gray;
+            pnSettingRemoveOutlier.Controls.Add(lbSettingOutlierToggle);
+            pnSettingRemoveOutlier.Controls.Add(tgBtnSettingRemoveOutlier);
+            pnSettingRemoveOutlier.Controls.Add(lbSettingRemoveOutlierInfo);
+            pnSettingRemoveOutlier.Controls.Add(lbSettingRemoveOutlier);
+            pnSettingRemoveOutlier.Location = new Point(24, 257);
+            pnSettingRemoveOutlier.Margin = new Padding(3, 4, 3, 4);
+            pnSettingRemoveOutlier.Name = "pnSettingRemoveOutlier";
+            pnSettingRemoveOutlier.Size = new Size(850, 62);
+            pnSettingRemoveOutlier.TabIndex = 21;
+            // 
+            // lbSettingOutlierToggle
+            // 
+            lbSettingOutlierToggle.AutoSize = true;
+            lbSettingOutlierToggle.Font = new Font("맑은 고딕", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
+            lbSettingOutlierToggle.ForeColor = Color.White;
+            lbSettingOutlierToggle.Location = new Point(704, 23);
+            lbSettingOutlierToggle.Name = "lbSettingOutlierToggle";
+            lbSettingOutlierToggle.Size = new Size(34, 17);
+            lbSettingOutlierToggle.TabIndex = 4;
+            lbSettingOutlierToggle.Text = "유지";
+            // 
+            // tgBtnSettingRemoveOutlier
+            // 
+            tgBtnSettingRemoveOutlier.AutoSize = true;
+            tgBtnSettingRemoveOutlier.BackColor = Color.White;
+            tgBtnSettingRemoveOutlier.ForeColor = Color.Black;
+            tgBtnSettingRemoveOutlier.Location = new Point(740, 16);
+            tgBtnSettingRemoveOutlier.MaximumSize = new Size(65, 30);
+            tgBtnSettingRemoveOutlier.MinimumSize = new Size(81, 30);
+            tgBtnSettingRemoveOutlier.Name = "tgBtnSettingRemoveOutlier";
+            tgBtnSettingRemoveOutlier.OffBackColor = Color.Gray;
+            tgBtnSettingRemoveOutlier.OffToggleColor = Color.Gainsboro;
+            tgBtnSettingRemoveOutlier.OnBackColor = Color.MediumSlateBlue;
+            tgBtnSettingRemoveOutlier.OnToggleColor = Color.WhiteSmoke;
+            tgBtnSettingRemoveOutlier.Size = new Size(81, 30);
+            tgBtnSettingRemoveOutlier.TabIndex = 3;
+            tgBtnSettingRemoveOutlier.UseVisualStyleBackColor = false;
+            // 
+            // lbSettingRemoveOutlierInfo
+            // 
+            lbSettingRemoveOutlierInfo.AutoSize = true;
+            lbSettingRemoveOutlierInfo.Font = new Font("맑은 고딕", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
+            lbSettingRemoveOutlierInfo.ForeColor = Color.White;
+            lbSettingRemoveOutlierInfo.Location = new Point(18, 31);
+            lbSettingRemoveOutlierInfo.Name = "lbSettingRemoveOutlierInfo";
+            lbSettingRemoveOutlierInfo.Size = new Size(278, 17);
+            lbSettingRemoveOutlierInfo.TabIndex = 2;
+            lbSettingRemoveOutlierInfo.Text = "불필요한 점을 제거해 노이즈를 감소시킵니다.";
+            // 
+            // lbSettingRemoveOutlier
+            // 
+            lbSettingRemoveOutlier.AutoSize = true;
+            lbSettingRemoveOutlier.Font = new Font("맑은 고딕", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
+            lbSettingRemoveOutlier.ForeColor = Color.White;
+            lbSettingRemoveOutlier.Location = new Point(19, 15);
+            lbSettingRemoveOutlier.Name = "lbSettingRemoveOutlier";
+            lbSettingRemoveOutlier.Size = new Size(78, 17);
+            lbSettingRemoveOutlier.TabIndex = 1;
+            lbSettingRemoveOutlier.Text = "이상점 제거";
             // 
             // MainForm
             // 
@@ -921,6 +991,8 @@ namespace WinFormsAppTest
             pnSettingCrown3.PerformLayout();
             pnSettingTrunk1.ResumeLayout(false);
             pnSettingTrunk1.PerformLayout();
+            pnSettingRemoveOutlier.ResumeLayout(false);
+            pnSettingRemoveOutlier.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -988,5 +1060,13 @@ namespace WinFormsAppTest
         private Label lbSettingFileDel;
         private LiDAR_PROJECT.ToggleBtn tgBtnSettingFileDel;
         private Label lbSettingToggle;
+        private CustomPanel pnSettingRemoveOutlier;
+        private Label label1;
+        private LiDAR_PROJECT.ToggleBtn toggleBtn1;
+        private Label lbSettingRemoveOutlierInfo;
+        private Label lbSettingRemoveOutlier;
+        private Label lbSettingFileToggle;
+        private Label lbSettingOutlierToggle;
+        private LiDAR_PROJECT.ToggleBtn tgBtnSettingRemoveOutlier;
     }
 }
