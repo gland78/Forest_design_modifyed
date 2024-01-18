@@ -30,7 +30,6 @@ namespace WinFormsAppTest
         public string[] tablename = { "gui", "filters_crop", "filters_outlier", "filters_smrf", "filters_range_trunk", "filters_range_crown", "csp_segmentstem", "csp_segmentcrown", "measure" };
 
 
-
         //Circle형 plot값 DB 파일->구조체로 뽑아내는 메서드
         //plot값은 plotForm이 열리기 전까지 넣을 곳이 없기에 구조체가 필요
         void ExtractCircleValues(ref GUI guiStruct, string circleString)
@@ -521,6 +520,12 @@ namespace WinFormsAppTest
             string toggle = tgBtnSettingFileDel.Checked ? "true" : "false";
             UpdateDataInTable(databaseFileName,"gui", "del_inter", toggle.Trim());
 
+            //Do_Outlier_boolean
+            string tgDoOutlier = tgBtnSettingRemoveOutlier.Checked ? "true" : "false";
+            UpdateDataInTable(databaseFileName, "gui", "do_outlier", tgDoOutlier.Trim());
+
+            //MessageBox.Show(tgDoOutlier.ToString());
+
             //Normalize_textboxes
             UpdateDataInTable(databaseFileName, "filters_smrf", "cell", tbNorCellSize.Text.Trim());
             UpdateDataInTable(databaseFileName, "filters_smrf", "scalar", tbNorScalar.Text.Trim());
@@ -545,10 +550,18 @@ namespace WinFormsAppTest
             ExtractRectangleValues(ref gui, SelectDataFromTable(databaseFileName, "gui", "rectangle"));
 
             //del_inter
-            if (SelectDataFromTable(databaseFileName, "gui", "del_inter").Trim().ToLower() == "true"){
+            if (SelectDataFromTable(databaseFileName, "gui", "do_outlier").Trim().ToLower() == "true")
+            {
+                tgBtnSettingRemoveOutlier.Checked = true;
+            }
+            else { tgBtnSettingRemoveOutlier.Checked = false;}
+
+
+            if (SelectDataFromTable(databaseFileName, "gui", "del_inter").Trim().ToLower() == "true")
+            {
                 tgBtnSettingFileDel.Checked = true;
             }
-            else { tgBtnSettingFileDel.Checked = false;}
+            else { tgBtnSettingFileDel.Checked = false; }
 
             //normalize_textboxes
             tbNorCellSize.Text = SelectDataFromTable(databaseFileName, "filters_smrf", "cell");

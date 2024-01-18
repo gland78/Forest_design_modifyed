@@ -347,6 +347,28 @@ namespace WinFormsAppTest
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + second + inter + ".json 파일을 생성했습니다.");
             }
         }
+
+        private void Skip_Outlier()
+        {
+            string dir_path = paramForm.SelectDataFromTable(databaseFileName, "gui", "intermediate_dir");
+            string second = "lv2_outlierRemoved_";
+
+            string sourcePath = Path.Combine(dir_path,"lv1_cropped_" + inter + "_B.las");
+            string destinationPath = Path.Combine(dir_path, second + inter + ".las");
+
+            try
+            {
+                File.Copy(sourcePath, destinationPath, true); // Set the third parameter to 'true' to overwrite if the file already exists
+                //Console.WriteLine("File copied successfully.");
+            }
+            catch (IOException e)
+            {
+                MessageBox.Show($"An error occurred: {e.Message}");
+                return;
+            }
+        }
+
+
         private void Normalization()
         {
             string three = "lv3_nomarlized_";
@@ -1108,7 +1130,9 @@ namespace WinFormsAppTest
             {
                 //전처리
 
-                Outlier();
+                if (paramForm.SelectDataFromTable(databaseFileName, "gui", "do_outlier").Trim().ToLower() == "true") { Outlier(); }
+                else { Skip_Outlier(); }
+
                 Normalization();
                 MakeSliceFile();
                 Turn_Las_into_PCD();
@@ -1121,7 +1145,9 @@ namespace WinFormsAppTest
                     return;
                 }
 
-                RunFileSecond();
+                if (paramForm.SelectDataFromTable(databaseFileName, "gui", "do_outlier").Trim().ToLower() == "true")
+                    RunFileSecond();
+
                 progress++;
                 ProgressBarSet(progress);
 
