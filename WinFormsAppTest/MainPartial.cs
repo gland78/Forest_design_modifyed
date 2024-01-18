@@ -475,6 +475,7 @@ namespace WinFormsAppTest
             InsertDataIntoTable("gui", "private", "internal_las_file", "", "내부적으로 사용할 las 파일 이름 입니다.");
             InsertDataIntoTable("gui", "private", "origin_las_file", "", "원본 las 파일 이름 입니다.");
             InsertDataIntoTable("gui", "public", "del_inter", "true", "intermediate 폴더 삭제여부를 설정합니다. (기본값 : true)");
+            InsertDataIntoTable("gui", "public", "do_outlier", "true", "out_lier 실행여부를 결정합니다 (기본값 : true)");
             InsertDataIntoTable("filters_crop", "private", "buffer", "120", "plot 영역보다 120% 큰 영역을 의미한다.");
             InsertDataIntoTable("filters_crop", "private", "bufferd_dat", "xmin=-12.35 xmax=12.43 ymin=-6.22 ymax=22.14", "bufferd_plot 영역의 정보를 저장한다.");
             InsertDataIntoTable("filters_crop", "private", "origin_dat", "xmin=-14.738 xmax=5.531 ymin=-2.147 ymax=15.436 cx=0 cy=0 radius=100", "origin_plot 영역의 정보를 저장한다.");
