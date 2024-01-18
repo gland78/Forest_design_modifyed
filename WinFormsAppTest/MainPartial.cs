@@ -133,19 +133,7 @@ namespace WinFormsAppTest
         //db파일 생성 및 테이블 생성
         private void create_dbFile_dbtable()
         {
-            //bin_path 변수 초기화
-            string filePath = "bin_path.txt";
-            if (File.Exists(Path.Combine(basePath, filePath)))
-            {
-                string content = File.ReadAllText(filePath);
-                bin_folder = content;               
-                //MessageBox.Show(content);
-            }
-            else
-            {
-                Console.WriteLine("파일이 존재하지 않습니다.");
-            }
-
+            bin_folder = basePath;
             databaseFileName = Path.Combine(bin_folder, "config.db");
 
             //MessageBox.Show(databaseFileName);
