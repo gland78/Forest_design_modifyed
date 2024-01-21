@@ -423,5 +423,10 @@ namespace WinFormsAppTest
         {
             lbSettingFileToggle.Text = tgBtnSettingFileDel.Checked ? "삭제" : "유지";
         }
+
+        private void tgBtnSettingRemoveOutlier_CheckedChanged(object sender, EventArgs e)
+        {
+            lbSettingOutlierToggle.Text = tgBtnSettingRemoveOutlier.Checked ? "삭제" : "유지";
+        }
     }
 }

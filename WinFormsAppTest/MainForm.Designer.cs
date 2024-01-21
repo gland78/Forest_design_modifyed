@@ -46,6 +46,11 @@ namespace WinFormsAppTest
             btnStart = new CustomBtn();
             lbTitle = new Label();
             tpSettings = new TabPage();
+            pnSettingRemoveOutlier = new CustomPanel();
+            lbSettingOutlierToggle = new Label();
+            tgBtnSettingRemoveOutlier = new LiDAR_PROJECT.ToggleBtn();
+            lbSettingRemoveOutlierInfo = new Label();
+            lbSettingRemoveOutlier = new Label();
             pnSettingFileDel = new CustomPanel();
             lbSettingFileToggle = new Label();
             tgBtnSettingFileDel = new LiDAR_PROJECT.ToggleBtn();
@@ -95,16 +100,12 @@ namespace WinFormsAppTest
             tbTrunkMinHeight = new TextBox();
             lbTrunkMinH = new Label();
             ttMainInfo = new ToolTip(components);
-            pnSettingRemoveOutlier = new CustomPanel();
-            lbSettingOutlierToggle = new Label();
-            tgBtnSettingRemoveOutlier = new LiDAR_PROJECT.ToggleBtn();
-            lbSettingRemoveOutlierInfo = new Label();
-            lbSettingRemoveOutlier = new Label();
             pnSideMenu.SuspendLayout();
             tcMainHome.SuspendLayout();
             tpMainHome.SuspendLayout();
             pnMain.SuspendLayout();
             tpSettings.SuspendLayout();
+            pnSettingRemoveOutlier.SuspendLayout();
             pnSettingFileDel.SuspendLayout();
             pnSettingCrown1.SuspendLayout();
             pnSettingCrown2.SuspendLayout();
@@ -118,7 +119,6 @@ namespace WinFormsAppTest
             pnSettingTrunk2.SuspendLayout();
             pnSettingCrown3.SuspendLayout();
             pnSettingTrunk1.SuspendLayout();
-            pnSettingRemoveOutlier.SuspendLayout();
             SuspendLayout();
             // 
             // pnSideMenu
@@ -314,6 +314,70 @@ namespace WinFormsAppTest
             tpSettings.Padding = new Padding(3);
             tpSettings.Size = new Size(888, 482);
             tpSettings.TabIndex = 1;
+            // 
+            // pnSettingRemoveOutlier
+            // 
+            pnSettingRemoveOutlier.BackColor = Color.Gray;
+            pnSettingRemoveOutlier.Controls.Add(lbSettingOutlierToggle);
+            pnSettingRemoveOutlier.Controls.Add(tgBtnSettingRemoveOutlier);
+            pnSettingRemoveOutlier.Controls.Add(lbSettingRemoveOutlierInfo);
+            pnSettingRemoveOutlier.Controls.Add(lbSettingRemoveOutlier);
+            pnSettingRemoveOutlier.Location = new Point(24, 257);
+            pnSettingRemoveOutlier.Margin = new Padding(3, 4, 3, 4);
+            pnSettingRemoveOutlier.Name = "pnSettingRemoveOutlier";
+            pnSettingRemoveOutlier.Size = new Size(850, 62);
+            pnSettingRemoveOutlier.TabIndex = 21;
+            // 
+            // lbSettingOutlierToggle
+            // 
+            lbSettingOutlierToggle.AutoSize = true;
+            lbSettingOutlierToggle.Font = new Font("맑은 고딕", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
+            lbSettingOutlierToggle.ForeColor = Color.White;
+            lbSettingOutlierToggle.Location = new Point(704, 23);
+            lbSettingOutlierToggle.Name = "lbSettingOutlierToggle";
+            lbSettingOutlierToggle.Size = new Size(34, 17);
+            lbSettingOutlierToggle.TabIndex = 4;
+            lbSettingOutlierToggle.Text = "유지";
+            // 
+            // tgBtnSettingRemoveOutlier
+            // 
+            tgBtnSettingRemoveOutlier.AutoSize = true;
+            tgBtnSettingRemoveOutlier.BackColor = Color.White;
+            tgBtnSettingRemoveOutlier.ForeColor = Color.Black;
+            tgBtnSettingRemoveOutlier.Location = new Point(740, 16);
+            tgBtnSettingRemoveOutlier.MaximumSize = new Size(65, 30);
+            tgBtnSettingRemoveOutlier.MinimumSize = new Size(81, 30);
+            tgBtnSettingRemoveOutlier.Name = "tgBtnSettingRemoveOutlier";
+            tgBtnSettingRemoveOutlier.OffBackColor = Color.Gray;
+            tgBtnSettingRemoveOutlier.OffToggleColor = Color.Gainsboro;
+            tgBtnSettingRemoveOutlier.OnBackColor = Color.MediumSlateBlue;
+            tgBtnSettingRemoveOutlier.OnToggleColor = Color.WhiteSmoke;
+            tgBtnSettingRemoveOutlier.Size = new Size(81, 30);
+            tgBtnSettingRemoveOutlier.TabIndex = 3;
+            tgBtnSettingRemoveOutlier.UseVisualStyleBackColor = false;
+            tgBtnSettingRemoveOutlier.CheckedChanged += tgBtnSettingRemoveOutlier_CheckedChanged;
+            // 
+            // lbSettingRemoveOutlierInfo
+            // 
+            lbSettingRemoveOutlierInfo.AutoSize = true;
+            lbSettingRemoveOutlierInfo.Font = new Font("맑은 고딕", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
+            lbSettingRemoveOutlierInfo.ForeColor = Color.White;
+            lbSettingRemoveOutlierInfo.Location = new Point(18, 31);
+            lbSettingRemoveOutlierInfo.Name = "lbSettingRemoveOutlierInfo";
+            lbSettingRemoveOutlierInfo.Size = new Size(278, 17);
+            lbSettingRemoveOutlierInfo.TabIndex = 2;
+            lbSettingRemoveOutlierInfo.Text = "불필요한 점을 제거해 노이즈를 감소시킵니다.";
+            // 
+            // lbSettingRemoveOutlier
+            // 
+            lbSettingRemoveOutlier.AutoSize = true;
+            lbSettingRemoveOutlier.Font = new Font("맑은 고딕", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
+            lbSettingRemoveOutlier.ForeColor = Color.White;
+            lbSettingRemoveOutlier.Location = new Point(19, 15);
+            lbSettingRemoveOutlier.Name = "lbSettingRemoveOutlier";
+            lbSettingRemoveOutlier.Size = new Size(78, 17);
+            lbSettingRemoveOutlier.TabIndex = 1;
+            lbSettingRemoveOutlier.Text = "이상점 제거";
             // 
             // pnSettingFileDel
             // 
@@ -877,69 +941,6 @@ namespace WinFormsAppTest
             lbTrunkMinH.TabIndex = 1;
             lbTrunkMinH.Text = "MinHeight";
             // 
-            // pnSettingRemoveOutlier
-            // 
-            pnSettingRemoveOutlier.BackColor = Color.Gray;
-            pnSettingRemoveOutlier.Controls.Add(lbSettingOutlierToggle);
-            pnSettingRemoveOutlier.Controls.Add(tgBtnSettingRemoveOutlier);
-            pnSettingRemoveOutlier.Controls.Add(lbSettingRemoveOutlierInfo);
-            pnSettingRemoveOutlier.Controls.Add(lbSettingRemoveOutlier);
-            pnSettingRemoveOutlier.Location = new Point(24, 257);
-            pnSettingRemoveOutlier.Margin = new Padding(3, 4, 3, 4);
-            pnSettingRemoveOutlier.Name = "pnSettingRemoveOutlier";
-            pnSettingRemoveOutlier.Size = new Size(850, 62);
-            pnSettingRemoveOutlier.TabIndex = 21;
-            // 
-            // lbSettingOutlierToggle
-            // 
-            lbSettingOutlierToggle.AutoSize = true;
-            lbSettingOutlierToggle.Font = new Font("맑은 고딕", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-            lbSettingOutlierToggle.ForeColor = Color.White;
-            lbSettingOutlierToggle.Location = new Point(704, 23);
-            lbSettingOutlierToggle.Name = "lbSettingOutlierToggle";
-            lbSettingOutlierToggle.Size = new Size(34, 17);
-            lbSettingOutlierToggle.TabIndex = 4;
-            lbSettingOutlierToggle.Text = "유지";
-            // 
-            // tgBtnSettingRemoveOutlier
-            // 
-            tgBtnSettingRemoveOutlier.AutoSize = true;
-            tgBtnSettingRemoveOutlier.BackColor = Color.White;
-            tgBtnSettingRemoveOutlier.ForeColor = Color.Black;
-            tgBtnSettingRemoveOutlier.Location = new Point(740, 16);
-            tgBtnSettingRemoveOutlier.MaximumSize = new Size(65, 30);
-            tgBtnSettingRemoveOutlier.MinimumSize = new Size(81, 30);
-            tgBtnSettingRemoveOutlier.Name = "tgBtnSettingRemoveOutlier";
-            tgBtnSettingRemoveOutlier.OffBackColor = Color.Gray;
-            tgBtnSettingRemoveOutlier.OffToggleColor = Color.Gainsboro;
-            tgBtnSettingRemoveOutlier.OnBackColor = Color.MediumSlateBlue;
-            tgBtnSettingRemoveOutlier.OnToggleColor = Color.WhiteSmoke;
-            tgBtnSettingRemoveOutlier.Size = new Size(81, 30);
-            tgBtnSettingRemoveOutlier.TabIndex = 3;
-            tgBtnSettingRemoveOutlier.UseVisualStyleBackColor = false;
-            // 
-            // lbSettingRemoveOutlierInfo
-            // 
-            lbSettingRemoveOutlierInfo.AutoSize = true;
-            lbSettingRemoveOutlierInfo.Font = new Font("맑은 고딕", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
-            lbSettingRemoveOutlierInfo.ForeColor = Color.White;
-            lbSettingRemoveOutlierInfo.Location = new Point(18, 31);
-            lbSettingRemoveOutlierInfo.Name = "lbSettingRemoveOutlierInfo";
-            lbSettingRemoveOutlierInfo.Size = new Size(278, 17);
-            lbSettingRemoveOutlierInfo.TabIndex = 2;
-            lbSettingRemoveOutlierInfo.Text = "불필요한 점을 제거해 노이즈를 감소시킵니다.";
-            // 
-            // lbSettingRemoveOutlier
-            // 
-            lbSettingRemoveOutlier.AutoSize = true;
-            lbSettingRemoveOutlier.Font = new Font("맑은 고딕", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-            lbSettingRemoveOutlier.ForeColor = Color.White;
-            lbSettingRemoveOutlier.Location = new Point(19, 15);
-            lbSettingRemoveOutlier.Name = "lbSettingRemoveOutlier";
-            lbSettingRemoveOutlier.Size = new Size(78, 17);
-            lbSettingRemoveOutlier.TabIndex = 1;
-            lbSettingRemoveOutlier.Text = "이상점 제거";
-            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -965,6 +966,8 @@ namespace WinFormsAppTest
             pnMain.PerformLayout();
             tpSettings.ResumeLayout(false);
             tpSettings.PerformLayout();
+            pnSettingRemoveOutlier.ResumeLayout(false);
+            pnSettingRemoveOutlier.PerformLayout();
             pnSettingFileDel.ResumeLayout(false);
             pnSettingFileDel.PerformLayout();
             pnSettingCrown1.ResumeLayout(false);
@@ -991,8 +994,6 @@ namespace WinFormsAppTest
             pnSettingCrown3.PerformLayout();
             pnSettingTrunk1.ResumeLayout(false);
             pnSettingTrunk1.PerformLayout();
-            pnSettingRemoveOutlier.ResumeLayout(false);
-            pnSettingRemoveOutlier.PerformLayout();
             ResumeLayout(false);
         }
 
