@@ -22,14 +22,12 @@ namespace WinFormsAppTest
     {
         //다른 폼들을 띄우고 delegate를 통해 메서드 전달을 위한 form 변수
         private PlotForm? pFrm;
-
         public MainForm()
         {
             InitializeComponent();
             DoubleBuffered = true;
             MaximizeBox = false;
         }
-
         private void MainForm_Load(object sender, EventArgs e)
         {
             string currentPath = Directory.GetCurrentDirectory();
@@ -67,7 +65,6 @@ namespace WinFormsAppTest
             //메인폼의 각 컴포넌트 이벤트 설정
             mainForm_AddEvent();
         }
-
         //메인 폼 로드 전 이벤트 전처리(Designer.cs에 넣으면 찾기가 힘듬)
         private void mainForm_AddEvent()
         {
@@ -149,7 +146,6 @@ namespace WinFormsAppTest
             pnSettingCrown3.MouseLeave += pnSettingAll_MouseLeave;
             pnSettingCrown3.MouseUp += pnSettingAll_MouseUp;
         }
-
         //CustomPanel 색 및 테두리 지정(Designer.cs에서 지정하면 컴파일 시 없어짐)
         private void customPanels_Load()
         {
@@ -225,7 +221,6 @@ namespace WinFormsAppTest
             pnSettingCrown3.isBorder = false;
             pnSettingCrown3.fillColor = customPanelColor;
         }
-
         //사이드메뉴 버튼 관련 이벤트 처리 코드
         private void btnStart_Click(object sender, EventArgs e)
         {
@@ -239,12 +234,10 @@ namespace WinFormsAppTest
             //plot창을 모달리스로 띄우는 대신 실행 및 설정 적용 관련 기능 버튼 비활성화
             switchCoreBtns(false);
         }
-
         private void switchCoreBtns(bool onOff)
         {
             switchBtns(tpSettings, onOff);
         }
-
         private void switchBtns(Control control, bool onOff)
         {
             foreach (Control btns in control.Controls)
@@ -256,7 +249,6 @@ namespace WinFormsAppTest
                 switchBtns(btns, onOff);
             }
         }
-
         private void btnHome_Click(object sender, EventArgs e)
         {
             if (tcMainHome.SelectedIndex == 0)
@@ -309,12 +301,10 @@ namespace WinFormsAppTest
             }
             tcMainHome.SelectedIndex = 0;
         }
-
         private void btnSettings_Click(object sender, EventArgs e)
         {
             tcMainHome.SelectedIndex = 1;
         }
-
         //이 아래 4개 메서드 설정창 파라메터 판넬 마우스 이벤트
         private void pnSettingAll_MouseEnter(object sender, EventArgs e)
         {
@@ -376,7 +366,6 @@ namespace WinFormsAppTest
                 }
             }
         }
-
         //적용하기 버튼 이벤트
         private void btnSettingApply_Click(object sender, EventArgs e)
         {
@@ -385,7 +374,6 @@ namespace WinFormsAppTest
             MessageBox.Show("적용되었습니다.");
             tcMainHome.SelectedIndex = 0;
         }
-
         //취소버튼
         //저장하지 않고 기본 config 값으로 텍스트 박스 값 교체 후
         //시작화면으로 이동
@@ -394,12 +382,10 @@ namespace WinFormsAppTest
             FillTextboxes();
             tcMainHome.SelectedIndex = 0;
         }
-
         private void startBtnAttach(bool onOff)
         {
             btnStart.Visible = onOff;
         }
-
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             Process[] allProc = Process.GetProcesses();
@@ -418,7 +404,6 @@ namespace WinFormsAppTest
                 }
             }
         }
-
         //공장초기화 버튼
         private void BtnFactoryReset_Click(object sender, EventArgs e)
         {
@@ -434,7 +419,6 @@ namespace WinFormsAppTest
             CreateTable(databaseFileName, tablename);
             insert_initial_data();
         }
-
         private void tgBtnSettingFileDel_CheckedChanged(object sender, EventArgs e)
         {
             lbSettingFileToggle.Text = tgBtnSettingFileDel.Checked ? "삭제" : "유지";

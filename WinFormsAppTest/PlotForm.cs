@@ -33,7 +33,6 @@ namespace WinFormsAppTest
 
             lasSizeInit();
         }
-
         private void PlotForm_Load(object sender, EventArgs e)
         {
             //각종 DB 연결을 위한 파라메터 전처리
@@ -52,7 +51,6 @@ namespace WinFormsAppTest
 
             cbPlotShape.SelectedIndex = 0;
         }
-
         //plotForm 컴포넌트들 세팅
         private void SetPlotFormComponent()
         {
@@ -62,12 +60,10 @@ namespace WinFormsAppTest
             pnPlotData.borderColor = Color.White;
             cbPlotShape.SelectedIndex = 0;
         }
-
         private void btnPlotCancel_Click(object sender, EventArgs e)
         {
             this.Close();
         }
-
         //원본 Las 파일 찾기 버튼
         private void btnPlotData_Click(object sender, EventArgs e)
         {
@@ -94,7 +90,6 @@ namespace WinFormsAppTest
                 }
             }
         }
-
         /// 다각형 꼭짓점 정보 파일 읽기 버튼
         /// 해당 텍스트 파일을 읽어서 x,y값을 gui 구조체의 pointList에 저장
         private void btnPlotPolySet_Click(object sender, EventArgs e)
@@ -249,7 +244,6 @@ namespace WinFormsAppTest
 
             btnPlotData.Enabled = true;
         }
-
         private void ProgressDialog_Create()
         {
             if(progressDialog != null)
@@ -291,7 +285,6 @@ namespace WinFormsAppTest
             progressDialog.Controls.Add(progressTextBox);
             progressDialog.Show();
         }
-
         private void FormDisposing(object sender, FormClosingEventArgs e)
         {
             progressDialog = null;
@@ -318,7 +311,6 @@ namespace WinFormsAppTest
                 MessageBox.Show("백그라운드 프로그램 강제종료에 실패하였습니다\n" + ex.Message);
             }
         }
-
         private void ProgressBarSet(int level)
         {
             if (pbLoadingBar.InvokeRequired)
@@ -335,14 +327,12 @@ namespace WinFormsAppTest
                 pbLoadingBar.Invalidate();
             }
         }
-
         //PlotForm 콤보박스 이벤트
         private void cbPlotShape_SelectedIndexChanged(object sender, EventArgs e)
         {
             tcPlot.SelectedIndex = cbPlotShape.SelectedIndex;
             cbPlotShape.Focus();
         }
-
         //텍스트 박스 무결성 체크 및 las파일 크기 placeholder 처리
         private void tbPlotCircleX_Leave(object sender, EventArgs e)
         {
@@ -545,7 +535,6 @@ namespace WinFormsAppTest
 
             tbPlotData.Text = paramForm.gui.loadPath;
         }
-
         //사용자가 입력한 좌표값이 올바른지 체크하기 위한 함수들
         private async void Validation(string filePath)
         {
@@ -641,7 +630,6 @@ namespace WinFormsAppTest
                 Console.WriteLine($"Error reorganizing folder: {ex.Message}");
             }
         }
-
         //PDAL로 Las파일에서 정보를 뽑은 json을 만들고, 거기서 크기 정보만 빼서 .dat파일로 생성
         private async Task MakeInfo(string filePath, string dirPath)
         {
@@ -707,7 +695,6 @@ namespace WinFormsAppTest
                 return;
             }
         }
-
         private void readInfo(string filePath, string dirPath)
         {
             string datPath = Path.Combine(dirPath, Path.GetFileNameWithoutExtension(filePath) + ".dat");
@@ -761,14 +748,12 @@ namespace WinFormsAppTest
                 this.Close();
             }
         }
-
         private void PlotForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             attachStartBtn(true);
             enableMainFormBtns(true);
             this.Dispose();
         }
-
         private async void CloudCompareToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string lasPath = tbPlotData.Text;
@@ -797,7 +782,6 @@ namespace WinFormsAppTest
                 }
             });
         }
-
         private string FindProgramPath(string programName)
         {
             string paths = Environment.GetEnvironmentVariable("Path");
@@ -811,7 +795,6 @@ namespace WinFormsAppTest
             }
             return "";
         }
-
         private void lasSizeInit()
         {
             lasSize.minx = paramForm.gui.xMin;

@@ -29,7 +29,6 @@ namespace WinFormsAppTest
         //테이블 이름 목록
         public string[] tablename = { "gui", "filters_crop", "filters_outlier", "filters_smrf", "filters_range_trunk", "filters_range_crown", "csp_segmentstem", "csp_segmentcrown", "measure" };
 
-
         //Circle형 plot값 DB 파일->구조체로 뽑아내는 메서드
         //plot값은 plotForm이 열리기 전까지 넣을 곳이 없기에 구조체가 필요
         void ExtractCircleValues(ref GUI guiStruct, string circleString)
@@ -59,7 +58,6 @@ namespace WinFormsAppTest
                 }
             }
         }
-
         //Rect형 plot값 DB 파일->구조체로 뽑아내는 메서드
         //plot값은 plotForm이 열리기 전까지 넣을 곳이 없기에 구조체가 필요
         void ExtractRectangleValues(ref GUI guiStruct,string rectangleString)
@@ -91,8 +89,7 @@ namespace WinFormsAppTest
                     }
                 }
             }
-        }
-        
+        }     
         // 무결성 검사를 위한 코드
         private void RegistTextBoxHandler()
         {
@@ -128,12 +125,11 @@ namespace WinFormsAppTest
                 e.Handled = true;
             }
         }             
-
         //db파일 생성 및 테이블 생성
         private void create_dbFile_dbtable()
         {
             bin_folder = basePath;
-            databaseFileName = Path.Combine(bin_folder, "config.db");
+            databaseFileName = Path.Combine(bin_folder, "config_init.db");
 
             //MessageBox.Show(databaseFileName);
 
@@ -147,7 +143,6 @@ namespace WinFormsAppTest
                 //MessageBox.Show(SelectValueFromTable(databaseFileName, "gui", "circle"));
             }
         }
-
         //db 파일 생성
         private void CreateDatabaseFile(string bin_folder, string databaseFileName)
         {
@@ -165,7 +160,6 @@ namespace WinFormsAppTest
                 //MessageBox.Show("데이터베이스 파일이 이미 존재합니다.");
             }
         }
-
         //테이블 생성
         private void CreateTable(string databaseFileName, string[] tableNames)
         {
@@ -186,7 +180,7 @@ namespace WinFormsAppTest
                             command.ExecuteNonQuery();
                         }
                     }
-
+                    connection.Close();
                     //MessageBox.Show("테이블이 성공적으로 생성되었습니다.");
                 }
             }
@@ -195,7 +189,6 @@ namespace WinFormsAppTest
                 MessageBox.Show("오류: " + ex.Message);
             }
         }
-
         //전체 테이블 삭제
         public void DeleteAllTables(string databaseFileName, string[] tableNames)
         {
@@ -225,7 +218,6 @@ namespace WinFormsAppTest
                 MessageBox.Show("오류: " + ex.Message);
             }
         }
-
         //db파일 삭제
         public void delete_dbFile()
         {
@@ -248,7 +240,6 @@ namespace WinFormsAppTest
                 MessageBox.Show("데이터베이스 파일 삭제 오류: " + ex.Message);
             }
         }
-
         //insert 쿼리 실행
         public bool InsertDataIntoTable(string tableName, string accessModifier, string ID, string value, string explanation)
         {
@@ -281,6 +272,7 @@ namespace WinFormsAppTest
                             flag = false;
                         }
                     }
+                    connection.Close();
                 }
             }
             catch (Exception ex)
@@ -290,7 +282,6 @@ namespace WinFormsAppTest
 
             return flag;
         }
-
         //update 쿼리 실행
         public void UpdateDataInTable(string databaseFileName, string tableName, string ID, string newValue)
         {
@@ -320,6 +311,7 @@ namespace WinFormsAppTest
                         //    MessageBox.Show("업데이트할 데이터를 찾을 수 없습니다.");
                         //}
                     }
+                    connection.Close();
                 }
             }
             catch (Exception ex)
@@ -327,7 +319,6 @@ namespace WinFormsAppTest
                 MessageBox.Show("오류: " + ex.Message);
             }
         }
-
         //value 값 추출
         public string SelectDataFromTable(string databaseFileName, string tableName, string ID)
         {
@@ -354,6 +345,7 @@ namespace WinFormsAppTest
                             }
                         }
                     }
+                    connection.Close();
                 }
             }
             catch (Exception ex)
@@ -363,7 +355,6 @@ namespace WinFormsAppTest
 
             return value;
         }
-
         //db를 읽어서 하나의 테이블을 List<List<string>>형태로 반환
         public List<List<string>> SelectDataFromTable(string databaseFileName, string tableName)
         {
@@ -402,7 +393,6 @@ namespace WinFormsAppTest
 
             return result;
         }
-
         //db를 읽어서 List<List<string>>형태의 table로 반환
         public List<List<string>> SelectDataFromTable(string databaseFileName)
         {
@@ -460,7 +450,6 @@ namespace WinFormsAppTest
 
             return result;
         }
-
         //초기값 insert
         public void insert_initial_data()
         {
@@ -513,7 +502,6 @@ namespace WinFormsAppTest
             InsertDataIntoTable("measure", "private", "zmax_check", "0.7", "나무가 표준지의 속하는지 판단하기 위해 사용 된다. 기준포인트들 중 최상점의 높이다.(단위 : m) (기본값 : 0.7m)");
             InsertDataIntoTable("measure", "private", "tree_files", "", "추출된 개체목 파일입니다.");
         }
-
         //textbox 값 -> DB 테이블로 대입 
         private void UpdateParams()
         {

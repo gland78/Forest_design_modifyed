@@ -33,15 +33,12 @@ namespace WinFormsAppTest
         public Form? progressDialog;
         public TextBox progressTextBox;
         public ProgressBar pbLoadingBar;
-
-
         //db 파일 명
         string bin_folder = "";
         string databaseFileName = "";
         //테이블 이름 목록(현재 안쓰였음 - 삭제 보류 중)
         string[] tablename = { "gui", "filters_crop", "filters_outlier", "filters_smrf", "filters_range_trunk", "filters_range_crown", "csp_segmentstem", "csp_segmentcrown", "measure" };
         string inter;
-
 
         //PLOT
         private void MakeResultDirectory_PLOT()
@@ -80,6 +77,8 @@ namespace WinFormsAppTest
             string inter_dir = Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(resultSavedDirectory + "\\intermediate"));
 
 
+
+
             paramForm.UpdateDataInTable(databaseFileName, "gui", "tree_dir", tree_dir);
             paramForm.UpdateDataInTable(databaseFileName, "gui", "intermediate_dir", inter_dir);
 
@@ -89,9 +88,12 @@ namespace WinFormsAppTest
 
             //config 복사
             copy_bin();
+            string copied_init = Path.Combine(paramForm.SelectDataFromTable(databaseFileName, "gui", "tree_dir"), "config_init.db");
+            string destinationPath = Path.Combine(paramForm.SelectDataFromTable(databaseFileName, "gui", "tree_dir"), "config.db");
+            File.Move(copied_init, destinationPath);
 
 
-            databaseFileName = Path.Combine(paramForm.SelectDataFromTable(databaseFileName, "gui", "tree_dir"), "config.db");
+            databaseFileName = destinationPath;
             //databaseFileName = "config.db";
 
             originLasPath = paramForm.SelectDataFromTable(databaseFileName, "gui", "origin_las_file");
@@ -124,7 +126,6 @@ namespace WinFormsAppTest
 
             RunBatchMakeDat();
         }
-
         /// cropping step, 배치파일 생성 및 실행하는 함수입니다.
         private void RunBatchMakeDat()
         {
@@ -226,7 +227,6 @@ namespace WinFormsAppTest
                 LogWrite(resultSavedDirectory + @"\intermediate\" + one + inter + "_B.las 파일을 생성했습니다.");
             }
         }
-
         /// Cropping step, 정사각형으로 표준지를 자릅니다.
         private void MakeSquarePlot()
         {
@@ -274,7 +274,6 @@ namespace WinFormsAppTest
                 LogWrite(resultSavedDirectory + @"\intermediate\" + one + inter + "_B.las 파일을 생성했습니다.");
             }
         }
-
         /// Cropping step, 사용자가 입력한 좌표를(다각형의 꼭짓점) 읽어온 후 표준지를 다각형으로 자릅니다.
         private void MakePolygonPlot()
         {
@@ -320,8 +319,6 @@ namespace WinFormsAppTest
                 LogWrite(resultSavedDirectory + @"\intermediate\" + one + inter + "_B.las 파일을 생성했습니다.");
             }
         }
-
-
         //데이터 전처리 단계, 1~6단계 JSON 생성, 7~8단계 csv append line
         private void Outlier()
         {
@@ -347,7 +344,6 @@ namespace WinFormsAppTest
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + second + inter + ".json 파일을 생성했습니다.");
             }
         }
-
         private void Skip_Outlier()
         {
             string dir_path = paramForm.SelectDataFromTable(databaseFileName, "gui", "intermediate_dir");
@@ -367,8 +363,6 @@ namespace WinFormsAppTest
                 return;
             }
         }
-
-
         private void Normalization()
         {
             string three = "lv3_nomarlized_";
@@ -411,7 +405,6 @@ namespace WinFormsAppTest
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + three + inter + ".json 파일을 생성했습니다.");
             }
         }
-
         private void ExtractOriginDat()
         {
             string six = "extractOriginDat_"; //crop 후 dat 파일 만들기
@@ -484,7 +477,6 @@ namespace WinFormsAppTest
             }
             LogWrite(resultSavedDirectory + @"\intermediate\" + six + inter + "O.dat DB 기입 완료.");
         }
-
         private void Turn_Las_into_PCD()
         {
             string four = "lv4_LAStoPCD_";
@@ -506,7 +498,6 @@ namespace WinFormsAppTest
             }
 
         }
-
         private void MakeSliceFile()
         {
             string sevenone = "lv5-1_trunkslice_";
@@ -548,7 +539,6 @@ namespace WinFormsAppTest
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + seventwo + inter + ".json 파일을 생성했습니다.");
             }
         }
-
         private void UpdateDBAfterSeventh()
         {
             string trunkslicefile = "";
@@ -573,7 +563,6 @@ namespace WinFormsAppTest
             paramForm.UpdateDataInTable(databaseFileName, "csp_segmentstem", "trunk_slice_file", trunkslicefile);
             paramForm.UpdateDataInTable(databaseFileName, "csp_segmentcrown", "crown_slice_file", crownslicefile);
         }
-
         private void UpdateDBAfterEighth()
         {
             List<String> filenames_pcd = new List<String>();
@@ -590,7 +579,6 @@ namespace WinFormsAppTest
 
             paramForm.UpdateDataInTable(databaseFileName, "csp_segmentstem", "trunk_files", string.Join(" ", filenames_pcd));
         }
-
         //배치파일 실행 코드
         private void ProcessBatch(string batFile)
         {
@@ -621,8 +609,6 @@ namespace WinFormsAppTest
                 proc.WaitForExit();
             }
         }
-
-
         private void OutputDataReceived(object sender, DataReceivedEventArgs e)
         {
             if (e.Data != null && progressDialog != null)
@@ -670,7 +656,6 @@ namespace WinFormsAppTest
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + inter + zero + ".bat 파일을 생성했습니다.");
             }
         }
-
         //OutlierRemove
         private void RunFileSecond()
         {
@@ -723,7 +708,6 @@ namespace WinFormsAppTest
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + three + inter + ".bat 파일을 생성했습니다.");
             }
         }
-
         //LAS2PCDoriginLasPath
         private void RunFileFourth()
         {
@@ -824,8 +808,10 @@ namespace WinFormsAppTest
                     sw.WriteLine("chcp 65001 > nul");
                     sw.WriteLine("cls");
                     sw.WriteLine("echo 개별목 추출 중...");
+                    sw.WriteLine("Segment_Crwon 호출됨");
                     sw.WriteLine($"cd {this.resultSavedDirectory + shape + @"\intermediate"}");
                     sw.WriteLine("csp_segmentcrown \"" + databaseFileName + "\"");
+
                     //sw.WriteLine();
                     //sw.WriteLine("set destination=\"{0}\"", destination);
                     //sw.WriteLine();
@@ -920,9 +906,6 @@ namespace WinFormsAppTest
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + eleven + originLasName + ".bat 파일을 생성했습니다.");
             }
         }
-
-
-
         private void RunFileTwelveth()
         {
             string twelve = "lv10_add_RGB_Trees";
@@ -955,8 +938,6 @@ namespace WinFormsAppTest
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + twelve + originLasName + ".bat 파일을 생성했습니다.");
             }
         }
-
-
         private void copy_bin()
         {
             {
@@ -995,9 +976,7 @@ namespace WinFormsAppTest
                 // 프로세스 종료
                 process.Close();
             }
-
         }
-
         //intermediate 삭제 코드
         private void del_inter()
         {
@@ -1069,6 +1048,7 @@ namespace WinFormsAppTest
                 using (StreamWriter writer = new StreamWriter(filePath))
                 {
                     writer.Write(info);
+                    writer.Write(paramForm.SelectDataFromTable(databaseFileName, "gui", "crown_radius"));
                 }
             }
             catch (Exception ex)
@@ -1076,7 +1056,6 @@ namespace WinFormsAppTest
                 MessageBox.Show("10단계 오류 : " + ex.Message);
             }
         }
-
         //로그 작성 코드
         private void LogWrite(string message)
         {
@@ -1112,7 +1091,6 @@ namespace WinFormsAppTest
                 MessageBox.Show(e.ToString());
             }
         }
-
         //전체 process 실행 코드
         private void preProAndExcuteStep()
         {
@@ -1243,12 +1221,12 @@ namespace WinFormsAppTest
                 progressDialog.Invoke(new Action(() => progressDialog.Close()));
             }
         }
-
         //파일 생성을 기준, 에러 확인 코드
         bool CatchError(string path, int lv)
         {
             bool isError = true;
             string find;
+
             if (lv == 8)
             {
                 find = "_trunk";
@@ -1261,6 +1239,7 @@ namespace WinFormsAppTest
             {
                 find = "_dbh";
             }
+
             try
             {
                 // 디렉토리에서 파일 이름들을 가져옵니다.
@@ -1281,7 +1260,6 @@ namespace WinFormsAppTest
 
             return isError;
         }
-
         //LAS파일 입력 시 각 경로 세팅(Las파일 경로, 이름 등)
         private void tbPlotData_TextChanged(object sender, EventArgs e)
         {
@@ -1291,7 +1269,6 @@ namespace WinFormsAppTest
             originLasName = Path.GetFileNameWithoutExtension(originLasPath).ToLower();
             originLasDirectory = Path.GetDirectoryName(originLasPath);
         }
-
         //폴리곤 plot 실행 시 buffer 적용을 위해 사각형 꼭지점 찾는 코드
         private void FindExtremeCoordinates(point[] points)
         {
@@ -1317,7 +1294,6 @@ namespace WinFormsAppTest
                     bufferedPolycords.left = temppoint;
             }
         }
-
         //Las파일 크기 읽고 유효값인지 점검
         private bool IsLasSizeValid()
         {
