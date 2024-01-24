@@ -574,6 +574,11 @@ namespace WinFormsAppTest
                         SizeMode = PictureBoxSizeMode.StretchImage,
                         BackColor = TransparencyKey
                     };
+                    if (Image.FromFile(Environment.CurrentDirectory.ToString() + @"\LoadingPx.gif") == null)
+                    {
+                        MessageBox.Show("LoadingPx.gif 파일이 없습니다.");
+                        return;
+                    }
 
                     extractDialog.Controls.Add(gifBox);
                     extractDialog.Show();
