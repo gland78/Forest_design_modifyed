@@ -97,6 +97,7 @@ namespace WinFormsAppTest
             //databaseFileName = "config.db";
 
             originLasPath = paramForm.SelectDataFromTable(databaseFileName, "gui", "origin_las_file");
+
             RunFileZero(originLasPath);
 
             if (progressDialog == null)
@@ -584,11 +585,11 @@ namespace WinFormsAppTest
         {
             using (Process proc = new Process())
             {
-                //proc.StartInfo.WorkingDirectory = resultSavedDirectory + shape + @"\intermediate\";
-                proc.StartInfo.FileName = resultSavedDirectory + shape + @"\intermediate\" + batFile;
+                proc.StartInfo.WorkingDirectory = resultSavedDirectory + shape + @"\intermediate\";
+                proc.StartInfo.FileName         = resultSavedDirectory + shape + @"\intermediate\" + batFile;
                 proc.StartInfo.UseShellExecute = false;
                 proc.StartInfo.CreateNoWindow = true;
-                proc.StartInfo.StandardOutputEncoding = Encoding.UTF8;
+                //proc.StartInfo.StandardOutputEncoding = Encoding.UTF8;
                 proc.StartInfo.RedirectStandardOutput = true;
                 proc.OutputDataReceived += new DataReceivedEventHandler(OutputDataReceived);
 
@@ -601,6 +602,7 @@ namespace WinFormsAppTest
                 }
                 else
                 {
+                    MessageBox.Show("progressDialog.IsDisposed == true");
                     return;
                 }
 
@@ -1220,6 +1222,7 @@ namespace WinFormsAppTest
 
                 progressDialog.Invoke(new Action(() => progressDialog.Close()));
             }
+            databaseFileName = paramForm.databaseFileName;
         }
         //파일 생성을 기준, 에러 확인 코드
         bool CatchError(string path, int lv)

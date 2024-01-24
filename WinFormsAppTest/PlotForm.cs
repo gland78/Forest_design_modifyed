@@ -230,16 +230,18 @@ namespace WinFormsAppTest
                 //각 단계 실행
                 preProAndExcuteStep();
 
-                if (progress == 10)
+                progressTextBox.Invoke(new Action(() =>
                 {
-                    MessageBox.Show("실행 완료");
-                    //progressDialog.Close();
-                }
-                else
-                {
-                    MessageBox.Show(progress + "단계 에러");
-                    return;
-                }
+                    if (progress == 10)
+                    {
+                        MessageBox.Show("Execution complete");
+                        //progressDialog.Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show(progress + " step error");
+                    }
+                }));
             });
 
             btnPlotData.Enabled = true;
@@ -540,6 +542,7 @@ namespace WinFormsAppTest
         {
             string infoDir = Path.Combine(basePath, "LAS_info");
             string fileName = Path.GetFileNameWithoutExtension(filePath);
+            
             if (!Directory.Exists(infoDir))
             {
                 Directory.CreateDirectory(infoDir);
