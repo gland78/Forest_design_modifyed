@@ -33,6 +33,7 @@ namespace WinFormsAppTest
         public Form? progressDialog;
         public TextBox progressTextBox;
         public ProgressBar pbLoadingBar;
+        public bool processDisposed = false;
         //db 파일 명
         string bin_folder = "";
         string databaseFileName = "";
@@ -586,10 +587,13 @@ namespace WinFormsAppTest
             using (Process proc = new Process())
             {
                 proc.StartInfo.WorkingDirectory = resultSavedDirectory + shape + @"\intermediate\";
-                proc.StartInfo.FileName         = resultSavedDirectory + shape + @"\intermediate\" + batFile;
+                //proc.StartInfo.FileName         = resultSavedDirectory + shape + @"\intermediate\" + batFile;
+                proc.StartInfo.FileName = "cmd.exe";
+                proc.StartInfo.Arguments = "/C " + resultSavedDirectory + shape + @"\intermediate\" + batFile;
+
                 proc.StartInfo.UseShellExecute = false;
                 proc.StartInfo.CreateNoWindow = true;
-                //proc.StartInfo.StandardOutputEncoding = Encoding.UTF8;
+                proc.StartInfo.StandardOutputEncoding = Encoding.UTF8;
                 proc.StartInfo.RedirectStandardOutput = true;
                 proc.OutputDataReceived += new DataReceivedEventHandler(OutputDataReceived);
 
@@ -901,8 +905,6 @@ namespace WinFormsAppTest
 
                 ProcessBatch(eleven + inter + ".bat");
 
-                MakeInfoFile();
-
                 
 
                 LogWrite(resultSavedDirectory + shape + @"\intermediate\" + eleven + originLasName + ".bat 파일을 생성했습니다.");
@@ -1050,7 +1052,7 @@ namespace WinFormsAppTest
                 using (StreamWriter writer = new StreamWriter(filePath))
                 {
                     writer.Write(info);
-                    writer.Write(paramForm.SelectDataFromTable(databaseFileName, "gui", "crown_radius"));
+                    //writer.Write(paramForm.SelectDataFromTable(databaseFileName, "gui", "crown_radius"));
                 }
             }
             catch (Exception ex)
@@ -1098,7 +1100,9 @@ namespace WinFormsAppTest
         {
             MakeResultDirectory_PLOT();
 
-            if (Application.OpenForms["progressDialog"] == null)
+
+
+            if (processDisposed)
             {
                 return;
             }
@@ -1120,18 +1124,19 @@ namespace WinFormsAppTest
                 ProgressBarSet(progress);
                 //=====
 
-                if (Application.OpenForms["progressDialog"] == null)
+                if (processDisposed)
                 {
                     return;
                 }
 
                 if (paramForm.SelectDataFromTable(databaseFileName, "gui", "do_outlier").Trim().ToLower() == "true")
+                {
                     RunFileSecond();
-
+                }
                 progress++;
                 ProgressBarSet(progress);
 
-                if (Application.OpenForms["progressDialog"] == null)
+                if (processDisposed)
                 {
                     return;
                 }
@@ -1140,7 +1145,7 @@ namespace WinFormsAppTest
                 progress++;
                 ProgressBarSet(progress);
 
-                if (Application.OpenForms["progressDialog"] == null)
+                if (processDisposed)
                 {
                     return;
                 }
@@ -1153,7 +1158,7 @@ namespace WinFormsAppTest
                 progress++;
                 ProgressBarSet(progress);
 
-                if (Application.OpenForms["progressDialog"] == null)
+                if (processDisposed)
                 {
                     return;
                 }
@@ -1163,7 +1168,7 @@ namespace WinFormsAppTest
                 progress++;
                 ProgressBarSet(progress);
 
-                if (Application.OpenForms["progressDialog"] == null)
+                if (processDisposed)
                 {
                     return;
                 }
@@ -1172,7 +1177,7 @@ namespace WinFormsAppTest
                 progress++;
                 ProgressBarSet(progress);
 
-                if (Application.OpenForms["progressDialog"] == null)
+                if (processDisposed)
                 {
                     return;
                 }
@@ -1180,9 +1185,11 @@ namespace WinFormsAppTest
                 RunFileEighth();//trunk
                 progress++;
                 ProgressBarSet(progress);
+
+
                 if (CatchError(resultP + @"\intermediate\", 8)) return;
 
-                if (Application.OpenForms["progressDialog"] == null)
+                if (processDisposed)
                 {
                     return;
                 }
@@ -1190,9 +1197,10 @@ namespace WinFormsAppTest
                 RunFileNinth();//tree
                 progress++;
                 ProgressBarSet(progress);
+                
                 if (CatchError(resultP + @"\tree\", 9)) return;
 
-                if (Application.OpenForms["progressDialog"] == null)
+                if (processDisposed)
                 {
                     return;
                 }
@@ -1201,7 +1209,7 @@ namespace WinFormsAppTest
 
                 //if (CatchError(resultP + @"\tree\", 10)) return;
 
-                if (Application.OpenForms["progressDialog"] == null)
+                if (processDisposed)
                 {
                     return;
                 }
@@ -1209,7 +1217,7 @@ namespace WinFormsAppTest
                 RunFileEleventh();
                 progress++;
                 ProgressBarSet(progress);
-
+                
 
                 RunFileTwelveth();
 

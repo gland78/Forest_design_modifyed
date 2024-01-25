@@ -168,6 +168,7 @@ namespace WinFormsAppTest
         private async void btnPlotOK_Click(object sender, EventArgs e)
         {
             progress = 0;
+            processDisposed = false;
 
             paramForm.UpdateDataInTable(databaseFileName, "gui", "origin_las_file", tbPlotData.Text);
 
@@ -230,25 +231,22 @@ namespace WinFormsAppTest
                 //각 단계 실행
                 preProAndExcuteStep();
 
-                progressTextBox.Invoke(new Action(() =>
+                if (progress == 10)
                 {
-                    if (progress == 10)
-                    {
-                        MessageBox.Show("Execution complete");
-                        //progressDialog.Close();
-                    }
-                    else
-                    {
-                        MessageBox.Show(progress + " step error");
-                    }
-                }));
+                    MessageBox.Show("Execution complete");
+                    //progressDialog.Close();
+                }
+                else
+                {
+                    MessageBox.Show(progress + " step error");
+                }
             });
 
             btnPlotData.Enabled = true;
         }
         private void ProgressDialog_Create()
         {
-            if(progressDialog != null)
+            if (progressDialog != null)
             {
                 return;
             }
@@ -297,7 +295,7 @@ namespace WinFormsAppTest
 
                 foreach (Process proc in Process.GetProcesses())
                 {
-                    if(targetExe.Any(name => proc.ProcessName.Contains(name)))
+                    if (targetExe.Any(name => proc.ProcessName.Contains(name)))
                     {
                         //procList += proc.ProcessName + Environment.NewLine;
                         foreach (Process target in Process.GetProcessesByName(proc.ProcessName))
@@ -308,10 +306,11 @@ namespace WinFormsAppTest
                 }
                 //MessageBox.Show(procList);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show("백그라운드 프로그램 강제종료에 실패하였습니다\n" + ex.Message);
             }
+            processDisposed = true;
         }
         private void ProgressBarSet(int level)
         {
@@ -542,7 +541,7 @@ namespace WinFormsAppTest
         {
             string infoDir = Path.Combine(basePath, "LAS_info");
             string fileName = Path.GetFileNameWithoutExtension(filePath);
-            
+
             if (!Directory.Exists(infoDir))
             {
                 Directory.CreateDirectory(infoDir);
