@@ -30,10 +30,13 @@ namespace WinFormsAppTest
         //las파일 크기 저장 구조체
         LasSize lasSize = new LasSize();
 
+        //배치 파일 실행 시 Process ID 저장
+        List<int> batchPidList = new List<int>();
+
         public Form? progressDialog;
         public TextBox progressTextBox;
         public ProgressBar pbLoadingBar;
-        public bool processDisposed = false;
+
         //db 파일 명
         string bin_folder = "";
         string databaseFileName = "";
@@ -100,11 +103,6 @@ namespace WinFormsAppTest
             originLasPath = paramForm.SelectDataFromTable(databaseFileName, "gui", "origin_las_file");
 
             RunFileZero(originLasPath);
-
-            if (progressDialog == null)
-            {
-                return;
-            }
 
 
             internalLasName = paramForm.SelectDataFromTable(databaseFileName, "gui", "internal_las_file");
@@ -597,20 +595,20 @@ namespace WinFormsAppTest
                 proc.StartInfo.RedirectStandardOutput = true;
                 proc.OutputDataReceived += new DataReceivedEventHandler(OutputDataReceived);
 
-                if (progressDialog.IsDisposed == false)
+                try
                 {
                     progressTextBox.Invoke(new Action(() =>
                     {
                         progressTextBox.AppendText("=================================" + Environment.NewLine);
                     }));
                 }
-                else
+                catch(Exception ex)
                 {
-                    MessageBox.Show("progressDialog.IsDisposed == true");
                     return;
                 }
 
                 proc.Start();
+                batchPidList.Add(proc.Id);
                 proc.BeginOutputReadLine();
                 proc.WaitForExit();
             }
@@ -1100,13 +1098,6 @@ namespace WinFormsAppTest
         {
             MakeResultDirectory_PLOT();
 
-
-
-            if (processDisposed)
-            {
-                return;
-            }
-
             string resultP = resultSavedDirectory + shape;
             string strFile1 = resultP + @"\intermediate\" + "lv1_cropped_" + inter + "_B.las";
             FileInfo fileInfo1 = new FileInfo(strFile1);//파일 있는지 확인 있을때(true), 없으면(false)
@@ -1124,11 +1115,6 @@ namespace WinFormsAppTest
                 ProgressBarSet(progress);
                 //=====
 
-                if (processDisposed)
-                {
-                    return;
-                }
-
                 if (paramForm.SelectDataFromTable(databaseFileName, "gui", "do_outlier").Trim().ToLower() == "true")
                 {
                     RunFileSecond();
@@ -1136,19 +1122,9 @@ namespace WinFormsAppTest
                 progress++;
                 ProgressBarSet(progress);
 
-                if (processDisposed)
-                {
-                    return;
-                }
-
                 RunFileThird();
                 progress++;
                 ProgressBarSet(progress);
-
-                if (processDisposed)
-                {
-                    return;
-                }
 
                 RunFileFourth();
                 progress++;
@@ -1158,41 +1134,20 @@ namespace WinFormsAppTest
                 progress++;
                 ProgressBarSet(progress);
 
-                if (processDisposed)
-                {
-                    return;
-                }
-
                 //RunFileSixth();
                 ExtractOriginDat();
                 progress++;
                 ProgressBarSet(progress);
 
-                if (processDisposed)
-                {
-                    return;
-                }
-
                 RunFileSeventh();
                 progress++;
                 ProgressBarSet(progress);
-
-                if (processDisposed)
-                {
-                    return;
-                }
 
                 RunFileEighth();//trunk
                 progress++;
                 ProgressBarSet(progress);
 
-
                 if (CatchError(resultP + @"\intermediate\", 8)) return;
-
-                if (processDisposed)
-                {
-                    return;
-                }
 
                 RunFileNinth();//tree
                 progress++;
@@ -1200,19 +1155,9 @@ namespace WinFormsAppTest
                 
                 if (CatchError(resultP + @"\tree\", 9)) return;
 
-                if (processDisposed)
-                {
-                    return;
-                }
-
                 RunFileTenth();//measure
 
-                //if (CatchError(resultP + @"\tree\", 10)) return;
-
-                if (processDisposed)
-                {
-                    return;
-                }
+                if (CatchError(resultP + @"\tree\", 10)) return;
 
                 RunFileEleventh();
                 progress++;

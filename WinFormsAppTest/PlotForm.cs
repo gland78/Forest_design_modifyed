@@ -168,7 +168,6 @@ namespace WinFormsAppTest
         private async void btnPlotOK_Click(object sender, EventArgs e)
         {
             progress = 0;
-            processDisposed = false;
 
             paramForm.UpdateDataInTable(databaseFileName, "gui", "origin_las_file", tbPlotData.Text);
 
@@ -233,12 +232,12 @@ namespace WinFormsAppTest
 
                 if (progress == 10)
                 {
-                    MessageBox.Show("Execution complete");
+                    MessageBox.Show("작업 완료");
                     //progressDialog.Close();
                 }
                 else
                 {
-                    MessageBox.Show(progress + " step error");
+                    MessageBox.Show(progress + " 단계 에러");
                 }
             });
 
@@ -288,29 +287,29 @@ namespace WinFormsAppTest
         private void FormDisposing(object sender, FormClosingEventArgs e)
         {
             progressDialog = null;
-            try
-            {
-                string procList = "";
-                string[] targetExe = { "laszip", "csp_segment", "measure", "Delete_duplication", "LAS", "PCD" };
+            Process proc;
 
-                foreach (Process proc in Process.GetProcesses())
-                {
-                    if (targetExe.Any(name => proc.ProcessName.Contains(name)))
-                    {
-                        //procList += proc.ProcessName + Environment.NewLine;
-                        foreach (Process target in Process.GetProcessesByName(proc.ProcessName))
-                        {
-                            target.Kill();
-                        }
-                    }
-                }
-                //MessageBox.Show(procList);
-            }
-            catch (Exception ex)
+
+            while (batchPidList.Count > 0)
             {
-                MessageBox.Show("백그라운드 프로그램 강제종료에 실패하였습니다\n" + ex.Message);
+                try
+                {
+                    proc = Process.GetProcessById(batchPidList[0]);
+
+                    if (!proc.HasExited)
+                    {
+                        proc.Kill();
+                        bool IsExited = proc.WaitForExit(1000);
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    //이미 죽은 프로세스이므로 무시
+                }
+
+                batchPidList.RemoveAt(0);
             }
-            processDisposed = true;
         }
         private void ProgressBarSet(int level)
         {
